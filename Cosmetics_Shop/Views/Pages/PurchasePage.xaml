@@ -9,7 +9,7 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid Background="#F2FFF6">
+    <Grid Background="Transparent">
 
     </Grid>
 </Page>

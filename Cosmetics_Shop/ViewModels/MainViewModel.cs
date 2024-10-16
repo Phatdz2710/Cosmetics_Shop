@@ -15,6 +15,23 @@ namespace Cosmetics_Shop.ViewModels
     public class MainViewModel : INotifyPropertyChanged
     {
         private Page currentPage;
+        private int _selectedPageNumber;
+
+        private Page buyPage = new BuyPage();
+        private Page cartPage = new CartPage();
+        private Page adminPage = new AdminPage();
+        private Page accountPage = new AccountPage();
+
+        public int SelectedPageNumber
+        {
+            get => _selectedPageNumber;
+            set
+            {
+                _selectedPageNumber = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedPageNumber)));
+            }
+        }
+
         public Page CurrentPage
         {
             get => currentPage;
@@ -24,11 +41,6 @@ namespace Cosmetics_Shop.ViewModels
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentPage)));
             }
         }
-
-        private Page buyPage = new BuyPage();
-        private Page cartPage = new CartPage();
-        private Page adminPage = new AdminPage();
-        private Page accountPage = new AccountPage();
 
         public ICommand BuyButton { get; set; }
         public ICommand CartButton { get; set; }
@@ -41,10 +53,27 @@ namespace Cosmetics_Shop.ViewModels
         public MainViewModel()
         {
             CurrentPage = buyPage;
-            BuyButton = new RelayCommand(() => CurrentPage = buyPage);
-            CartButton = new RelayCommand(() => CurrentPage = cartPage);
-            AdminButton = new RelayCommand(() => CurrentPage = adminPage);
-            AccountButton = new RelayCommand(() => CurrentPage = accountPage);
+            SelectedPageNumber = 1;
+
+            BuyButton = new RelayCommand(() => {
+                CurrentPage = buyPage;
+                SelectedPageNumber = 1;
+            });
+
+            CartButton = new RelayCommand(() => {
+                CurrentPage = cartPage;
+                SelectedPageNumber = 2;
+            });
+
+            AdminButton = new RelayCommand(() => {
+                CurrentPage = adminPage;
+                SelectedPageNumber = 3;
+            });
+
+            AccountButton = new RelayCommand(() => {
+                CurrentPage = accountPage;
+                SelectedPageNumber = 4;
+            });
         }
     }
 }

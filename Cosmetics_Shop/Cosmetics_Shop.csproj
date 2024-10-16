@@ -18,8 +18,9 @@
     <None Remove="Views\Objects\ProductThumbnail.xaml" />
     <None Remove="Views\Pages\AccountPage.xaml" />
     <None Remove="Views\Pages\AdminPage.xaml" />
-    <None Remove="Views\Pages\BuyPage.xaml" />
     <None Remove="Views\Pages\CartPage.xaml" />
+    <None Remove="Views\Pages\PurchasePage.xaml" />
+    <None Remove="Views\WindowContent.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -71,6 +72,11 @@
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
+    <Page Update="Views\WindowContent.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
     <Page Update="Views\Objects\ProductThumbnail.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -91,7 +97,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Views\Pages\BuyPage.xaml">
+    <Page Update="Views\Pages\PurchasePage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
