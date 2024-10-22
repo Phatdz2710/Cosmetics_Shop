@@ -9,7 +9,6 @@ namespace Cosmetics_Shop.Models.DataService
     public interface IDao
     {
         void GetAllProduct();
-        void GetProductBySearch(string search);
-        void GetFilterProduct();
+        void GetProductByKeyword(string keyword);
     }
 }
