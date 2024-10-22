@@ -9,7 +9,22 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
+    <Grid Background="White">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="180"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
+        <Grid Grid.Column="0"
+              CornerRadius="0 10 10 0" >
+            <Image Source="Asset/admin-icon.pn"
+                   Stretch="UniformToFill"/>
 
+        </Grid>
+        <StackPanel>
+            <TextBlock>
+                
+            </TextBlock>
+        </StackPanel>
     </Grid>
 </Page>
