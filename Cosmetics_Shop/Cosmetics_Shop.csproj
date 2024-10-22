@@ -15,10 +15,13 @@
   <ItemGroup>
     <None Remove="LoginWindow.xaml" />
     <None Remove="Views\MainWindow.xaml" />
-    <None Remove="Views\Objects\ProductThumbnail.xaml" />
+    <None Remove="Views\Controls\ProductThumbnailControl.xaml" />
     <None Remove="Views\Pages\AccountPage.xaml" />
     <None Remove="Views\Pages\AdminPage.xaml" />
     <None Remove="Views\Pages\CartPage.xaml" />
+    <None Remove="Views\Pages\DashboardPage.xaml" />
+    <None Remove="Views\Pages\LoginSignupControl.xaml" />
+    <None Remove="Views\Pages\LoginSignupPage.xaml" />
     <None Remove="Views\Pages\PurchasePage.xaml" />
     <None Remove="Views\WindowContent.xaml" />
   </ItemGroup>
@@ -69,15 +72,12 @@
     <Resource Remove="Views\MainWindow.xaml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-  <ItemGroup>
     <Page Update="Views\WindowContent.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Views\Objects\ProductThumbnail.xaml">
+    <Page Update="Views\Objects\ProductThumbnailControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
@@ -98,6 +98,24 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\Pages\PurchasePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\Enums\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\Pages\DashboardPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\Pages\LoginSignupPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\Pages\LoginSignupControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

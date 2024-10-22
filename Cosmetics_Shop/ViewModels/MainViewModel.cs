@@ -15,22 +15,13 @@ namespace Cosmetics_Shop.ViewModels
     public class MainViewModel : INotifyPropertyChanged
     {
         private Page currentPage;
-        private int _selectedPageNumber;
+        //private int _selectedPageNumber;
 
-        private Page buyPage = new BuyPage();
+        private Page purchasePage = new PurchasePage();
         private Page cartPage = new CartPage();
         private Page adminPage = new AdminPage();
         private Page accountPage = new AccountPage();
-
-        public int SelectedPageNumber
-        {
-            get => _selectedPageNumber;
-            set
-            {
-                _selectedPageNumber = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedPageNumber)));
-            }
-        }
+        private Page dashboardPage = new DashboardPage();
 
         public Page CurrentPage
         {
@@ -42,37 +33,44 @@ namespace Cosmetics_Shop.ViewModels
             }
         }
 
-        public ICommand BuyButton { get; set; }
-        public ICommand CartButton { get; set; }
-        public ICommand AdminButton { get; set; }
-        public ICommand AccountButton { get; set; }
+        // Command (gán Event cho button qua binding)
+        public ICommand PurchaseButtonCommand { get; set; }
+        public ICommand CartButtonCommand { get; set; }
+        public ICommand AdminButtonCommand { get; set; }
+        public ICommand AccountButtonCommand { get; set; }
+        public ICommand DashboardButtonCommand {  get; set; }
 
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public MainViewModel()
         {
-            CurrentPage = buyPage;
-            SelectedPageNumber = 1;
+            CurrentPage = dashboardPage;
+            //SelectedPageNumber = 1;
 
-            BuyButton = new RelayCommand(() => {
-                CurrentPage = buyPage;
-                SelectedPageNumber = 1;
+            DashboardButtonCommand = new RelayCommand(() =>
+            {
+                CurrentPage = dashboardPage;
             });
 
-            CartButton = new RelayCommand(() => {
+            PurchaseButtonCommand = new RelayCommand(() => {
+                CurrentPage = purchasePage;
+                //SelectedPageNumber = 1;
+            });
+
+            CartButtonCommand = new RelayCommand(() => {
                 CurrentPage = cartPage;
-                SelectedPageNumber = 2;
+                //SelectedPageNumber = 2;
             });
 
-            AdminButton = new RelayCommand(() => {
+            AdminButtonCommand = new RelayCommand(() => {
                 CurrentPage = adminPage;
-                SelectedPageNumber = 3;
+                //SelectedPageNumber = 3;
             });
 
-            AccountButton = new RelayCommand(() => {
+            AccountButtonCommand = new RelayCommand(() => {
                 CurrentPage = accountPage;
-                SelectedPageNumber = 4;
+                //SelectedPageNumber = 4;
             });
         }
     }

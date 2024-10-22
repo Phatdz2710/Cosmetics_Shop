@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Cosmetics_Shop"
+    xmlns:objects="using:Cosmetics_Shop.Views.Objects"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
@@ -15,64 +16,13 @@
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Column="1" 
-              x:Name="image" >
+              x:Name="image">
             <Image Source="/Assets/login_background.jpg"
                    Stretch="Fill"/>
         </Grid>
 
-        <StackPanel Grid.Column="0"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Width="300"
-                    Spacing="15">
-            
-            <TextBlock Text="LOGIN"
-                       FontSize="40"
-                       FontWeight="Bold"
-                       Foreground="#31C777"
-                       HorizontalAlignment="Center"
-                       Margin="0,0,0,20"/>
-
-            <TextBox x:Name="username"
-                     PlaceholderText="Username"
-                     Padding="10"
-                     CornerRadius="8"
-                     Background="#F0F0F0"
-                     BorderBrush="LightGray"
-                     BorderThickness="1"
-                     Margin="0,0,0,10"/>
-
-            <PasswordBox x:Name="password"
-                         PlaceholderText="Password"
-                         Padding="10"
-                         CornerRadius="8"
-                         Background="#F0F0F0"
-                         BorderBrush="LightGray"
-                         BorderThickness="1"
-                         Margin="0,0,0,5"/>
-
-            <CheckBox x:Name="cbxRememeber" 
-                      Content="Remember me"/>
-
-            <Button Content="Login"
-                    Background="#7CFFB9"
-                    Foreground="White"
-                    FontSize="16"
-                    FontWeight="Bold"
-                    Padding="10"
-                    CornerRadius="8"
-                    HorizontalAlignment="Stretch"
-                    Margin="0,0,0,5"/>
-
-            <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Center">
-                <TextBlock Text="Don't have an account?"/>
-                <TextBlock Text="Sign up" 
-                           Margin="5 0 0 0"
-                           Foreground="#31C777"/>
-            </StackPanel>
-
-        </StackPanel>
+        <Frame x:Name="LoginSignupFrame"
+               Grid.Column="0"/>
 
 
     </Grid>

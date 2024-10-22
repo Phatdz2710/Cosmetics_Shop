@@ -12,15 +12,20 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using Cosmetics_Shop.ViewModels;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
-namespace Cosmetics_Shop.Views.Objects
+namespace Cosmetics_Shop.Views.Pages
 {
-    public sealed partial class ProductThumbnail : UserControl
+    /// <summary>
+    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// </summary>
+    public sealed partial class LoginSignupPage : Page
     {
-        public ProductThumbnail()
+        public LoginViewModel ViewModel { get; set; } = new LoginViewModel();
+        public LoginSignupPage()
         {
             this.InitializeComponent();
         }

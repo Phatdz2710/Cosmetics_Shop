@@ -13,23 +13,21 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
-using Windows.UI.ViewManagement;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
-namespace Cosmetics_Shop
+namespace Cosmetics_Shop.Views.Pages
 {
     /// <summary>
-    /// An empty window that can be used on its own or navigated to within a Frame.
+    /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class LoginWindow : Window
+    public sealed partial class DashboardPage : Page
     {
-        public LoginWindow()
+        public DashboardPageViewModel ViewModel { get; set; } = new DashboardPageViewModel();
+        public DashboardPage()
         {
             this.InitializeComponent();
-            this.AppWindow.Resize(new Windows.Graphics.SizeInt32(1200, 750));
-            this.LoginSignupFrame.Navigate(typeof(Views.Pages.LoginSignupPage));
         }
     }
 }

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="Cosmetics_Shop.Views.Pages.LoginSignupPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Cosmetics_Shop.Views.Pages"
+    xmlns:converter="using:Cosmetics_Shop.Views.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.Resources>
+        <converter:LoginSignupStateConverter x:Key="LoginSignupStateConverter"/>
+    </Page.Resources>
+
+    <Grid>
+        <StackPanel Grid.Column="0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Width="300"
+                Spacing="15"
+                Visibility="{x:Bind ViewModel.LoginSignupState, Mode=OneWay,
+                             Converter={StaticResource LoginSignupStateConverter},
+                             ConverterParameter=Login}">
+
+            <TextBlock Text="LOGIN"
+                   FontSize="40"
+                   FontWeight="Bold"
+                   Foreground="#31C777"
+                   HorizontalAlignment="Center"
+                   Margin="0,0,0,20"/>
+
+            <TextBox x:Name="UsernameLogin"
+                 PlaceholderText="Username"
+                 Padding="10"
+                 CornerRadius="8"
+                 Background="#F0F0F0"
+                 BorderBrush="LightGray"
+                 BorderThickness="1"
+                 Margin="0,0,0,10"/>
+
+            <PasswordBox x:Name="PasswordLogin"
+                     PlaceholderText="Password"
+                     Padding="10"
+                     CornerRadius="8"
+                     Background="#F0F0F0"
+                     BorderBrush="LightGray"
+                     BorderThickness="1"
+                     Margin="0,0,0,5"/>
+
+            <TextBlock 
+                   Text="{x:Bind ViewModel.WrongMessage}"
+                   Foreground="Red"
+                   Visibility="{x:Bind ViewModel.MessageVisibility}"/>
+
+            <CheckBox x:Name="cbxRememeber" 
+                Content="Remember me"/>
+
+            <Button Content="Login"
+                Background="#7CFFB9"
+                Foreground="White"
+                FontSize="16"
+                FontWeight="Bold"
+                Padding="10"
+                CornerRadius="8"
+                HorizontalAlignment="Stretch"
+                Margin="0,0,0,5"/>
+
+            <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Center">
+                <TextBlock Text="Don't have an account?"/>
+                <TextBlock Text="Register" 
+                       Margin="5 0 0 0"
+                       Foreground="#31C777"/>
+            </StackPanel>
+
+        </StackPanel>
+
+        <StackPanel Grid.Column="0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Width="300"
+                Spacing="15"
+                Visibility="{x:Bind ViewModel.LoginSignupState, Mode=TwoWay,
+                             Converter={StaticResource LoginSignupStateConverter},
+                             ConverterParameter=Signup}">
+
+            <TextBlock Text="SIGN UP"
+                   FontSize="40"
+                   FontWeight="Bold"
+                   Foreground="#31C777"
+                   HorizontalAlignment="Center"
+                   Margin="0,0,0,20"/>
+
+            <TextBox x:Name="UsernameSignup"
+                     PlaceholderText="Username"
+                     Padding="10"
+                     CornerRadius="8"
+                     Background="#F0F0F0"
+                     BorderBrush="LightGray"
+                     BorderThickness="1"
+                     Margin="0,0,0,10"/>
+
+            <PasswordBox x:Name="PasswordSignup"
+                         PlaceholderText="Password"
+                         Padding="10"
+                         CornerRadius="8"
+                         Background="#F0F0F0"
+                         BorderBrush="LightGray"
+                         BorderThickness="1"
+                         Margin="0,0,0,5"/>
+
+            <PasswordBox x:Name="ConfirmPasswordSignup"
+                     PlaceholderText="Confirm password"
+                     Padding="10"
+                     CornerRadius="8"
+                     Background="#F0F0F0"
+                     BorderBrush="LightGray"
+                     BorderThickness="1"
+                     Margin="0,0,0,5"/>
+
+            <TextBlock
+                   Text="{x:Bind ViewModel.WrongMessage}"
+                   Foreground="Red"
+                   Visibility="{x:Bind ViewModel.MessageVisibility}"/>
+
+            <Button Content="Sign Up"
+                    Background="#7CFFB9"
+                    Foreground="White"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Padding="10"
+                    CornerRadius="8"
+                    HorizontalAlignment="Stretch"
+                    Margin="0,0,0,5"/>
+
+            <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Center">
+                <TextBlock Text="Login" 
+                       Margin="5 0 0 0"
+                       Foreground="#31C777"/>
+            </StackPanel>
+
+        </StackPanel>
+
+    </Grid>
+</Page>
