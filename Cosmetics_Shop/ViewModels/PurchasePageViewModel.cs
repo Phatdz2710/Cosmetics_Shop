@@ -1,4 +1,5 @@
 ﻿using Cosmetics_Shop.Models;
+using Cosmetics_Shop.Models.DataService;
 using Cosmetics_Shop.Views.Objects;
 using System;
 using System.Collections.Generic;
@@ -14,22 +15,38 @@ namespace Cosmetics_Shop.ViewModels
     public class PurchasePageViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-
         public ObservableCollection<ProductThumbnailViewModel> ProductThumbnails { get; set; }
-            = new ObservableCollection<ProductThumbnailViewModel>()
-            {
-                new ProductThumbnailViewModel(new ProductThumbnail(1, "Sieu cap san pham my pham provip cua fat", null, 10000000)),
-                new ProductThumbnailViewModel(new ProductThumbnail(2, "Product 2", null, 2000000)),
-                new ProductThumbnailViewModel(new ProductThumbnail(3, "Product 3", null, 3000000)),
-            };
+
+        private IDao dao = null;
+
+        public string Keyword { get; set; } = "";
 
         public PurchasePageViewModel()
         {
+            dao = new MockDao();
+            ProductThumbnails = new ObservableCollection<ProductThumbnailViewModel>();
+            GetAllProductThumbnail();
+        }
+
+        private void GetAllProductThumbnail()
+        {
+            var (productThumbnails, totalItems) = dao.GetListProductThumbnail(Keyword);
+            ProductThumbnails?.Clear();
+            
+            for (int i = 0; i < productThumbnails.Count; i++)
+            {
+                ProductThumbnails.Add(new ProductThumbnailViewModel(productThumbnails[i]));
+            }
         }
 
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void SearchProduct()
+        {
+            GetAllProductThumbnail();
         }
     }
 }

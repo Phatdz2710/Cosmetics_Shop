@@ -80,12 +80,25 @@
                       ItemsSource="{x:Bind ViewModel.ProductThumbnails}">
                 <GridView.ItemTemplate>
                     <DataTemplate>
-                        <objects:ProductThumbnailControl Height="300"
-                                                         Width="250"
+                        <objects:ProductThumbnailControl Height="270"
+                                                         Width="230"
                                                          ViewModel="{Binding}"/>
                     </DataTemplate>
                 </GridView.ItemTemplate>
             </GridView>
+
+            <StackPanel Grid.Row="1"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <Button Content="Trước"
+                        Width="80"/>
+                <TextBlock Text="1 / 1"
+                           VerticalAlignment="Center"
+                           Foreground="White"
+                           Margin="10 0 10 0"/>
+                <Button Content="Sau"
+                        Width="80"/>
+            </StackPanel>
         </Grid>
     </Grid>
 </Page>

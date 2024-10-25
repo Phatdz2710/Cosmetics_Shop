@@ -24,7 +24,7 @@ namespace Cosmetics_Shop.Views
     /// </summary>
     public sealed partial class WindowContent : Page
     {
-        public MainViewModel ViewModel { get; set; } = new MainViewModel();
+        public MainViewModel ViewModel = new MainViewModel();
         public WindowContent()
         {
             this.InitializeComponent();
