@@ -25,10 +25,10 @@ namespace Cosmetics_Shop.Views.Pages
     public sealed partial class PurchasePage : Page
     {
         public PurchasePageViewModel ViewModel;
-        public PurchasePage(PurchasePageViewModel viewmodel)
+        public PurchasePage(PurchasePageViewModel viewModel)
         {
             this.InitializeComponent();
-            ViewModel = viewmodel;
+            this.ViewModel = viewModel;
         }
     }
 }

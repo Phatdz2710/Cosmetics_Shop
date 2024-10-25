@@ -10,22 +10,14 @@ namespace Cosmetics_Shop.Models.DataService
     { 
         void InsertProduct(Product product);
 
-        Tuple<List<ProductThumbnail>, int> GetListProductThumbnail(
+        ProductQueryResult GetListProductThumbnail(
             string keyword = "",
             int pageIndex = 1,
             int rowsPerPage = 10,
             bool nameAscending = false);
 
-        List<ProductThumbnail> GetListNewProduct(
-            string keyword = "",
-            int pageIndex = 1,
-            int rowsPerPage = 10,
-            bool nameAscending = false);
+        List<ProductThumbnail> GetListNewProduct();
 
-        List<ProductThumbnail> GetListBestSeller(
-            string keyword = "",
-            int pageIndex = 1,
-            int rowsPerPage = 10,
-            bool nameAscending = false);
+        List<ProductThumbnail> GetListBestSeller();
     }
 }

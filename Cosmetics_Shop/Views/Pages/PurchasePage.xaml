@@ -27,18 +27,18 @@
               Background="White">
 
             <!-- Mục Lọc (theo giá) -->
-            <StackPanel Grid.Row="0" Margin="10">
-                <TextBlock Text="Lọc (theo giá)"
-                   FontSize="16"
-                   FontWeight="Bold"
-                   Margin="0,0,0,5"/>
-                <ComboBox x:Name="PriceFilterComboBox"
-                  HorizontalAlignment="Stretch"
-                  SelectedIndex="0">
-                    <ComboBoxItem Content="Tất cả giá"/>
-                    <ComboBoxItem Content="Dưới 1 triệu"/>
-                    <ComboBoxItem Content="1 triệu - 5 triệu"/>
-                    <ComboBoxItem Content="Trên 5 triệu"/>
+            <StackPanel Grid.Row="0" 
+                        Margin="10">
+                
+                <TextBlock Text="Thương hiệu"
+                           FontSize="16"
+                           FontWeight="Bold"
+                           Margin="0,0,0,5"/>
+
+                <ComboBox x:Name="BrandFilterCombobox"
+                          HorizontalAlignment="Stretch"
+                          SelectedIndex="{x:Bind ViewModel.BrandSelectedIndex, Mode=OneWay}"
+                          ItemsSource="{x:Bind ViewModel.Brands}">
                 </ComboBox>
             </StackPanel>
 
@@ -90,14 +90,27 @@
             <StackPanel Grid.Row="1"
                         Orientation="Horizontal"
                         HorizontalAlignment="Center">
-                <Button Content="Trước"
-                        Width="80"/>
-                <TextBlock Text="1 / 1"
-                           VerticalAlignment="Center"
+                <Grid Width="80">
+                    <Button Content="Trước"
+                            Width="80"
+                            Command="{x:Bind ViewModel.PreviousPageCommand}"
+                            Visibility="{x:Bind ViewModel.VisiPrevious, Mode=OneWay}"/>
+                </Grid>
+                
+                <TextBlock VerticalAlignment="Center"
                            Foreground="White"
-                           Margin="10 0 10 0"/>
-                <Button Content="Sau"
-                        Width="80"/>
+                           Margin="10 0 10 0">
+                    <Run Text="{x:Bind ViewModel.PageIndex, Mode=OneWay}"/> 
+                    <Run Text=" / "/>
+                    <Run Text="{x:Bind ViewModel.TotalPages, Mode=OneWay}"/>
+                </TextBlock>
+                <Grid Width="80">
+                    <Button Content="Sau"
+                            Width="80"
+                            Command="{x:Bind ViewModel.NextPageCommand}"
+                            Visibility="{x:Bind ViewModel.VisiNext, Mode=OneWay}"/>
+                </Grid>
+                
             </StackPanel>
         </Grid>
     </Grid>

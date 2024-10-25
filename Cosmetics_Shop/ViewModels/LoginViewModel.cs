@@ -76,7 +76,6 @@ namespace Cosmetics_Shop.ViewModels
             LoginCommand = new RelayCommand(() =>
             {
                 WrongMessage = "Wrong username or password!";
-
             });
 
             SignupCommand = new RelayCommand(() =>
