@@ -47,10 +47,11 @@ namespace Cosmetics_Shop.ViewModels
         {
             CurrentPage = dashboardPage;
             //SelectedPageNumber = 1;
-
+            
             DashboardButtonCommand = new RelayCommand(() =>
             {
                 CurrentPage = dashboardPage;
+
             });
 
             PurchaseButtonCommand = new RelayCommand(() => {
