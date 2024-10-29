@@ -22,13 +22,14 @@ namespace Cosmetics_Shop.ViewModels
         private Page adminPage = new AdminPage();
         private Page accountPage = new AccountPage();
         private Page dashboardPage = new DashboardPage();
+        private Page productDetailPage = new ProductDetailPage();
 
         public Page CurrentPage
         {
             get => currentPage;
             set
             {
-                currentPage = value;
+                currentPage = productDetailPage;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentPage)));
             }
         }
@@ -39,7 +40,7 @@ namespace Cosmetics_Shop.ViewModels
         public ICommand AdminButtonCommand { get; set; }
         public ICommand AccountButtonCommand { get; set; }
         public ICommand DashboardButtonCommand {  get; set; }
-
+        public ICommand ProductDetailButtonCommand { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -72,6 +73,11 @@ namespace Cosmetics_Shop.ViewModels
                 CurrentPage = accountPage;
                 //SelectedPageNumber = 4;
             });
+            ProductDetailButtonCommand = new RelayCommand(() => {
+                CurrentPage = productDetailPage;
+                //SelectedPageNumber = 4;
+            });
+
         }
     }
 }
