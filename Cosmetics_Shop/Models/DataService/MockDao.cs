@@ -8,8 +8,16 @@ namespace Cosmetics_Shop.Models.DataService
 {
     public class MockDao : IDao
     {
-        public ProductQueryResult GetListProductThumbnail(string keyword = "", int pageIndex = 1, int productsPerPage = 10, bool nameAscending = false)
+        public ProductQueryResult GetListProductThumbnail(
+            string keyword = "", 
+            int pageIndex = 1, 
+            int productsPerPage = 10, 
+            bool nameAscending = false,
+            string filterBrand = "",
+            int minPrice = 0,
+            int maxPrice = int.MaxValue)
         {
+            //var db = new List<ProductThumbnail>();
             var db = new List<ProductThumbnail>()
             {
                 new ProductThumbnail(1, "Moisturizing Cream", null, 250000, "Cetaphil"),
@@ -51,9 +59,15 @@ namespace Cosmetics_Shop.Models.DataService
                 db = db.Where(p => p.Name.ToLower().Contains(keyword.ToLower())).ToList();
             }
 
-            List<string> brands = db.Select(p => p.Brand).Distinct().ToList();
-            var resBrands = new List<string>() { "Tất cả" };
-            resBrands.AddRange(brands);
+            if (!string.IsNullOrEmpty(filterBrand))
+            {
+                db = db.Where(p => p.Brand == filterBrand).ToList();
+            }
+
+            db = db.Where(p => p.Price >= minPrice && p.Price <= maxPrice).ToList();
+
+            var resBrands = db.Select(p => p.Brand).Distinct().ToList();
+            
 
             int totalProduct = db.Count;
 
@@ -75,9 +89,9 @@ namespace Cosmetics_Shop.Models.DataService
         {
             var db = new List<ProductThumbnail>()
             {
-                new ProductThumbnail(1, "Moisturizing Cream", null, 250000, "La Roche-Rosay"),
-                new ProductThumbnail(2, "Sunscreen SPF 50", null, 300000, "La Roche-Rosay"),
-                new ProductThumbnail(3, "Vitamin C Serum", null, 400000, "La Roche-Rosay"),
+                new ProductThumbnail(1, "Moisturizing Cream", null, 250000, "La Roche-Posay"),
+                new ProductThumbnail(2, "Sunscreen SPF 50", null, 300000, "La Roche-Posay"),
+                new ProductThumbnail(3, "Vitamin C Serum", null, 400000, "La Roche-Posay"),
             };
 
             // Filter by keyword

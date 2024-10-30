@@ -13,8 +13,11 @@ namespace Cosmetics_Shop.Models.DataService
         ProductQueryResult GetListProductThumbnail(
             string keyword = "",
             int pageIndex = 1,
-            int rowsPerPage = 10,
-            bool nameAscending = false);
+            int productsPerPage = 10,
+            bool nameAscending = false,
+            string filterBrand = "",
+            int minPrice = 0,
+            int maxPrice=int.MaxValue);
 
         List<ProductThumbnail> GetListNewProduct();
 

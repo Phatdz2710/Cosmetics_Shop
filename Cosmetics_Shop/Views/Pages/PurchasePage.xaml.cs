@@ -30,5 +30,6 @@ namespace Cosmetics_Shop.Views.Pages
             this.InitializeComponent();
             this.ViewModel = viewModel;
         }
+
     }
 }

@@ -104,9 +104,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\Enums\" />
-  </ItemGroup>
-  <ItemGroup>
     <Page Update="Views\Pages\DashboardPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>

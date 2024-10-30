@@ -20,28 +20,22 @@ namespace Cosmetics_Shop.ViewModels
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public ObservableCollection<ProductThumbnailViewModel> ProductThumbnails { get; set; }
-        public ObservableCollection<string> Brands { get; set; }
+        public ObservableCollection<CheckboxBrandContent> Brands { get; set; }
+
 
         private IDao dao = null;
-        
-        private string keyword;
         private int pageIndex = 1;
         private int productPerPage = 15;
         private int totalPages = 0;
         private Visibility visiPrevious = Visibility.Visible;
         private Visibility visiNext = Visibility.Visible;
         private int brandSelectedIndex = 0;
+        private string filterBrand = "";
+        private string minPrice = "";
+        private string maxPrice = "";
 
 
-        public string Keyword
-        {
-            get => keyword;
-            set
-            {
-                keyword = value;
-                OnPropertyChanged(nameof(Keyword));
-            }
-        }
+        public string Keyword { get; set; } = "";
         public int PageIndex
         {
             get => pageIndex;
@@ -69,6 +63,38 @@ namespace Cosmetics_Shop.ViewModels
                 OnPropertyChanged(nameof(TotalPages));
             }
         }
+        public string MinPrice
+        {
+            get
+            {
+                if (minPrice == string.Empty)
+                {
+                    return "0";
+                }
+                return minPrice;
+            }
+            set
+            {
+                minPrice = value;
+                OnPropertyChanged(nameof(MinPrice));
+            }
+        }
+        public string MaxPrice
+        {
+            get
+            {
+                if (maxPrice == string.Empty)
+                {
+                    return "99999999";
+                }
+                return maxPrice;
+            }
+            set
+            {
+                maxPrice = value;
+                OnPropertyChanged(nameof(MaxPrice));
+            }
+        }
         public Visibility VisiPrevious
         {
             get => visiPrevious;
@@ -87,26 +113,16 @@ namespace Cosmetics_Shop.ViewModels
                 OnPropertyChanged(nameof(VisiNext));
             }
         }
-        public int BrandSelectedIndex
-        {
-            get => brandSelectedIndex;
-            set
-            {
-                brandSelectedIndex = value;
-                OnPropertyChanged(nameof(BrandSelectedIndex));
-            }
-        }
-
-
         public ICommand NextPageCommand { get; }
         public ICommand PreviousPageCommand { get; }
+        public ICommand CheckboxBrandCheckedCommand { get; }
+        public ICommand FilterPriceCommand { get; }
 
         public PurchasePageViewModel()
         {
             dao = new MockDao();
             ProductThumbnails = new ObservableCollection<ProductThumbnailViewModel>();
-            Brands = new ObservableCollection<string>();
-            GetProductThumbnails();
+            Brands = new ObservableCollection<CheckboxBrandContent>();
 
             NextPageCommand = new RelayCommand(() =>
             {
@@ -119,11 +135,42 @@ namespace Cosmetics_Shop.ViewModels
                 PageIndex--;
                 GetProductThumbnails();
             });
+
+            CheckboxBrandCheckedCommand = new RelayCommand<int>((index) =>
+            {
+                this.filterBrand = this.Brands[index].Name;
+                PageIndex = 1;
+                if (this.Brands[index].IsChecked)
+                {
+                    this.filterBrand = string.Empty;
+                    GetProductThumbnails();
+                }
+                else
+                {
+                    GetProductThumbnails(isBrandFilter: true);
+                }
+            });
+
+            FilterPriceCommand = new RelayCommand(() =>
+            {
+                PageIndex = 1;
+                GetProductThumbnails();
+            });
+
+            GetProductThumbnails();
         }
 
-        private void GetProductThumbnails(bool isLoadNew = false)
+
+        private void GetProductThumbnails(bool isBrandFilter = false)
         {
-            ProductQueryResult productQueryResult = dao.GetListProductThumbnail(Keyword, PageIndex, ProductsPerPage);
+            ProductQueryResult productQueryResult = dao.GetListProductThumbnail(
+                keyword:Keyword, 
+                pageIndex:PageIndex, 
+                productsPerPage:ProductsPerPage, 
+                filterBrand: this.filterBrand,
+                minPrice: int.Parse(MinPrice),
+                maxPrice: int.Parse(MaxPrice));
+
             TotalPages = productQueryResult.TotalPages;
 
             VisiNext = PageIndex == totalPages ? Visibility.Collapsed : Visibility.Visible;
@@ -131,20 +178,22 @@ namespace Cosmetics_Shop.ViewModels
 
             ProductThumbnails?.Clear();
             
-            
             for (int i = 0; i < productQueryResult.Products.Count; i++)
             {
                 ProductThumbnails.Add(new ProductThumbnailViewModel(productQueryResult.Products[i]));
             }
 
-            if (isLoadNew)
+            Brands?.Clear();
+            for (int i = 0; i < productQueryResult.Brands.Count; i++)
             {
-                Brands?.Clear();
-                for (int i = 0; i < productQueryResult.Brands.Count; i++)
+                Brands.Add(new CheckboxBrandContent()
                 {
-                    Brands.Add(productQueryResult.Brands[i]);
-                }
-            } 
+                    Name = productQueryResult.Brands[i],
+                    Index = i,
+                    CheckedCommand = CheckboxBrandCheckedCommand,
+                    IsChecked = isBrandFilter
+                });
+            }
         }
 
         private void OnPropertyChanged(string propertyName)
@@ -155,8 +204,8 @@ namespace Cosmetics_Shop.ViewModels
         public void SearchProduct()
         {
             PageIndex = 1;
-            GetProductThumbnails(isLoadNew: true);
-            BrandSelectedIndex = 0;
+            this.filterBrand = "";
+            GetProductThumbnails();
         }
     }
 }

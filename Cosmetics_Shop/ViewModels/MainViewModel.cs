@@ -23,15 +23,7 @@ namespace Cosmetics_Shop.ViewModels
         private DashboardPage dashboardPage;
 
         private PurchasePageViewModel purchasePageViewModel;
-        public string Keyword
-        {
-            get => purchasePageViewModel.Keyword;
-            set
-            {
-                purchasePageViewModel.Keyword = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Keyword)));
-            }
-        }
+        public string Keyword { get; set; }
 
         public Page CurrentPage
         {
@@ -49,6 +41,7 @@ namespace Cosmetics_Shop.ViewModels
         public ICommand AdminButtonCommand { get; }
         public ICommand AccountButtonCommand { get; }
         public ICommand DashboardButtonCommand { get; }
+        public ICommand SearchButtonCommand { get; }
 
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -69,10 +62,16 @@ namespace Cosmetics_Shop.ViewModels
                 CurrentPage = dashboardPage;
             });
 
+            SearchButtonCommand = new RelayCommand(() =>
+            {
+                CurrentPage = purchasePage;
+                purchasePage.ViewModel.Keyword = Keyword;
+                purchasePage.ViewModel.SearchProduct();
+            });
+
             PurchaseButtonCommand = new RelayCommand(() =>
             {
                 CurrentPage = purchasePage;
-                purchasePage.ViewModel.SearchProduct();
             });
 
             CartButtonCommand = new RelayCommand(() =>

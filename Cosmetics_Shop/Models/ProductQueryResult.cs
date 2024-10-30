@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.Models.DataService
 {
+    
     public struct ProductQueryResult
     {
         public List<ProductThumbnail> Products { get; set; }
