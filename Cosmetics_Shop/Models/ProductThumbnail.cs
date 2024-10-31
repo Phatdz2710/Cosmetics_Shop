@@ -10,7 +10,11 @@ namespace Cosmetics_Shop.Models
 {
     public class ProductThumbnail : Product
     {
-        public ProductThumbnail(int id, string name, Image thumbnailImage, int price, string brand)
+        public ProductThumbnail(int id, 
+                                string name, 
+                                Image thumbnailImage, 
+                                int price, 
+                                string brand)
             : base(id, name, thumbnailImage, price, brand)
         { }
     }

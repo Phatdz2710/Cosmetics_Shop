@@ -9,85 +9,90 @@ using Windows.Networking.Sockets;
 using System.ComponentModel;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
+using Cosmetics_Shop.Services;
+using Cosmetics_Shop.Services.Interfaces;
+using Windows.ApplicationModel.Activation;
 
 namespace Cosmetics_Shop.ViewModels
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        private Page currentPage;
-
-        private PurchasePage purchasePage;
-        private CartPage cartPage;
-        private AdminPage adminPage;
-        private AccountPage accountPage;
-        private DashboardPage dashboardPage;
-
-        private PurchasePageViewModel purchasePageViewModel;
-        public string Keyword { get; set; }
-
-        public Page CurrentPage
-        {
-            get => currentPage;
-            set
-            {
-                currentPage = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentPage)));
-            }
-        }
+        // Navigation service
+        private readonly INavigationService _navigationService;
+        // Event aggregator for publish and subscribe
+        private readonly IEventAggregator _eventAggregator;
 
         // Command (gán Event cho button qua binding)
+
+        #region Commands for Switch page
         public ICommand PurchaseButtonCommand { get; }
         public ICommand CartButtonCommand { get; }
         public ICommand AdminButtonCommand { get; }
         public ICommand AccountButtonCommand { get; }
         public ICommand DashboardButtonCommand { get; }
+        #endregion
+
+        // Search button command
         public ICommand SearchButtonCommand { get; }
+        
+        // Từ khóa tìm kiếm (Binding)
+        public string Keyword { get; set; }
 
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public MainViewModel()
+        // Constructor
+        public MainViewModel(IEventAggregator eventAggregator,
+                                INavigationService navigationService)
         {
-            purchasePageViewModel = new PurchasePageViewModel();
-            purchasePage = new PurchasePage(purchasePageViewModel);
-            cartPage = new CartPage();
-            adminPage = new AdminPage();
-            accountPage = new AccountPage();
-            dashboardPage = new DashboardPage();
+            _eventAggregator = eventAggregator;
+            _navigationService = navigationService;
 
-            CurrentPage = dashboardPage;
-
-            DashboardButtonCommand = new RelayCommand(() =>
-            {
-                CurrentPage = dashboardPage;
-            });
-
-            SearchButtonCommand = new RelayCommand(() =>
-            {
-                CurrentPage = purchasePage;
-                purchasePage.ViewModel.Keyword = Keyword;
-                purchasePage.ViewModel.SearchProduct();
-            });
-
+            // Switch to Purchase page
             PurchaseButtonCommand = new RelayCommand(() =>
             {
-                CurrentPage = purchasePage;
+                _navigationService.NavigateTo<PurchasePage>();
             });
 
+            // Switch to Cart page
             CartButtonCommand = new RelayCommand(() =>
             {
-                CurrentPage = cartPage;
+                _navigationService.NavigateTo<CartPage>();
             });
 
+            // Switch to Admin page
             AdminButtonCommand = new RelayCommand(() =>
             {
-                CurrentPage = adminPage;
+                _navigationService.NavigateTo<AdminPage>();
             });
 
+            // Switch to Account page
             AccountButtonCommand = new RelayCommand(() =>
             {
-                CurrentPage = accountPage;
+                _navigationService.NavigateTo<AccountPage>();
             });
+
+            // Switch to Dashboard page
+            DashboardButtonCommand = new RelayCommand(() =>
+            {
+                _navigationService.NavigateTo<DashboardPage>();
+            });
+
+            // Search button click event
+            SearchButtonCommand = new RelayCommand(() =>
+            {
+                SearchEvent searchEvent = new SearchEvent();
+                searchEvent.Keyword = Keyword;
+
+                // Publish event (send event to all subscribers)
+                _eventAggregator.Publish(searchEvent);
+                _navigationService.NavigateTo<PurchasePage>();
+            });
+        }
+
+
+        // For INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

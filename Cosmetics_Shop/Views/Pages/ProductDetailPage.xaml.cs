@@ -19,16 +19,12 @@ using Cosmetics_Shop.ViewModels;
 
 namespace Cosmetics_Shop.Views.Pages
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
-    public sealed partial class PurchasePage : Page
+    public sealed partial class ProductDetailPage : Page
     {
-        public PurchasePageViewModel ViewModel { get; }
-        public PurchasePage()
+        public ProductDetailViewModel ViewModel { get; set; } = new ProductDetailViewModel();
+        public ProductDetailPage()
         {
             this.InitializeComponent();
-            ViewModel = App.ServiceProvider.GetService(typeof(PurchasePageViewModel)) as PurchasePageViewModel;
         }
     }
 }

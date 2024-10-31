@@ -116,9 +116,10 @@
             </StackPanel>
         </Grid>
 
-        <Frame x:Name="Content"
-               Grid.Row="2"
-               Content="{x:Bind ViewModel.CurrentPage,
-                                Mode=OneWay}"/>
+        <Frame x:Name="rootFrame"
+               Grid.Row="2"/>
+
+        <!--Content="{x:Bind ViewModel.CurrentPage,
+                 Mode=OneWay}"-->
     </Grid>
 </Page>

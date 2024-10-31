@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cosmetics_Shop.Models.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,8 +20,12 @@ namespace Cosmetics_Shop.Models.DataService
             int minPrice = 0,
             int maxPrice=int.MaxValue);
 
+        ProductDetail GetProductDetail(int idProduct);
+
         List<ProductThumbnail> GetListNewProduct();
 
         List<ProductThumbnail> GetListBestSeller();
+
+        LoginResult CheckLogin(string username, string password);
     }
 }

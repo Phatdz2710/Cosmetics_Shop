@@ -24,10 +24,11 @@ namespace Cosmetics_Shop.Views.Pages
     /// </summary>
     public sealed partial class DashboardPage : Page
     {
-        public DashboardPageViewModel ViewModel { get; set; } = new DashboardPageViewModel();
+        public DashboardPageViewModel ViewModel { get; }
         public DashboardPage()
         {
             this.InitializeComponent();
+            ViewModel = App.ServiceProvider.GetService(typeof(DashboardPageViewModel)) as DashboardPageViewModel;
         }
     }
 }

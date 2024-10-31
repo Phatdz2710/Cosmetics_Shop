@@ -1,3 +1,5 @@
+using Cosmetics_Shop.Services;
+using Cosmetics_Shop.Services.Interfaces;
 using Cosmetics_Shop.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -30,6 +32,12 @@ namespace Cosmetics_Shop
             this.InitializeComponent();
             this.AppWindow.Resize(new Windows.Graphics.SizeInt32(1200, 750));
             this.LoginSignupFrame.Navigate(typeof(Views.Pages.LoginSignupPage));
+
+            var eventAggregator = App.ServiceProvider.GetService(typeof(IEventAggregator)) as IEventAggregator;
+            eventAggregator.Subscribe<CloseWindowMessage>((param) =>
+            {
+                this.Close();
+            });
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cosmetics_Shop.Models.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -85,6 +86,11 @@ namespace Cosmetics_Shop.Models.DataService
             };
         }
 
+        public ProductDetail GetProductDetail(int idProduct)
+        {
+            return null;
+        }
+
         public List<ProductThumbnail> GetListNewProduct()
         {
             var db = new List<ProductThumbnail>()
@@ -98,7 +104,6 @@ namespace Cosmetics_Shop.Models.DataService
 
             return db;
         }
-
         public List<ProductThumbnail> GetListBestSeller()
         {
             var db = new List<ProductThumbnail>()
@@ -113,6 +118,29 @@ namespace Cosmetics_Shop.Models.DataService
         public void InsertProduct(Product product)
         {
             throw new NotImplementedException();
+        }
+
+        public LoginResult CheckLogin(string username, string password)
+        {
+            List<Tuple<string, string>> _listAccount = new List<Tuple<string, string>>()
+            {
+                new Tuple<string, string>("admin", "admin"),
+                new Tuple<string, string>("user", "user")
+            };
+
+            bool isExistUsername = _listAccount.Any(account => account.Item1 == username);
+            
+            if (!isExistUsername)
+            {
+                return LoginResult.InvalidUsername;
+            }
+
+            bool isCorrectPassword = _listAccount.Any(account => account.Item1 == username && account.Item2 == password);
+            if (!isCorrectPassword) {
+                return LoginResult.InvalidPassword;
+            }
+
+            return LoginResult.Success;
         }
     }
 }

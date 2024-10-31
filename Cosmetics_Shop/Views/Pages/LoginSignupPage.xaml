@@ -20,9 +20,10 @@
                 VerticalAlignment="Center"
                 Width="300"
                 Spacing="15"
-                Visibility="{x:Bind ViewModel.LoginSignupState, Mode=OneWay,
-                             Converter={StaticResource LoginSignupStateConverter},
-                             ConverterParameter=Login}">
+                Visibility="{x:Bind ViewModel.LoginSignupState, 
+                                Mode=OneWay,
+                                Converter={StaticResource LoginSignupStateConverter},
+                                ConverterParameter=Login}">
 
             <TextBlock Text="LOGIN"
                    FontSize="40"
@@ -38,7 +39,8 @@
                      Background="#F0F0F0"
                      BorderBrush="LightGray"
                      BorderThickness="1"
-                     Margin="0,0,0,10"/>
+                     Margin="0,0,0,10"
+                     Text="{x:Bind ViewModel.Username, Mode=TwoWay}"/>
 
             <PasswordBox x:Name="PasswordLogin"
                          PlaceholderText="Password"
@@ -47,14 +49,16 @@
                          Background="#F0F0F0"
                          BorderBrush="LightGray"
                          BorderThickness="1"
-                         Margin="0,0,0,5"/>
+                         Margin="0,0,0,5"
+                         Password="{x:Bind ViewModel.Password, Mode=TwoWay}"/>
 
             <TextBlock  Text="{x:Bind ViewModel.WrongMessage, Mode=OneWay}"
                        Foreground="Red"
                        Visibility="{x:Bind ViewModel.MessageVisibility, Mode=OneWay}"/>
 
             <CheckBox x:Name="cbxRememeber" 
-                        Content="Remember me"/>
+                        Content="Remember me"
+                      IsChecked="{x:Bind ViewModel.RememberMe, Mode=TwoWay}"/>
 
             <Button Content="Login"
                     Background="#7CFFB9"

@@ -13,6 +13,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Cosmetics_Shop.ViewModels;
+using Cosmetics_Shop.Services;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -24,10 +25,22 @@ namespace Cosmetics_Shop.Views
     /// </summary>
     public sealed partial class WindowContent : Page
     {
-        public MainViewModel ViewModel = new MainViewModel();
+        public MainViewModel ViewModel;
         public WindowContent()
         {
             this.InitializeComponent();
+            var navigationService = (INavigationService)App.ServiceProvider.GetService(typeof(INavigationService));
+            navigationService.Initialize(rootFrame);
+
+            rootFrame.NavigationFailed += RootFrame_NavigationFailed;
+            rootFrame.Navigate(typeof(Pages.DashboardPage));
+            
+            ViewModel = (MainViewModel)App.ServiceProvider.GetService(typeof(MainViewModel));
+        }
+
+        private void RootFrame_NavigationFailed(object sender, Microsoft.UI.Xaml.Navigation.NavigationFailedEventArgs e)
+        {
+            throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
         }
     }
 }

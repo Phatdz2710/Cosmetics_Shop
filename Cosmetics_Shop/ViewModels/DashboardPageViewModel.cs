@@ -1,5 +1,6 @@
 ﻿using Cosmetics_Shop.Models;
 using Cosmetics_Shop.Models.DataService;
+using Cosmetics_Shop.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,25 +12,38 @@ namespace Cosmetics_Shop.ViewModels
 {
     public class DashboardPageViewModel
     {
-        public ObservableCollection<ProductThumbnailViewModel> BestSeller { get; set; } = new ObservableCollection<ProductThumbnailViewModel>();
-        public ObservableCollection<ProductThumbnailViewModel> NewProducts { get; set; } = new ObservableCollection<ProductThumbnailViewModel>();
+        // Data access object
+        private IDao _dao = null;
 
-        private IDao dao = null;
-        public DashboardPageViewModel()
+        // Observable Collection
+        public ObservableCollection<ProductThumbnailViewModel> BestSeller { get; set; } 
+        public ObservableCollection<ProductThumbnailViewModel> NewProducts { get; set; } 
+
+
+        // Constructor
+        public DashboardPageViewModel(INavigationService navigationService,
+                                        IDao dao)
         {
-            dao = new MockDao();
+            _dao = dao;
 
-            var bestSeller = dao.GetListBestSeller();
-            var newProducts = dao.GetListNewProduct();
+            BestSeller = new ObservableCollection<ProductThumbnailViewModel>();
+            NewProducts = new ObservableCollection<ProductThumbnailViewModel>();
+
+            var bestSeller = _dao.GetListBestSeller();
+            var newProducts = _dao.GetListNewProduct();
 
             for (int i = 0; i < bestSeller.Count; i++)
             {
-                BestSeller.Add(new ProductThumbnailViewModel(bestSeller[i]));
+                var productThumbnailViewModel = App.ServiceProvider.GetService(typeof(ProductThumbnailViewModel));
+                productThumbnailViewModel.GetType().GetProperty("ProductThumbnail").SetValue(productThumbnailViewModel, bestSeller[i]);
+                BestSeller.Add(productThumbnailViewModel as ProductThumbnailViewModel);
             }
 
             for (int i = 0; i < newProducts.Count; i++)
             {
-                NewProducts.Add(new ProductThumbnailViewModel(newProducts[i]));
+                var productThumbnailViewModel = App.ServiceProvider.GetService(typeof(ProductThumbnailViewModel));
+                productThumbnailViewModel.GetType().GetProperty("ProductThumbnail").SetValue(productThumbnailViewModel, newProducts[i]);
+                NewProducts.Add(productThumbnailViewModel as ProductThumbnailViewModel);
             }
         }
     }

@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using Cosmetics_Shop.Models;
 using Cosmetics_Shop.Models.DataService;
+using Cosmetics_Shop.Services;
+using Cosmetics_Shop.Services.Interfaces;
 using Cosmetics_Shop.Views.Objects;
 using Microsoft.UI.Xaml;
 using System;
@@ -16,14 +18,28 @@ using Windows.Graphics.Printing;
 
 namespace Cosmetics_Shop.ViewModels
 {
+    /// <summary>
+    /// View model for PurchasePage
+    /// Singleton pattern
+    /// </summary>
     public class PurchasePageViewModel : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        // Event aggregator for publish and subscribe
+        private readonly IEventAggregator _eventAggregator;
+
+        // Navigation service
+        private readonly INavigationService _navigationService;
+
+        // Data access object
+        private IDao _dao = null;
+
+
+
+        // Observable Collection
         public ObservableCollection<ProductThumbnailViewModel> ProductThumbnails { get; set; }
         public ObservableCollection<CheckboxBrandContent> Brands { get; set; }
 
-
-        private IDao dao = null;
+        #region Fields
         private int pageIndex = 1;
         private int productPerPage = 15;
         private int totalPages = 0;
@@ -33,9 +49,11 @@ namespace Cosmetics_Shop.ViewModels
         private string filterBrand = "";
         private string minPrice = "";
         private string maxPrice = "";
-
+        #endregion
 
         public string Keyword { get; set; } = "";
+
+        #region Binding Properties
         public int PageIndex
         {
             get => pageIndex;
@@ -113,15 +131,35 @@ namespace Cosmetics_Shop.ViewModels
                 OnPropertyChanged(nameof(VisiNext));
             }
         }
+        #endregion
+
+        // Commands
         public ICommand NextPageCommand { get; }
         public ICommand PreviousPageCommand { get; }
         public ICommand CheckboxBrandCheckedCommand { get; }
         public ICommand FilterPriceCommand { get; }
 
-        public PurchasePageViewModel()
+
+        // Constructor
+        public PurchasePageViewModel(INavigationService navigationService, 
+                                        IEventAggregator eventAggregator,
+                                        IDao dao)
         {
-            dao = new MockDao();
+            _eventAggregator = eventAggregator;
+            _navigationService = navigationService;
+            _dao = dao;
+
+            // Register event to listen from MainViewModel
+            _eventAggregator.Subscribe<SearchEvent>((searchEvent) =>
+            {
+                Keyword = searchEvent.Keyword;
+                SearchProduct();
+            });
+
+            // Initialize list of product thumbnails
             ProductThumbnails = new ObservableCollection<ProductThumbnailViewModel>();
+
+            // Initialize list of brands
             Brands = new ObservableCollection<CheckboxBrandContent>();
 
             NextPageCommand = new RelayCommand(() =>
@@ -160,10 +198,9 @@ namespace Cosmetics_Shop.ViewModels
             GetProductThumbnails();
         }
 
-
         private void GetProductThumbnails(bool isBrandFilter = false)
         {
-            ProductQueryResult productQueryResult = dao.GetListProductThumbnail(
+            ProductQueryResult productQueryResult = _dao.GetListProductThumbnail(
                 keyword:Keyword, 
                 pageIndex:PageIndex, 
                 productsPerPage:ProductsPerPage, 
@@ -180,7 +217,9 @@ namespace Cosmetics_Shop.ViewModels
             
             for (int i = 0; i < productQueryResult.Products.Count; i++)
             {
-                ProductThumbnails.Add(new ProductThumbnailViewModel(productQueryResult.Products[i]));
+                var productThumbnailViewModel = App.ServiceProvider.GetService(typeof(ProductThumbnailViewModel));
+                productThumbnailViewModel.GetType().GetProperty("ProductThumbnail").SetValue(productThumbnailViewModel, productQueryResult.Products[i]);
+                ProductThumbnails.Add(productThumbnailViewModel as ProductThumbnailViewModel);
             }
 
             Brands?.Clear();
@@ -196,16 +235,20 @@ namespace Cosmetics_Shop.ViewModels
             }
         }
 
-        private void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
+        
         public void SearchProduct()
         {
             PageIndex = 1;
             this.filterBrand = "";
             GetProductThumbnails();
+        }
+
+
+        // For INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -24,10 +24,11 @@ namespace Cosmetics_Shop.Views.Pages
     /// </summary>
     public sealed partial class LoginSignupPage : Page
     {
-        public LoginViewModel ViewModel { get; set; } = new LoginViewModel();
+        public LoginViewModel ViewModel { get; }
         public LoginSignupPage()
         {
             this.InitializeComponent();
+            ViewModel = App.ServiceProvider.GetService(typeof(LoginViewModel)) as LoginViewModel;
         }
     }
 }
