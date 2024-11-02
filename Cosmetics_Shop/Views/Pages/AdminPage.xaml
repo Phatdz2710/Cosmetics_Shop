@@ -64,19 +64,39 @@
                 <StackPanel Background="Azure" Width="850" Height="100" >
                     <Grid HorizontalAlignment="Center">
                         <TextBlock Text="QUẢN LÝ ĐƠN HÀNG" VerticalAlignment="Center" 
-                   FontStyle="Normal" FontSize="34"
-                   Margin="10,0,20,20" Foreground="Black"/>
+                   FontStyle="Normal" FontSize="28"
+                   Margin="10,0,20,10" Foreground="Black"/>
+                    </Grid>
+
+                    <Grid VariableSizedWrapGrid.RowSpan="1" Background="Beige" Width="800" Margin="30,10,0,0">
+                        <TextBlock Text="1. Đơn hàng 1" VerticalAlignment="Center"  Foreground="Black" Margin="40,0,0,0"/>
+                        <Button Width="50" Height="50" Margin="740,0,0,0" Background="Aqua">
+
+                            <Image Source="/Assets/add.png" Width="25" Height="25"  Stretch="Uniform"/>
+
+                        </Button>
                     </Grid>
                 </StackPanel>
             </Grid>
                         
             <Grid Grid.Row="1" Margin="10"><!--Quản lý sản phẩm-->
                 <StackPanel Background="Azure" Width="850" Height="100">
-                    <Grid HorizontalAlignment="Center">
+                    
+                    <Grid Grid.Row="0" HorizontalAlignment="Center">
                         <TextBlock Text="QUẢN LÝ SẢN PHẨM" VerticalAlignment="Center" 
-                   FontStyle="Normal" FontSize="34"
-                   Margin="10,0,20,20" Foreground="Black"/>
+                   FontStyle="Normal" FontSize="28"
+                   Margin="10,0,20,10" Foreground="Black"/>
                     </Grid>
+
+                    <Grid VariableSizedWrapGrid.RowSpan="1" Background="Beige" Width="800" Margin="30,10,0,0">
+                        <TextBlock Text="1. Sản phẩm 1" VerticalAlignment="Center"  Foreground="Black" Margin="40,0,0,0"/>
+                        <Button Width="50" Height="50" Margin="740,0,0,0" Background="Aqua">
+
+                            <Image Source="/Assets/add.png" Width="25" Height="25"  Stretch="Uniform"/>
+
+                        </Button>
+                    </Grid>
+
                 </StackPanel>
             </Grid>
 
@@ -85,11 +105,11 @@
                     
                     <Grid HorizontalAlignment="Center">
                         <TextBlock Text="DANH SÁCH TÀI KHOẢN" VerticalAlignment="Center" 
-                                   FontStyle="Normal" FontSize="34"
-                                   Margin="10,0,20,20" Foreground="Black"/>
+                                   FontStyle="Normal" FontSize="28"
+                                   Margin="10,0,20,10" Foreground="Black"/>
                     </Grid>
                     
-                    <Grid VariableSizedWrapGrid.RowSpan="1" Background="Beige" Width="800" Margin="30,10,0,0">
+                    <Grid VariableSizedWrapGrid.RowSpan="1" Background="Beige" Width="800" Margin="30,5,0,0">
                         <TextBlock Text="1. Tài khoản 1" VerticalAlignment="Center"  Foreground="Black" Margin="40,0,0,0"/>
                         <Button Width="50" Height="50" Margin="740,0,0,0" Background="Aqua">
 
@@ -98,7 +118,7 @@
                         </Button>
                     </Grid>
 
-                    <Grid VariableSizedWrapGrid.RowSpan="2" Background="Beige" Width="800" Margin="30,10,0,0">
+                    <Grid VariableSizedWrapGrid.RowSpan="2" Background="Beige" Width="800" Margin="30,5,0,0">
                         <TextBlock Text="2. Tài khoản 2" VerticalAlignment="Center"  Foreground="Black" Margin="40,0,0,0"/>
                         <Button Width="50" Height="50" Margin="740,0,0,0" Background="Aqua">
 
@@ -107,7 +127,7 @@
                         </Button>
                     </Grid>
 
-                    <Grid VariableSizedWrapGrid.RowSpan="3" Background="Beige" Width="800" Margin="30,10,0,0">
+                    <Grid VariableSizedWrapGrid.RowSpan="3" Background="Beige" Width="800" Margin="30,5,0,0">
                         <TextBlock Text="3. Tài khoản 3" VerticalAlignment="Center"  Foreground="Black" Margin="40,0,0,0"/>
                         <Button Width="50" Height="50" Margin="740,0,0,0" Background="Aqua">
 
@@ -116,7 +136,7 @@
                         </Button>
                     </Grid>
 
-                    <Grid VariableSizedWrapGrid.RowSpan="4" Background="Beige" Width="800" Margin="30,10,0,0">
+                    <Grid VariableSizedWrapGrid.RowSpan="4" Background="Beige" Width="800" Margin="30,5,0,0">
                         <TextBlock Text="4. Tài khoản 4" VerticalAlignment="Center"  Foreground="Black" Margin="40,0,0,0"/>
                         <Button Width="50" Height="50" Margin="740,0,0,0" Background="Aqua">
 
@@ -125,7 +145,7 @@
                         </Button>
                     </Grid>
 
-                    <Grid VariableSizedWrapGrid.RowSpan="5" Background="Beige" Width="800" Margin="30,10,0,0">
+                    <Grid VariableSizedWrapGrid.RowSpan="5" Background="Beige" Width="800" Margin="30,5,0,0">
                         <TextBlock Text="5. Tài khoản 5" VerticalAlignment="Center"  Foreground="Black" Margin="40,0,0,0"/>
                         <Button Width="50" Height="50" Margin="740,0,0,0" Background="Aqua">
 
