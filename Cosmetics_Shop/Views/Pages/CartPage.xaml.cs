@@ -24,7 +24,11 @@ namespace Cosmetics_Shop.Views.Pages
     /// </summary>
     public sealed partial class CartPage : Page
     {
+<<<<<<< HEAD
         public CartPageViewModel ViewModel { get; }
+=======
+        public CartPageViewModel ViewModel { get; set; } = new CartPageViewModel();
+>>>>>>> ad4311b5a9c311e96d94838537af8decb763063a
         public CartPage()
         {
             this.InitializeComponent();

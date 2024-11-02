@@ -17,6 +17,7 @@ namespace Cosmetics_Shop.ViewModels
 {
     public class MainViewModel : INotifyPropertyChanged
     {
+<<<<<<< HEAD
         // Navigation service
         private readonly INavigationService _navigationService;
         // Event aggregator for publish and subscribe
@@ -31,6 +32,35 @@ namespace Cosmetics_Shop.ViewModels
         public ICommand AccountButtonCommand { get; }
         public ICommand DashboardButtonCommand { get; }
         #endregion
+=======
+        private Page currentPage;
+        //private int _selectedPageNumber;
+
+        private Page purchasePage = new PurchasePage();
+        private Page cartPage = new CartPage();
+        private Page adminPage = new AdminPage();
+        private Page accountPage = new AccountPage();
+        private Page dashboardPage = new DashboardPage();
+        private Page productDetailPage = new ProductDetailPage();
+
+        public Page CurrentPage
+        {
+            get => currentPage;
+            set
+            {
+                currentPage = productDetailPage;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentPage)));
+            }
+        }
+
+        // Command (gán Event cho button qua binding)
+        public ICommand PurchaseButtonCommand { get; set; }
+        public ICommand CartButtonCommand { get; set; }
+        public ICommand AdminButtonCommand { get; set; }
+        public ICommand AccountButtonCommand { get; set; }
+        public ICommand DashboardButtonCommand {  get; set; }
+        public ICommand ProductDetailButtonCommand { get; set; }
+>>>>>>> ad4311b5a9c311e96d94838537af8decb763063a
 
         // Search button command
         public ICommand SearchButtonCommand { get; }
@@ -88,11 +118,23 @@ namespace Cosmetics_Shop.ViewModels
         }
 
 
+<<<<<<< HEAD
         // For INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+=======
+            AccountButtonCommand = new RelayCommand(() => {
+                CurrentPage = accountPage;
+                //SelectedPageNumber = 4;
+            });
+            ProductDetailButtonCommand = new RelayCommand(() => {
+                CurrentPage = productDetailPage;
+                //SelectedPageNumber = 4;
+            });
+
+>>>>>>> ad4311b5a9c311e96d94838537af8decb763063a
         }
     }
 }

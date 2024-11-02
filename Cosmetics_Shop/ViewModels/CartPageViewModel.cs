@@ -1,6 +1,9 @@
 ﻿using Cosmetics_Shop.Models;
+<<<<<<< HEAD
 using Cosmetics_Shop.Models.DataService;
 using Cosmetics_Shop.Services;
+=======
+>>>>>>> ad4311b5a9c311e96d94838537af8decb763063a
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,6 +15,7 @@ namespace Cosmetics_Shop.ViewModels
 {
     public class CartPageViewModel
     {
+<<<<<<< HEAD
         // Data access object
         private IDao _dao = null;
 
@@ -34,6 +38,20 @@ namespace Cosmetics_Shop.ViewModels
                 cartThumbnailViewModel.GetType().GetProperty("CartThumbnail").SetValue(cartThumbnailViewModel, cartProduct[i]);
                 Cart.Add(cartThumbnailViewModel as CartThumbnailViewModel);
             }
+=======
+        public ObservableCollection<CartThumbnailViewModel> Cart { get; set; } = new ObservableCollection<CartThumbnailViewModel>()
+        {
+            new CartThumbnailViewModel(new CartThumbnail("Loreal Official Store", 1, null, "Tẩy trang loreal", "Tươi mát", 150000, 2, 300000)),
+            new CartThumbnailViewModel(new CartThumbnail("Loreal Official Store", 1, null, "Tẩy trang loreal", "Sạch sâu", 150000, 2, 300000)),
+            new CartThumbnailViewModel(new CartThumbnail("Bioderma Official Store", 1, null, "Tẩy trang Bioderma", "Tươi mát", 150000, 1, 150000)),
+            new CartThumbnailViewModel(new CartThumbnail("Bioderma Official Store", 1, null, "Tẩy trang Bioderma", "Sạch sâu", 150000, 2, 300000)),
+            new CartThumbnailViewModel(new CartThumbnail("Ganier Official Store", 1, null, "Tẩy trang Ganier", "BHA", 130000, 1, 130000)),
+        };
+
+        public CartPageViewModel()
+        {
+
+>>>>>>> ad4311b5a9c311e96d94838537af8decb763063a
         }
     }
 }

@@ -19,7 +19,7 @@ namespace Cosmetics_Shop.Views.Objects
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class CartThumbnailControl : UserControl
+    public sealed partial class ProductCartThumbnailControl : UserControl
     {
         public CartThumbnailViewModel ViewModel
         {
@@ -35,36 +35,13 @@ namespace Cosmetics_Shop.Views.Objects
         public static readonly DependencyProperty ViewModelProperty =
             DependencyProperty.Register("ViewModel",
                                         typeof(CartThumbnailViewModel),
-                                        typeof(CartThumbnailControl),
+                                        typeof(ProductCartThumbnailControl),
                                         new PropertyMetadata(null));
 
-<<<<<<< HEAD
-=======
-
->>>>>>> ad4311b5a9c311e96d94838537af8decb763063a
-        public CartThumbnailControl()
+        public ProductCartThumbnailControl()
         {
             this.InitializeComponent();
         }
 
-<<<<<<< HEAD
-        private void minusButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (int.TryParse(amountTextBox.Text, out int currentAmount) && currentAmount > 1)
-            {
-                amountTextBox.Text = (currentAmount - 1).ToString();
-            }
-        }
-
-        private void plusButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (int.TryParse(amountTextBox.Text, out int currentAmount))
-            {
-                amountTextBox.Text = (currentAmount + 1).ToString();
-            }
-        }
-
-=======
->>>>>>> ad4311b5a9c311e96d94838537af8decb763063a
     }
 }

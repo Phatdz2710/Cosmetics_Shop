@@ -1,16 +1,23 @@
 ﻿using Cosmetics_Shop.Models;
+<<<<<<< HEAD
 using Cosmetics_Shop.Models.DataService;
 using Cosmetics_Shop.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+=======
+using System.Collections.ObjectModel;
+using System;
+using System.Collections.Generic;
+>>>>>>> ad4311b5a9c311e96d94838537af8decb763063a
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.ViewModels
 {
+<<<<<<< HEAD
     public class ProductDetailViewModel : INotifyPropertyChanged
     {
         private ProductDetail _productDetail;
@@ -69,5 +76,10 @@ namespace Cosmetics_Shop.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+=======
+    public class ProductDetailViewModel
+    {
+
+>>>>>>> ad4311b5a9c311e96d94838537af8decb763063a
     }
 }
