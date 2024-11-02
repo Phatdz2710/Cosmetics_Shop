@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -19,11 +22,11 @@ namespace Cosmetics_Shop.Views.Objects
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class ProductCartThumbnailControl : UserControl
+    public sealed partial class ReviewThumbnailControl : UserControl
     {
-        public CartThumbnailViewModel ViewModel
+        public ReviewThumbnailViewModel ViewModel
         {
-            get { return (CartThumbnailViewModel)GetValue(ViewModelProperty); }
+            get { return (ReviewThumbnailViewModel)GetValue(ViewModelProperty); }
             set
             {
                 SetValue(ViewModelProperty, value);
@@ -34,14 +37,12 @@ namespace Cosmetics_Shop.Views.Objects
         // Sử dụng DependencyProperty để hỗ trợ binding
         public static readonly DependencyProperty ViewModelProperty =
             DependencyProperty.Register("ViewModel",
-                                        typeof(CartThumbnailViewModel),
-                                        typeof(ProductCartThumbnailControl),
+                                        typeof(ReviewThumbnailViewModel),
+                                        typeof(ReviewThumbnailControl),
                                         new PropertyMetadata(null));
-
-        public ProductCartThumbnailControl()
+        public ReviewThumbnailControl()
         {
             this.InitializeComponent();
         }
-
     }
 }

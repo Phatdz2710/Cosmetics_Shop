@@ -26,6 +26,12 @@ namespace Cosmetics_Shop.Models.DataService
 
         List<ProductThumbnail> GetListBestSeller();
 
+        List<CartThumbnail> GetListCartProduct();
+
+        List<ReviewThumbnail> GetListReviewThumbnail();
+
+        List<ReviewThumbnail> GetListReviewThumbnailByIDProduct(int idProduct);
+
         LoginResult CheckLogin(string username, string password);
     }
 }

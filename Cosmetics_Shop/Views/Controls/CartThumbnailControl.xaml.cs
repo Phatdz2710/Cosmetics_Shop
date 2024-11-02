@@ -38,10 +38,25 @@ namespace Cosmetics_Shop.Views.Objects
                                         typeof(CartThumbnailControl),
                                         new PropertyMetadata(null));
 
-
         public CartThumbnailControl()
         {
             this.InitializeComponent();
+        }
+
+        private void minusButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (int.TryParse(amountTextBox.Text, out int currentAmount) && currentAmount > 1)
+            {
+                amountTextBox.Text = (currentAmount - 1).ToString();
+            }
+        }
+
+        private void plusButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (int.TryParse(amountTextBox.Text, out int currentAmount))
+            {
+                amountTextBox.Text = (currentAmount + 1).ToString();
+            }
         }
 
     }

@@ -16,6 +16,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="LoginWindow.xaml" />
+    <None Remove="Views\Controls\ReviewThumbnailControl.xaml" />
     <None Remove="Views\MainWindow.xaml" />
     <None Remove="Views\Controls\ProductThumbnailControl.xaml" />
     <None Remove="Views\Pages\AccountPage.xaml" />
@@ -73,6 +74,11 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Remove="Views\MainWindow.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\Controls\ReviewThumbnailControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\WindowContent.xaml">

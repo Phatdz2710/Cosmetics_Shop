@@ -21,10 +21,31 @@ namespace Cosmetics_Shop.Views.Pages
 {
     public sealed partial class ProductDetailPage : Page
     {
-        public ProductDetailViewModel ViewModel { get; set; } = new ProductDetailViewModel();
+        public ProductDetailViewModel ViewModel { get; }
         public ProductDetailPage()
         {
             this.InitializeComponent();
+            ViewModel = App.ServiceProvider.GetService(typeof(ProductDetailViewModel)) as ProductDetailViewModel;
+
+            int productId = 2;
+            ViewModel.LoadProductDetail(productId);
+            ViewModel.LoadInitialReviews(productId);
+        }
+
+        private void minusButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (int.TryParse(amountTextBox.Text, out int currentAmount) && currentAmount > 1)
+            {
+                amountTextBox.Text = (currentAmount - 1).ToString();
+            }
+        }
+
+        private void plusButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (int.TryParse(amountTextBox.Text, out int currentAmount))
+            {
+                amountTextBox.Text = (currentAmount + 1).ToString();
+            }
         }
     }
 }
