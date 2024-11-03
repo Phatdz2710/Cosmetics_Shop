@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace Cosmetics_Shop.ViewModels
+namespace Cosmetics_Shop.ViewModels.UserControlViewModels
 {
     public class ProductThumbnailViewModel : INotifyPropertyChanged
     {
@@ -21,8 +21,8 @@ namespace Cosmetics_Shop.ViewModels
         private readonly INavigationService _navigationService;
 
         // Main properties
-        public ProductThumbnail ProductThumbnail { get; set; }   
-        
+        public ProductThumbnail ProductThumbnail { get; set; }
+
         // Buy button command
         public ICommand BuyButtonCommand { get; set; }
 

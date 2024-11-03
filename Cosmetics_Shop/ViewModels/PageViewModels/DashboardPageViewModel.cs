@@ -1,6 +1,7 @@
 ﻿using Cosmetics_Shop.Models;
 using Cosmetics_Shop.Models.DataService;
 using Cosmetics_Shop.Services;
+using Cosmetics_Shop.ViewModels.UserControlViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cosmetics_Shop.ViewModels
+namespace Cosmetics_Shop.ViewModels.PageViewModels
 {
     public class DashboardPageViewModel
     {
@@ -16,8 +17,8 @@ namespace Cosmetics_Shop.ViewModels
         private IDao _dao = null;
 
         // Observable Collection
-        public ObservableCollection<ProductThumbnailViewModel> BestSeller { get; set; } 
-        public ObservableCollection<ProductThumbnailViewModel> NewProducts { get; set; } 
+        public ObservableCollection<ProductThumbnailViewModel> BestSeller { get; set; }
+        public ObservableCollection<ProductThumbnailViewModel> NewProducts { get; set; }
 
 
         // Constructor
@@ -29,8 +30,8 @@ namespace Cosmetics_Shop.ViewModels
             BestSeller = new ObservableCollection<ProductThumbnailViewModel>();
             NewProducts = new ObservableCollection<ProductThumbnailViewModel>();
 
-            var bestSeller = _dao.GetListBestSeller();
-            var newProducts = _dao.GetListNewProduct();
+            var bestSeller = _dao.GetListBestSellerAsync();
+            var newProducts = _dao.GetListNewProductAsync();
 
             for (int i = 0; i < bestSeller.Count; i++)
             {

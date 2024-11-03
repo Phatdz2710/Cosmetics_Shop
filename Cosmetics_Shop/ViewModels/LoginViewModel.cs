@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using Cosmetics_Shop.Models;
 using Cosmetics_Shop.Models.DataService;
 using Cosmetics_Shop.Services;
 using Cosmetics_Shop.Services.Interfaces;
@@ -83,7 +84,7 @@ namespace Cosmetics_Shop.ViewModels
             var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
             Username = localSettings.Values["Username"] as string;
             Password = localSettings.Values["Password"] as string;
-            RememberMe = localSettings.Values["Username"] as string != "";
+            RememberMe = localSettings.Values["RememberMe"] as string != "";
 
             SwitchLoginCommand = new RelayCommand(() =>
             {
@@ -97,9 +98,9 @@ namespace Cosmetics_Shop.ViewModels
                 MessageVisibility = Visibility.Collapsed;
             });
 
-            LoginCommand = new RelayCommand(() =>
+            LoginCommand = new RelayCommand(async () =>
             {
-                CheckLogin();
+                await CheckLogin();
             });
 
             SignupCommand = new RelayCommand(() =>
@@ -108,10 +109,11 @@ namespace Cosmetics_Shop.ViewModels
             });
         }
 
-        public void CheckLogin()
+        public async Task CheckLogin()
         {
-            var loginResult = _dao.CheckLogin(Username, Password);
-            switch ((int)loginResult)
+            LoginResult loginResult = await _dao.CheckLoginAsync(Username, Password);
+
+            switch ((int)loginResult.LoginStatus)
             {
                 case 0:
                     // Local store username and password'
@@ -129,15 +131,27 @@ namespace Cosmetics_Shop.ViewModels
                         localSettings.Values["RememberMe"] = "";
                     }
 
+                    // Set Info to UserSession
+                    var userSession = App.ServiceProvider.GetService(typeof(UserSession)) as UserSession;
+                    
+                    if (loginResult.Role == "Admin")
+                    {
+                        userSession.SetUserInfo(new Admin(1, Username, loginResult.Token));
+                    }
+                    else
+                    {
+                        userSession.SetUserInfo(new User(2, Username, loginResult.Token));
+                    }
+
                     var mainWindow = new MainWindow();
                     mainWindow.Activate();
                     _eventAggregator.Publish(new CloseWindowMessage());
                     break;
                 case 1:
-                    WrongMessage = "Username does not exist!";
+                    WrongMessage = "Tài khoản không tồn tại!";
                     break;
                 case 2:
-                    WrongMessage = "Wrong password!";
+                    WrongMessage = "Sai mật khẩu !";
                     break;
                 default:
                     break;

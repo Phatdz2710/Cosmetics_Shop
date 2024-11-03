@@ -1,4 +1,5 @@
 ﻿using Cosmetics_Shop.Models.Enums;
+using Cosmetics_Shop.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Cosmetics_Shop.Models.DataService
     { 
         void InsertProduct(Product product);
 
-        ProductQueryResult GetListProductThumbnail(
+        Task<ProductQueryResult> GetListProductThumbnailAsync(
             string keyword = "",
             int pageIndex = 1,
             int productsPerPage = 10,
@@ -22,10 +23,10 @@ namespace Cosmetics_Shop.Models.DataService
 
         ProductDetail GetProductDetail(int idProduct);
 
-        List<ProductThumbnail> GetListNewProduct();
+        List<ProductThumbnail> GetListNewProductAsync();
 
-        List<ProductThumbnail> GetListBestSeller();
+        List<ProductThumbnail> GetListBestSellerAsync();
 
-        LoginResult CheckLogin(string username, string password);
+        Task<LoginResult> CheckLoginAsync(string username, string password);
     }
 }

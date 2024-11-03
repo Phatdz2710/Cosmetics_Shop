@@ -3,6 +3,7 @@ using Cosmetics_Shop.Models;
 using Cosmetics_Shop.Models.DataService;
 using Cosmetics_Shop.Services;
 using Cosmetics_Shop.Services.Interfaces;
+using Cosmetics_Shop.ViewModels.UserControlViewModels;
 using Cosmetics_Shop.Views.Objects;
 using Microsoft.UI.Xaml;
 using System;
@@ -16,7 +17,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.Graphics.Printing;
 
-namespace Cosmetics_Shop.ViewModels
+namespace Cosmetics_Shop.ViewModels.PageViewModels
 {
     /// <summary>
     /// View model for PurchasePage
@@ -141,7 +142,7 @@ namespace Cosmetics_Shop.ViewModels
 
 
         // Constructor
-        public PurchasePageViewModel(INavigationService navigationService, 
+        public PurchasePageViewModel(INavigationService navigationService,
                                         IEventAggregator eventAggregator,
                                         IDao dao)
         {
@@ -162,49 +163,54 @@ namespace Cosmetics_Shop.ViewModels
             // Initialize list of brands
             Brands = new ObservableCollection<CheckboxBrandContent>();
 
-            NextPageCommand = new RelayCommand(() =>
+            NextPageCommand = new RelayCommand(async () =>
             {
                 PageIndex++;
-                GetProductThumbnails();
+                await GetProductThumbnails();
             });
 
-            PreviousPageCommand = new RelayCommand(() =>
+            PreviousPageCommand = new RelayCommand(async () =>
             {
                 PageIndex--;
-                GetProductThumbnails();
+                await GetProductThumbnails();
             });
 
-            CheckboxBrandCheckedCommand = new RelayCommand<int>((index) =>
+            CheckboxBrandCheckedCommand = new RelayCommand<int>(async (index) =>
             {
-                this.filterBrand = this.Brands[index].Name;
+                filterBrand = Brands[index].Name;
                 PageIndex = 1;
-                if (this.Brands[index].IsChecked)
+                if (Brands[index].IsChecked)
                 {
-                    this.filterBrand = string.Empty;
-                    GetProductThumbnails();
+                    filterBrand = string.Empty;
+                    await GetProductThumbnails();
                 }
                 else
                 {
-                    GetProductThumbnails(isBrandFilter: true);
+                    await GetProductThumbnails(isBrandFilter: true);
                 }
             });
 
-            FilterPriceCommand = new RelayCommand(() =>
+            FilterPriceCommand = new RelayCommand(async () =>
             {
                 PageIndex = 1;
-                GetProductThumbnails();
+                await GetProductThumbnails();
             });
 
-            GetProductThumbnails();
+            FirstLoadProductThumbnails();
         }
 
-        private void GetProductThumbnails(bool isBrandFilter = false)
+        private async void FirstLoadProductThumbnails()
         {
-            ProductQueryResult productQueryResult = _dao.GetListProductThumbnail(
-                keyword:Keyword, 
-                pageIndex:PageIndex, 
-                productsPerPage:ProductsPerPage, 
-                filterBrand: this.filterBrand,
+            await GetProductThumbnails();
+        }
+
+        private async Task GetProductThumbnails(bool isBrandFilter = false)
+        {
+            ProductQueryResult productQueryResult = await _dao.GetListProductThumbnailAsync(
+                keyword: Keyword,
+                pageIndex: PageIndex,
+                productsPerPage: ProductsPerPage,
+                filterBrand: filterBrand,
                 minPrice: int.Parse(MinPrice),
                 maxPrice: int.Parse(MaxPrice));
 
@@ -214,7 +220,7 @@ namespace Cosmetics_Shop.ViewModels
             VisiPrevious = PageIndex == 1 ? Visibility.Collapsed : Visibility.Visible;
 
             ProductThumbnails?.Clear();
-            
+
             for (int i = 0; i < productQueryResult.Products.Count; i++)
             {
                 var productThumbnailViewModel = App.ServiceProvider.GetService(typeof(ProductThumbnailViewModel));
@@ -235,11 +241,11 @@ namespace Cosmetics_Shop.ViewModels
             }
         }
 
-        
+
         public void SearchProduct()
         {
             PageIndex = 1;
-            this.filterBrand = "";
+            filterBrand = "";
             GetProductThumbnails();
         }
 

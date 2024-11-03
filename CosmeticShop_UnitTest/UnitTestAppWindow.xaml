@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Window
-    x:Class="Cosmetics_Shop.Views.MainWindow"
+    x:Class="CosmeticShop_UnitTest.UnitTestAppWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Cosmetics_Shop.Views"
-    xmlns:converter="using:Cosmetics_Shop.Views.Converters"
+    xmlns:local="using:CosmeticShop_UnitTest"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Frame x:Name="MainPageFrame"/>
+    <Grid>
+
+    </Grid>
 </Window>

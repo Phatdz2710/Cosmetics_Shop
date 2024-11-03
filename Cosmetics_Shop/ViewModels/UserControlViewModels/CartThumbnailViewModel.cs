@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cosmetics_Shop.ViewModels
+namespace Cosmetics_Shop.ViewModels.UserControlViewModels
 {
     public class CartThumbnailViewModel : INotifyPropertyChanged
     {
@@ -17,7 +17,7 @@ namespace Cosmetics_Shop.ViewModels
 
         public CartThumbnailViewModel(CartThumbnail cartThumbnail)
         {
-            this.CartThumbnail = cartThumbnail;
+            CartThumbnail = cartThumbnail;
         }
 
         private void OnPropertyChanged(string propertyName)

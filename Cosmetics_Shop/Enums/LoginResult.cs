@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.Models.Enums
 {
-    public enum LoginResult
+    public enum LoginStatus
     {
         Success = 0,
         InvalidUsername = 1,

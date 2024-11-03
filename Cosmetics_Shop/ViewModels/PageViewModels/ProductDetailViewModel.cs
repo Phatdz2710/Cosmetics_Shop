@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using Cosmetics_Shop.Models.DataService;
 
-namespace Cosmetics_Shop.ViewModels
+namespace Cosmetics_Shop.ViewModels.PageViewModels
 {
     public class ProductDetailViewModel : INotifyPropertyChanged
     {

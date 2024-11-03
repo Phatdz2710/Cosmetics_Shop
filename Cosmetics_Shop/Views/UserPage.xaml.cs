@@ -23,19 +23,18 @@ namespace Cosmetics_Shop.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class WindowContent : Page
+    public sealed partial class UserPage : Page
     {
-        public MainViewModel ViewModel;
-        public WindowContent()
+        public UserViewModel ViewModel { get; set; } 
+        public UserPage()
         {
             this.InitializeComponent();
             var navigationService = (INavigationService)App.ServiceProvider.GetService(typeof(INavigationService));
             navigationService.Initialize(rootFrame);
 
             rootFrame.NavigationFailed += RootFrame_NavigationFailed;
-            rootFrame.Navigate(typeof(Pages.DashboardPage));
-            
-            ViewModel = (MainViewModel)App.ServiceProvider.GetService(typeof(MainViewModel));
+           
+            ViewModel = (UserViewModel)App.ServiceProvider.GetService(typeof(UserViewModel));
         }
 
         private void RootFrame_NavigationFailed(object sender, Microsoft.UI.Xaml.Navigation.NavigationFailedEventArgs e)

@@ -22,6 +22,9 @@ using Cosmetics_Shop.ViewModels;
 using Cosmetics_Shop.Views.Pages;
 using Cosmetics_Shop.Services.Interfaces;
 using Cosmetics_Shop.Models.DataService;
+using Cosmetics_Shop.Models;
+using Cosmetics_Shop.ViewModels.PageViewModels;
+using Cosmetics_Shop.ViewModels.UserControlViewModels;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -66,13 +69,17 @@ namespace Cosmetics_Shop
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<IEventAggregator, EventAggregator>();
             services.AddSingleton<IDao, MockDao>();
+            services.AddSingleton<UserSession>();
 
             // Add Transient
             services.AddTransient<LoginViewModel>();
+            services.AddTransient<UserViewModel>();
+            services.AddTransient<AdminViewModel>();
             services.AddTransient<MainViewModel>();
             services.AddTransient<PurchasePageViewModel>();
             services.AddTransient<DashboardPageViewModel>();
             services.AddTransient<ProductThumbnailViewModel>();
+            
             
 
             // Add Scoped

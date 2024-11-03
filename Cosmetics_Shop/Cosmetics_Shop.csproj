@@ -3,7 +3,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
-    <WindowsSdkPackageVersion>10.0.22621.38</WindowsSdkPackageVersion>
+    <WindowsSdkPackageVersion>10.0.19041.38</WindowsSdkPackageVersion>
     <RootNamespace>Cosmetics_Shop</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <Platforms>x86;x64;ARM64</Platforms>
@@ -13,6 +13,7 @@
     <UseWinUI>true</UseWinUI>
     <EnableMsixTooling>true</EnableMsixTooling>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+	<EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="LoginWindow.xaml" />
@@ -25,7 +26,7 @@
     <None Remove="Views\Pages\LoginSignupControl.xaml" />
     <None Remove="Views\Pages\LoginSignupPage.xaml" />
     <None Remove="Views\Pages\PurchasePage.xaml" />
-    <None Remove="Views\WindowContent.xaml" />
+    <None Remove="Views\UserPage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -75,7 +76,7 @@
     <Resource Remove="Views\MainWindow.xaml" />
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Views\WindowContent.xaml">
+    <Page Update="Views\UserPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

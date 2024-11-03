@@ -1,15 +1,18 @@
 ﻿using Cosmetics_Shop.Models.Enums;
+using Cosmetics_Shop.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using Windows.Security.Authentication.Web.Provider;
 
 namespace Cosmetics_Shop.Models.DataService
 {
     public class MockDao : IDao
     {
-        public ProductQueryResult GetListProductThumbnail(
+        public async Task<ProductQueryResult> GetListProductThumbnailAsync(
             string keyword = "", 
             int pageIndex = 1, 
             int productsPerPage = 10, 
@@ -53,37 +56,40 @@ namespace Cosmetics_Shop.Models.DataService
                 new ProductThumbnail(30, "Nail Polish", null, 90000, "Burt's Bees"),
             };
 
-
-            // Filter by keyword
-            if (!string.IsNullOrEmpty(keyword))
+            return await Task.Run(() =>
             {
-                db = db.Where(p => p.Name.ToLower().Contains(keyword.ToLower())).ToList();
-            }
+                // Filter by keyword
+                if (!string.IsNullOrEmpty(keyword))
+                {
+                    db = db.Where(p => p.Name.ToLower().Contains(keyword.ToLower())).ToList();
+                }
 
-            if (!string.IsNullOrEmpty(filterBrand))
-            {
-                db = db.Where(p => p.Brand == filterBrand).ToList();
-            }
+                if (!string.IsNullOrEmpty(filterBrand))
+                {
+                    db = db.Where(p => p.Brand == filterBrand).ToList();
+                }
 
-            db = db.Where(p => p.Price >= minPrice && p.Price <= maxPrice).ToList();
+                db = db.Where(p => p.Price >= minPrice && p.Price <= maxPrice).ToList();
 
-            var resBrands = db.Select(p => p.Brand).Distinct().ToList();
+                var resBrands = db.Select(p => p.Brand).Distinct().ToList();
+
+
+                int totalProduct = db.Count;
+
+                // Paging
+                db = db.Skip((pageIndex - 1) * productsPerPage).Take(productsPerPage).ToList();
+
+                int numPages = totalProduct / productsPerPage + (totalProduct % productsPerPage != 0 ? 1 : 0);
+                if (numPages == 0) numPages = 1;
+
+                return new ProductQueryResult()
+                {
+                    Products = db,
+                    TotalPages = numPages,
+                    Brands = resBrands
+                };
+            });
             
-
-            int totalProduct = db.Count;
-
-            // Paging
-            db = db.Skip((pageIndex - 1) * productsPerPage).Take(productsPerPage).ToList();
-
-            int numPages = totalProduct / productsPerPage + (totalProduct % productsPerPage != 0 ? 1 : 0);
-            if (numPages == 0) numPages = 1;
-
-            return new ProductQueryResult()
-            {
-                Products = db,
-                TotalPages = numPages,
-                Brands = resBrands
-            };
         }
 
         public ProductDetail GetProductDetail(int idProduct)
@@ -91,7 +97,7 @@ namespace Cosmetics_Shop.Models.DataService
             return null;
         }
 
-        public List<ProductThumbnail> GetListNewProduct()
+        public List<ProductThumbnail> GetListNewProductAsync()
         {
             var db = new List<ProductThumbnail>()
             {
@@ -104,7 +110,7 @@ namespace Cosmetics_Shop.Models.DataService
 
             return db;
         }
-        public List<ProductThumbnail> GetListBestSeller()
+        public List<ProductThumbnail> GetListBestSellerAsync()
         {
             var db = new List<ProductThumbnail>()
             {
@@ -120,27 +126,47 @@ namespace Cosmetics_Shop.Models.DataService
             throw new NotImplementedException();
         }
 
-        public LoginResult CheckLogin(string username, string password)
+        public async Task<LoginResult> CheckLoginAsync(string username, string password)
         {
-            List<Tuple<string, string>> _listAccount = new List<Tuple<string, string>>()
+            List<Tuple<string, string, string, string>> _listAccount = new List<Tuple<string, string, string, string>>()
             {
-                new Tuple<string, string>("admin", "admin"),
-                new Tuple<string, string>("user", "user")
+                new Tuple<string, string, string, string>("admin", "admin", "Admin", "1234"),
+                new Tuple<string, string, string, string>("user", "user", "User", "2345")
             };
 
-            bool isExistUsername = _listAccount.Any(account => account.Item1 == username);
-            
-            if (!isExistUsername)
+            return await Task.Run(() =>
             {
-                return LoginResult.InvalidUsername;
-            }
+                bool isExistUsername = _listAccount.Any(account => account.Item1 == username);
 
-            bool isCorrectPassword = _listAccount.Any(account => account.Item1 == username && account.Item2 == password);
-            if (!isCorrectPassword) {
-                return LoginResult.InvalidPassword;
-            }
+                if (!isExistUsername)
+                {
+                    return new LoginResult()
+                    {
+                        LoginStatus = LoginStatus.InvalidUsername,
+                        Role = "",
+                        Token = "",
+                    };
 
-            return LoginResult.Success;
+                }
+
+                bool isCorrectPassword = _listAccount.Any(account => account.Item1 == username && account.Item2 == password);
+                if (!isCorrectPassword)
+                {
+                    return new LoginResult()
+                    {
+                        LoginStatus = LoginStatus.InvalidPassword,
+                        Role = "",
+                        Token = "",
+                    };
+                }
+
+                return new LoginResult()
+                {
+                    LoginStatus = LoginStatus.Success,
+                    Role = _listAccount.First(account => account.Item1 == username).Item3,
+                    Token = _listAccount.First(account => account.Item1 == username).Item4,
+                };
+            });
         }
     }
 }
