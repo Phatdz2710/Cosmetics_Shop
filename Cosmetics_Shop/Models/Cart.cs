@@ -9,7 +9,6 @@ namespace Cosmetics_Shop.Models
 {
     public class Cart
     {
-        public string ShopName { get; set; }
         public int Id { get; set; }
         Image ProductImage { get; set; }
         public string ProductName { get; set; }
@@ -18,10 +17,9 @@ namespace Cosmetics_Shop.Models
         public int Amount { get; set; }
         public int TotalPrice { get; set; }
 
-        public Cart(string shopName, int id, Image productImage, string productName, string classification, 
+        public Cart(int id, Image productImage, string productName, string classification, 
             int price, int amount, int totalPrice)
         {
-            this.ShopName = shopName;
             Id = id;
             ProductImage = productImage;
             ProductName = productName;

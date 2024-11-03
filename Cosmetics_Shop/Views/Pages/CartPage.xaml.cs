@@ -24,10 +24,13 @@ namespace Cosmetics_Shop.Views.Pages
     /// </summary>
     public sealed partial class CartPage : Page
     {
-        public CartPageViewModel ViewModel { get; set; } = new CartPageViewModel();
+
+        public CartPageViewModel ViewModel { get; }
+
         public CartPage()
         {
             this.InitializeComponent();
+            ViewModel = App.ServiceProvider.GetService(typeof(CartPageViewModel)) as CartPageViewModel;
         }
     }
 }

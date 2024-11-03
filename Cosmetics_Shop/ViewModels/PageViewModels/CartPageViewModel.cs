@@ -1,4 +1,6 @@
 ﻿using Cosmetics_Shop.Models;
+using Cosmetics_Shop.Models.DataService;
+using Cosmetics_Shop.Services;
 using Cosmetics_Shop.ViewModels.UserControlViewModels;
 using System;
 using System.Collections.Generic;
@@ -11,18 +13,28 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
 {
     public class CartPageViewModel
     {
-        public ObservableCollection<CartThumbnailViewModel> Cart { get; set; } = new ObservableCollection<CartThumbnailViewModel>()
-        {
-            new CartThumbnailViewModel(new CartThumbnail("Loreal Official Store", 1, null, "Tẩy trang loreal", "Tươi mát", 150000, 2, 300000)),
-            new CartThumbnailViewModel(new CartThumbnail("Loreal Official Store", 1, null, "Tẩy trang loreal", "Sạch sâu", 150000, 2, 300000)),
-            new CartThumbnailViewModel(new CartThumbnail("Bioderma Official Store", 1, null, "Tẩy trang Bioderma", "Tươi mát", 150000, 1, 150000)),
-            new CartThumbnailViewModel(new CartThumbnail("Bioderma Official Store", 1, null, "Tẩy trang Bioderma", "Sạch sâu", 150000, 2, 300000)),
-            new CartThumbnailViewModel(new CartThumbnail("Ganier Official Store", 1, null, "Tẩy trang Ganier", "BHA", 130000, 1, 130000)),
-        };
+        // Data access object
+        private IDao _dao = null;
 
-        public CartPageViewModel()
-        {
+        // Observable Collection
+        public ObservableCollection<CartThumbnailViewModel> Cart { get; set; }
 
+        // Constructor
+        public CartPageViewModel(INavigationService navigationService,
+                                        IDao dao)
+        {
+            _dao = dao;
+
+            Cart = new ObservableCollection<CartThumbnailViewModel>();
+
+            var cartProduct = _dao.GetListCartProduct();
+
+            for (int i = 0; i < cartProduct.Count; i++)
+            {
+                var cartThumbnailViewModel = App.ServiceProvider.GetService(typeof(CartThumbnailViewModel));
+                cartThumbnailViewModel.GetType().GetProperty("CartThumbnail").SetValue(cartThumbnailViewModel, cartProduct[i]);
+                Cart.Add(cartThumbnailViewModel as CartThumbnailViewModel);
+            }
         }
     }
 }
