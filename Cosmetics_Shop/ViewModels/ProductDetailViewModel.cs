@@ -1,23 +1,23 @@
-﻿using Cosmetics_Shop.Models;
-<<<<<<< HEAD
+﻿using CommunityToolkit.Mvvm.Input;
+using Cosmetics_Shop.Models;
 using Cosmetics_Shop.Models.DataService;
 using Cosmetics_Shop.Services;
+using Cosmetics_Shop.Views.Objects;
+using Cosmetics_Shop.Views.Pages;
+using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-=======
 using System.Collections.ObjectModel;
-using System;
-using System.Collections.Generic;
->>>>>>> ad4311b5a9c311e96d94838537af8decb763063a
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
+
 
 namespace Cosmetics_Shop.ViewModels
 {
-<<<<<<< HEAD
+
     public class ProductDetailViewModel : INotifyPropertyChanged
     {
         private ProductDetail _productDetail;
@@ -36,18 +36,6 @@ namespace Cosmetics_Shop.ViewModels
         public ProductDetailViewModel()
         {
             dao = new MockDao();
-
-            //int idProduct = 1;
-            //reviewThumbnail = new ObservableCollection<ReviewThumbnailViewModel>();
-            //var review = dao.GetListReviewThumbnailByIDProduct(idProduct);
-            //for (int i = 0; i < review.Count; i++)
-            //{
-            //    var reviewThumbnailViewModel = App.ServiceProvider.GetService(typeof(ReviewThumbnailViewModel));
-            //    reviewThumbnailViewModel.GetType().GetProperty("ReviewThumbnail").SetValue(reviewThumbnailViewModel, review[i]);
-            //    reviewThumbnail.Add(reviewThumbnailViewModel as ReviewThumbnailViewModel);
-            //}
-            //reviewThumbnail = new ObservableCollection<ReviewThumbnailViewModel>();
-            //LoadInitialReviews();
         }
 
         public void LoadInitialReviews(int idProduct)
@@ -76,10 +64,5 @@ namespace Cosmetics_Shop.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-=======
-    public class ProductDetailViewModel
-    {
-
->>>>>>> ad4311b5a9c311e96d94838537af8decb763063a
     }
 }

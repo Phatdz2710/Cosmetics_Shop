@@ -7,24 +7,15 @@
     xmlns:objects="using:Cosmetics_Shop.Views.Objects"
     xmlns:converter="using:Cosmetics_Shop.Views.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-<<<<<<< HEAD
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-=======
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
->>>>>>> ad4311b5a9c311e96d94838537af8decb763063a
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <UserControl.Resources>
         <converter:VNDCurrencyConverter x:Key="VNDCurrencyConverter"/>
-<<<<<<< HEAD
         <converter:AmountThousandToKConvert x:Key="AmountThousandToKConvert"/>
     </UserControl.Resources>
 
-=======
-    </UserControl.Resources>
-    
->>>>>>> ad4311b5a9c311e96d94838537af8decb763063a
     <ScrollView>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -37,90 +28,35 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="400"/>
                 <RowDefinition Height="20"/>
-<<<<<<< HEAD
                 <RowDefinition Height="250"/>
-=======
-                <RowDefinition Height="150"/>
->>>>>>> ad4311b5a9c311e96d94838537af8decb763063a
                 <RowDefinition Height="20"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
             <Grid Grid.Column="0"
                   Grid.RowSpan="6"
-<<<<<<< HEAD
                   Background="#317256">
-=======
-                  Background="#6bb120">
->>>>>>> ad4311b5a9c311e96d94838537af8decb763063a
             </Grid>
 
             <Grid Grid.Column="2"
                   Grid.RowSpan="6"
-<<<<<<< HEAD
                   Background="#317256">
-=======
-                  Background="#6bb120">
->>>>>>> ad4311b5a9c311e96d94838537af8decb763063a
             </Grid>
 
             <StackPanel Grid.Row="0"
                         Grid.ColumnSpan="4"
-<<<<<<< HEAD
                         Background="#317256">
-=======
-                        Background="#6bb120">
->>>>>>> ad4311b5a9c311e96d94838537af8decb763063a
                 <!--do a breadcrumbar control-->
             </StackPanel>
 
             <Button x:Name="returnButton"
-<<<<<<< HEAD
                     Background="#317256"
                     BorderBrush="#317256"
-=======
-                    Background="#6bb120"
-                    BorderBrush="#6bb120"
->>>>>>> ad4311b5a9c311e96d94838537af8decb763063a
                     Margin="10 0 0 0"
                     >
                 <FontIcon Glyph="&#xE830;" />
             </Button>
 
-<<<<<<< HEAD
-=======
-            <StackPanel Grid.Row="3"
-                        Grid.Column="1"
-                        Background="White"
-                        Orientation="Horizontal">
-                <Ellipse Fill="Gray" 
-                         Width="120"
-                         Height="120"
-                         Margin="20 0 0 0"
-                         HorizontalAlignment="Center"
-                         VerticalAlignment="Center"/>
-                <StackPanel Orientation="Vertical">
-                    <TextBlock x:Name="shopNameTextBlock"
-                               Text="Bioderma Official"
-                               VerticalAlignment="Center"
-                               Margin="20 40 0 0"
-                               FontSize="20"
-                               />
-                    <Button x:Name="xemShopButton"
-                            Margin="20 15 0 0"
-                            FontSize="15"
-                            >
-                        <StackPanel Orientation="Horizontal"
-                                    HorizontalAlignment="Center">
-                            <FontIcon Glyph="&#xE719;" />
-                            <TextBlock Text="Xem shop"
-                                       Margin="20 0 0 0"/>
-                        </StackPanel>
-                    </Button>
-                </StackPanel>
-            </StackPanel>
-
->>>>>>> ad4311b5a9c311e96d94838537af8decb763063a
             <StackPanel Grid.Column="1" Grid.Row="1"
                         Background="White">
                 <Grid>
@@ -136,29 +72,17 @@
                            Height="400"
                         />
 
-<<<<<<< HEAD
                     <StackPanel Grid.Column="1"
                                 Background="White"
                                 Orientation="Vertical">
                         <TextBlock FontSize="25"
                                    TextWrapping="Wrap"
                                    Margin="0 20 10 0"
-                                   Text="{x:Bind ViewModel.ProductDetail.Name, Mode=OneWay}"
-=======
-                    <StackPanel Grid.Column="2"
-                                Background="White"
-                                Orientation="Vertical">
-                        <TextBlock Text="Nước tẩy trang Bidema Sensibio H20 500ml dành cho mọi loại da nhaỵ cảm da dầu mụn khô 500ml"
-                                   FontSize="20"
-                                   TextWrapping="Wrap"
-                                   Margin="0 20 10 0"
->>>>>>> ad4311b5a9c311e96d94838537af8decb763063a
-                                   />
+                                   Text="{x:Bind ViewModel.ProductDetail.Name, Mode=OneWay}"/>
 
                         <StackPanel Orientation="Horizontal" 
                                     VerticalAlignment="Center">
                             <Button x:Name="reviewButton"
-<<<<<<< HEAD
                                     Background="White"
                                     BorderBrush ="White"                  
                                     FontSize="15"
@@ -187,26 +111,7 @@
                             <Run Text="{x:Bind ViewModel.ProductDetail.Price, Mode=OneWay,
                                             Converter={StaticResource VNDCurrencyConverter}}"/> đ
                         </TextBlock>
-=======
-                                    Content="2.7k Đánh giá"
-                                    Background="White"
-                                    BorderBrush ="White"                  
-                                    FontSize="15"
-                                    />
-                            <TextBlock x:Name="soldTextBlock"
-                                       Text="10k Đã bán"
-                                       FontSize="15"
-                                       Margin="10 6 0 0"
-                                       />
-                        </StackPanel>
 
-                        <TextBlock x:Name="priceTextBlock"
-                                   Text="200.000 đ"
-                                   FontSize="35"
-                                   Foreground="Red"                      
-                                   Margin="0 6 0 0"
-                                   />
->>>>>>> ad4311b5a9c311e96d94838537af8decb763063a
                         <StackPanel>
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -299,47 +204,30 @@
 
                                 <StackPanel Grid.Column="1"
                                             Orientation="Horizontal">
-<<<<<<< HEAD
                                     <Button Name="minusButton" 
                                             Width="35" 
                                             Height="35" 
                                             Content="-" 
                                             Click="minusButton_Click"/>
-=======
-                                    <Button Name="minusButton" Width="35" Height="35" Content="-"/>
->>>>>>> ad4311b5a9c311e96d94838537af8decb763063a
                                     <TextBox x:Name="amountTextBox" 
                                                Height="35" 
                                                Width="5" 
                                                Text="1"
                                                TextAlignment="Center"
-<<<<<<< HEAD
                                     />
                                     <Button Name="plusButton" 
                                             Width="35" 
                                             Height="35" 
                                             Content="+" 
                                             Click="plusButton_Click"/>
-=======
-                               />
-                                    <Button Name="plusButton" Width="35" Height="35" Content="+"/>
-                                    <!--Click="nextButton_Click"/>-->
->>>>>>> ad4311b5a9c311e96d94838537af8decb763063a
                                 </StackPanel>
 
                                 <TextBlock Grid.Column="2"  
                                            x:Name="availableTextBlock"
-<<<<<<< HEAD
                                            Margin="0 10 0 0"
                                            Foreground="DarkGray">
                                     <Run Text="{x:Bind ViewModel.ProductDetail.availableAmount, Mode=OneWay}"/> sản phẩm có sẵn
                                 </TextBlock>
-=======
-                                           Text="1212 sản phẩm có sẵn"
-                                           Margin="0 10 0 0"
-                                           Foreground="DarkGray"
-                                 />
->>>>>>> ad4311b5a9c311e96d94838537af8decb763063a
                             </Grid>
                         </StackPanel>
 
@@ -387,19 +275,14 @@
 
             <Grid Grid.Row="2"
                   Grid.ColumnSpan="4"
-<<<<<<< HEAD
                   Background="#317256">
-=======
-                  Background="#6bb120">
->>>>>>> ad4311b5a9c311e96d94838537af8decb763063a
             </Grid>
 
             <Grid Grid.Row="4"
                   Grid.ColumnSpan="4"
-<<<<<<< HEAD
                   Background="#317256">
             </Grid>
-            
+
             <Grid Grid.Column="1"
                   Grid.Row="3"
                   Background="White"
@@ -435,11 +318,6 @@
                 </ScrollView>
             </Grid>
 
-=======
-                  Background="#6bb120">
-            </Grid>
->>>>>>> ad4311b5a9c311e96d94838537af8decb763063a
-
             <StackPanel Grid.Row="5"
                     Grid.Column="1"
                     Background="White">
@@ -468,13 +346,6 @@
                                    Margin="50 10 0 0"
                                    Foreground="DarkGray"
                                    FontSize="15"/>
-<<<<<<< HEAD
-=======
-                        <TextBlock Text="Chất liệu"
-                                   Margin="50 10 0 0"
-                                   Foreground="DarkGray"
-                                   FontSize="15"/>
->>>>>>> ad4311b5a9c311e96d94838537af8decb763063a
                         <TextBlock Text="Gửi từ"
                                    Margin="50 10 0 0"
                                    Foreground="DarkGray"
@@ -484,43 +355,22 @@
                     <StackPanel Orientation="Vertical"
                                 Grid.Column="1">
                         <TextBlock x:Name="danhMucTextBlock" 
-<<<<<<< HEAD
                                    Text="{x:Bind ViewModel.ProductDetail.danhMuc, Mode=OneWay}"
-=======
-                                   Text="Shoppe"
->>>>>>> ad4311b5a9c311e96d94838537af8decb763063a
                                    Margin="50 20 0 0"
                                    Foreground="DarkGray"
                                    FontSize="15"/>
                         <TextBlock x:Name="khoTextBlock" 
-<<<<<<< HEAD
                                    Text="{x:Bind ViewModel.ProductDetail.kho, Mode=OneWay}"
-=======
-                                   Text="1889"
->>>>>>> ad4311b5a9c311e96d94838537af8decb763063a
                                    Margin="50 10 0 0"
                                    Foreground="DarkGray"
                                    FontSize="15"/>
                         <TextBlock x:Name="thuongHieuTextBlock" 
-<<<<<<< HEAD
                                    Text="{x:Bind ViewModel.ProductDetail.thuongHieu, Mode=OneWay}"
-=======
-                                   Text="tingoan"
-                                   Margin="50 10 0 0"
-                                   Foreground="DarkGray"
-                                   FontSize="15"/>
-                        <TextBlock x:Name="chatLieuTextBlock" 
-                                   Text="Len"
->>>>>>> ad4311b5a9c311e96d94838537af8decb763063a
                                    Margin="50 10 0 0"
                                    Foreground="DarkGray"
                                    FontSize="15"/>
                         <TextBlock x:Name="guiTuTextBlock" 
-<<<<<<< HEAD
                                    Text="{x:Bind ViewModel.ProductDetail.guiTu, Mode=OneWay}"
-=======
-                                   Text="Hà Nội"
->>>>>>> ad4311b5a9c311e96d94838537af8decb763063a
                                    Margin="50 10 0 0"
                                    Foreground="DarkGray"
                                    FontSize="15"/>
@@ -535,59 +385,7 @@
                 <TextBlock x:Name="moTaTextBlock"
                            Margin="50 20 50 50"
                            TextWrapping="Wrap"
-<<<<<<< HEAD
                            Text="{x:Bind ViewModel.ProductDetail.moTa, Mode=OneWay}"
-=======
-                           Text="TINGOAN® - Áo len xám crop bề mặt len hoạ tiết quả trám buộc nơ YURI YURI TOP V2/GR PHIÊN BẢN MỚI NHẤT T6/2024
-                           (Do màn hình thiết bị và điều kiện ánh sáng khác nhau, màu sắc thực tế của sản phẩm có thể chênh 3 - 5%)
-                           - PHIÊN BẢN MỚI NHẤT 2024
-                           
-                           
-                           - CHẤT LIỆU LEN TRONG QUÁ TRÌNH SỬ DỤNG SẼ XÙ BÔNG VÀ CO GIÃN DẦN THEO THỜI GIAN
-                           
-                           
-                           - FORM NGẮN, THÂN ÔM
-                           
-                           
-                           - CÓ CHI TIẾT BUỘC NƠ CỔ ĐÍNH LIỀN
-                           
-                           
-                           - LEN MÙA THU, KHÔNG DÀY
-                           
-                           
-                           - KHÔNG GIẶT MÁY, GIẶT THEO HƯỚNG DẪN (THAM KHẢO ẢNH CUỐI)
-                           
-                           
-                           
-                           ***Quý khách vui lòng đọc kỹ và cân nhắc trước khi mua sản phẩm: 
-                           
-                                                   
-                           1. Khách tham khảo kỹ bảng size, mô tả sản phẩm và ảnh cận chất liệu để lựa chọn sản phẩm phù hợp với mình (tránh trường hợp mua sản phẩm không phù hợp với ý thích).
-                           
-                           
-                           2. Khách chat với shop để được tư vấn size (trong trường hợp shop phản hồi không kịp khách vui lòng nhắn tin cho hotline 096.23456.23).
-                           
-                           
-                           
-                           3. Khách cần sử dụng bàn là hơi cũng như chăm sóc và giặt sản phẩm kĩ lưỡng, cẩn thận theo như tờ hướng dẫn bảo quản được kèm chi tiết trong đơn hàng.
-                           
-                           
-                           4. Khách vui lòng đặt đúng size và màu, shop không đóng gói theo ghi chú.
-                           
-                           
-                           
-                           5. Các sản phẩm cạp cao khách lưu ý đo phần eo tại điểm thắt lưng cao, không đo eo thấp tránh mua size bị rộng. 
-                           
-                           
-                           6. Vui lòng tham khảo các hình ảnh và đánh giá của khách hàng TINGOAN® trước khi đặt hàng. 
-                           
-                           
-                           7. Thời gian giao hàng từ 4-7 ngày tùy địa điểm, shop chỉ hỗ trợ ship gấp các đơn hỏa tốc. 
-                           
-                           
-                           8. Với những sản phẩm tweed hoặc các sản phẩm cần giữ form vì tính chất sản phẩm đặc thù sẽ được ưu tiên đóng gói trong hộp giấy."
-
->>>>>>> ad4311b5a9c311e96d94838537af8decb763063a
                            Padding="10"
                            Opacity="0.8"
                            >

@@ -10,7 +10,6 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-<<<<<<< HEAD
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.1*"/>
@@ -77,7 +76,7 @@
                         Grid.ColumnSpan="3"
                         Grid.Row="1"
                         Background="#317256"/>
-            
+
             <CheckBox Grid.Column="0"
                       Grid.Row="2"
                       Content="Chọn tất cả"
@@ -91,7 +90,7 @@
                     <ColumnDefinition Width="0.2*"/>
                     <ColumnDefinition Width="0.3*"/>
                 </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" 
+                <TextBlock Grid.Column="0" 
                                Text="Tổng thanh toán: " FontSize="18"
                                Margin="0 10 0 0"/>
                 <TextBlock Grid.Column="1" 
@@ -134,60 +133,5 @@
                 </DataTemplate>
             </GridView.ItemTemplate>
         </GridView>
-
-=======
-	<ScrollView>
-		<Grid>
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="0.1*"/>
-				<ColumnDefinition Width="0.9*"/>
-				<ColumnDefinition Width="0.1*"/>
-			</Grid.ColumnDefinitions>
-			
-			<Grid.RowDefinitions>
-				<RowDefinition Height="30"/>
-				<RowDefinition Height="*"/>
-			</Grid.RowDefinitions>
->>>>>>> ad4311b5a9c311e96d94838537af8decb763063a
-
-			<Grid Grid.Column="0"
-				  Grid.RowSpan="2"
-				  Background="#6bb120"
-				  />
-
-			<Grid Grid.Column="2"
-				  Grid.RowSpan="2"
-				  Background="#6bb120"
-				  />
-
-			<Grid Grid.Row="0"
-				  Grid.ColumnSpan="2"
-				  Background="#6bb120"
-				  />
-
-            <Grid Grid.Column="1"
-                  Grid.Row="1"
-                  Background="White">
-                <GridView Grid.Row="1"
-                      CornerRadius="10"
-                      ItemsSource="{x:Bind ViewModel.Cart}"
-                      Background="	#317256"
-                      Padding="10">
-                    <GridView.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <ItemsWrapGrid Orientation="Horizontal"/>
-                        </ItemsPanelTemplate>
-                    </GridView.ItemsPanel>
-
-                    <GridView.ItemTemplate>
-                        <DataTemplate>
-                            <objects:CartThumbnailControl ViewModel="{Binding}"
-                                                          Height="250"
-                                                          Width="200"/>
-                        </DataTemplate>
-                    </GridView.ItemTemplate>
-                </GridView>
-            </Grid>
-        </Grid>
-    </ScrollView>
+    </Grid>
 </Page>
