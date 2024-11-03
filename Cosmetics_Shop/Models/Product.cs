@@ -13,13 +13,15 @@ namespace Cosmetics_Shop.Models
         public string Name { get; set; }
         public Image ThumbnailImage { get; set; }
         public int Price { get; set; }
+        public string Brand { get; set; }
 
-        public Product(int id, string name, Image thumbnailImage, int price)
+        public Product(int id, string name, Image thumbnailImage, int price, string brand)
         {
             Id = id;
             Name = name;
             ThumbnailImage = thumbnailImage;
             Price = price;
+            Brand = brand;
         }
     }
 }

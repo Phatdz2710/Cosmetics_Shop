@@ -13,6 +13,9 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Cosmetics_Shop.ViewModels;
+using Cosmetics_Shop.Models;
+using Cosmetics_Shop.Views.Pages;
+using Cosmetics_Shop.Services;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -24,11 +27,16 @@ namespace Cosmetics_Shop.Views
     /// </summary>
     public sealed partial class MainWindow : Window
     {
+        public MainViewModel ViewModel { get; set; }
         public MainWindow()
         {
             this.InitializeComponent();
             this.AppWindow.Resize(new Windows.Graphics.SizeInt32(1500, 900));
-            this.MainContentFrame.Navigate(typeof(WindowContent));
+            
+            var navigationService = App.ServiceProvider.GetService(typeof(INavigationService)) as INavigationService;
+            navigationService.Initialize(MainPageFrame);
+
+            ViewModel = App.ServiceProvider.GetService(typeof(MainViewModel)) as MainViewModel;
         }
     }
 }

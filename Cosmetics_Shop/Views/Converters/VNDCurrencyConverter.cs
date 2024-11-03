@@ -13,9 +13,9 @@ namespace Cosmetics_Shop.Views.Converters
         {
             if (value is int price)
             {
-                return $"{price:0,0} VNĐ";
+                return $"{price:0,0}";
             }
-            return "0 VNĐ";
+            return "0";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

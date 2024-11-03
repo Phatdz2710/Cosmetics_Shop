@@ -20,9 +20,10 @@
                 VerticalAlignment="Center"
                 Width="300"
                 Spacing="15"
-                Visibility="{x:Bind ViewModel.LoginSignupState, Mode=OneWay,
-                             Converter={StaticResource LoginSignupStateConverter},
-                             ConverterParameter=Login}">
+                Visibility="{x:Bind ViewModel.LoginSignupState, 
+                                Mode=OneWay,
+                                Converter={StaticResource LoginSignupStateConverter},
+                                ConverterParameter=Login}">
 
             <TextBlock Text="LOGIN"
                    FontSize="40"
@@ -32,66 +33,73 @@
                    Margin="0,0,0,20"/>
 
             <TextBox x:Name="UsernameLogin"
-                 PlaceholderText="Username"
-                 Padding="10"
-                 CornerRadius="8"
-                 Background="#F0F0F0"
-                 BorderBrush="LightGray"
-                 BorderThickness="1"
-                 Margin="0,0,0,10"/>
-
-            <PasswordBox x:Name="PasswordLogin"
-                     PlaceholderText="Password"
+                     PlaceholderText="Username"
                      Padding="10"
                      CornerRadius="8"
                      Background="#F0F0F0"
                      BorderBrush="LightGray"
                      BorderThickness="1"
-                     Margin="0,0,0,5"/>
+                     Margin="0,0,0,10"
+                     Text="{x:Bind ViewModel.Username, Mode=TwoWay}"/>
 
-            <TextBlock 
-                   Text="{x:Bind ViewModel.WrongMessage}"
-                   Foreground="Red"
-                   Visibility="{x:Bind ViewModel.MessageVisibility}"/>
+            <PasswordBox x:Name="PasswordLogin"
+                         PlaceholderText="Password"
+                         Padding="10"
+                         CornerRadius="8"
+                         Background="#F0F0F0"
+                         BorderBrush="LightGray"
+                         BorderThickness="1"
+                         Margin="0,0,0,5"
+                         Password="{x:Bind ViewModel.Password, Mode=TwoWay}"/>
+
+            <TextBlock  Text="{x:Bind ViewModel.WrongMessage, Mode=OneWay}"
+                       Foreground="Red"
+                       Visibility="{x:Bind ViewModel.MessageVisibility, Mode=OneWay}"/>
 
             <CheckBox x:Name="cbxRememeber" 
-                Content="Remember me"/>
+                        Content="Remember me"
+                      IsChecked="{x:Bind ViewModel.RememberMe, Mode=TwoWay}"/>
 
             <Button Content="Login"
-                Background="#7CFFB9"
-                Foreground="White"
-                FontSize="16"
-                FontWeight="Bold"
-                Padding="10"
-                CornerRadius="8"
-                HorizontalAlignment="Stretch"
-                Margin="0,0,0,5"/>
+                    Background="#7CFFB9"
+                    Foreground="White"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Padding="10"
+                    CornerRadius="8"
+                    HorizontalAlignment="Stretch"
+                    Margin="0,0,0,5"
+                    Command="{x:Bind ViewModel.LoginCommand}"/>
 
             <StackPanel Orientation="Horizontal"
-                    HorizontalAlignment="Center">
-                <TextBlock Text="Don't have an account?"/>
-                <TextBlock Text="Register" 
+                        HorizontalAlignment="Center">
+                <TextBlock Text="Don't have an account?"
+                           VerticalAlignment="Center"/>
+                <Button Content="Register" 
                        Margin="5 0 0 0"
-                       Foreground="#31C777"/>
+                       Foreground="#31C777"
+                       Background="Transparent"
+                       VerticalAlignment="Center"
+                       Command="{x:Bind ViewModel.SwitchSignupCommand}"/>
             </StackPanel>
 
         </StackPanel>
 
         <StackPanel Grid.Column="0"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Width="300"
-                Spacing="15"
-                Visibility="{x:Bind ViewModel.LoginSignupState, Mode=TwoWay,
-                             Converter={StaticResource LoginSignupStateConverter},
-                             ConverterParameter=Signup}">
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Width="300"
+                    Spacing="15"
+                    Visibility="{x:Bind ViewModel.LoginSignupState, Mode=OneWay,
+                                 Converter={StaticResource LoginSignupStateConverter},
+                                 ConverterParameter=Signup}">
 
             <TextBlock Text="SIGN UP"
-                   FontSize="40"
-                   FontWeight="Bold"
-                   Foreground="#31C777"
-                   HorizontalAlignment="Center"
-                   Margin="0,0,0,20"/>
+                       FontSize="40"
+                       FontWeight="Bold"
+                       Foreground="#31C777"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,20"/>
 
             <TextBox x:Name="UsernameSignup"
                      PlaceholderText="Username"
@@ -112,18 +120,18 @@
                          Margin="0,0,0,5"/>
 
             <PasswordBox x:Name="ConfirmPasswordSignup"
-                     PlaceholderText="Confirm password"
-                     Padding="10"
-                     CornerRadius="8"
-                     Background="#F0F0F0"
-                     BorderBrush="LightGray"
-                     BorderThickness="1"
-                     Margin="0,0,0,5"/>
+                         PlaceholderText="Confirm password"
+                         Padding="10"
+                         CornerRadius="8"
+                         Background="#F0F0F0"
+                         BorderBrush="LightGray"
+                         BorderThickness="1"
+                         Margin="0,0,0,5"/>
 
-            <TextBlock
-                   Text="{x:Bind ViewModel.WrongMessage}"
-                   Foreground="Red"
-                   Visibility="{x:Bind ViewModel.MessageVisibility}"/>
+            <TextBlock Text="{x:Bind ViewModel.WrongMessage, Mode=OneWay}"
+                       Foreground="Red"
+                       FontSize="12"
+                       Visibility="{x:Bind ViewModel.MessageVisibility, Mode=OneWay}"/>
 
             <Button Content="Sign Up"
                     Background="#7CFFB9"
@@ -133,13 +141,17 @@
                     Padding="10"
                     CornerRadius="8"
                     HorizontalAlignment="Stretch"
-                    Margin="0,0,0,5"/>
+                    Margin="0,0,0,5"
+                    Command="{x:Bind ViewModel.SignupCommand}"/>
 
             <StackPanel Orientation="Horizontal"
-                    HorizontalAlignment="Center">
-                <TextBlock Text="Login" 
-                       Margin="5 0 0 0"
-                       Foreground="#31C777"/>
+                        HorizontalAlignment="Center">
+                
+                <Button Content="Login" 
+                           Margin="5 0 0 0"
+                           Foreground="#31C777"
+                           Command="{x:Bind ViewModel.SwitchLoginCommand}"
+                        Background="Transparent"/>
             </StackPanel>
 
         </StackPanel>

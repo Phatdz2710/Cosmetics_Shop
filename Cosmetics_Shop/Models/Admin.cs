@@ -8,7 +8,8 @@ namespace Cosmetics_Shop.Models
 {
     public class Admin : UserBase
     {
-        public Admin(int id, string name) : base(id, name)
+        public Admin(int id, string name, string token)
+            : base(id, name, token)
         { }
 
         public override string DisplayRole()

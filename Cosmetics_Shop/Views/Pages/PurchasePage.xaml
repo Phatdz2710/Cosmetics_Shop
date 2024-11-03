@@ -4,11 +4,13 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Cosmetics_Shop.Views.Pages"
+    xmlns:brand="using:Cosmetics_Shop.Models"
     xmlns:objects="using:Cosmetics_Shop.Views.Objects"
     xmlns:converter="using:Cosmetics_Shop.Views.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    NavigationCacheMode="Enabled"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <UserControl.Resources>
@@ -27,20 +29,58 @@
               Background="White">
 
             <!-- Mục Lọc (theo giá) -->
-            <StackPanel Grid.Row="0" Margin="10">
-                <TextBlock Text="Lọc (theo giá)"
-                   FontSize="16"
-                   FontWeight="Bold"
-                   Margin="0,0,0,5"/>
-                <ComboBox x:Name="PriceFilterComboBox"
-                  HorizontalAlignment="Stretch"
-                  SelectedIndex="0">
-                    <ComboBoxItem Content="Tất cả giá"/>
-                    <ComboBoxItem Content="Dưới 1 triệu"/>
-                    <ComboBoxItem Content="1 triệu - 5 triệu"/>
-                    <ComboBoxItem Content="Trên 5 triệu"/>
-                </ComboBox>
+            <StackPanel Grid.Row="0" 
+                        Margin="10">
+                
+                <TextBlock Text="Thương hiệu"
+                           FontSize="16"
+                           FontWeight="Bold"
+                           Margin="0,0,0,5"/>
+
+                <ListView Name="ListViewBrands" 
+                          MaxHeight="160"
+                          ItemsSource="{x:Bind ViewModel.Brands}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="brand:CheckboxBrandContent">
+                            <CheckBox Content="{x:Bind Name}"
+                                      Command="{x:Bind CheckedCommand}"
+                                      CommandParameter="{x:Bind Index}"
+                                      IsChecked="{x:Bind IsChecked}"/>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <TextBlock Text="Giá"
+                           FontSize="16"
+                           FontWeight="Bold"
+                           Margin="0,0,0,5"/>
+
+                <StackPanel Orientation="Vertical">
+                    <NumberBox Width="160"
+                             PlaceholderText="Thấp nhất"
+                             HorizontalAlignment="Left"
+                               Text="{x:Bind ViewModel.MinPrice, Mode=TwoWay}"/>
+                    <TextBlock Text="đến"
+                               VerticalAlignment="Center"
+                               Margin="10"/>
+                    <NumberBox Width="160"
+                               PlaceholderText="Cao nhất"
+                               HorizontalAlignment="Left"
+                               Text="{x:Bind ViewModel.MaxPrice, Mode=TwoWay}"/>
+                    <Button Content="Xác nhận"
+                            HorizontalAlignment="Center"
+                            Width="200"
+                            Command="{x:Bind ViewModel.FilterPriceCommand}"
+                            Margin="0 10 0 0"
+                            Background="#49ab81"
+                            Foreground="White"
+                            CornerRadius="5"/>
+                </StackPanel>
             </StackPanel>
+
+
+            <!--Command="{Binding ViewModel.CheckboxBrandCheckedCommand, 
+          ElementName=ListViewBrands}"-->
 
             <!-- Mục Sắp xếp -->
             <StackPanel Grid.Row="1" Margin="10">
@@ -57,13 +97,6 @@
                     <ComboBoxItem Content="Tên sản phẩm"/>
                 </ComboBox>
             </StackPanel>
-
-            <Button Content="Xác nhận"
-                    Margin="10"
-                    Width="200"
-                    Background="#52bf90"
-                    Foreground="White"
-                    HorizontalAlignment="Center"/>
         </StackPanel>
 
         <Grid Grid.Column="1"
@@ -80,12 +113,38 @@
                       ItemsSource="{x:Bind ViewModel.ProductThumbnails}">
                 <GridView.ItemTemplate>
                     <DataTemplate>
-                        <objects:ProductThumbnailControl Height="300"
-                                                         Width="250"
+                        <objects:ProductThumbnailControl Height="270"
+                                                         Width="230"
                                                          ViewModel="{Binding}"/>
                     </DataTemplate>
                 </GridView.ItemTemplate>
             </GridView>
+
+            <StackPanel Grid.Row="1"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <Grid Width="80">
+                    <Button Content="Trước"
+                            Width="80"
+                            Command="{x:Bind ViewModel.PreviousPageCommand}"
+                            Visibility="{x:Bind ViewModel.VisiPrevious, Mode=OneWay}"/>
+                </Grid>
+                
+                <TextBlock VerticalAlignment="Center"
+                           Foreground="White"
+                           Margin="10 0 10 0">
+                    <Run Text="{x:Bind ViewModel.PageIndex, Mode=OneWay}"/> 
+                    <Run Text=" / "/>
+                    <Run Text="{x:Bind ViewModel.TotalPages, Mode=OneWay}"/>
+                </TextBlock>
+                <Grid Width="80">
+                    <Button Content="Sau"
+                            Width="80"
+                            Command="{x:Bind ViewModel.NextPageCommand}"
+                            Visibility="{x:Bind ViewModel.VisiNext, Mode=OneWay}"/>
+                </Grid>
+                
+            </StackPanel>
         </Grid>
     </Grid>
 </Page>
