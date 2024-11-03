@@ -8,14 +8,14 @@
   IgnorableNamespaces="uap rescap">
 
   <Identity
-    Name="de3935a1-ef6e-4c77-af71-ef98563d7255"
+    Name="38a365d9-9ced-4a5e-856b-41a85a816ff9"
     Publisher="CN=Ngoc Phat"
     Version="1.0.0.0" />
 
-  <mp:PhoneIdentity PhoneProductId="de3935a1-ef6e-4c77-af71-ef98563d7255" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="38a365d9-9ced-4a5e-856b-41a85a816ff9" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>CosmeticShop_UnitTest</DisplayName>
+    <DisplayName>UnitTest</DisplayName>
     <PublisherDisplayName>Ngoc Phat</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -34,8 +34,8 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="CosmeticShop_UnitTest"
-        Description="CosmeticShop_UnitTest"
+        DisplayName="UnitTest"
+        Description="UnitTest"
         BackgroundColor="transparent"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png">

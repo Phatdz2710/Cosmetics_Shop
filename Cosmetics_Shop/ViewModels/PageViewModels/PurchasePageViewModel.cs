@@ -206,6 +206,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
 
         private async Task GetProductThumbnails(bool isBrandFilter = false)
         {
+            // Get list of product thumbnails with keyword, page index, products per page, filter brand, min price, max price
             ProductQueryResult productQueryResult = await _dao.GetListProductThumbnailAsync(
                 keyword: Keyword,
                 pageIndex: PageIndex,
@@ -214,6 +215,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 minPrice: int.Parse(MinPrice),
                 maxPrice: int.Parse(MaxPrice));
 
+            // Update total pages
             TotalPages = productQueryResult.TotalPages;
 
             VisiNext = PageIndex == totalPages ? Visibility.Collapsed : Visibility.Visible;
@@ -241,12 +243,12 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
         }
 
-
-        public void SearchProduct()
+        // Search product
+        public async void SearchProduct()
         {
             PageIndex = 1;
             filterBrand = "";
-            GetProductThumbnails();
+            await GetProductThumbnails();
         }
 
 

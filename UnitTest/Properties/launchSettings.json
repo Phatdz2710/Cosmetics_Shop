@@ -1,9 +1,9 @@
 {
   "profiles": {
-    "CosmeticShop_UnitTest (Package)": {
+    "UnitTest (Package)": {
       "commandName": "MsixPackage"
     },
-    "CosmeticShop_UnitTest (Unpackaged)": {
+    "UnitTest (Unpackaged)": {
       "commandName": "Project"
     }
   }
