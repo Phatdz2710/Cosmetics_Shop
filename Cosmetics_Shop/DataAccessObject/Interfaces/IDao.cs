@@ -27,6 +27,14 @@ namespace Cosmetics_Shop.Models.DataService
 
         List<ProductThumbnail> GetListBestSellerAsync();
 
+        List<CartThumbnail> GetListCartProduct();
+
+        List<ReviewThumbnail> GetListReviewThumbnail();
+
+        List<ReviewThumbnail> GetListReviewThumbnailByIDProduct(int idProduct);
+
         Task<LoginResult> CheckLoginAsync(string username, string password);
+
+
     }
 }

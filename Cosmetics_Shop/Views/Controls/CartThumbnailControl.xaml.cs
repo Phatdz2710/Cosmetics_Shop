@@ -14,7 +14,7 @@ using Cosmetics_Shop.ViewModels.UserControlViewModels;
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
-namespace Cosmetics_Shop.Views.Objects
+namespace Cosmetics_Shop.Views.Controls
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
@@ -37,12 +37,25 @@ namespace Cosmetics_Shop.Views.Objects
                                         typeof(CartThumbnailViewModel),
                                         typeof(CartThumbnailControl),
                                         new PropertyMetadata(null));
-
-
         public CartThumbnailControl()
         {
             this.InitializeComponent();
         }
 
+        private void minusButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (int.TryParse(amountTextBox.Text, out int currentAmount) && currentAmount > 1)
+            {
+                amountTextBox.Text = (currentAmount - 1).ToString();
+            }
+        }
+
+        private void plusButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (int.TryParse(amountTextBox.Text, out int currentAmount))
+            {
+                amountTextBox.Text = (currentAmount + 1).ToString();
+            }
+        }
     }
 }

@@ -21,12 +21,27 @@ namespace Cosmetics_Shop.DataAccessObject
             throw new NotImplementedException();
         }
 
+        public List<CartThumbnail> GetListCartProduct()
+        {
+            throw new NotImplementedException();
+        }
+
         public List<ProductThumbnail> GetListNewProductAsync()
         {
             throw new NotImplementedException();
         }
 
         public Task<ProductQueryResult> GetListProductThumbnailAsync(string keyword = "", int pageIndex = 1, int productsPerPage = 10, bool nameAscending = false, string filterBrand = "", int minPrice = 0, int maxPrice = int.MaxValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<ReviewThumbnail> GetListReviewThumbnail()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<ReviewThumbnail> GetListReviewThumbnailByIDProduct(int idProduct)
         {
             throw new NotImplementedException();
         }
