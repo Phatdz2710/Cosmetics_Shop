@@ -1,5 +1,6 @@
 ﻿using Cosmetics_Shop.Models;
 using Cosmetics_Shop.Models.DataService;
+using Cosmetics_Shop.Models.Enums;
 using Cosmetics_Shop.Services;
 using System;
 using System.Collections.Generic;
@@ -31,7 +32,15 @@ namespace Cosmetics_Shop.DataAccessObject
             throw new NotImplementedException();
         }
 
-        public Task<ProductQueryResult> GetListProductThumbnailAsync(string keyword = "", int pageIndex = 1, int productsPerPage = 10, bool nameAscending = false, string filterBrand = "", int minPrice = 0, int maxPrice = int.MaxValue)
+        public Task<ProductQueryResult> GetListProductThumbnailAsync(
+            string keyword = "",
+            int pageIndex = 1,
+            int productsPerPage = 10,
+            SortProduct sortProduct = SortProduct.DateAscending,
+            string filterBrand = "",
+            int minPrice = 0,
+            int maxPrice =
+            int.MaxValue)
         {
             throw new NotImplementedException();
         }
@@ -47,6 +56,11 @@ namespace Cosmetics_Shop.DataAccessObject
         }
 
         public ProductDetail GetProductDetail(int idProduct)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<string> GetSuggestions(string keyword)
         {
             throw new NotImplementedException();
         }

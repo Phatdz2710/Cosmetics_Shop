@@ -1,11 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using Cosmetics_Shop.Models;
 using Cosmetics_Shop.Models.DataService;
+using Cosmetics_Shop.Models.Enums;
 using Cosmetics_Shop.Services;
 using Cosmetics_Shop.Services.Interfaces;
 using Cosmetics_Shop.ViewModels.UserControlViewModels;
 using Cosmetics_Shop.Views.Objects;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -34,7 +36,8 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         // Data access object
         private IDao _dao = null;
 
-
+        private string _keyword = "";
+        private int _totalProducts = 0;
 
         // Observable Collection
         public ObservableCollection<ProductThumbnailViewModel> ProductThumbnails { get; set; }
@@ -42,7 +45,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
 
         #region Fields
         private int pageIndex = 1;
-        private int productPerPage = 15;
+        private int productPerPage = 20;
         private int totalPages = 0;
         private Visibility visiPrevious = Visibility.Visible;
         private Visibility visiNext = Visibility.Visible;
@@ -50,9 +53,28 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         private string filterBrand = "";
         private string minPrice = "";
         private string maxPrice = "";
+        private int selectedIndexSort = 0;
         #endregion
 
-        public string Keyword { get; set; } = "";
+        public string Keyword
+        {
+            get => _keyword;
+            set
+            {
+                _keyword = value;
+                OnPropertyChanged(nameof(Keyword));
+            }
+        }
+
+        public int TotalProducts
+        {
+            get => _totalProducts;
+            set
+            {
+                _totalProducts = value;
+                OnPropertyChanged(nameof(TotalProducts));
+            }
+        }
 
         #region Binding Properties
         public int PageIndex
@@ -84,14 +106,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         }
         public string MinPrice
         {
-            get
-            {
-                if (minPrice == string.Empty)
-                {
-                    return "0";
-                }
-                return minPrice;
-            }
+            get => minPrice;
             set
             {
                 minPrice = value;
@@ -100,14 +115,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         }
         public string MaxPrice
         {
-            get
-            {
-                if (maxPrice == string.Empty)
-                {
-                    return "99999999";
-                }
-                return maxPrice;
-            }
+            get => maxPrice;
             set
             {
                 maxPrice = value;
@@ -132,6 +140,16 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(VisiNext));
             }
         }
+        public int SelectedIndexSort
+        {
+            get => selectedIndexSort;
+            set
+            {
+                selectedIndexSort = value;
+                OnPropertyChanged(nameof(SelectedIndexSort));
+            }
+        }
+
         #endregion
 
         // Commands
@@ -206,17 +224,73 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
 
         private async Task GetProductThumbnails(bool isBrandFilter = false)
         {
+            int minPc, maxPc;
+            try
+            {
+                minPc = string.IsNullOrEmpty(minPrice) ? 0 : int.Parse(minPrice);
+                maxPc = string.IsNullOrEmpty(maxPrice) ? int.MaxValue : int.Parse(maxPrice);
+
+                InvalidPriceMinMaxMessageBox _message = new InvalidPriceMinMaxMessageBox();
+                // Kiểm tra giá trị nhỏ hơn 0 hoặc lớn hơn int.MaxValue
+                if (minPc < 0 || minPc > int.MaxValue)
+                {
+                    _message.Message = "Giá thấp nhất không hợp lệ";
+                    _eventAggregator.Publish(_message);
+
+                    MinPrice = "";
+                    MaxPrice = "";
+                    minPc = 0;
+                    maxPc = int.MaxValue;
+                }
+
+                if (maxPc < 0 || maxPc > int.MaxValue)
+                {
+                    _message.Message = "Giá cao nhất không hợp lệ";
+                    _eventAggregator.Publish(_message);
+
+                    MinPrice = "";
+                    MaxPrice = "";
+                    minPc = 0;
+                    maxPc = int.MaxValue;
+                }
+
+                // Kiểm tra minPc lớn hơn maxPc
+                if (minPc > maxPc)
+                {
+                    _message.Message = "Giá thấp nhất lớn hơn giá cao nhất";
+                    _eventAggregator.Publish(_message);
+
+                    MinPrice = "";
+                    MaxPrice = "";
+                    minPc = 0;
+                    maxPc = int.MaxValue;
+                }
+            }
+            catch (OverflowException)
+            {
+                ContentDialog contentDialog = new ContentDialog()
+                {
+                    Title = "Số quá lớn",
+                    CloseButtonText = "OK"
+                };
+                await contentDialog.ShowAsync();
+                minPc = 0;
+                maxPc = int.MaxValue;
+            }
+
             // Get list of product thumbnails with keyword, page index, products per page, filter brand, min price, max price
             ProductQueryResult productQueryResult = await _dao.GetListProductThumbnailAsync(
                 keyword: Keyword,
                 pageIndex: PageIndex,
-                productsPerPage: ProductsPerPage,
+                productsPerPage: this.productPerPage,
+                sortProduct: GetSortProductChoice(),
                 filterBrand: filterBrand,
-                minPrice: int.Parse(MinPrice),
-                maxPrice: int.Parse(MaxPrice));
+                minPrice: minPc,
+                maxPrice: maxPc);
 
             // Update total pages
             TotalPages = productQueryResult.TotalPages;
+            TotalProducts = productQueryResult.TotalProducts;
 
             VisiNext = PageIndex == totalPages ? Visibility.Collapsed : Visibility.Visible;
             VisiPrevious = PageIndex == 1 ? Visibility.Collapsed : Visibility.Visible;
@@ -240,6 +314,24 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                     CheckedCommand = CheckboxBrandCheckedCommand,
                     IsChecked = isBrandFilter
                 });
+            }
+        }
+
+        // Sort product change
+        public SortProduct GetSortProductChoice()
+        {
+            switch (selectedIndexSort)
+            {
+                case 0:
+                    return SortProduct.DateAscending;
+                case 1:
+                    return SortProduct.PriceDescending;
+                case 2:
+                    return SortProduct.PriceAscending;
+                case 3:
+                    return SortProduct.NameAscending;
+                default:
+                    return SortProduct.DateAscending;
             }
         }
 

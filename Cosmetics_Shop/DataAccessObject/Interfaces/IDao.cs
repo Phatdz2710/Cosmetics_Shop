@@ -9,17 +9,19 @@ using System.Threading.Tasks;
 namespace Cosmetics_Shop.Models.DataService
 {
     public interface IDao
-    { 
+    {
         void InsertProduct(Product product);
 
         Task<ProductQueryResult> GetListProductThumbnailAsync(
             string keyword = "",
             int pageIndex = 1,
             int productsPerPage = 10,
-            bool nameAscending = false,
+            SortProduct sortProduct = SortProduct.DateAscending,
             string filterBrand = "",
             int minPrice = 0,
-            int maxPrice=int.MaxValue);
+            int maxPrice = int.MaxValue);
+
+        List<string> GetSuggestions(string keyword);
 
         ProductDetail GetProductDetail(int idProduct);
 

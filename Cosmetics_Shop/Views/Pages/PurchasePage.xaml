@@ -29,9 +29,8 @@
               Background="White">
 
             <!-- Mục Lọc (theo giá) -->
-            <StackPanel Grid.Row="0" 
-                        Margin="10">
-                
+            <StackPanel Margin="10">
+
                 <TextBlock Text="Thương hiệu"
                            FontSize="16"
                            FontWeight="Bold"
@@ -89,8 +88,8 @@
                    FontWeight="Bold"
                    Margin="0,0,0,5"/>
                 <ComboBox x:Name="SortComboBox"
-                  HorizontalAlignment="Stretch"
-                  SelectedIndex="0">
+                          HorizontalAlignment="Stretch"
+                          SelectedIndex="{x:Bind ViewModel.SelectedIndexSort, Mode=OneWay}">
                     <ComboBoxItem Content="Mới nhất"/>
                     <ComboBoxItem Content="Giá tăng dần"/>
                     <ComboBoxItem Content="Giá giảm dần"/>
@@ -105,10 +104,24 @@
               Padding="10"
               CornerRadius="10">
             <Grid.RowDefinitions>
+                <RowDefinition Height="0.6*"/>
                 <RowDefinition Height="10*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <GridView Grid.Row="0"
+
+            <TextBlock Grid.Row="0"
+                       Foreground="White">
+                <Run Text="Kết quả tìm kiếm cho từ khóa '"/>
+                <Run Text="{x:Bind ViewModel.Keyword, Mode=OneWay}"
+                     Foreground="LightGreen"/>
+                <Run Text="'"/>
+                <Run Text=" - "/>
+                <Run Text="Tổng số sản phẩm: "/>
+                <Run Text="{x:Bind ViewModel.TotalProducts, Mode=OneWay}"
+                     Foreground="LightGreen"/>
+            </TextBlock>
+
+            <GridView Grid.Row="1"
                       CornerRadius="10"
                       ItemsSource="{x:Bind ViewModel.ProductThumbnails}">
                 <GridView.ItemTemplate>
@@ -120,7 +133,7 @@
                 </GridView.ItemTemplate>
             </GridView>
 
-            <StackPanel Grid.Row="1"
+            <StackPanel Grid.Row="2"
                         Orientation="Horizontal"
                         HorizontalAlignment="Center">
                 <Grid Width="80">
@@ -129,7 +142,7 @@
                             Command="{x:Bind ViewModel.PreviousPageCommand}"
                             Visibility="{x:Bind ViewModel.VisiPrevious, Mode=OneWay}"/>
                 </Grid>
-                
+
                 <TextBlock VerticalAlignment="Center"
                            Foreground="White"
                            Margin="10 0 10 0">
@@ -143,7 +156,7 @@
                             Command="{x:Bind ViewModel.NextPageCommand}"
                             Visibility="{x:Bind ViewModel.VisiNext, Mode=OneWay}"/>
                 </Grid>
-                
+
             </StackPanel>
         </Grid>
     </Grid>

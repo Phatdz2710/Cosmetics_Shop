@@ -13,6 +13,9 @@ using Cosmetics_Shop.Services;
 using Cosmetics_Shop.Services.Interfaces;
 using Windows.ApplicationModel.Activation;
 using Cosmetics_Shop.Models;
+using System.Collections.ObjectModel;
+using Cosmetics_Shop.Models.DataService;
+using System.Runtime.CompilerServices;
 
 namespace Cosmetics_Shop.ViewModels
 {
@@ -22,9 +25,34 @@ namespace Cosmetics_Shop.ViewModels
         private readonly INavigationService _navigationService;
         // Event aggregator for publish and subscribe
         private readonly IEventAggregator _eventAggregator;
+        // Data access object
+        private readonly IDao _dao;
 
         private readonly UserSession _userSession;
         // Command (gán Event cho button qua binding)
+        private ObservableCollection<string> _suggestions;
+        private string _keyword;
+        public ObservableCollection<string> Suggestions
+        {
+            get => _suggestions;
+            set
+            {
+                _suggestions = value;
+                OnPropertyChanged(nameof(Suggestions));
+            }
+        }
+
+        // Từ khóa tìm kiếm (Binding)
+        public string Keyword
+        {
+            get => _keyword;
+            set
+            {
+                _keyword = value;
+                OnPropertyChanged(nameof(_keyword));
+                UpdateSuggestions();
+            }
+        }
 
         #region Commands for Switch page
         public ICommand PurchaseButtonCommand { get; }
@@ -45,18 +73,20 @@ namespace Cosmetics_Shop.ViewModels
                 return _userSession.GetName();
             }
         }
-        
-        // Từ khóa tìm kiếm (Binding)
-        public string Keyword { get; set; }
+
 
         // Constructor
         public UserViewModel(IEventAggregator eventAggregator,
                                 INavigationService navigationService,
+                                IDao dao,
                                 UserSession userSession)
         {
             _eventAggregator = eventAggregator;
             _navigationService = navigationService;
             _userSession = userSession;
+            _dao = dao;
+
+            Suggestions = new ObservableCollection<string>();
 
             if (_userSession.GetRole() == "Admin")
             {
@@ -102,13 +132,27 @@ namespace Cosmetics_Shop.ViewModels
             // Search button click event
             SearchButtonCommand = new RelayCommand(() =>
             {
+                _navigationService.NavigateTo<PurchasePage>();
                 SearchEvent searchEvent = new SearchEvent();
                 searchEvent.Keyword = Keyword;
 
                 // Publish event (send event to all subscribers)
                 _eventAggregator.Publish(searchEvent);
-                _navigationService.NavigateTo<PurchasePage>();
             });
+        }
+
+        private void UpdateSuggestions()
+        {
+            Suggestions.Clear();
+            if (!string.IsNullOrWhiteSpace(Keyword))
+            {
+                var suggestions = _dao.GetSuggestions(Keyword);
+
+                foreach (var suggestion in suggestions)
+                {
+                    Suggestions.Add(suggestion);
+                }
+            }
         }
 
 
