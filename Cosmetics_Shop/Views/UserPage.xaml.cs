@@ -25,7 +25,7 @@ namespace Cosmetics_Shop.Views
     /// </summary>
     public sealed partial class UserPage : Page
     {
-        public UserViewModel ViewModel { get; set; } 
+        public UserViewModel ViewModel { get; set; }
         public UserPage()
         {
             this.InitializeComponent();
@@ -33,13 +33,18 @@ namespace Cosmetics_Shop.Views
             navigationService.Initialize(rootFrame);
 
             rootFrame.NavigationFailed += RootFrame_NavigationFailed;
-           
+
             ViewModel = (UserViewModel)App.ServiceProvider.GetService(typeof(UserViewModel));
         }
 
         private void RootFrame_NavigationFailed(object sender, Microsoft.UI.Xaml.Navigation.NavigationFailedEventArgs e)
         {
             throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
+        }
+
+        private void AutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        {
+
         }
     }
 }

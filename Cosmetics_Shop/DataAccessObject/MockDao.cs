@@ -14,10 +14,10 @@ namespace Cosmetics_Shop.Models.DataService
     public class MockDao : IDao
     {
         public async Task<ProductQueryResult> GetListProductThumbnailAsync(
-            string keyword = "", 
-            int pageIndex = 1, 
-            int productsPerPage = 10, 
-            bool nameAscending = false,
+            string keyword = "",
+            int pageIndex = 1,
+            int productsPerPage = 10,
+            SortProduct sortProduct = SortProduct.DateAscending,
             string filterBrand = "",
             int minPrice = 0,
             int maxPrice = int.MaxValue)
@@ -55,6 +55,16 @@ namespace Cosmetics_Shop.Models.DataService
                 new ProductThumbnail(28, "Shampoo", null, 180000, "Skinceuticals"),
                 new ProductThumbnail(29, "Deodorant", null, 100000, "Olay"),
                 new ProductThumbnail(30, "Nail Polish", null, 90000, "Burt's Bees"),
+                new ProductThumbnail(31, "Face Serum", null, 450000, "Cetaphil"),
+                new ProductThumbnail(32, "Facial Oil", null, 500000, "La Roche-Posay"),
+                new ProductThumbnail(33, "Body Lotion", null, 180000, "Skinceuticals"),
+                new ProductThumbnail(34, "Hand Cream", null, 120000, "Olay"),
+                new ProductThumbnail(35, "Perfume", null, 600000, "Burt's Bees"),
+                new ProductThumbnail(36, "Body Wash", null, 150000, "Cetaphil"),
+                new ProductThumbnail(37, "Hair Conditioner", null, 200000, "La Roche-Posay"),
+                new ProductThumbnail(38, "Shampoo", null, 180000, "Skinceuticals"),
+                new ProductThumbnail(39, "Deodorant", null, 100000, "Olay"),
+                new ProductThumbnail(40, "Nail Polish", null, 90000, "Burt's Bees"),
             };
 
             return await Task.Run(() =>
@@ -74,7 +84,6 @@ namespace Cosmetics_Shop.Models.DataService
 
                 var resBrands = db.Select(p => p.Brand).Distinct().ToList();
 
-
                 int totalProduct = db.Count;
 
                 // Paging
@@ -87,10 +96,11 @@ namespace Cosmetics_Shop.Models.DataService
                 {
                     Products = db,
                     TotalPages = numPages,
+                    TotalProducts = totalProduct,
                     Brands = resBrands
                 };
             });
-            
+
         }
 
         public List<ProductDetail> GetListProductDetail()
@@ -98,7 +108,7 @@ namespace Cosmetics_Shop.Models.DataService
             var db = new List<ProductDetail>()
             {
                 new ProductDetail(1, "Moisturizing Cream", null, 250000, 2700, 10000, 1792, "Kem dưỡng ẩm",
-                                   "Hà Nội", "La Roche-Posay", "Hà Nội", 
+                                   "Hà Nội", "La Roche-Posay", "Hà Nội",
                                    "Với sự kết hợp của 3 ceramides thiết yếu và hyaluronic acid, " +
                                    "kem dưỡng giúp duy trì độ ẩm và phục hồi lớp hàng rào bảo vệ cho da mặt và " +
                                    "toàn thân\r\n\r\nSản phẩm từ CeraVe - nhãn hiệu chăm sóc da số 1 tại " +
@@ -110,7 +120,7 @@ namespace Cosmetics_Shop.Models.DataService
                                    "t béo và các chất béo khác được tăng cường với hệ thống phân phối đột phá được gọi l" +
                                    "à MultiVesicular Emulsion Technology - MVE. Công thức của 3 loại CERAmides thiết" +
                                    " yếu và công nghệ mVE là sự ra đời của CeraVe" ),
-                new ProductDetail(2, "Sunscreen SPF 50", null, 300000, 1000, 5000, 179, "Kem chống nắng", 
+                new ProductDetail(2, "Sunscreen SPF 50", null, 300000, 1000, 5000, 179, "Kem chống nắng",
                                     "Thành phố Hồ Chí Minh", "La Roche-Posay", "Thành phố Hồ Chí Minh",
                                     "Kem chống nắng Sunplay Super Block dùng được cho mặt và toàn thân, " +
                                     "thích hợp đi biển, bơi lội, du lịch, leo núi, thể thao. " +
@@ -131,7 +141,7 @@ namespace Cosmetics_Shop.Models.DataService
                                     "mịn, không gây khô da, không chứa cồn, kháng nước tốt."
                                     ),
 
-                new ProductDetail(3, "Vitamin C Serum", null, 400000, 500, 2500, 250, "Vitamin C", 
+                new ProductDetail(3, "Vitamin C Serum", null, 400000, 500, 2500, 250, "Vitamin C",
                                     "Cần Thơ", "La Roche-Posay", "Cần Thơ",
                                     "Serum trắng da, mờ thâm Balance Active Formula Vitamin " +
                                     "C Brightening 30ml với thành phần chính là Vitamin C nhưng tối " +
@@ -157,7 +167,7 @@ namespace Cosmetics_Shop.Models.DataService
             var db = GetListProductDetail();
             for (int i = 0; i < db.Count; i++)
             {
-                if(idProduct == db[i].Id)
+                if (idProduct == db[i].Id)
                 {
                     return db[i];
                 }
@@ -282,6 +292,17 @@ namespace Cosmetics_Shop.Models.DataService
             }
             return result;
 
+        }
+
+        public List<string> GetSuggestions(string keyword)
+        {
+            var suggestions = new List<string> { "Apple", "Application", "Banana", "Cherry", "Date", "Grape" };
+
+            // Lọc gợi ý dựa trên văn bản nhập
+            var filtered = suggestions.Where(s => s.StartsWith(keyword, StringComparison.OrdinalIgnoreCase))
+                                        .Take(10).ToList();
+
+            return filtered;
         }
     }
 }

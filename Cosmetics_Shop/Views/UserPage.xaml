@@ -20,7 +20,7 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0"
-              Background="#52bf90"> 
+              Background="#52bf90">
         </Grid>
 
         <Grid Grid.Row="1"
@@ -40,15 +40,18 @@
                        VerticalAlignment="Center"
                        Foreground="White"
                        FontSize="30"/>
-            
+
             <Button Grid.Column="1"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Height="50"
                     Width="50"
                     Background="Black"
-                    Command="{x:Bind ViewModel.DashboardButtonCommand}">
+                    Command="{x:Bind ViewModel.DashboardButtonCommand}"
+                    ToolTipService.ToolTip="Trang chính"
+                    ToolTipService.Placement="Left">
                 <Image Source="/Assets/dashboard_icon.png"/>
+
             </Button>
 
             <Button Grid.Column="2"
@@ -57,7 +60,9 @@
                     Height="50"
                     Width="50"
                     Background="Black"
-                    Command="{x:Bind ViewModel.PurchaseButtonCommand}">
+                    Command="{x:Bind ViewModel.PurchaseButtonCommand}"
+                    ToolTipService.ToolTip="Trang tìm kiếm"
+                    ToolTipService.Placement="Left">
                 <Image Source="/Assets/search-icon.png"/>
             </Button>
 
@@ -73,7 +78,9 @@
                              VerticalAlignment="Center"
                              BorderThickness="2"
                              CornerRadius="5"
-                             Text="{x:Bind ViewModel.Keyword, Mode=TwoWay}">
+                             Text="{x:Bind ViewModel.Keyword, Mode=TwoWay}"
+                             TextChanged="AutoSuggestBox_TextChanged"
+                             ItemsSource="{x:Bind ViewModel.Suggestions}">
                 </AutoSuggestBox>
 
 
@@ -95,12 +102,16 @@
                 <Button Height="60"
                         Width="60"
                         Background="Black"
-                        Command="{x:Bind ViewModel.CartButtonCommand}">
+                        Command="{x:Bind ViewModel.CartButtonCommand}"
+                        ToolTipService.ToolTip="Giỏ hàng"
+                        ToolTipService.Placement="Left">
                     <Image Source="/Assets/cart_icon_1.png"/>
                 </Button>
 
                 <Button Background="Black"
-                        Command="{x:Bind ViewModel.AccountButtonCommand}">
+                        Command="{x:Bind ViewModel.AccountButtonCommand}"
+                        ToolTipService.ToolTip="Tài khoản"
+                        ToolTipService.Placement="Left">
                     <StackPanel Orientation="Horizontal">
                         <Ellipse Fill="Gray" 
                                  Width="40"
