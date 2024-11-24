@@ -31,7 +31,7 @@ namespace Cosmetics_Shop.Views
         public MainWindow()
         {
             this.InitializeComponent();
-            this.AppWindow.Resize(new Windows.Graphics.SizeInt32(1500, 900));
+            this.AppWindow.Resize(new Windows.Graphics.SizeInt32(1600, 900));
             
             var navigationService = App.ServiceProvider.GetService(typeof(INavigationService)) as INavigationService;
             navigationService.Initialize(MainPageFrame);

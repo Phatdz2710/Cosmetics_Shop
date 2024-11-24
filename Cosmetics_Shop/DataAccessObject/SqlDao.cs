@@ -45,6 +45,11 @@ namespace Cosmetics_Shop.DataAccessObject
             throw new NotImplementedException();
         }
 
+        public List<ProductThumbnail> GetListRecentlyViewAsync()
+        {
+            throw new NotImplementedException();
+        }
+
         public List<ReviewThumbnail> GetListReviewThumbnail()
         {
             throw new NotImplementedException();

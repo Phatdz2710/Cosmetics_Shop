@@ -182,9 +182,22 @@ namespace Cosmetics_Shop.Models.DataService
                 new ProductThumbnail(1, "Moisturizing Cream", null, 250000, "La Roche-Posay"),
                 new ProductThumbnail(2, "Sunscreen SPF 50", null, 300000, "La Roche-Posay"),
                 new ProductThumbnail(3, "Vitamin C Serum", null, 400000, "La Roche-Posay"),
+                new ProductThumbnail(1, "Moisturizing Cream", null, 250000, "La Roche-Posay"),
+                new ProductThumbnail(2, "Sunscreen SPF 50", null, 300000, "La Roche-Posay"),
+                new ProductThumbnail(3, "Vitamin C Serum", null, 400000, "La Roche-Posay"),
+                new ProductThumbnail(1, "Moisturizing Cream", null, 250000, "La Roche-Posay"),
+                new ProductThumbnail(2, "Sunscreen SPF 50", null, 300000, "La Roche-Posay"),
+                new ProductThumbnail(3, "Vitamin C Serum", null, 400000, "La Roche-Posay"),
+                new ProductThumbnail(1, "Moisturizing Cream", null, 250000, "La Roche-Posay"),
+                new ProductThumbnail(2, "Sunscreen SPF 50", null, 300000, "La Roche-Posay"),
+                new ProductThumbnail(3, "Vitamin C Serum", null, 400000, "La Roche-Posay"),
+                new ProductThumbnail(1, "Moisturizing Cream", null, 250000, "La Roche-Posay"),
+                new ProductThumbnail(2, "Sunscreen SPF 50", null, 300000, "La Roche-Posay"),
+                new ProductThumbnail(3, "Vitamin C Serum", null, 400000, "La Roche-Posay"),
+                new ProductThumbnail(1, "Moisturizing Cream", null, 250000, "La Roche-Posay"),
+                new ProductThumbnail(2, "Sunscreen SPF 50", null, 300000, "La Roche-Posay"),
+                new ProductThumbnail(3, "Vitamin C Serum", null, 400000, "La Roche-Posay"),
             };
-
-            // Filter by keyword
 
             return db;
         }
@@ -199,6 +212,19 @@ namespace Cosmetics_Shop.Models.DataService
 
             return db;
         }
+
+        public List<ProductThumbnail> GetListRecentlyViewAsync()
+        {
+            var db = new List<ProductThumbnail>()
+            {
+                new ProductThumbnail(1, "Moisturizing Cream", null, 250000, "La Roche-Rosay"),
+                new ProductThumbnail(2, "Sunscreen SPF 50", null, 300000, "La Roche-Rosay"),
+                new ProductThumbnail(3, "Vitamin C Serum", null, 400000, "La Roche-Rosay"),
+            };
+
+            return db;
+        }
+
         public void InsertProduct(Product product)
         {
             throw new NotImplementedException();
@@ -262,6 +288,9 @@ namespace Cosmetics_Shop.Models.DataService
             return db;
         }
 
+
+ 
+
         public List<ReviewThumbnail> GetListReviewThumbnail()
         {
             var db = new List<ReviewThumbnail>()
@@ -304,5 +333,6 @@ namespace Cosmetics_Shop.Models.DataService
 
             return filtered;
         }
+
     }
 }

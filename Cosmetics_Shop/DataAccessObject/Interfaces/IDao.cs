@@ -29,6 +29,8 @@ namespace Cosmetics_Shop.Models.DataService
 
         List<ProductThumbnail> GetListBestSellerAsync();
 
+        List<ProductThumbnail> GetListRecentlyViewAsync();
+
         List<CartThumbnail> GetListCartProduct();
 
         List<ReviewThumbnail> GetListReviewThumbnail();
