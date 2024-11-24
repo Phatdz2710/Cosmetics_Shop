@@ -2,6 +2,7 @@
 
 ## Thành viên
 <<<<<<< HEAD
+<<<<<<< HEAD
 - **21120419** - Vũ Thành Công
 
 ## Chức năng đã hoàn thành
@@ -35,6 +36,12 @@
 - **18120340** - Hồ Nguyễn Ngọc Duy
 - **21120419** - Vũ Thành Công
 
+=======
+- **22120260** - Châu Ngọc Phát
+- **18120340** - Hồ Nguyễn Ngọc Duy
+- **21120419** - Vũ Thành Công
+
+>>>>>>> 7dc43a7e50c40630462e0af96d669811e1b994b1
 ## Đánh giá công việc
 - **Châu Ngọc Phát**:
   - Số giờ làm: 7 giờ
@@ -88,6 +95,9 @@
 - **Event Aggregator Pattern**: Trao đổi thông tin giữa các thành phần mà không cần biết đến nhau.
 - **Bất đồng bộ Async, Await**: Áp dụng cho các tính năng đăng nhập và tìm kiếm.
 - **Unit Test**: Kiểm thử cho chức năng đăng nhập và tìm kiếm.
+<<<<<<< HEAD
+>>>>>>> 7dc43a7e50c40630462e0af96d669811e1b994b1
+=======
 >>>>>>> 7dc43a7e50c40630462e0af96d669811e1b994b1
 
 
