@@ -13,6 +13,8 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Cosmetics_Shop.ViewModels.UserControlViewModels;
+using System.Windows.Input;
+using Windows.UI.Popups;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -36,9 +38,20 @@ namespace Cosmetics_Shop.Views.Objects
                                         typeof(ProductThumbnailControl),
                                         new PropertyMetadata(null));
 
+
         public ProductThumbnailControl()
         {
             this.InitializeComponent();
+        }
+
+        private void Grid_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            ICommand command = ViewModel.BuyButtonCommand;
+            if (command.CanExecute(null))
+            {
+                command.Execute(null);
+            }
+
         }
     }
 }

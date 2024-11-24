@@ -16,7 +16,7 @@
         <converter:AmountThousandToKConvert x:Key="AmountThousandToKConvert"/>
     </UserControl.Resources>
 
-    <ScrollView>
+    <ScrollView x:Name="scrollView">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.1*"/>
@@ -175,14 +175,15 @@
                                     </StackPanel>
                                 </StackPanel>
 
-                                <DropDownButton Grid.Column="2"
+                                <DropDownButton x:Name="myDropDownButton"
+                                                Grid.Column="2"
                                                 Grid.Row="1"
                                                 Content="0đ">
                                     <DropDownButton.Flyout>
                                         <MenuFlyout Placement="Bottom">
-                                            <MenuFlyoutItem Text="Nhanh - 16.500 đ"/>
-                                            <MenuFlyoutItem Text="Hỏa tốc - 54.000 đ"/>
-                                            <MenuFlyoutItem Text="Tiết kiệm - 20.000 đ"/>
+                                            <MenuFlyoutItem Text="Nhanh - 16.500 đ" Click="MenuFlyoutItem_Click"/>
+                                            <MenuFlyoutItem Text="Hỏa tốc - 54.000 đ" Click="MenuFlyoutItem_Click"/>
+                                            <MenuFlyoutItem Text="Tiết kiệm - 20.000 đ" Click="MenuFlyoutItem_Click"/>
                                         </MenuFlyout>
                                     </DropDownButton.Flyout>
                                 </DropDownButton>
@@ -245,7 +246,8 @@
                                         Height="50"
                                         Foreground="Red"
                                         BorderBrush="Red"
-                                        BorderThickness="1.5">
+                                        BorderThickness="1.5"
+                                        Click="themvaogiohangButton_Click">
                                     <StackPanel Orientation="Horizontal">
                                         <FontIcon Glyph="&#xE7BF;" />
                                         <TextBlock Text="Thêm vào giỏ hàng"
@@ -283,10 +285,11 @@
                   Background="#317256">
             </Grid>
 
-            <Grid Grid.Column="1"
+            <Grid x:Name="reviewGrid" 
+                  Grid.Column="1"
                   Grid.Row="3"
                   Background="White"
-                  >
+                >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="2*"/>
                     <RowDefinition Height="7*"/>
@@ -296,6 +299,43 @@
                            Text="ĐÁNH GIÁ"
                            FontSize="20"
                            Margin="40 20 0 0"/>
+
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="200 10 0 0">
+                    <Button Click="FilterButton_Click" Tag="1">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="1 " Margin="0,0,5,0"/>
+                            <FontIcon Glyph="&#xF0EA;" Foreground="Gold" FontSize="15"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Click="FilterButton_Click" Tag="2">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="2 " Margin="0,0,5,0"/>
+                            <FontIcon Glyph="&#xF0EA;" Foreground="Gold" FontSize="15"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Click="FilterButton_Click" Tag="3">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="3 " Margin="0,0,5,0"/>
+                            <FontIcon Glyph="&#xF0EA;" Foreground="Gold" FontSize="15"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Click="FilterButton_Click" Tag="4">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="4 " Margin="0,0,5,0"/>
+                            <FontIcon Glyph="&#xF0EA;" Foreground="Gold" FontSize="15"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Click="FilterButton_Click" Tag="5">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="5 " Margin="0,0,5,0"/>
+                            <FontIcon Glyph="&#xF0EA;" Foreground="Gold" FontSize="15"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Click="FilterButton_Click" Tag="All">
+                        <TextBlock Text="Alls" Margin="0,0,5,0"/>
+                    </Button>
+                </StackPanel>
+
 
                 <ScrollView Grid.Row="1">
                     <GridView ItemsSource="{x:Bind ViewModel.reviewThumbnail}"

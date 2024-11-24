@@ -143,12 +143,12 @@ namespace Cosmetics_Shop.ViewModels
 
 
         // Update Search's suggest
-        private void UpdateSuggestions()
+        private async void UpdateSuggestions()
         {
             Suggestions.Clear();
             if (!string.IsNullOrWhiteSpace(Keyword))
             {
-                var suggestions = _dao.GetSuggestions(Keyword);
+                var suggestions = await _dao.GetSuggestionsAsync(Keyword);
 
                 foreach (var suggestion in suggestions)
                 {

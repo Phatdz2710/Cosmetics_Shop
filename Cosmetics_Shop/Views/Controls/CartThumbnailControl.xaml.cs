@@ -44,18 +44,17 @@ namespace Cosmetics_Shop.Views.Controls
 
         private void minusButton_Click(object sender, RoutedEventArgs e)
         {
-            if (int.TryParse(amountTextBox.Text, out int currentAmount) && currentAmount > 1)
+            if (ViewModel.CartThumbnail.Amount > 1)
             {
-                amountTextBox.Text = (currentAmount - 1).ToString();
+                ViewModel.CartThumbnail.Amount--;
+                //ViewModel.CartPageViewModel.RecalculateTotalPay(); // Recalculate total pay
             }
         }
 
         private void plusButton_Click(object sender, RoutedEventArgs e)
         {
-            if (int.TryParse(amountTextBox.Text, out int currentAmount))
-            {
-                amountTextBox.Text = (currentAmount + 1).ToString();
-            }
+            ViewModel.CartThumbnail.Amount++;
+            //ViewModel.CartPageViewModel.RecalculateTotalPay();
         }
     }
 }

@@ -8,13 +8,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <!--<UserControl.Resources>
-        <Style x:Key="StarStyle" TargetType="FontIcon">
-            <Setter Property="Foreground" Value="Gold"/>
-            <Setter Property="FontSize" Value="15"/>
-        </Style>
-    </UserControl.Resources>-->
-
     <StackPanel Orientation="Horizontal"
                 Background="#E9FFF0">
         <Ellipse Fill="Gray" 
@@ -26,31 +19,19 @@
                    FontSize="15"
                    Margin="10 10 0 0"/>
         
-        <Grid Margin="10">
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                 <!--Assuming the rating is 5--> 
-                <FontIcon Glyph="&#xF0EA;" Foreground="Gold" FontSize="15" />
-                <FontIcon Glyph="&#xF0EA;" Foreground="Gold" FontSize="15" />
-                <FontIcon Glyph="&#xF0EA;" Foreground="Gold" FontSize="15" />
-                <FontIcon Glyph="&#xF0EA;" Foreground="Gold" FontSize="15" />
-                <FontIcon Glyph="&#xF0EA;" Foreground="Gold" FontSize="15" />
-            </StackPanel>
-        </Grid>
-
-        <!--<Grid Margin="10">
-            <ItemsControl ItemsSource="{Binding StarNumbers, ElementName=StarRating}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <FontIcon Glyph="&#xF0EA;" Style="{StaticResource StarStyle}" />
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
-        </Grid>-->
+        <ItemsControl ItemsSource="{x:Bind ViewModel.StarList, Mode=OneWay}"
+                      Margin="10 0 0 10">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <FontIcon Glyph="&#xF0EA;" Foreground="Gold" FontSize="15" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
 
     </StackPanel>
 </UserControl>

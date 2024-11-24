@@ -12,18 +12,20 @@
     <UserControl.Resources>
         <converter:VNDCurrencyConverter x:Key="VNDCurrencyConverter"/>
         <converter:NameProductOnThumbnail x:Key="NameProductOnThumbnailConverter"/>
+        <converter:BackgroundColorByRatingConverter x:Key="BackgroundColorByRatingConverter"/>
     </UserControl.Resources>
 
     <Grid Background="White"
           CornerRadius="10"
           ToolTipService.ToolTip="{x:Bind ViewModel.ProductThumbnail.Name, Mode=OneWay}"
-          ToolTipService.Placement="Right">
+          ToolTipService.Placement="Right"
+          Tapped="Grid_Tapped"
+          >
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="3*"/>
-            <RowDefinition Height="0.6*"/>
-            <RowDefinition Height="0.4*"/>
+            <RowDefinition Height="3.4*"/> 
             <RowDefinition Height="*"/>
+            <RowDefinition Height="0.4*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -31,16 +33,31 @@
                x:Name="ImageProduct"
                Margin="5"/>
 
-        <TextBlock Grid.Row="1"
-                   x:Name="NameProduct"
-                   FontSize="15"
-                   Margin="2"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
-                   Text="{x:Bind ViewModel.ProductThumbnail.Name, 
-                            Mode=OneWay,
-                            Converter={StaticResource NameProductOnThumbnailConverter}}"/>
 
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Border Background="{x:Bind ViewModel.ProductThumbnail.Rating, 
+                                    Mode=OneWay, Converter={StaticResource BackgroundColorByRatingConverter}}"
+                    Width="45"
+                    Height="25"
+                    CornerRadius="5"
+                    Margin="3 0 3 0">
+                <TextBlock Text="{x:Bind ViewModel.ProductThumbnail.Rating, Mode=OneWay}"
+                           FontSize="14"
+                           TextAlignment="Center"
+                           VerticalAlignment="Center"
+                           Foreground="White"/>
+            </Border>
+            <TextBlock x:Name="NameProduct"
+                       FontSize="15"
+                       Margin="2"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Text="{x:Bind ViewModel.ProductThumbnail.Name, 
+                                Mode=OneWay,
+                                Converter={StaticResource NameProductOnThumbnailConverter}}"/>
+        </StackPanel>
+        
         <TextBlock Grid.Row="2"
                    x:Name="BrandProduct"
                    FontSize="12"
@@ -62,13 +79,14 @@
             <Run Text="{x:Bind ViewModel.ProductThumbnail.Price, 
                         Mode=OneWay,
                         Converter={StaticResource VNDCurrencyConverter}}"
-                 Foreground="#52bf90"/>
+                 Foreground="#52bf90"
+                 FontWeight="Bold"/>
             
             <Run Text="đ"
                  Foreground="#52bf90"/>
         </TextBlock>
 
-        <Button Grid.Row="4"
+        <!--<Button Grid.Row="4"
                 x:Name="btnBuy"
                 Content="Mua"
                 Margin="5"
@@ -76,8 +94,6 @@
                 Width="130"
                 Background="#52bf90"
                 Command="{x:Bind ViewModel.BuyButtonCommand,
-                            Mode=OneWay}"/>
-
-
+                            Mode=OneWay}"/>-->
     </Grid>
 </UserControl>

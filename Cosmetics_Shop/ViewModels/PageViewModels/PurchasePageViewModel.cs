@@ -53,7 +53,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         private string filterBrand = "";
         private string minPrice = "";
         private string maxPrice = "";
-        private int selectedIndexSort = 0;
+        private int selectedIndexSort = 1;
         #endregion
 
         public string Keyword
@@ -146,6 +146,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             set
             {
                 selectedIndexSort = value;
+                SearchProduct();
                 OnPropertyChanged(nameof(SelectedIndexSort));
             }
         }
@@ -271,7 +272,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
 
             // Get list of product thumbnails with keyword, page index, products per page, filter brand, min price, max price
-            ProductQueryResult productQueryResult = await _dao.GetListProductThumbnailAsync(
+            SearchResult productQueryResult = await _dao.GetListProductThumbnailAsync(
                 keyword: Keyword,
                 pageIndex: PageIndex,
                 productsPerPage: this.productPerPage,
