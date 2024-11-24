@@ -53,7 +53,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         private string filterBrand = "";
         private string minPrice = "";
         private string maxPrice = "";
-        private int selectedIndexSort = 0;
+        private int selectedIndexSort = 1;
         #endregion
 
         public string Keyword
@@ -146,6 +146,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             set
             {
                 selectedIndexSort = value;
+                SearchProduct();
                 OnPropertyChanged(nameof(SelectedIndexSort));
             }
         }
@@ -230,56 +231,48 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 minPc = string.IsNullOrEmpty(minPrice) ? 0 : int.Parse(minPrice);
                 maxPc = string.IsNullOrEmpty(maxPrice) ? int.MaxValue : int.Parse(maxPrice);
 
-                InvalidPriceMinMaxMessageBox _message = new InvalidPriceMinMaxMessageBox();
-                // Kiểm tra giá trị nhỏ hơn 0 hoặc lớn hơn int.MaxValue
+                // Check valid minPrice
                 if (minPc < 0 || minPc > int.MaxValue)
                 {
-                    _message.Message = "Giá thấp nhất không hợp lệ";
-                    _eventAggregator.Publish(_message);
-
+                    ShowDialog("Giá thấp nhất không hợp lệ");
                     MinPrice = "";
                     MaxPrice = "";
                     minPc = 0;
                     maxPc = int.MaxValue;
                 }
 
+                // Check valid maxPrice
                 if (maxPc < 0 || maxPc > int.MaxValue)
                 {
-                    _message.Message = "Giá cao nhất không hợp lệ";
-                    _eventAggregator.Publish(_message);
-
+                    ShowDialog("Giá cao nhất không hợp lệ");
                     MinPrice = "";
                     MaxPrice = "";
                     minPc = 0;
                     maxPc = int.MaxValue;
                 }
 
-                // Kiểm tra minPc lớn hơn maxPc
+                // Check if minPc is bigger than maxPc
                 if (minPc > maxPc)
                 {
-                    _message.Message = "Giá thấp nhất lớn hơn giá cao nhất";
-                    _eventAggregator.Publish(_message);
-
+                    ShowDialog("Giá thấp nhất lớn hơn giá cao nhất");
                     MinPrice = "";
                     MaxPrice = "";
                     minPc = 0;
                     maxPc = int.MaxValue;
                 }
             }
+            // If minPrice or maxPrice is less than int.MinValue or bigger than int.MaxValue
             catch (OverflowException)
             {
-                ContentDialog contentDialog = new ContentDialog()
-                {
-                    Title = "Số quá lớn",
-                    CloseButtonText = "OK"
-                };
-                await contentDialog.ShowAsync();
+                ShowDialog("Giá trị không hợp lệ");
+                MinPrice = "";
+                MaxPrice = "";
                 minPc = 0;
                 maxPc = int.MaxValue;
             }
 
             // Get list of product thumbnails with keyword, page index, products per page, filter brand, min price, max price
-            ProductQueryResult productQueryResult = await _dao.GetListProductThumbnailAsync(
+            SearchResult productQueryResult = await _dao.GetListProductThumbnailAsync(
                 keyword: Keyword,
                 pageIndex: PageIndex,
                 productsPerPage: this.productPerPage,
@@ -292,9 +285,17 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             TotalPages = productQueryResult.TotalPages;
             TotalProducts = productQueryResult.TotalProducts;
 
+            // Check if total products equal zero (cannot find any product)
+            if (TotalProducts == 0)
+            {
+                ShowDialog("Không tìm thấy bất kỳ sản phẩm nào");
+            }
+
+            // Show or hide button next/previous page
             VisiNext = PageIndex == totalPages ? Visibility.Collapsed : Visibility.Visible;
             VisiPrevious = PageIndex == 1 ? Visibility.Collapsed : Visibility.Visible;
 
+            // Update group of Product thumbnails
             ProductThumbnails?.Clear();
 
             for (int i = 0; i < productQueryResult.Products.Count; i++)
@@ -304,6 +305,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 ProductThumbnails.Add(productThumbnailViewModel as ProductThumbnailViewModel);
             }
 
+            // Update list brand for filter
             Brands?.Clear();
             for (int i = 0; i < productQueryResult.Brands.Count; i++)
             {
@@ -349,6 +351,17 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        // Require View layer show a ContentDialog with message
+        private void ShowDialog(string message)
+        {
+            var _message = new InvalidPriceMinMaxMessageBox()
+            {
+                Message = message
+            };
+
+            _eventAggregator.Publish(_message);
         }
     }
 }

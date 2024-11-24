@@ -30,7 +30,8 @@
             </Grid.ColumnDefinitions>
 
             <CheckBox Grid.Column="0" 
-                      Margin="20 0 0 0"/>
+                      Margin="20 0 0 0"
+                      IsChecked="{x:Bind ViewModel.IsChecked, Mode=TwoWay}"/>
 
             <Ellipse Grid.Column="1"
                      Fill="Gray" 
@@ -68,11 +69,13 @@
                                     VerticalAlignment="Center">
                 <Button Name="minusButton" Width="35" Height="35" Content="-" Click="minusButton_Click"/>
                 <TextBox x:Name="amountTextBox" 
-                                     Height="35" 
-                                     Width="5" 
-                                     Text="1"
-                                     TextAlignment="Center"
-                                     />
+                         Height="35" 
+                         Width="5" 
+                         Text="{x:Bind ViewModel.CartThumbnail.Amount,
+                                       Mode=TwoWay, 
+                                       UpdateSourceTrigger=PropertyChanged}"
+                         TextAlignment="Center"
+                         />
                 <Button Name="plusButton" Width="35" Height="35" Content="+" Click="plusButton_Click"/>
             </StackPanel>
 
@@ -86,11 +89,11 @@
             </TextBlock>
 
             <Button Grid.Column="7" 
-                                x:Name="deleteButton"
-                                Margin="30 0 0 0"
-                                Content="Xóa"
-                                BorderBrush="White"
-                                >
+                    x:Name="deleteButton"
+                    Margin="30 0 0 0"
+                    Content="Xóa"
+                    BorderBrush="White">
+                <!--Command="{Binding DeleteCommand}"-->
             </Button>
 
         </Grid>

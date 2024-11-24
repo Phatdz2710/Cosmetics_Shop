@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Cosmetics_Shop.Models.DataService
 {
 
-    public struct ProductQueryResult
+    public struct SearchResult
     {
         public List<ProductThumbnail> Products { get; set; }
         public int TotalPages { get; set; }

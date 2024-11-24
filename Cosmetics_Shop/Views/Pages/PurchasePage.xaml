@@ -89,10 +89,10 @@
                    Margin="0,0,0,5"/>
                 <ComboBox x:Name="SortComboBox"
                           HorizontalAlignment="Stretch"
-                          SelectedIndex="{x:Bind ViewModel.SelectedIndexSort, Mode=OneWay}">
+                          SelectedIndex="{x:Bind ViewModel.SelectedIndexSort, Mode=TwoWay}">
                     <ComboBoxItem Content="Mới nhất"/>
-                    <ComboBoxItem Content="Giá tăng dần"/>
                     <ComboBoxItem Content="Giá giảm dần"/>
+                    <ComboBoxItem Content="Giá tăng dần"/>
                     <ComboBoxItem Content="Tên sản phẩm"/>
                 </ComboBox>
             </StackPanel>

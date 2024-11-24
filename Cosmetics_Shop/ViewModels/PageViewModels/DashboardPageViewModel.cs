@@ -19,6 +19,8 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         // Observable Collection
         public ObservableCollection<ProductThumbnailViewModel> BestSeller { get; set; }
         public ObservableCollection<ProductThumbnailViewModel> NewProducts { get; set; }
+        public ObservableCollection<ProductThumbnailViewModel> RecentlyView { get; set; }
+
 
 
         // Constructor
@@ -29,9 +31,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
 
             BestSeller = new ObservableCollection<ProductThumbnailViewModel>();
             NewProducts = new ObservableCollection<ProductThumbnailViewModel>();
+            RecentlyView = new ObservableCollection<ProductThumbnailViewModel>();
 
             var bestSeller = _dao.GetListBestSellerAsync();
             var newProducts = _dao.GetListNewProductAsync();
+            var recentlyView = _dao.GetListRecentlyViewAsync();
 
             for (int i = 0; i < bestSeller.Count; i++)
             {
@@ -45,6 +49,13 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 var productThumbnailViewModel = App.ServiceProvider.GetService(typeof(ProductThumbnailViewModel));
                 productThumbnailViewModel.GetType().GetProperty("ProductThumbnail").SetValue(productThumbnailViewModel, newProducts[i]);
                 NewProducts.Add(productThumbnailViewModel as ProductThumbnailViewModel);
+            }
+
+            for (int i = 0; i < recentlyView.Count; i++)
+            {
+                var productThumbnailViewModel = App.ServiceProvider.GetService(typeof(ProductThumbnailViewModel));
+                productThumbnailViewModel.GetType().GetProperty("ProductThumbnail").SetValue(productThumbnailViewModel, newProducts[i]);
+                RecentlyView.Add(productThumbnailViewModel as ProductThumbnailViewModel);
             }
         }
     }

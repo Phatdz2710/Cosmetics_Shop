@@ -10,9 +10,9 @@ namespace Cosmetics_Shop.Models.DataService
 {
     public interface IDao
     {
-        void InsertProduct(Product product);
+        void InsertProduct(ProductThumbnail product);
 
-        Task<ProductQueryResult> GetListProductThumbnailAsync(
+        Task<SearchResult> GetListProductThumbnailAsync(
             string keyword = "",
             int pageIndex = 1,
             int productsPerPage = 10,
@@ -21,13 +21,15 @@ namespace Cosmetics_Shop.Models.DataService
             int minPrice = 0,
             int maxPrice = int.MaxValue);
 
-        List<string> GetSuggestions(string keyword);
+        Task<List<string>> GetSuggestionsAsync(string keyword);
 
         ProductDetail GetProductDetail(int idProduct);
 
         List<ProductThumbnail> GetListNewProductAsync();
 
         List<ProductThumbnail> GetListBestSellerAsync();
+
+        List<ProductThumbnail> GetListRecentlyViewAsync();
 
         List<CartThumbnail> GetListCartProduct();
 
@@ -37,6 +39,11 @@ namespace Cosmetics_Shop.Models.DataService
 
         Task<LoginResult> CheckLoginAsync(string username, string password);
 
+        List<Voucher> GetAllVouchers();
 
+        //Voucher GetVoucherByCode(string code);
+        //void AddVoucher(Voucher voucher);
+        //void DeleteVoucher(int id);
+        //void UpdateVoucher(Voucher updatedVoucher);
     }
 }

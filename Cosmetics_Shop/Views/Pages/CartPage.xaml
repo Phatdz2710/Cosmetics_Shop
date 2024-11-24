@@ -5,11 +5,16 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Cosmetics_Shop.Views.Pages"
     xmlns:controls="using:Cosmetics_Shop.Views.Controls"
+    xmlns:converter="using:Cosmetics_Shop.Views.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+    <UserControl.Resources>
+        <converter:VNDCurrencyConverter x:Key="VNDCurrencyConverter"/>
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.1*"/>
@@ -43,7 +48,7 @@
               Background="White">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.2*"/>
-                <ColumnDefinition Width="0.3*"/>
+                <ColumnDefinition Width="0.25*"/>
                 <ColumnDefinition Width="0.5*"/>
             </Grid.ColumnDefinitions>
 
@@ -60,16 +65,23 @@
                 <TextBlock Text="Voucher"
                            Margin="10 5 50 0"
                            FontSize="15"/>
-                <Button Grid.Row="0" 
-                        Grid.Column="2"
-                        x:Name="voucherButton"
-                        Margin="150 0 0 0"
-                        Content="Nhập hoặc chọn mã"
-                        Foreground="DarkBlue"
-                        Background="White"
-                        BorderBrush="White"
-                        FontSize="15">
-                </Button>
+
+                <ComboBox
+                            x:Name="voucherComboBox"
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            Margin="150,0,0,0"
+                            Foreground="DarkBlue"
+                            Background="White"
+                            FontSize="15"
+                            SelectionChanged="voucherComboBox_SelectionChanged"
+                            PlaceholderText="Chọn mã giảm giá">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Code}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
             </StackPanel>
 
             <StackPanel Grid.Column="0"
@@ -77,11 +89,13 @@
                         Grid.Row="1"
                         Background="#317256"/>
 
-            <CheckBox Grid.Column="0"
+            <CheckBox x:Name="chooseAllCheckBox"
+                      Grid.Column="0"
                       Grid.Row="2"
                       Content="Chọn tất cả"
                       Margin="20 10 0 10"
-                      FontSize="15"/>
+                      FontSize="15"
+                      IsChecked="{x:Bind ViewModel.IsAllChecked, Mode=TwoWay}"/>
             <Grid Grid.Column="2"
                   Grid.Row="2"
                   Margin="0 10 0 0">
@@ -90,14 +104,17 @@
                     <ColumnDefinition Width="0.2*"/>
                     <ColumnDefinition Width="0.3*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" 
-                               Text="Tổng thanh toán: " FontSize="18"
-                               Margin="0 10 0 0"/>
-                <TextBlock Grid.Column="1" 
-                               Text="0 đ"
-                               Margin="10 10 0 0"
-                               FontSize="20"
-                               Foreground="Red"/>
+                <TextBlock 
+                           Grid.Column="0" 
+                           Text="Tổng thanh toán: " FontSize="18"
+                           Margin="0 10 0 0"/>
+                <TextBlock x:Name="totalPay" 
+                           Grid.Column="1"             
+                           FontSize="25"
+                           Foreground="Red">
+                    <Run Text="{x:Bind ViewModel.TotalPay, Mode=OneWay,
+                                Converter={StaticResource VNDCurrencyConverter}}"/> đ
+                </TextBlock>
                 <Button x:Name="muangayButton" 
                             Grid.Column="2"
                             Margin="0 0 0 10"
@@ -128,7 +145,7 @@
             <GridView.ItemTemplate>
                 <DataTemplate>
                     <controls:CartThumbnailControl ViewModel="{Binding}"
-                                                  MinWidth="1280"
+                                                    MinWidth="1280"
                                                       />
                 </DataTemplate>
             </GridView.ItemTemplate>

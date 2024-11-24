@@ -25,6 +25,8 @@ using Cosmetics_Shop.Models.DataService;
 using Cosmetics_Shop.Models;
 using Cosmetics_Shop.ViewModels.PageViewModels;
 using Cosmetics_Shop.ViewModels.UserControlViewModels;
+using Cosmetics_Shop.DBModels;
+using Microsoft.EntityFrameworkCore;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -68,7 +70,7 @@ namespace Cosmetics_Shop
             // Add Singleton
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<IEventAggregator, EventAggregator>();
-            services.AddSingleton<IDao, MockDao>();
+            services.AddSingleton<IDao, SqlDao>();
             services.AddSingleton<UserSession>();
 
             // Add Transient
@@ -83,6 +85,10 @@ namespace Cosmetics_Shop
             services.AddTransient<CartPageViewModel>();
             services.AddTransient<CartThumbnailViewModel>();
             services.AddTransient<ReviewThumbnailViewModel>();
+
+            services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(
+                "Server=localhost,1433;Database=COSMETIC_SHOP;User Id=sa;Password=FatPr0@123;TrustServerCertificate=True;"
+                ));
 
             // Add Scoped
             ServiceProvider = services.BuildServiceProvider();

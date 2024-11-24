@@ -76,15 +76,15 @@ namespace Cosmetics_Shop.ViewModels
 
 
         // Constructor
-        public UserViewModel(IEventAggregator eventAggregator,
-                                INavigationService navigationService,
-                                IDao dao,
-                                UserSession userSession)
+        public UserViewModel(   IEventAggregator    eventAggregator,
+                                INavigationService  navigationService,
+                                IDao                dao,
+                                UserSession         userSession)
         {
-            _eventAggregator = eventAggregator;
-            _navigationService = navigationService;
-            _userSession = userSession;
-            _dao = dao;
+            _eventAggregator    = eventAggregator;
+            _navigationService  = navigationService;
+            _userSession        = userSession;
+            _dao                = dao;
 
             Suggestions = new ObservableCollection<string>();
 
@@ -141,12 +141,14 @@ namespace Cosmetics_Shop.ViewModels
             });
         }
 
-        private void UpdateSuggestions()
+
+        // Update Search's suggest
+        private async void UpdateSuggestions()
         {
             Suggestions.Clear();
             if (!string.IsNullOrWhiteSpace(Keyword))
             {
-                var suggestions = _dao.GetSuggestions(Keyword);
+                var suggestions = await _dao.GetSuggestionsAsync(Keyword);
 
                 foreach (var suggestion in suggestions)
                 {
