@@ -37,6 +37,11 @@ namespace Cosmetics_Shop.Models.DataService
 
         Task<LoginResult> CheckLoginAsync(string username, string password);
 
+        List<Voucher> GetAllVouchers();
 
+        //Voucher GetVoucherByCode(string code);
+        //void AddVoucher(Voucher voucher);
+        //void DeleteVoucher(int id);
+        //void UpdateVoucher(Voucher updatedVoucher);
     }
 }

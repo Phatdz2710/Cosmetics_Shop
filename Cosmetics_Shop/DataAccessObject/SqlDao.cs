@@ -69,5 +69,10 @@ namespace Cosmetics_Shop.DataAccessObject
         {
             throw new NotImplementedException();
         }
+
+        public List<Voucher> GetAllVouchers()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
