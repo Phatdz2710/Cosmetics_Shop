@@ -1,6 +1,8 @@
-﻿using Cosmetics_Shop.Models.Enums;
+﻿using Cosmetics_Shop.Enums;
+using Cosmetics_Shop.Models.Enums;
 using Cosmetics_Shop.Services;
 using Cosmetics_Shop.ViewModels;
+using Microsoft.UI.Xaml.Documents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +21,7 @@ namespace Cosmetics_Shop.Models.DataService
             int productsPerPage = 10,
             SortProduct sortProduct = SortProduct.DateAscending,
             string filterBrand = "",
+            string filerCategory = "",
             int minPrice = 0,
             int maxPrice = int.MaxValue)
         {
@@ -175,7 +178,7 @@ namespace Cosmetics_Shop.Models.DataService
             return null;
         }
 
-        public List<ProductThumbnail> GetListNewProductAsync()
+        public async Task<List<ProductThumbnail>> GetListNewProductAsync()
         {
             var db = new List<ProductThumbnail>()
             {
@@ -201,7 +204,7 @@ namespace Cosmetics_Shop.Models.DataService
 
             return db;
         }
-        public List<ProductThumbnail> GetListBestSellerAsync()
+        public async Task<List<ProductThumbnail>> GetListBestSellerAsync()
         {
             var db = new List<ProductThumbnail>()
             {
@@ -213,7 +216,7 @@ namespace Cosmetics_Shop.Models.DataService
             return db;
         }
 
-        public List<ProductThumbnail> GetListRecentlyViewAsync()
+        public async Task<List<ProductThumbnail>> GetListRecentlyViewAsync()
         {
             var db = new List<ProductThumbnail>()
             {
@@ -238,39 +241,32 @@ namespace Cosmetics_Shop.Models.DataService
                 new Tuple<string, string, string, string>("user", "user", "User", "2345")
             };
 
-            return await Task.Run(() =>
+            bool isExistUsername = _listAccount.Any(account => account.Item1 == username);
+
+            if (!isExistUsername)
             {
-                bool isExistUsername = _listAccount.Any(account => account.Item1 == username);
-
-                if (!isExistUsername)
-                {
-                    return new LoginResult()
-                    {
-                        LoginStatus = LoginStatus.InvalidUsername,
-                        Role = "",
-                        Token = "",
-                    };
-
-                }
-
-                bool isCorrectPassword = _listAccount.Any(account => account.Item1 == username && account.Item2 == password);
-                if (!isCorrectPassword)
-                {
-                    return new LoginResult()
-                    {
-                        LoginStatus = LoginStatus.InvalidPassword,
-                        Role = "",
-                        Token = "",
-                    };
-                }
-
                 return new LoginResult()
                 {
-                    LoginStatus = LoginStatus.Success,
-                    Role = _listAccount.First(account => account.Item1 == username).Item3,
-                    Token = _listAccount.First(account => account.Item1 == username).Item4,
+                    LoginStatus = LoginStatus.InvalidUsername,
+                     
                 };
-            });
+
+            }
+
+            bool isCorrectPassword = _listAccount.Any(account => account.Item1 == username && account.Item2 == password);
+            if (!isCorrectPassword)
+            {
+                return new LoginResult()
+                {
+                    LoginStatus = LoginStatus.InvalidPassword,
+                    
+                };
+            }
+
+            return new LoginResult()
+            {
+                LoginStatus = LoginStatus.Success,
+            };
         }
 
         public List<CartThumbnail> GetListCartProduct()
@@ -287,9 +283,6 @@ namespace Cosmetics_Shop.Models.DataService
 
             return db;
         }
-
-
- 
 
         public List<ReviewThumbnail> GetListReviewThumbnail()
         {
@@ -348,6 +341,11 @@ namespace Cosmetics_Shop.Models.DataService
             };
 
             return db;
+        }
+
+        public Task<SignupStatus> DoSignupAsync(string username, string password, string confirmPassword, string email)
+        {
+            throw new NotImplementedException();
         }
 
         //// Method to get a voucher by code

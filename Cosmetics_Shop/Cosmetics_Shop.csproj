@@ -16,6 +16,7 @@
 	<EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Assets\stock_icon.png" />
     <None Remove="LoginWindow.xaml" />
     <None Remove="Views\Controls\ReviewThumbnailControl.xaml" />
     <None Remove="Views\MainWindow.xaml" />
@@ -84,6 +85,11 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Remove="Views\MainWindow.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="Assets\stock_icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 	
   <ItemGroup>

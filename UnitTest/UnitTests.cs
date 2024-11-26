@@ -21,7 +21,7 @@ namespace UnitTest
         [TestInitialize]
         public void Setup()
         {
-            dao = new MockDao();
+            dao = new SqlDao();
         }
 
         [TestMethod]
@@ -29,13 +29,11 @@ namespace UnitTest
         {
 
             var expectedRole = "Admin";
-            var expectedToken = "1234";
             var expectedResult = LoginStatus.Success;
 
             var result = dao.CheckLoginAsync("admin", "admin");
 
-            Assert.AreEqual(expectedRole, result.Result.Role);
-            Assert.AreEqual(expectedToken, result.Result.Token);
+            Assert.AreEqual(expectedRole, result.Result.UserInfo.DisplayRole());
             Assert.AreEqual(expectedResult, result.Result.LoginStatus);
         }
 

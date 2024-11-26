@@ -95,7 +95,6 @@ namespace Cosmetics_Shop.ViewModels
             }
             else
             {
-                // Switch to Dashboard page
                 _navigationService.NavigateTo<DashboardPage>();
             }
 
@@ -127,6 +126,10 @@ namespace Cosmetics_Shop.ViewModels
             DashboardButtonCommand = new RelayCommand(() =>
             {
                 _navigationService.NavigateTo<DashboardPage>();
+                ReloadDashboardRequire reloadEvent = new ReloadDashboardRequire();
+
+                // Publish event (send event to all subscribers)
+                _eventAggregator.Publish(reloadEvent);
             });
 
             // Search button click event

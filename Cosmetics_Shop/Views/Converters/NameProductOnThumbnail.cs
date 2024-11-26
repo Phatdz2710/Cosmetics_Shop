@@ -12,9 +12,9 @@ namespace Cosmetics_Shop.Views.Converters
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (value is string nameProduct && nameProduct.Length > 20)
+            if (value is string nameProduct && nameProduct.Length > 22)
             {
-                return nameProduct.Substring(0, 20) + "...";
+                return nameProduct.Substring(0, 22) + "...";
             }
 
             return value;

@@ -29,5 +29,10 @@ namespace Cosmetics_Shop.Models
         {
             return UserInfo.Name;
         }
+
+        public int GetId()
+        {
+            return UserInfo.Id;
+        }
     }
 }

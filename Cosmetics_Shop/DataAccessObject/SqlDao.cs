@@ -1,25 +1,27 @@
 ﻿using Cosmetics_Shop.DBModels;
+using Cosmetics_Shop.Enums;
 using Cosmetics_Shop.Models.Enums;
 using Cosmetics_Shop.Services;
 using Cosmetics_Shop.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Appointments;
+using Windows.ApplicationModel.Background;
+using Windows.Networking.NetworkOperators;
 using Windows.Security.Authentication.Web.Provider;
 
 namespace Cosmetics_Shop.Models.DataService
 {
     public class SqlDao : IDao
     {
-        public SqlDao()
-        {
-        }
 
         public async Task<SearchResult> GetListProductThumbnailAsync(
             string keyword = "",
@@ -27,15 +29,16 @@ namespace Cosmetics_Shop.Models.DataService
             int productsPerPage = 10,
             SortProduct sortProduct = SortProduct.DateAscending,
             string filterBrand = "",
+            string filterCategory = "",
             int minPrice = 0,
             int maxPrice = int.MaxValue)
         {
-            return await Task.Run(async () =>
+            using (var scope = App.ServiceProvider.CreateScope())
             {
-                using (var scope = App.ServiceProvider.CreateScope())
+                try
                 {
-                    var dbcontext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-                    var query = dbcontext.Products.AsQueryable();
+                    var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                    var query = _databaseContext.Products.AsQueryable();
 
                     if (!string.IsNullOrEmpty(keyword))
                     {
@@ -45,6 +48,11 @@ namespace Cosmetics_Shop.Models.DataService
                     if (!string.IsNullOrEmpty(filterBrand))
                     {
                         query = query.Where(p => p.Brand == filterBrand);
+                    }
+
+                    if (!string.IsNullOrEmpty(filterCategory))
+                    {
+                        query = query.Where(p => p.Category == filterCategory);
                     }
 
                     query = query.Where(p => p.Price >= minPrice && p.Price <= maxPrice);
@@ -63,26 +71,49 @@ namespace Cosmetics_Shop.Models.DataService
 
                     var db = await query.Skip((pageIndex - 1) * productsPerPage)
                                   .Take(productsPerPage)
-                                  .Select(p => new ProductThumbnail(p.Id, p.Name, p.ImageThumbnailPath, p.Price, p.Brand, p.AverageRating))
+                                  .Select(p => new ProductThumbnail(p.Id,
+                                        p.Name,
+                                        p.ImagePath,
+                                        p.Price,
+                                        p.Brand,
+                                        p.AverageRating,
+                                        p.Sold,
+                                        p.Stock))
                                   .ToListAsync();
 
-                    var resBrands = await dbcontext.Products
+                    var resBrands = await _databaseContext.Products
                                         .Where(p => query.Select(q => q.Brand).Contains(p.Brand))
                                         .Select(p => p.Brand)
                                         .Distinct()
                                         .ToListAsync();
 
-
+                    var resCategories = await _databaseContext.Products
+                                        .Where(p => query.Select(q => q.Category).Contains(p.Category))
+                                        .Select(p => p.Category)
+                                        .Distinct()
+                                        .ToListAsync();
 
                     return new SearchResult()
                     {
                         Products = db,
                         TotalPages = numPages == 0 ? 1 : numPages,
                         TotalProducts = totalProduct,
-                        Brands = resBrands
+                        Brands = resBrands,
+                        Categories = resCategories
                     };
                 }
-            });
+                catch (Exception)
+                {
+                    return new SearchResult()
+                    {
+                        Products = new List<ProductThumbnail>(),
+                        TotalPages = 1,
+                        TotalProducts = 0,
+                        Brands = new List<string>(),
+                        Categories = new List<string>()
+                    };
+                }
+            }
         }
 
         public List<ProductDetail> GetListProductDetail()
@@ -157,54 +188,96 @@ namespace Cosmetics_Shop.Models.DataService
             return null;
         }
 
-        public List<ProductThumbnail> GetListNewProductAsync()
+        public async Task<List<ProductThumbnail>> GetListNewProductAsync()
         {
-            var db = new List<ProductThumbnail>()
+            using (var scope = App.ServiceProvider.CreateScope())
             {
-                new ProductThumbnail(1, "Moisturizing Cream", null, 250000, "La Roche-Posay"),
-                new ProductThumbnail(2, "Sunscreen SPF 50", null, 300000, "La Roche-Posay"),
-                new ProductThumbnail(3, "Vitamin C Serum", null, 400000, "La Roche-Posay"),
-                new ProductThumbnail(1, "Moisturizing Cream", null, 250000, "La Roche-Posay"),
-                new ProductThumbnail(2, "Sunscreen SPF 50", null, 300000, "La Roche-Posay"),
-                new ProductThumbnail(3, "Vitamin C Serum", null, 400000, "La Roche-Posay"),
-                new ProductThumbnail(1, "Moisturizing Cream", null, 250000, "La Roche-Posay"),
-                new ProductThumbnail(2, "Sunscreen SPF 50", null, 300000, "La Roche-Posay"),
-                new ProductThumbnail(3, "Vitamin C Serum", null, 400000, "La Roche-Posay"),
-                new ProductThumbnail(1, "Moisturizing Cream", null, 250000, "La Roche-Posay"),
-                new ProductThumbnail(2, "Sunscreen SPF 50", null, 300000, "La Roche-Posay"),
-                new ProductThumbnail(3, "Vitamin C Serum", null, 400000, "La Roche-Posay"),
-                new ProductThumbnail(1, "Moisturizing Cream", null, 250000, "La Roche-Posay"),
-                new ProductThumbnail(2, "Sunscreen SPF 50", null, 300000, "La Roche-Posay"),
-                new ProductThumbnail(3, "Vitamin C Serum", null, 400000, "La Roche-Posay"),
-                new ProductThumbnail(1, "Moisturizing Cream", null, 250000, "La Roche-Posay"),
-                new ProductThumbnail(2, "Sunscreen SPF 50", null, 300000, "La Roche-Posay"),
-                new ProductThumbnail(3, "Vitamin C Serum", null, 400000, "La Roche-Posay"),
-            };
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                try
+                {
+                    var db = await _databaseContext.Products
+                        .OrderByDescending(p => p.CreatedAt)
+                        .Take(6)
+                        .Select(p => new ProductThumbnail(p.Id,
+                                p.Name,
+                                p.ImagePath,
+                                p.Price,
+                                p.Brand,
+                                p.AverageRating,
+                                p.Sold,
+                                p.Stock))
+                        .ToListAsync();
 
-            return db;
+                    return db;
+                }
+                catch (Exception)
+                {
+                    
+                    return new List<ProductThumbnail>();
+                }
+            }
+            
         }
-        public List<ProductThumbnail> GetListBestSellerAsync()
+        public async Task<List<ProductThumbnail>> GetListBestSellerAsync()
         {
-            var db = new List<ProductThumbnail>()
+            using (var scope = App.ServiceProvider.CreateScope())
             {
-                new ProductThumbnail(1, "Moisturizing Cream", null, 250000, "La Roche-Rosay"),
-                new ProductThumbnail(2, "Sunscreen SPF 50", null, 300000, "La Roche-Rosay"),
-                new ProductThumbnail(3, "Vitamin C Serum", null, 400000, "La Roche-Rosay"),
-            };
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                try
+                {
+                    var db = await _databaseContext.Products
+                        .OrderByDescending(p => p.AverageRating)
+                        .Take(6)
+                        .Select(p => new ProductThumbnail(p.Id, 
+                                p.Name, 
+                                p.ImagePath,
+                                p.Price,
+                                p.Brand,
+                                p.AverageRating,
+                                p.Sold,
+                                p.Stock))
+                        .ToListAsync();
 
-            return db;
+                    return db;
+                }
+                catch (Exception)
+                {
+                    return new List<ProductThumbnail>();
+                }
+            }
         }
 
-        public List<ProductThumbnail> GetListRecentlyViewAsync()
+        public async Task<List<ProductThumbnail>> GetListRecentlyViewAsync()
         {
-            var db = new List<ProductThumbnail>()
+            using (var scope = App.ServiceProvider.CreateScope())
             {
-                new ProductThumbnail(1, "Moisturizing Cream", null, 250000, "La Roche-Rosay"),
-                new ProductThumbnail(2, "Sunscreen SPF 50", null, 300000, "La Roche-Rosay"),
-                new ProductThumbnail(3, "Vitamin C Serum", null, 400000, "La Roche-Rosay"),
-            };
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                var userSession = App.ServiceProvider.GetService(typeof(UserSession)) as UserSession;
+                try
+                {
+                    var query = _databaseContext.Orders.AsQueryable();
 
-            return db;
+                    var db = await query.Where(p => p.UserId == userSession.GetId())
+                        .OrderByDescending(p => p.OrderDate)
+                        .SelectMany(p => p.OrderItems)
+                        .Take(6)
+                        .Select(p => new ProductThumbnail(p.ProductId, 
+                                p.Product.Name,
+                                p.Product.ImagePath, 
+                                p.Product.Price, 
+                                p.Product.Brand, 
+                                p.Product.AverageRating, 
+                                p.Product.Sold, 
+                                p.Product.Stock))
+                        .ToListAsync();
+
+                    return db;
+                }
+                catch (Exception)
+                {
+                    return new List<ProductThumbnail>();
+                }
+            }
         }
 
         public void InsertProduct(ProductThumbnail product)
@@ -214,18 +287,20 @@ namespace Cosmetics_Shop.Models.DataService
 
         public async Task<LoginResult> CheckLoginAsync(string username, string password)
         {
-            return await Task.Run(async () =>
+            using (var scope = App.ServiceProvider.CreateScope())
             {
-                using (var scope = App.ServiceProvider.CreateScope())
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                try
                 {
-                    var context = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-                    var user = await context.Users.FindAsync(username);
+                    var user = await _databaseContext.Accounts.FirstOrDefaultAsync(p => p.Username == username);
 
                     if (user == null)
                     {
+
                         return new LoginResult
                         {
                             LoginStatus = LoginStatus.InvalidUsername,
+                            UserInfo = new User(0, "", "")
                         };
                     }
 
@@ -234,15 +309,84 @@ namespace Cosmetics_Shop.Models.DataService
                         return new LoginResult
                         {
                             LoginStatus = LoginStatus.InvalidPassword,
+                            UserInfo = new User(0, "", "")
+                        };
+                    }
+
+                    if (user.Role == "Admin")
+                    {
+                        return new LoginResult
+                        {
+                            LoginStatus = LoginStatus.Success,
+                            UserInfo = new Admin(user.Id, user.Username, user.Token)
                         };
                     }
 
                     return new LoginResult
                     {
                         LoginStatus = LoginStatus.Success,
+                        UserInfo = new User(user.Id, user.Username, user.Token)
                     };
                 }
-            });
+                catch (Exception)
+                {
+                    return new LoginResult
+                    {
+                        LoginStatus = LoginStatus.ConnectServerFailed,
+                        UserInfo = new User(0, "", "")
+                    };
+                }
+            }
+        }
+
+        public async Task<SignupStatus> DoSignupAsync(string username, 
+                                                    string password, 
+                                                    string confirmPassword, 
+                                                    string email)
+        {
+            using (var scope = App.ServiceProvider.CreateScope())
+            {
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                try
+                {
+                    if (username.IsNullOrEmpty()) return SignupStatus.EmptyUsername;
+                    if (password.IsNullOrEmpty()) return SignupStatus.EmptyPassword;
+                    if (password != confirmPassword) return SignupStatus.ConfirmPasswordWrong;
+
+                    var user = await _databaseContext.Accounts.FirstOrDefaultAsync(p => p.Username == username);
+
+                    if (user != null) return SignupStatus.UsernameAlreadyExists;
+
+                    var newAccount = new DBModels.Account()
+                    {
+                        Username = username,
+                        Password = password,
+                        Token = Guid.NewGuid().ToString(),
+                        Role = "User",
+                    };
+
+                    await _databaseContext.Accounts.AddAsync(newAccount);
+                    await _databaseContext.SaveChangesAsync();
+
+                    var newUser = new DBModels.User()
+                    {
+                        Name = username,
+                        Email = email,
+                        Address = null,
+                        Phone = null,
+                        AccountId = newAccount.Id,
+                    };
+                    await _databaseContext.Users.AddAsync(newUser);
+                    await _databaseContext.SaveChangesAsync();
+
+                    // Return if signup was successful
+                    return SignupStatus.Success;
+                }
+                catch (Exception)
+                {
+                    return SignupStatus.ConnectServerFailed;
+                }
+            }
         }
 
         public List<CartThumbnail> GetListCartProduct()
@@ -259,9 +403,6 @@ namespace Cosmetics_Shop.Models.DataService
 
             return db;
         }
-
-
-
 
         public List<ReviewThumbnail> GetListReviewThumbnail()
         {

@@ -17,6 +17,10 @@ public partial class Product
 
     public string Category { get; set; }
 
+    public int Stock { get; set; }
+
+    public int Sold { get; set; }
+
     public string Description { get; set; }
 
     public DateTime CreatedAt { get; set; }
@@ -26,4 +30,6 @@ public partial class Product
     public string ImageThumbnailPath { get; set; }
 
     public double AverageRating { get; set; }
+
+    public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 }

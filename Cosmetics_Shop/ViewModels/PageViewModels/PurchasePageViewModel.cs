@@ -36,24 +36,26 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         // Data access object
         private IDao _dao = null;
 
-        private string _keyword = "";
-        private int _totalProducts = 0;
-
         // Observable Collection
         public ObservableCollection<ProductThumbnailViewModel> ProductThumbnails { get; set; }
-        public ObservableCollection<CheckboxBrandContent> Brands { get; set; }
+        public ObservableCollection<FilterCheckbox> Brands { get; set; }
+        public ObservableCollection<FilterCheckbox> Categories { get; set; }
 
         #region Fields
+        private string _keyword = "";
+        private int _totalProducts = 0;
+        private bool _filterBrand = false;
+        private bool _filterCategory = false;
         private int pageIndex = 1;
-        private int productPerPage = 20;
+        private int productPerPage = 30;
         private int totalPages = 0;
         private Visibility visiPrevious = Visibility.Visible;
         private Visibility visiNext = Visibility.Visible;
-        private int brandSelectedIndex = 0;
         private string filterBrand = "";
+        private string filterCategory = "";
         private string minPrice = "";
         private string maxPrice = "";
-        private int selectedIndexSort = 1;
+        private int selectedIndexSort = 0;
         #endregion
 
         public string Keyword
@@ -146,7 +148,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             set
             {
                 selectedIndexSort = value;
-                SearchProduct();
+                SearchProduct(searchNewEntire: false);
                 OnPropertyChanged(nameof(SelectedIndexSort));
             }
         }
@@ -157,7 +159,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         public ICommand NextPageCommand { get; }
         public ICommand PreviousPageCommand { get; }
         public ICommand CheckboxBrandCheckedCommand { get; }
+        public ICommand CheckboxCategoryCheckedCommand { get; }
         public ICommand FilterPriceCommand { get; }
+
 
 
         // Constructor
@@ -180,7 +184,8 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             ProductThumbnails = new ObservableCollection<ProductThumbnailViewModel>();
 
             // Initialize list of brands
-            Brands = new ObservableCollection<CheckboxBrandContent>();
+            Brands = new ObservableCollection<FilterCheckbox>();
+            Categories = new ObservableCollection<FilterCheckbox>();
 
             NextPageCommand = new RelayCommand(async () =>
             {
@@ -196,16 +201,48 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
 
             CheckboxBrandCheckedCommand = new RelayCommand<int>(async (index) =>
             {
-                filterBrand = Brands[index].Name;
-                PageIndex = 1;
                 if (Brands[index].IsChecked)
                 {
-                    filterBrand = string.Empty;
-                    await GetProductThumbnails();
+                    filterBrand = "";
+                    _filterBrand = false;
                 }
                 else
                 {
-                    await GetProductThumbnails(isBrandFilter: true);
+                    filterBrand = Brands[index].Name;
+                    _filterBrand = true;
+                }
+
+                if (_filterCategory)
+                {
+                    await GetProductThumbnails(updateCategory: false);
+                }
+                else
+                {
+                    await GetProductThumbnails();
+                }
+            });
+
+            CheckboxCategoryCheckedCommand = new RelayCommand<int>(async (index) =>
+            {
+                if (Categories[index].IsChecked)
+                {
+                    // Clear filter
+                    filterCategory = "";
+                    _filterCategory = false;
+                }
+                else
+                {
+                    filterCategory = Categories[index].Name;
+                    _filterCategory = true;
+                }
+
+                if (_filterBrand)
+                {
+                    await GetProductThumbnails(updateBrand: false);
+                }
+                else
+                {
+                    await GetProductThumbnails();
                 }
             });
 
@@ -223,7 +260,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             await GetProductThumbnails();
         }
 
-        private async Task GetProductThumbnails(bool isBrandFilter = false)
+        private async Task GetProductThumbnails(bool updateBrand = true, bool updateCategory = true)
         {
             int minPc, maxPc;
             try
@@ -273,13 +310,14 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
 
             // Get list of product thumbnails with keyword, page index, products per page, filter brand, min price, max price
             SearchResult productQueryResult = await _dao.GetListProductThumbnailAsync(
-                keyword: Keyword,
-                pageIndex: PageIndex,
-                productsPerPage: this.productPerPage,
-                sortProduct: GetSortProductChoice(),
-                filterBrand: filterBrand,
-                minPrice: minPc,
-                maxPrice: maxPc);
+                        keyword: Keyword,
+                        pageIndex: PageIndex,
+                        productsPerPage: this.productPerPage,
+                        sortProduct: GetSortProductChoice(),
+                        filterBrand: filterBrand,
+                        filterCategory: filterCategory,
+                        minPrice: minPc,
+                        maxPrice: maxPc);
 
             // Update total pages
             TotalPages = productQueryResult.TotalPages;
@@ -305,17 +343,36 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 ProductThumbnails.Add(productThumbnailViewModel as ProductThumbnailViewModel);
             }
 
-            // Update list brand for filter
-            Brands?.Clear();
-            for (int i = 0; i < productQueryResult.Brands.Count; i++)
+            if (updateBrand)
             {
-                Brands.Add(new CheckboxBrandContent()
+                // Update list brand for filter
+                Brands?.Clear();
+                for (int i = 0; i < productQueryResult.Brands.Count; i++)
                 {
-                    Name = productQueryResult.Brands[i],
-                    Index = i,
-                    CheckedCommand = CheckboxBrandCheckedCommand,
-                    IsChecked = isBrandFilter
-                });
+                    Brands.Add(new FilterCheckbox()
+                    {
+                        Name = productQueryResult.Brands[i],
+                        Index = i,
+                        CheckedCommand = CheckboxBrandCheckedCommand,
+                        IsChecked = _filterBrand
+                    });
+                }
+            }
+
+            if (updateCategory)
+            {
+                // Update list category for filter
+                Categories?.Clear();
+                for (int i = 0; i < productQueryResult.Categories.Count; i++)
+                {
+                    Categories.Add(new FilterCheckbox()
+                    {
+                        Name = productQueryResult.Categories[i],
+                        Index = i,
+                        CheckedCommand = CheckboxCategoryCheckedCommand,
+                        IsChecked = _filterCategory
+                    });
+                }
             }
         }
 
@@ -338,11 +395,23 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         }
 
         // Search product
-        public async void SearchProduct()
+        public async void SearchProduct(bool searchNewEntire = true)
         {
-            PageIndex = 1;
-            filterBrand = "";
+            if (searchNewEntire)
+            {
+                PageIndex = 1;
+                filterBrand = "";
+                filterCategory = "";
+                _filterCategory = false;
+                _filterBrand = false;
+            }
+            else
+            {
+                PageIndex = 1;
+            }
+
             await GetProductThumbnails();
+
         }
 
 

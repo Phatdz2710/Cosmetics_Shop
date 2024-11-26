@@ -11,5 +11,6 @@ namespace Cosmetics_Shop.Models.Enums
         Success = 0,
         InvalidUsername = 1,
         InvalidPassword = 2,
+        ConnectServerFailed = 3
     }
 }

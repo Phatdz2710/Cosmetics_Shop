@@ -13,5 +13,6 @@ namespace Cosmetics_Shop.Models.DataService
         public int TotalPages { get; set; }
         public int TotalProducts { get; set; }
         public List<string> Brands { get; set; }
+        public List<string> Categories { get; set; }
     }
 }

@@ -23,10 +23,12 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Column="0"
+        <ScrollView Grid.Column="0"
               Margin="10"
               CornerRadius="10"
-              Background="White">
+              Background="White"
+              VerticalScrollBarVisibility="Hidden">
+            <StackPanel>
 
             <!-- Mục Lọc (theo giá) -->
             <StackPanel Margin="10">
@@ -36,11 +38,27 @@
                            FontWeight="Bold"
                            Margin="0,0,0,5"/>
 
-                <ListView Name="ListViewBrands" 
-                          MaxHeight="160"
+                <ListView MaxHeight="160"
                           ItemsSource="{x:Bind ViewModel.Brands}">
                     <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="brand:CheckboxBrandContent">
+                        <DataTemplate x:DataType="brand:FilterCheckbox">
+                            <CheckBox Content="{x:Bind Name}"
+                                      Command="{x:Bind CheckedCommand}"
+                                      CommandParameter="{x:Bind Index}"
+                                      IsChecked="{x:Bind IsChecked}"/>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <TextBlock Text="Loại sản phẩm"
+                           FontSize="16"
+                           FontWeight="Bold"
+                           Margin="0,0,0,5"/>
+
+                <ListView MaxHeight="160"
+                          ItemsSource="{x:Bind ViewModel.Categories}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="brand:FilterCheckbox">
                             <CheckBox Content="{x:Bind Name}"
                                       Command="{x:Bind CheckedCommand}"
                                       CommandParameter="{x:Bind Index}"
@@ -96,7 +114,8 @@
                     <ComboBoxItem Content="Tên sản phẩm"/>
                 </ComboBox>
             </StackPanel>
-        </StackPanel>
+            </StackPanel>
+        </ScrollView>
 
         <Grid Grid.Column="1"
               Background="#317256"
@@ -126,8 +145,8 @@
                       ItemsSource="{x:Bind ViewModel.ProductThumbnails}">
                 <GridView.ItemTemplate>
                     <DataTemplate>
-                        <objects:ProductThumbnailControl Height="270"
-                                                         Width="230"
+                        <objects:ProductThumbnailControl Height="250"
+                                                         Width="200"
                                                          ViewModel="{Binding}"/>
                     </DataTemplate>
                 </GridView.ItemTemplate>

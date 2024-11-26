@@ -7,6 +7,7 @@
     xmlns:objects="using:Cosmetics_Shop.Views.Objects"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    NavigationCacheMode="Enabled"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -27,7 +28,7 @@
                 <TextBlock Grid.Row="0"
                        Text="Sản phẩm mới nhất"
                        FontSize="20"
-                       Margin="20 0 0 0"
+                           HorizontalAlignment="Center"
                        Foreground="#317256"
                        FontWeight="Bold"/>
                 <GridView Grid.Row="1"
@@ -54,24 +55,26 @@
                 </GridView>
             </Grid>
 
-            <Grid   Grid.Row="1"
-                Margin="10">
+            <Grid Grid.Row="1"
+  Margin="10">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="8*"/>
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0"
-                       Text="Sản phẩm bán chạy"
-                       FontSize="20"
-                       Margin="20 0 0 0"
-                       Foreground="#317256"
-                       FontWeight="Bold"/>
+           Text="Sản phẩm bán chạy nhất"
+           FontSize="20"
+                           HorizontalAlignment="Center"
+           Foreground="#317256"
+           FontWeight="Bold"/>
                 <GridView Grid.Row="1"
-                      CornerRadius="10"
-                      ItemsSource="{x:Bind ViewModel.BestSeller}"
-                      Background="	#317256"
-                      Padding="10"
-                      HorizontalContentAlignment="Center">
+          CornerRadius="10"
+          ItemsSource="{x:Bind ViewModel.BestSeller}"
+          Background="	#317256"
+          Padding="10"
+          HorizontalContentAlignment="Center"
+          HorizontalAlignment="Center"
+          MaxHeight="510">
                     <GridView.ItemsPanel>
                         <ItemsPanelTemplate>
                             <ItemsWrapGrid Orientation="Horizontal"/>
@@ -81,31 +84,33 @@
                     <GridView.ItemTemplate>
                         <DataTemplate>
                             <objects:ProductThumbnailControl ViewModel="{Binding}"
-                                                         Height="243"
-                                                         Width="200"/>
+                                             Height="243"
+                                             Width="200"/>
                         </DataTemplate>
                     </GridView.ItemTemplate>
                 </GridView>
             </Grid>
 
-            <Grid   Grid.Row="2"
-                    Margin="10">
+            <Grid Grid.Row="2"
+Margin="10">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="8*"/>
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0"
-                           Text="Bạn đã xem gần đây"
-                           FontSize="20"
-                           Margin="20 0 0 0"
-                           Foreground="#317256"
-                           FontWeight="Bold"/>
+         Text="Sản phẩm bạn đã mua gần đây"
+         FontSize="20"
+                         HorizontalAlignment="Center"
+         Foreground="#317256"
+         FontWeight="Bold"/>
                 <GridView Grid.Row="1"
-                          CornerRadius="10"
-                          ItemsSource="{x:Bind ViewModel.RecentlyView}"
-                          Background="	#317256"
-                          Padding="10"
-                          HorizontalContentAlignment="Center">
+        CornerRadius="10"
+        ItemsSource="{x:Bind ViewModel.RecentlyView}"
+        Background="	#317256"
+        Padding="10"
+        HorizontalContentAlignment="Center"
+        HorizontalAlignment="Center"
+        MaxHeight="510">
                     <GridView.ItemsPanel>
                         <ItemsPanelTemplate>
                             <ItemsWrapGrid Orientation="Horizontal"/>
@@ -115,8 +120,8 @@
                     <GridView.ItemTemplate>
                         <DataTemplate>
                             <objects:ProductThumbnailControl ViewModel="{Binding}"
-                                                             Height="243"
-                                                             Width="200"/>
+                                           Height="243"
+                                           Width="200"/>
                         </DataTemplate>
                     </GridView.ItemTemplate>
                 </GridView>
