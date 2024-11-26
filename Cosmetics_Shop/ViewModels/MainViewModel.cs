@@ -45,7 +45,7 @@ namespace Cosmetics_Shop.ViewModels
 
         public MainViewModel()
         {
-            CurrentPage = adminPage;
+            CurrentPage = dashboardPage;
             //SelectedPageNumber = 1;
             
             DashboardButtonCommand = new RelayCommand(() =>
