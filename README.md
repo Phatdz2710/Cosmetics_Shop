@@ -1,11 +1,53 @@
 # Cosmetic Shop Application
 
 ## Thành viên
-<<<<<<< HEAD
-<<<<<<< HEAD
+
+- **22120260** - Châu Ngọc Phát
+- **18120340** - Hồ Nguyễn Ngọc Duy
 - **21120419** - Vũ Thành Công
 
+## Đánh giá công việc
+- **Châu Ngọc Phát**:
+  - Số giờ làm: 11 giờ
+  - Đánh giá: 10/10
+- **Hồ Nguyễn Ngọc Duy**:
+  - Số giờ làm: 2 giờ
+  - Đánh giá: 8/10
+- **Vũ Thành Công**:
+  - Số giờ làm: 5 giờ
+  - Đánh giá: 9/10
+
+## CÁCH ĐĂNG NHẬP VÀO ỨNG DỤNG
+- Tạo tài khoản trước tiên sau đó đăng nhập bằng thông tin vừa đăng ký.
+
 ## Chức năng đã hoàn thành
+- **Đăng nhập**: 
+  - Đăng nhập và ghi nhớ đăng nhập. Phân quyền người dùng (Admin và User).
+
+- **Đăng ký**: 
+  - Tạo tài khoản người dùng.
+
+- **Trang Dashboard**:
+  - Danh sách sản phẩm mới nhất.
+  - Danh sách sản phẩm bán chạy nhất.
+  - Danh sách sản phẩm mua gần nhất.
+
+- **Trang tìm kiếm sản phẩm**:
+  - Tìm kiếm sản phẩm theo từ khóa (Search).
+  - Tổng số sản phẩm tìm kiếm được.
+  - Lọc sản phẩm (Filter):
+    - Lọc theo khoảng giá (min - max).
+    - Lọc theo thương hiệu sản phẩm.
+    - Lọc theo loại sản phẩm.
+    - Sắp xếp sản phẩm.
+      + Mới nhất
+      + Giá tăng/giảm dần
+      + Sắp xếp theo tên sản phẩm.
+  	- Danh sách thương hiệu và loại sản phẩm hiển thị đúng với các sản phẩm hiện có.
+
+- **Gợi ý khi tìm kiếm**
+  - Gợi ý sản phẩm dựa trên Keyword được nhập.
+
 - **Trang thông tin chi tiết sản phẩm**: 
   - ***Các chức năng hiển thị cơ bản***
     - Hiển thị được thông tin chi tiết cơ bản của sản phẩm theo ID
@@ -28,66 +70,14 @@
       - Áp dụng voucher
   - ***Các chức năng chưa làm***
     - Xóa sản phẩm khỏi Cart
-    - Chức năng mua ngay (chuyển qua trang thanh toán): do chưa có trang thanh toán
+    - Chức năng mua ngay (chuyển qua trang thanh toán): do chưa có trang thanh toán.
 
-
-=======
-- **22120260** - Châu Ngọc Phát
-- **18120340** - Hồ Nguyễn Ngọc Duy
-- **21120419** - Vũ Thành Công
-
-=======
-- **22120260** - Châu Ngọc Phát
-- **18120340** - Hồ Nguyễn Ngọc Duy
-- **21120419** - Vũ Thành Công
-
->>>>>>> 7dc43a7e50c40630462e0af96d669811e1b994b1
-## Đánh giá công việc
-- **Châu Ngọc Phát**:
-  - Số giờ làm: 7 giờ
-  - Đánh giá: 10/10
-- **Hồ Nguyễn Ngọc Duy**:
-  - Số giờ làm: 2 giờ
-  - Đánh giá: 8/10
-- **Vũ Thành Công**:
-  - Số giờ làm: 3 giờ
-  - Đánh giá: 9/10
-
-## CÁCH ĐĂNG NHẬP VÀO ỨNG DỤNG
-- Tài khoản User: 
-  - **Username**: `user`
-  - **Password**: `user`
-
-
-- Tài khoản Admin: 
-  - **Username**: `admin`
-  - **Password**: `admin`
-
-## Chức năng đã hoàn thành
-- **Đăng nhập**: 
-  - Đăng nhập và ghi nhớ đăng nhập. Phân quyền người dùng (Admin và User).
-- **Trang Dashboard**:
-  - Danh sách sản phẩm mới nhất.
-  - Danh sách sản phẩm bán chạy nhất.
-- **Trang tìm kiếm sản phẩm**:
-  - Tìm kiếm sản phẩm theo từ khóa (Search).
-  - Tổng số sản phẩm tìm kiếm được.
-  - Lọc sản phẩm (Filter):
-    - Lọc theo khoảng giá (min - max).
-    - Lọc theo thương hiệu sản phẩm.
-  	- Danh sách thương hiệu hiển thị đúng với các sản phẩm hiện có.
-- **Gợi ý khi tìm kiếm**
-  - Gợi ý sản phẩm dựa trên Keyword được nhập.
-- **Xem chi tiết sản phẩm**
-  - Hiển thị thông tin chi tiết của sản phẩm sau khi nhấn vào mua.
-- **Trang giỏ hàng**
-  - Giao diện trang giỏ hàng.
 - **Trang dành cho Admin**:
   - Giao diện trang quản lý.
 
 
 ## Dữ liệu
-- Sử dụng **MockDAO** cho dữ liệu giả.
+- Sử dụng Database với **SqlDao**.
 
 ## Công nghệ và kỹ thuật đã sử dụng
 - **Dependency Injection**: Inject các thuộc tính cần thiết (Singleton, ...).
@@ -95,9 +85,10 @@
 - **Event Aggregator Pattern**: Trao đổi thông tin giữa các thành phần mà không cần biết đến nhau.
 - **Bất đồng bộ Async, Await**: Áp dụng cho các tính năng đăng nhập và tìm kiếm.
 - **Unit Test**: Kiểm thử cho chức năng đăng nhập và tìm kiếm.
-<<<<<<< HEAD
->>>>>>> 7dc43a7e50c40630462e0af96d669811e1b994b1
-=======
->>>>>>> 7dc43a7e50c40630462e0af96d669811e1b994b1
 
-
+## NuGet Packages 
+- `CommunityToolkit.Mvvm` (8.3.2)
+- `Microsoft.EntityFrameworkCore.Design` (9.0.0)
+- `Microsoft.EntityFrameworkCore.SqlServer` (9.0.0)
+- `Microsoft.EntityFrameworkCore.Tools` (9.0.0)
+- `Microsoft.Extensions.DependencyInjection` (9.0.0)
