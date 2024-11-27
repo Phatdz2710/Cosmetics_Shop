@@ -1,34 +1,47 @@
 ﻿# Cosmetics Shop Application
 
 ## Thành viên
-- **22120260** - Châu Ngọc Phát
-
-## Số giờ làm việc
-- **Châu Ngọc Phát**: 6 giờ
+- **21120419** - Vũ Thành Công
 
 ## Chức năng đã hoàn thành
-- **Đăng nhập**: 
-  - Phân chia thành hai trang đăng nhập riêng cho người dùng thường (User) và quản trị viên (Admin).
-- **Hiển thị sản phẩm**:
-  - Danh sách sản phẩm mới nhất.
-  - Danh sách sản phẩm bán chạy nhất.
-- **Tìm kiếm sản phẩm**:
-  - Tìm kiếm sản phẩm theo từ khóa.
-- **Lọc sản phẩm**:
-  - Lọc theo khoảng giá (min - max).
-  - Lọc theo thương hiệu sản phẩm.
-  - Danh sách thương hiệu hiển thị đúng với các sản phẩm hiện có.
+- **Trang thông tin chi tiết sản phẩm**: 
+  - ***Các chức năng***
+    - Hiển thị được thông tin chi tiết cơ bản của sản phẩm theo ID
+    - Các chức năng tăng số lượng sản phẩm, xem chi phí vận chuyển hoàn thành
+    - Chức năng mua ngay (chuyển qua trang thanh toán)
+    - Chức năng quay lại trang trước đó.
+  - ***Khu vực đánh giá***
+    - Hiển thị được các đánh giá theo ID sản phẩm với số sao tương ứng
+    - Lọc các đánh giá theo số sao, sau đó có button Alls để xem lại toàn bộ đánh giá
+  - ***Các chức năng chưa làm***
+    - Thêm vào giỏ hàng (Đã thực hiện các hàm, chờ insert vô Sql)
+  - ***Các chức năng sẽ update sau***
+    - Khu vực đánh giá: Hiển thị thêm số lượng đánh giá tại button Alls, số lượng đánh giá ứng với mỗi số lượng sao.
 
-## Dữ liệu
-- Sử dụng **MockDAO** cho dữ liệu giả.
+- **Trang giỏ hàng**:
+  - ***Các chức năng***
+    - Hiển thị được các sản phẩm có trong giỏ hàng
+    - Các chức năng tăng số lượng thì tiền tương ứng tăng theo hoàn thành
+    - Tổng số tiền thanh toán được tính và thay đổi theo:
+      - Các sản phẩm nào được chọn (có nút chọn tất cả sản phẩm)
+      - Áp dụng voucher
+    - Chức năng mua ngay (chuyển qua trang thanh toán)
+    - Chức năng quay lại trang trước đó.
+  - ***Các chức năng chưa làm***
+    - Xóa sản phẩm khỏi Cart
 
-## Công nghệ và kỹ thuật đã sử dụng
-- **Dependency Injection**: Inject các thuộc tính cần thiết (Singleton, ...).
-- **MVVM Pattern**: Xây dựng ứng dụng theo mô hình MVVM.
-- **Event Aggregator Pattern**: Trao đổi thông tin giữa các thành phần mà không cần biết đến nhau.
-- **Bất đồng bộ Async, Await**: Áp dụng cho các tính năng đăng nhập và tìm kiếm.
-- **Unit Test**: Kiểm thử cho chức năng đăng nhập và tìm kiếm.
+- **Trang thanh toán**:
+  - ***Các chức năng***
+    - Hiển thị được các sản phẩm cần thanh toán (mới lớp MockDao, chưa thực sự chuyển thông tin từ Cart hay Product Detail qua)
+    - Tổng số tiền thanh toán được tính và thay đổi theo:
+      - Các sản phẩm nào được chọn (có nút chọn tất cả sản phẩm)
+      - Áp dụng voucher giảm giá
+      - Áp dụng phí vận chuyển (tùy chọn)
+    - Chức năng quay lại trang trước đó.
+  - ***Các chức năng chưa làm***
+    - Chức năng đặt hàng chưa hoàn thành
+    - Tên, sdt, địa chỉ người dùng còn truyền thẳng, chưa binding (do chưa có dữ liệu)
 
-## Link Github
+
 
 

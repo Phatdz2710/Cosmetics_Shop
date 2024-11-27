@@ -83,6 +83,8 @@ namespace Cosmetics_Shop
             services.AddTransient<CartPageViewModel>();
             services.AddTransient<CartThumbnailViewModel>();
             services.AddTransient<ReviewThumbnailViewModel>();
+            services.AddTransient<PaymentProductThumbnailViewModel>();
+            services.AddTransient<PaymentPageViewModel>();
 
             // Add Scoped
             ServiceProvider = services.BuildServiceProvider();

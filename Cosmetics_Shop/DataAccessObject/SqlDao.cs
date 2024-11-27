@@ -74,5 +74,14 @@ namespace Cosmetics_Shop.DataAccessObject
         {
             throw new NotImplementedException();
         }
+
+        public List<PaymentProductThumbnail> GetAllPaymentProducts()
+        {
+            throw new NotImplementedException();
+        }
+        public List<ShippingMethod> GetShippingMethods()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

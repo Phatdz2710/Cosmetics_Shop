@@ -1,4 +1,5 @@
-﻿using Cosmetics_Shop.Models;
+﻿using CommunityToolkit.Mvvm.Input;
+using Cosmetics_Shop.Models;
 using Cosmetics_Shop.Models.DataService;
 using Cosmetics_Shop.Services;
 using Cosmetics_Shop.ViewModels.UserControlViewModels;
@@ -6,11 +7,13 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Cosmetics_Shop.Views.Pages;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Cosmetics_Shop.ViewModels.PageViewModels
 {
@@ -25,6 +28,13 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
 
         // Observable Collection
         public ObservableCollection<CartThumbnailViewModel> Cart { get; set; }
+
+        //Command
+        public ICommand PaidButtonCommand { get; set; }
+        public ICommand GoBackCommand { get; set; }
+
+        // Navigation service
+        private readonly INavigationService _navigationService;
 
         // Expose the CartPageViewModel
 
@@ -46,7 +56,6 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 }
             }
         }
-
 
         public int TotalPay
         {
@@ -74,12 +83,6 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 // If no items are checked, set TotalPay to 0
                 TotalPay = 0;
             }
-
-            // If there's a currently applied voucher, apply it
-            //if (_currentVoucher != null)
-            //{
-            //    ApplyVoucher(_currentVoucher);
-            //}
         }
 
         public CartPageViewModel(INavigationService navigationService, IDao dao)
@@ -105,6 +108,17 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
 
                 Cart.Add(cartThumbnailViewModel);
             }
+
+            _navigationService = navigationService;
+            PaidButtonCommand = new RelayCommand(() =>
+            {
+
+                _navigationService.NavigateTo<PaymentPage>();
+            });
+            GoBackCommand = new RelayCommand(() =>
+            {
+                _navigationService.GoBack();
+            });
         }
 
         public List<Voucher> GetAllVouchers()
