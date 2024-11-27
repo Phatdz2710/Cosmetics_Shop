@@ -1,4 +1,4 @@
-using Cosmetics_Shop.Services;
+using Cosmetics_Shop.Services.EventAggregatorMessages;
 using Cosmetics_Shop.Services.Interfaces;
 using Cosmetics_Shop.ViewModels;
 using Microsoft.UI.Xaml;
@@ -34,9 +34,9 @@ namespace Cosmetics_Shop
             this.LoginSignupFrame.Navigate(typeof(Views.Pages.LoginSignupPage));
 
             var eventAggregator = App.ServiceProvider.GetService(typeof(IEventAggregator)) as IEventAggregator;
-            eventAggregator.Subscribe<CloseWindowMessage>((param) =>
+            eventAggregator.Subscribe<CloseLoginWindowMessage>((param) =>
             {
-                this.Close();
+                    this.Close();
             });
         }
     }

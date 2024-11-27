@@ -27,7 +27,7 @@ public partial class DatabaseContext : DbContext
     {
         modelBuilder.Entity<Account>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__accounts__3213E83FA85592C9");
+            entity.HasKey(e => e.Id).HasName("PK__accounts__3213E83FAA96BEC6");
 
             entity.ToTable("accounts");
 
@@ -45,15 +45,21 @@ public partial class DatabaseContext : DbContext
                 .IsRequired()
                 .HasMaxLength(50)
                 .HasColumnName("token");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
             entity.Property(e => e.Username)
                 .IsRequired()
                 .HasMaxLength(50)
                 .HasColumnName("username");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Accounts)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("accounts_user_id_foreign");
         });
 
         modelBuilder.Entity<Order>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__orders__3213E83FC4504E30");
+            entity.HasKey(e => e.Id).HasName("PK__orders__3213E83F51C058B1");
 
             entity.ToTable("orders");
 
@@ -79,7 +85,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<OrderItem>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__order_it__3213E83FE95F9EFD");
+            entity.HasKey(e => e.Id).HasName("PK__order_it__3213E83F2240EA14");
 
             entity.ToTable("order_items");
 
@@ -101,7 +107,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<Product>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__products__3213E83F62D48405");
+            entity.HasKey(e => e.Id).HasName("PK__products__3213E83FB2E94CA9");
 
             entity.ToTable("products");
 
@@ -122,10 +128,10 @@ public partial class DatabaseContext : DbContext
                 .HasMaxLength(1000)
                 .HasColumnName("description");
             entity.Property(e => e.ImagePath)
-                .HasMaxLength(50)
+                .HasMaxLength(200)
                 .HasColumnName("image_path");
             entity.Property(e => e.ImageThumbnailPath)
-                .HasMaxLength(50)
+                .HasMaxLength(200)
                 .HasColumnName("image_thumbnail_path");
             entity.Property(e => e.Name)
                 .IsRequired()
@@ -140,12 +146,11 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__users__3213E83F7CC1EF1E");
+            entity.HasKey(e => e.Id).HasName("PK__users__3213E83F606386F9");
 
             entity.ToTable("users");
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.AccountId).HasColumnName("account_id");
             entity.Property(e => e.Address)
                 .HasMaxLength(50)
                 .HasColumnName("address");
@@ -159,11 +164,6 @@ public partial class DatabaseContext : DbContext
             entity.Property(e => e.Phone)
                 .HasMaxLength(50)
                 .HasColumnName("phone");
-
-            entity.HasOne(d => d.Account).WithMany(p => p.Users)
-                .HasForeignKey(d => d.AccountId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("users_account_id_foreign");
         });
 
         OnModelCreatingPartial(modelBuilder);

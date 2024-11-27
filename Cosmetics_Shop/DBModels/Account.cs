@@ -17,5 +17,7 @@ public partial class Account
 
     public string Token { get; set; }
 
-    public virtual ICollection<User> Users { get; set; } = new List<User>();
+    public int UserId { get; set; }
+
+    public virtual User User { get; set; }
 }

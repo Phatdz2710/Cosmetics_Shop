@@ -15,6 +15,7 @@
 
     <UserControl.Resources>
         <converter:VNDCurrencyConverter x:Key="VNDCurrencyConverter"/>
+        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
 
     <Grid Background="LightGray">
@@ -96,9 +97,6 @@
             </StackPanel>
 
 
-            <!--Command="{Binding ViewModel.CheckboxBrandCheckedCommand, 
-          ElementName=ListViewBrands}"-->
-
             <!-- Mục Sắp xếp -->
             <StackPanel Grid.Row="1" Margin="10">
                 <TextBlock Text="Sắp xếp"
@@ -117,11 +115,19 @@
             </StackPanel>
         </ScrollView>
 
+        <Grid Grid.Column="0"
+              Margin="10"
+              CornerRadius="10"
+              Background="White"
+              Opacity="0.5"
+              Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+        </Grid>
+
         <Grid Grid.Column="1"
               Background="#317256"
               Margin="10"
-              Padding="10"
               CornerRadius="10">
+
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.6*"/>
                 <RowDefinition Height="10*"/>
@@ -129,7 +135,8 @@
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Row="0"
-                       Foreground="White">
+                       Foreground="White"
+                       Margin="10 10 10 0">
                 <Run Text="Kết quả tìm kiếm cho từ khóa '"/>
                 <Run Text="{x:Bind ViewModel.Keyword, Mode=OneWay}"
                      Foreground="LightGreen"/>
@@ -137,11 +144,14 @@
                 <Run Text=" - "/>
                 <Run Text="Tổng số sản phẩm: "/>
                 <Run Text="{x:Bind ViewModel.TotalProducts, Mode=OneWay}"
-                     Foreground="LightGreen"/>
+                     Foreground="LightGreen"
+                     FontSize="15"
+                     FontWeight="Bold"/>
             </TextBlock>
 
             <GridView Grid.Row="1"
                       CornerRadius="10"
+                      Margin="10"
                       ItemsSource="{x:Bind ViewModel.ProductThumbnails}">
                 <GridView.ItemTemplate>
                     <DataTemplate>
@@ -159,7 +169,7 @@
                     <Button Content="Trước"
                             Width="80"
                             Command="{x:Bind ViewModel.PreviousPageCommand}"
-                            Visibility="{x:Bind ViewModel.VisiPrevious, Mode=OneWay}"/>
+                            Visibility="{x:Bind ViewModel.VisiPrevious, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                 </Grid>
 
                 <TextBlock VerticalAlignment="Center"
@@ -173,10 +183,23 @@
                     <Button Content="Sau"
                             Width="80"
                             Command="{x:Bind ViewModel.NextPageCommand}"
-                            Visibility="{x:Bind ViewModel.VisiNext, Mode=OneWay}"/>
+                            Visibility="{x:Bind ViewModel.VisiNext, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                 </Grid>
 
             </StackPanel>
+
+            <Grid Grid.Row="0"
+                  Grid.RowSpan="3"
+                  Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                <TextBlock VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           Text="Loading..."
+                           FontSize="25"
+                           Foreground="White"/>
+            </Grid>
+
+            
         </Grid>
     </Grid>
 </Page>

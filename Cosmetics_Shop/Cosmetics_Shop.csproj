@@ -16,6 +16,12 @@
 	<EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Views\Pages\NewFolder\**" />
+    <EmbeddedResource Remove="Views\Pages\NewFolder\**" />
+    <None Remove="Views\Pages\NewFolder\**" />
+    <Page Remove="Views\Pages\NewFolder\**" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="Assets\stock_icon.png" />
     <None Remove="LoginWindow.xaml" />
     <None Remove="Views\Controls\ReviewThumbnailControl.xaml" />
@@ -87,6 +93,9 @@
     <Resource Remove="Views\MainWindow.xaml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Update="Assets\avatar_temp.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Update="Assets\stock_icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -144,5 +153,8 @@
     <Page Update="Views\Pages\LoginSignupControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <PRIResource Remove="Views\Pages\NewFolder\**" />
   </ItemGroup>
 </Project>

@@ -6,10 +6,349 @@
     xmlns:local="using:Cosmetics_Shop.Views.Pages"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converters="using:Cosmetics_Shop.Views.Converters"
+    NavigationCacheMode="Enabled"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid Background="Red">
+    <Page.Resources>
+        <converters:VNDCurrencyConverter x:Key="VNDCurrencyConverter"/>
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:StringToImageSourceConverter x:Key="StringToImageSourceConverter"/>
+    </Page.Resources>
 
+    <Grid Padding="230 50 230 50"
+          Background="LightGray">
+        <Grid Background="LightGray"
+              CornerRadius="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0" Padding="10"
+                  Background="White"
+                  CornerRadius="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0"
+                        Height="150"
+                        Width="150"
+                        CornerRadius="100"
+                        BorderThickness="0">
+                    <Grid>
+                        <Image Source="{x:Bind ViewModel.AvatarPath, Mode=OneWay, Converter={StaticResource StringToImageSourceConverter}}"
+                               Stretch="UniformToFill"/>
+
+                        <Button Width="150"
+                                Height="40"
+                                VerticalAlignment="Bottom">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Grid x:Name="RootGrid"
+                                          Background="Black"
+                                          Opacity="0.8">
+                                        <TextBlock x:Name="Text"
+                                                   Text="Thay đổi" 
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                   Foreground="White"/>
+
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CommonStates">
+                                                <VisualState x:Name="PointerOver">
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetName="RootGrid"
+                                                                         Storyboard.TargetProperty="Opacity"
+                                                                         To="0.8" Duration="0:0:0.05"/>
+                                                    </Storyboard>
+                                                </VisualState>
+                                                <VisualState x:Name="Normal">
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetName="RootGrid"
+                                                                         Storyboard.TargetProperty="Opacity"
+                                                                         To="0" Duration="0:0:0.05"/>
+                                                    </Storyboard>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                    </Grid>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </Grid>
+                    
+                </Border>
+
+                <TextBlock Grid.Row="1"
+                           Text="{x:Bind ViewModel.NameDisplay, Mode=OneWay}"
+                           FontSize="20"
+                           HorizontalAlignment="Center"
+                           FontWeight="SemiBold"
+                           Margin="0 5 0 0"/>
+
+                <Border Grid.Row="2"
+                        CornerRadius="8"
+                        Background="LightGreen"
+                        Width="70"
+                        Height="37"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center">
+                    <TextBlock VerticalAlignment="Center"
+                               HorizontalAlignment="Center"
+                               Text="Normal"/>
+                </Border>
+
+                <TextBlock Grid.Row="3"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           Foreground="Gray">
+                    <Run Text="Thành viên từ: "/>
+                    <Run Text="27/11/2024"/>
+                </TextBlock>
+
+                <Button Grid.Row="4"
+                        CornerRadius="5"
+                        Background="White"
+                        Content="Phản hồi"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Width="200"
+                        Height="40"
+                        BorderThickness="1.5"/>
+
+                <Button Grid.Row="5"
+                        CornerRadius="5"
+                        Background="White"
+                        Content="Đổi mật khẩu"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Width="200"
+                        Height="40"
+                        BorderThickness="1.5"/>
+
+                <Button Grid.Row="6"
+                        CornerRadius="5"
+                        Background="Tomato"
+                        Foreground="White"
+                        Content="Đăng xuất"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Width="200"
+                        Height="40"
+                        BorderThickness="1.5"
+                        Command="{x:Bind ViewModel.LogoutCommand, Mode=OneTime}"/>
+            </Grid>
+
+            <Grid Grid.Column="1"
+                  Margin="10 0 0 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="3*"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0"
+                      Background="White"
+                      CornerRadius="20"
+                      >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="0"
+                          Background="#eff6ff"
+                          CornerRadius="15"
+                          Margin="10">
+                        <TextBlock Text="Tổng tiền đã mua"
+                                   VerticalAlignment="Top"
+                                   HorizontalAlignment="Left"
+                                   Margin="15 10 0 0"
+                                   Foreground="Black"
+                                   FontSize="15"
+                                   FontFamily="Sans Serif"
+                                   FontWeight="SemiLight"/>
+
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="15 25 0 0">
+                            <FontIcon Glyph="&#xE90E;" 
+                                      Foreground="#2563eb"
+                                      FontSize="20"
+                                      VerticalAlignment="Center"
+                                      Margin="0 0 10 0"/>
+                            <TextBlock FontSize="25"
+                                       Foreground="#2563eb"
+                                       VerticalAlignment="Center">
+                                <Run Text="{x:Bind ViewModel.TotalMoneySpent, Mode=OneWay, Converter={StaticResource VNDCurrencyConverter}}"
+                                     FontWeight="SemiBold"/>
+                                <Run Text="đ"/>
+                            </TextBlock>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Grid.Column="1"
+      Background="#f0fdf4"
+      CornerRadius="15"
+                          Margin="10">
+                        <TextBlock Text="Tổng đơn hàng"
+               VerticalAlignment="Top"
+               HorizontalAlignment="Left"
+               Margin="15 10 0 0"
+               Foreground="Black"
+               FontSize="15"
+               FontFamily="Sans Serif"
+               FontWeight="SemiLight"/>
+
+                        <StackPanel Orientation="Horizontal"
+                Margin="15 25 0 0">
+                            <FontIcon Glyph="&#xE7BF;" 
+                  Foreground="#16a34a"
+                  FontSize="20"
+                  VerticalAlignment="Center"
+                  Margin="0 0 10 0"/>
+                            <TextBlock Text="{x:Bind ViewModel.TotalBills, Mode=OneWay}"
+                   FontSize="25"
+                   FontWeight="SemiBold"
+                   Foreground="#16a34a"
+                   VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Grid.Column="2"
+Background="#faf5ff"
+CornerRadius="15"
+                    Margin="10">
+                        <TextBlock Text="Số sản phầm đã mua"
+         VerticalAlignment="Top"
+         HorizontalAlignment="Left"
+         Margin="15 10 0 0"
+         Foreground="Black"
+         FontSize="15"
+         FontFamily="Sans Serif"
+         FontWeight="SemiLight"/>
+
+                        <StackPanel Orientation="Horizontal"
+          Margin="15 25 0 0">
+                            <FontIcon Glyph="&#xE9D2;" 
+            Foreground="#9333ea"
+            FontSize="20"
+            VerticalAlignment="Center"
+            Margin="0 0 10 0"/>
+                            <TextBlock Text="{x:Bind ViewModel.TotalProducts, Mode=OneWay}"
+             FontSize="25"
+             FontWeight="SemiBold"
+             Foreground="#9333ea"
+             VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Grid>
+
+
+                </Grid>
+
+                <Grid Grid.Row="1"
+                      Background="White"
+                      CornerRadius="20"
+                      Margin="0 5 0 0"
+                      Padding="40 10 0 0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.7*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0"
+                               Text="Thông tin tài khoản"
+                               FontSize="23"
+                               FontWeight="SemiBold"
+                               VerticalAlignment="Center"/>
+
+                    <StackPanel Grid.Row="1"
+                                Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="0 0 0 5">
+                            <Image/>
+                            <TextBlock Text="Tên"
+                                       FontSize="17"/>
+                        </StackPanel>
+                        <TextBox PlaceholderText="Tên"
+                                 Text="{x:Bind ViewModel.Name, Mode=TwoWay}"
+                                 Width="500"
+                                 HorizontalAlignment="Left"
+                                 IsEnabled="{x:Bind ViewModel.ChangeInforMode, Mode=OneWay}"/>
+                    </StackPanel>
+                    
+                    <StackPanel Grid.Row="2"
+                                Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="0 0 0 5">
+                            <Image/>
+                            <TextBlock Text="Email"
+                                       FontSize="17"/>
+                        </StackPanel>
+                        <TextBox PlaceholderText="Email"
+                                 Text="{x:Bind ViewModel.Email, Mode=TwoWay}"
+                                 Width="500"
+                                 HorizontalAlignment="Left"
+                                 IsEnabled="{x:Bind ViewModel.ChangeInforMode, Mode=OneWay}"/>
+                    </StackPanel>
+                    
+                    <StackPanel Grid.Row="3"
+                                Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="0 0 0 5">
+                            <Image/>
+                            <TextBlock Text="Số điện thoại"
+                                       FontSize="17"/>
+                        </StackPanel>
+                        <TextBox PlaceholderText="Số điện thoại"
+                                 Text="{x:Bind ViewModel.Phone, Mode=TwoWay}"
+                                 Width="500"
+                                 HorizontalAlignment="Left"
+                                 IsEnabled="{x:Bind ViewModel.ChangeInforMode, Mode=OneWay}"/>
+                    </StackPanel>
+                    
+                    <StackPanel Grid.Row="4"
+                                Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="0 0 0 5">
+                            <Image/>
+                            <TextBlock Text="Địa chỉ"
+                                       FontSize="17"/>
+                        </StackPanel>
+                        <TextBox PlaceholderText="Địa chỉ"
+                                 Text="{x:Bind ViewModel.Address, Mode=TwoWay}"
+                                 Width="500"
+                                 HorizontalAlignment="Left"
+                                 IsEnabled="{x:Bind ViewModel.ChangeInforMode, Mode=OneWay}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="5"
+                                Orientation="Horizontal">
+                        <Button Content="Thay đổi thông tin"
+                                Margin="0 0 5 0"
+                                BorderThickness="1.5"
+                                Command="{x:Bind ViewModel.ChangeInfoModeCommand, Mode=OneTime}"/>
+                        <Button Content="Lưu thay đổi"
+                                BorderThickness="1.5"
+                                Background="#49ab81"
+                                Foreground="White"
+                                Visibility="{x:Bind ViewModel.ChangeInforMode, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    </StackPanel>
+                </Grid>
+
+                
+            </Grid>
+
+        </Grid>
     </Grid>
 </Page>

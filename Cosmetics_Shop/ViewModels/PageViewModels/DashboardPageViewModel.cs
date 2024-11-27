@@ -2,6 +2,7 @@
 using Cosmetics_Shop.Models;
 using Cosmetics_Shop.Models.DataService;
 using Cosmetics_Shop.Services;
+using Cosmetics_Shop.Services.EventAggregatorMessages;
 using Cosmetics_Shop.Services.Interfaces;
 using Cosmetics_Shop.ViewModels.UserControlViewModels;
 using System;

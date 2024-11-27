@@ -16,6 +16,8 @@ using Cosmetics_Shop.ViewModels;
 using Cosmetics_Shop.Models;
 using Cosmetics_Shop.Views.Pages;
 using Cosmetics_Shop.Services;
+using Cosmetics_Shop.Services.Interfaces;
+using Cosmetics_Shop.Services.EventAggregatorMessages;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -28,6 +30,7 @@ namespace Cosmetics_Shop.Views
     public sealed partial class MainWindow : Window
     {
         public MainViewModel ViewModel { get; set; }
+
         public MainWindow()
         {
             this.InitializeComponent();
@@ -37,6 +40,15 @@ namespace Cosmetics_Shop.Views
             navigationService.Initialize(MainPageFrame);
 
             ViewModel = App.ServiceProvider.GetService(typeof(MainViewModel)) as MainViewModel;
+
+            IEventAggregator eventAggregator = App.ServiceProvider.GetService(typeof(IEventAggregator)) as IEventAggregator;
+            // Close window
+            eventAggregator.Subscribe<LogoutMessage>(WindowClose);
+        }
+
+        private void WindowClose(LogoutMessage message)
+        {
+            this.Close();
         }
     }
 }

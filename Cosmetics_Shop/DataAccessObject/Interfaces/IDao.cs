@@ -44,6 +44,8 @@ namespace Cosmetics_Shop.Models.DataService
 
         Task<SignupStatus> DoSignupAsync(string username, string password, string confirmPassword, string email);
 
+        Task<UserDetail> GetUserDetailAsync(int userId);
+
         List<Voucher> GetAllVouchers();
 
         //Voucher GetVoucherByCode(string code);

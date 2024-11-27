@@ -34,5 +34,10 @@ namespace Cosmetics_Shop.Models
         {
             return UserInfo.Id;
         }
+
+        public void Logout()
+        {
+            UserInfo = null;
+        }
     }
 }

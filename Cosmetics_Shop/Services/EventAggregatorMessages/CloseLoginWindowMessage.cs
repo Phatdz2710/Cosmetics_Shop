@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cosmetics_Shop.Services
+namespace Cosmetics_Shop.Services.EventAggregatorMessages
 {
-    public class CloseWindowMessage
+    public class CloseLoginWindowMessage
     {
         // Only need to define the message type
     }

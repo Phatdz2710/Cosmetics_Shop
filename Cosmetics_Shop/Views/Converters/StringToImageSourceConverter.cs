@@ -17,7 +17,7 @@ namespace Cosmetics_Shop.Views.Converters
                 try
                 {
                     // Tạo một BitmapImage từ đường dẫn chuỗi
-                    return new BitmapImage(new Uri(path));
+                    return new BitmapImage(new Uri(path, UriKind.RelativeOrAbsolute));
                 }
                 catch (Exception)
                 {

@@ -27,6 +27,7 @@ using Cosmetics_Shop.ViewModels.PageViewModels;
 using Cosmetics_Shop.ViewModels.UserControlViewModels;
 using Cosmetics_Shop.DBModels;
 using Microsoft.EntityFrameworkCore;
+using Cosmetics_Shop.Services.EventAggregatorMessages;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -63,6 +64,14 @@ namespace Cosmetics_Shop
             // Activate Main Window
             m_window = new LoginWindow();
             m_window.Activate();
+
+            var eventAggregator = ServiceProvider.GetService<IEventAggregator>();
+            // Close window
+            eventAggregator.Subscribe<LogoutMessage>((message) =>
+            {
+                m_window = new LoginWindow();
+                m_window.Activate();
+            });
         }
 
         private void ConfigureServices(ServiceCollection services)
@@ -82,6 +91,7 @@ namespace Cosmetics_Shop
             services.AddTransient<DashboardPageViewModel>();
             services.AddTransient<ProductThumbnailViewModel>();
             services.AddTransient<ProductDetailViewModel>();
+            services.AddTransient<AccountViewModel>();
             services.AddTransient<CartPageViewModel>();
             services.AddTransient<CartThumbnailViewModel>();
             services.AddTransient<ReviewThumbnailViewModel>();

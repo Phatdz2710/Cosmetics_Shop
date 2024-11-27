@@ -16,6 +16,7 @@ using Cosmetics_Shop.Models;
 using System.Collections.ObjectModel;
 using Cosmetics_Shop.Models.DataService;
 using System.Runtime.CompilerServices;
+using Cosmetics_Shop.Services.EventAggregatorMessages;
 
 namespace Cosmetics_Shop.ViewModels
 {
@@ -29,6 +30,10 @@ namespace Cosmetics_Shop.ViewModels
         private readonly IDao _dao;
 
         private readonly UserSession _userSession;
+
+        private string avatarPath;
+        private string name;
+        
         // Command (gán Event cho button qua binding)
         private ObservableCollection<string> _suggestions;
         private string _keyword;
@@ -68,9 +73,21 @@ namespace Cosmetics_Shop.ViewModels
         // Display Username
         public string Username
         {
-            get
+            get => name;
+            set
             {
-                return _userSession.GetName();
+                name = value;
+                OnPropertyChanged(nameof(Username));
+            }
+        }
+
+        public string AvatarPath
+        {
+            get => avatarPath;
+            set
+            {
+                avatarPath = value;
+                OnPropertyChanged(nameof(AvatarPath));
             }
         }
 
@@ -142,6 +159,21 @@ namespace Cosmetics_Shop.ViewModels
                 // Publish event (send event to all subscribers)
                 _eventAggregator.Publish(searchEvent);
             });
+
+            LoadUserButton();
+
+            _eventAggregator.Subscribe<ChangeUsernameOrAvatarMessage>((param) =>
+            {
+                Username = param.Name;
+                AvatarPath = param.AvatarPath;
+            });
+        }
+
+        private async void LoadUserButton()
+        {
+            var userDetail = await _dao.GetUserDetailAsync(_userSession.GetId());
+            Username = userDetail.Name;
+            AvatarPath = userDetail.AvatarPath;
         }
 
 

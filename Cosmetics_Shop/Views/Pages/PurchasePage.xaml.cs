@@ -14,7 +14,7 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Cosmetics_Shop.ViewModels.PageViewModels;
 using Cosmetics_Shop.Services.Interfaces;
-using Cosmetics_Shop.Services;
+using Cosmetics_Shop.Services.EventAggregatorMessages;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.

@@ -292,9 +292,9 @@ namespace Cosmetics_Shop.Models.DataService
                 var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
                 try
                 {
-                    var user = await _databaseContext.Accounts.FirstOrDefaultAsync(p => p.Username == username);
+                    var account = await _databaseContext.Accounts.FirstOrDefaultAsync(p => p.Username == username);
 
-                    if (user == null)
+                    if (account == null)
                     {
 
                         return new LoginResult
@@ -304,7 +304,7 @@ namespace Cosmetics_Shop.Models.DataService
                         };
                     }
 
-                    if (user.Password != password)
+                    if (account.Password != password)
                     {
                         return new LoginResult
                         {
@@ -313,19 +313,19 @@ namespace Cosmetics_Shop.Models.DataService
                         };
                     }
 
-                    if (user.Role == "Admin")
+                    if (account.Role == "Admin")
                     {
                         return new LoginResult
                         {
                             LoginStatus = LoginStatus.Success,
-                            UserInfo = new Admin(user.Id, user.Username, user.Token)
+                            UserInfo = new Admin(account.UserId, account.Username, account.Token)
                         };
                     }
 
                     return new LoginResult
                     {
                         LoginStatus = LoginStatus.Success,
-                        UserInfo = new User(user.Id, user.Username, user.Token)
+                        UserInfo = new User(account.UserId, account.Username, account.Token)
                     };
                 }
                 catch (Exception)
@@ -357,27 +357,29 @@ namespace Cosmetics_Shop.Models.DataService
 
                     if (user != null) return SignupStatus.UsernameAlreadyExists;
 
-                    var newAccount = new DBModels.Account()
-                    {
-                        Username = username,
-                        Password = password,
-                        Token = Guid.NewGuid().ToString(),
-                        Role = "User",
-                    };
-
-                    await _databaseContext.Accounts.AddAsync(newAccount);
-                    await _databaseContext.SaveChangesAsync();
-
                     var newUser = new DBModels.User()
                     {
                         Name = username,
                         Email = email,
                         Address = null,
                         Phone = null,
-                        AccountId = newAccount.Id,
                     };
                     await _databaseContext.Users.AddAsync(newUser);
                     await _databaseContext.SaveChangesAsync();
+
+                    var newAccount = new DBModels.Account()
+                    {
+                        Username = username,
+                        Password = password,
+                        Token = Guid.NewGuid().ToString(),
+                        Role = "User",
+                        UserId = newUser.Id
+                    };
+
+                    await _databaseContext.Accounts.AddAsync(newAccount);
+                    await _databaseContext.SaveChangesAsync();
+
+                    
 
                     // Return if signup was successful
                     return SignupStatus.Success;
@@ -385,6 +387,48 @@ namespace Cosmetics_Shop.Models.DataService
                 catch (Exception)
                 {
                     return SignupStatus.ConnectServerFailed;
+                }
+            }
+        }
+
+
+        public async Task<UserDetail> GetUserDetailAsync(int userId)
+        {
+            using (var scope = App.ServiceProvider.CreateScope())
+            {
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                try
+                {
+                    var user = await _databaseContext.Users.FirstOrDefaultAsync(p => p.Id == userId);
+
+                    if (user == null)
+                    {
+                        return new UserDetail
+                        {
+                            Name = "",
+                            Email = "",
+                            Phone = "",
+                            Address = ""
+                        };
+                    }
+
+                    return new UserDetail
+                    {
+                        Name = user.Name,
+                        Email = user.Email,
+                        Phone = user.Phone,
+                        Address = user.Address
+                    };
+                }
+                catch (Exception)
+                {
+                    return new UserDetail
+                    {
+                        Name = "",
+                        Email = "",
+                        Phone = "",
+                        Address = ""
+                    };
                 }
             }
         }

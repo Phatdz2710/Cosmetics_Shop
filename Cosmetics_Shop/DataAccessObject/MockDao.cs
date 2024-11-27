@@ -348,6 +348,11 @@ namespace Cosmetics_Shop.Models.DataService
             throw new NotImplementedException();
         }
 
+        public Task<UserDetail> GetUserDetailAsync(int userId)
+        {
+            throw new NotImplementedException();
+        }
+
         //// Method to get a voucher by code
         //public Voucher GetVoucherByCode(string code)
         //{

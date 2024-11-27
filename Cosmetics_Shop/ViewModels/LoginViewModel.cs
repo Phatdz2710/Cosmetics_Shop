@@ -2,7 +2,9 @@
 using Cosmetics_Shop.Enums;
 using Cosmetics_Shop.Models;
 using Cosmetics_Shop.Models.DataService;
+using Cosmetics_Shop.Models.Enums;
 using Cosmetics_Shop.Services;
+using Cosmetics_Shop.Services.EventAggregatorMessages;
 using Cosmetics_Shop.Services.Interfaces;
 using Cosmetics_Shop.Views;
 using Microsoft.Extensions.DependencyInjection;
@@ -153,9 +155,9 @@ namespace Cosmetics_Shop.ViewModels
             LoginResult loginResult = await _dao.CheckLoginAsync(Username, Password);
             IsEnabled = true;
 
-            switch ((int)loginResult.LoginStatus)
+            switch (loginResult.LoginStatus)
             {
-                case 0:
+                case LoginStatus.Success:
                     // Local store username and password'
                     var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
                     if (RememberMe)
@@ -174,28 +176,40 @@ namespace Cosmetics_Shop.ViewModels
                     // Set Info to UserSession
                     var userSession = App.ServiceProvider.GetService(typeof(UserSession)) as UserSession;
                     
+                    // Set user info
                     if (loginResult.UserInfo.DisplayRole() == "Admin")
                     {
-                        userSession.SetUserInfo(new Admin(loginResult.UserInfo.Id, loginResult.UserInfo.Name, loginResult.UserInfo.Token));
+                        userSession.SetUserInfo(new Admin(loginResult.UserInfo.Id, 
+                                                        loginResult.UserInfo.Name, 
+                                                        loginResult.UserInfo.Token));
                     }
                     else
                     {
-                        userSession.SetUserInfo(new User(loginResult.UserInfo.Id, loginResult.UserInfo.Name, loginResult.UserInfo.Token));
+                        userSession.SetUserInfo(new User(loginResult.UserInfo.Id,
+                                                        loginResult.UserInfo.Name,
+                                                        loginResult.UserInfo.Token));
                     }
 
+                    // After lged in, switch to main window
                     var mainWindow = new MainWindow();
                     mainWindow.Activate();
-                    _eventAggregator.Publish(new CloseWindowMessage());
+
+                    // Request to close login window
+                    _eventAggregator.Publish(new CloseLoginWindowMessage());
                     break;
-                case 1:
+
+                case LoginStatus.InvalidUsername:
                     WrongMessage = "Tên đăng nhập không tồn tại !";
                     break;
-                case 2:
+
+                case LoginStatus.InvalidPassword:
                     WrongMessage = "Sai mật khẩu !";
                     break;
-                case 3:
+
+                case LoginStatus.ConnectServerFailed:
                     WrongMessage = "Vui lòng kiểm tra lại kết nối của bạn !";
                     break;
+
                 default:
                     break;
             }

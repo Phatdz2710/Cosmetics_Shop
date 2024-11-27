@@ -11,6 +11,10 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     MinWidth="1200">
 
+    <Page.Resources>
+        <converter:StringToImageSourceConverter x:Key="StringToImageSourceConverter"/>
+    </Page.Resources>
+
 
     <Grid>
         <Grid.RowDefinitions>
@@ -113,11 +117,13 @@
                         ToolTipService.ToolTip="Tài khoản"
                         ToolTipService.Placement="Left">
                     <StackPanel Orientation="Horizontal">
-                        <Ellipse Fill="Gray" 
-                                 Width="40"
-                                 Height="40"
-                                 HorizontalAlignment="Center"
-                                 VerticalAlignment="Center"/>
+
+                        <Border Width="30"
+                                Height="30"
+                                CornerRadius="40">
+                            <Image Source="{x:Bind ViewModel.AvatarPath, Mode=OneWay, Converter={StaticResource StringToImageSourceConverter}}"/>
+                        </Border>
+                            
                         <TextBlock Text="{x:Bind ViewModel.Username}"
                                    VerticalAlignment="Center"
                                    Margin="10 0 0 0"

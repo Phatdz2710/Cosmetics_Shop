@@ -3,6 +3,7 @@ using Cosmetics_Shop.Models;
 using Cosmetics_Shop.Models.DataService;
 using Cosmetics_Shop.Models.Enums;
 using Cosmetics_Shop.Services;
+using Cosmetics_Shop.Services.EventAggregatorMessages;
 using Cosmetics_Shop.Services.Interfaces;
 using Cosmetics_Shop.ViewModels.UserControlViewModels;
 using Cosmetics_Shop.Views.Objects;
@@ -41,6 +42,8 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         public ObservableCollection<FilterCheckbox> Brands { get; set; }
         public ObservableCollection<FilterCheckbox> Categories { get; set; }
 
+        private ProductThumbnailViewModel lazyLoading = null;
+
         #region Fields
         private string _keyword = "";
         private int _totalProducts = 0;
@@ -48,16 +51,18 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         private bool _filterCategory = false;
         private int pageIndex = 1;
         private int productPerPage = 30;
-        private int totalPages = 0;
-        private Visibility visiPrevious = Visibility.Visible;
-        private Visibility visiNext = Visibility.Visible;
+        private int totalPages = 1;
+        private bool visiPrevious = true;
+        private bool visiNext = true;
         private string filterBrand = "";
         private string filterCategory = "";
         private string minPrice = "";
         private string maxPrice = "";
         private int selectedIndexSort = 0;
+        private bool isLoading = false;
         #endregion
 
+        #region Binding Properties
         public string Keyword
         {
             get => _keyword;
@@ -67,7 +72,6 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(Keyword));
             }
         }
-
         public int TotalProducts
         {
             get => _totalProducts;
@@ -77,8 +81,6 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(TotalProducts));
             }
         }
-
-        #region Binding Properties
         public int PageIndex
         {
             get => pageIndex;
@@ -124,7 +126,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(MaxPrice));
             }
         }
-        public Visibility VisiPrevious
+        public bool VisiPrevious
         {
             get => visiPrevious;
             set
@@ -133,7 +135,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(VisiPrevious));
             }
         }
-        public Visibility VisiNext
+        public bool VisiNext
         {
             get => visiNext;
             set
@@ -150,6 +152,15 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 selectedIndexSort = value;
                 SearchProduct(searchNewEntire: false);
                 OnPropertyChanged(nameof(SelectedIndexSort));
+            }
+        }
+        public bool IsLoading
+        {
+            get => isLoading;
+            set
+            {
+                isLoading = value;
+                OnPropertyChanged(nameof(IsLoading));
             }
         }
 
@@ -308,6 +319,10 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 maxPc = int.MaxValue;
             }
 
+            // Update group of Product thumbnails
+            ProductThumbnails?.Clear();
+            IsLoading = true;
+
             // Get list of product thumbnails with keyword, page index, products per page, filter brand, min price, max price
             SearchResult productQueryResult = await _dao.GetListProductThumbnailAsync(
                         keyword: Keyword,
@@ -330,11 +345,8 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
 
             // Show or hide button next/previous page
-            VisiNext = PageIndex == totalPages ? Visibility.Collapsed : Visibility.Visible;
-            VisiPrevious = PageIndex == 1 ? Visibility.Collapsed : Visibility.Visible;
-
-            // Update group of Product thumbnails
-            ProductThumbnails?.Clear();
+            VisiNext = PageIndex != totalPages;
+            VisiPrevious = PageIndex != 1;
 
             for (int i = 0; i < productQueryResult.Products.Count; i++)
             {
@@ -374,6 +386,8 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                     });
                 }
             }
+
+            IsLoading = false;
         }
 
         // Sort product change
