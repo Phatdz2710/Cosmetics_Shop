@@ -17,10 +17,11 @@
         <converters:StringToImageSourceConverter x:Key="StringToImageSourceConverter"/>
     </Page.Resources>
 
-    <Grid Padding="230 50 230 50"
-          Background="LightGray">
-        <Grid Background="LightGray"
-              CornerRadius="20">
+    <Grid 
+          Background="#FDFDFD">
+        <Grid Background="#FDFDFD"
+              CornerRadius="20"
+              Margin="230 50 230 50">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="3*"/>
@@ -28,7 +29,9 @@
 
             <Grid Grid.Column="0" Padding="10"
                   Background="White"
-                  CornerRadius="20">
+                  CornerRadius="20"
+                  BorderThickness="1"
+                  BorderBrush="LightGray">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="3*"/>
                     <RowDefinition Height="*"/>
@@ -50,7 +53,8 @@
 
                         <Button Width="150"
                                 Height="40"
-                                VerticalAlignment="Bottom">
+                                VerticalAlignment="Bottom"
+                                Command="{x:Bind ViewModel.ChangeAvatarCommand, Mode=OneTime}">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Grid x:Name="RootGrid"
@@ -131,6 +135,7 @@
                         Content="Đổi mật khẩu"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
+                        Command="{x:Bind ViewModel.ChangePasswordCommand, Mode=OneTime}"
                         Width="200"
                         Height="40"
                         BorderThickness="1.5"/>
@@ -149,7 +154,8 @@
             </Grid>
 
             <Grid Grid.Column="1"
-                  Margin="10 0 0 0">
+                  Margin="10 0 0 0"
+                  BorderThickness="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="3*"/>
@@ -158,7 +164,8 @@
                 <Grid Grid.Row="0"
                       Background="White"
                       CornerRadius="20"
-                      >
+                      BorderThickness="1"
+                      BorderBrush="LightGray">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
@@ -258,7 +265,9 @@ CornerRadius="15"
                       Background="White"
                       CornerRadius="20"
                       Margin="0 5 0 0"
-                      Padding="40 10 0 0">
+                      Padding="40 10 0 0"
+                      BorderThickness="1"
+                      BorderBrush="LightGray">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="0.7*"/>
                         <RowDefinition Height="*"/>
@@ -334,7 +343,7 @@ CornerRadius="15"
                     </StackPanel>
                     <StackPanel Grid.Row="5"
                                 Orientation="Horizontal">
-                        <Button Content="Thay đổi thông tin"
+                        <Button Content="{x:Bind ViewModel.ChangeModeContent, Mode=OneWay}"
                                 Margin="0 0 5 0"
                                 BorderThickness="1.5"
                                 Command="{x:Bind ViewModel.ChangeInfoModeCommand, Mode=OneTime}"/>
@@ -342,6 +351,7 @@ CornerRadius="15"
                                 BorderThickness="1.5"
                                 Background="#49ab81"
                                 Foreground="White"
+                                Command="{x:Bind ViewModel.SaveInfoCommand, Mode=OneTime}"
                                 Visibility="{x:Bind ViewModel.ChangeInforMode, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     </StackPanel>
                 </Grid>
@@ -349,6 +359,74 @@ CornerRadius="15"
                 
             </Grid>
 
+        </Grid>
+
+        <Grid Visibility="{x:Bind ViewModel.ShowDialogChangePassword, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid Background="Black" 
+                  Opacity="0.5"/>
+
+            <Grid Background="White"
+                    CornerRadius="20"
+                    Width="400"
+                    Height="200">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="0.6*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0"
+                           Text="Đổi mật khẩu" 
+                           FontWeight="SemiBold"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontSize="20"/>
+                
+                <TextBox Grid.Row="1"
+                         PlaceholderText="Mật khẩu hiện tại"
+                         VerticalAlignment="Center"
+                         Margin="10 5 10 5"
+                         BorderThickness="1"
+                         BorderBrush="LightGray"
+                         Text="{x:Bind ViewModel.PasswordCurrent, Mode=TwoWay}"/>
+
+                <TextBox Grid.Row="2"
+                         PlaceholderText="Mật khẩu mới"
+                         VerticalAlignment="Center"
+                         BorderThickness="1"
+                         BorderBrush="LightGray"
+                         Margin="10 5 10 5"
+                         Text="{x:Bind ViewModel.PasswordNew, Mode=TwoWay}"/>
+
+                <TextBlock Grid.Row="3"
+                           VerticalAlignment="Center"
+                           Margin="20 0 0 0"
+                           HorizontalAlignment="Left"
+                           Text="{x:Bind ViewModel.ChangePasswordMessage, Mode=OneWay}"
+                           Foreground="Red"/>
+
+                <StackPanel Grid.Row="4" Orientation="Horizontal"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+                    <Button Content="Xác nhận"
+                            CornerRadius="5"
+                            Width="100"
+                            Margin="0 0 5 0"
+                            Background="LightGreen"
+                            Command="{x:Bind ViewModel.AcceptChangePasswordCommand, Mode=OneTime}"/>
+                    <Button Content="Hủy"
+                            Width="100"
+                            CornerRadius="5"
+                            Background="Tomato"
+                            Foreground="White"
+                            Command="{x:Bind ViewModel.RefuseChangePasswordCommand, Mode=OneTime}"
+                            Margin="5 0 0 0"/>
+
+
+                </StackPanel>
+            </Grid>
         </Grid>
     </Grid>
 </Page>

@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using Cosmetics_Shop.Enums;
 using Cosmetics_Shop.Models;
 using Cosmetics_Shop.Models.DataService;
 using Cosmetics_Shop.Services;
@@ -12,14 +13,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.Storage.Pickers;
+using WinRT.Interop;
 
 namespace Cosmetics_Shop.ViewModels.PageViewModels
 {
     public class AccountViewModel : INotifyPropertyChanged
     {
-        private UserSession _userSession;
+        private readonly UserSession _userSession;
         private readonly IDao _dao;
         private readonly IEventAggregator _eventAggregator;
+        private readonly IFilePickerService _filePickerService;
 
         private string _name;
         private string _nameDisplay;
@@ -31,6 +35,17 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         private int totalMoneySpent;
         private bool _changeInforMode = false;
         private string _avatarPath;
+        private string _changeModeContent = "Thay đổi thông tin";
+        private bool _showDialogChangePassword = false;
+        private string _changePasswordMessage = "";
+
+        private string _passwordCurrent = "";
+        private string _passwordNew = "";
+
+        private string _nameRestore;
+        private string _emailRestore;
+        private string _phoneRestore;
+        private string _addressRestore;
         public string NameDisplay
         {
             get { return _nameDisplay; }
@@ -115,7 +130,6 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(AvatarPath));
             }
         }
-
         public bool ChangeInforMode
         {
             get => _changeInforMode;
@@ -125,45 +139,207 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(ChangeInforMode));
             }
         }
+        public bool ShowDialogChangePassword
+        {
+            get => _showDialogChangePassword;
+            set
+            {
+                _showDialogChangePassword = value;
+                OnPropertyChanged(nameof(ShowDialogChangePassword));
+            }
+        }
 
+        public string PasswordCurrent
+        {
+            get => _passwordCurrent;
+            set
+            {
+                _passwordCurrent = value;
+                OnPropertyChanged(nameof(PasswordCurrent));
+            }
+        }
+
+        public string PasswordNew
+        {
+            get => _passwordNew;
+            set
+            {
+                _passwordNew = value;
+                OnPropertyChanged(nameof(PasswordNew));
+            }
+        }
+        public string ChangePasswordMessage
+        {
+            get => _changePasswordMessage;
+            set
+            {
+                _changePasswordMessage = value;
+                OnPropertyChanged(nameof(ChangePasswordMessage));
+            }
+        }
+
+        public string ChangeModeContent
+        {
+            get => _changeModeContent;
+            set
+            {
+                _changeModeContent = value;
+                OnPropertyChanged(nameof(ChangeModeContent));
+            }
+        }
         public ICommand ChangeInfoModeCommand { get; set; }
+        public ICommand SaveInfoCommand { get; set; }
         public ICommand ChangeAvatarCommand { get; set; }
+        public ICommand ChangePasswordCommand { get; set; }
         public ICommand LogoutCommand { get; set; }
+        public ICommand AcceptChangePasswordCommand { get; set; }
 
-        public AccountViewModel(UserSession userSession, IDao dao, IEventAggregator eventAggregator)
+        public ICommand RefuseChangePasswordCommand { get; set; }
+
+
+
+
+        public AccountViewModel(UserSession userSession, IDao dao, IEventAggregator eventAggregator, IFilePickerService filePickerService)
         {
             this._userSession = userSession;
             this._eventAggregator = eventAggregator;
+            this._filePickerService = filePickerService;
             this._dao = dao;
 
             loadUserInformation();
             ChangeInforMode = false;
 
-            ChangeInfoModeCommand = new RelayCommand(() =>
+            ChangeInfoModeCommand = new RelayCommand(changeInfoModeCommand);
+
+            SaveInfoCommand = new RelayCommand(saveInfoCommand);
+
+            LogoutCommand = new RelayCommand(logoutCommand);
+
+            ChangeAvatarCommand = new RelayCommand(changeAvatarCommand);
+
+            AcceptChangePasswordCommand = new RelayCommand(acceptChangePasswordCommand);
+            RefuseChangePasswordCommand = new RelayCommand(refuseChangePasswordCommand);
+
+            ChangePasswordCommand = new RelayCommand(() =>
             {
-                ChangeInforMode = !ChangeInforMode;
+                ChangePasswordMessage = string.Empty;
+                PasswordCurrent = string.Empty;
+                PasswordNew = string.Empty;
+                ShowDialogChangePassword = true;
+            });
+        }
+
+        private void logoutCommand()
+        {
+            _userSession.Logout();
+            _eventAggregator.Publish(new LogoutMessage());
+        }
+
+        private async void saveInfoCommand()
+        {
+            await _dao.ChangeAllUserInformationAsync(_userSession.GetId(), new UserDetail()
+            {
+                Name = Name,
+                Email = Email,
+                Phone = Phone,
+                Address = Address,
+                AvatarPath = AvatarPath
             });
 
-            LogoutCommand = new RelayCommand(() =>
+            _nameRestore = Name;
+            _emailRestore = Email;
+            _phoneRestore = Phone;
+            _addressRestore = Address;
+            NameDisplay = Name;
+
+            changeInfoModeCommand();
+
+            _eventAggregator.Publish(new ChangeUsernameOrAvatarMessage()
             {
-                _userSession.Logout();
-                _eventAggregator.Publish(new LogoutMessage());
+                Name = Name,
+                AvatarPath = AvatarPath
             });
+        }
+
+        private void changeInfoModeCommand()
+        {
+            if (ChangeInforMode)
+            {
+                Name = _nameRestore;
+                Email = _emailRestore;
+                Phone = _phoneRestore;
+                Address = _addressRestore;
+            }
+
+            ChangeInforMode = !ChangeInforMode;
+            ChangeModeContent = ChangeInforMode ? "Hủy" : "Thay đổi thông tin";
+        }
+
+        private async void changeAvatarCommand()
+        {
+
+            // Thiết lập loại file được chọn
+            List<string> filters = new List<string>()
+            {
+                ".jpg", ".jpeg", ".png"
+            };
+
+            var result = await _filePickerService.PickFileAsync(filters);
+
+            var avatarPath = result;
+            if (avatarPath != null)
+            {
+                AvatarPath = avatarPath;
+                await _dao.ChangeUserInformationAsync(_userSession.GetId(), UserInformationType.AvatarPath, avatarPath);
+                _eventAggregator.Publish(new ChangeUsernameOrAvatarMessage()
+                {
+                    Name = Name,
+                    AvatarPath = AvatarPath
+                });
+            }
         }
 
         private async void loadUserInformation()
         {
             var userDetail = await _dao.GetUserDetailAsync(_userSession.GetId());
+
             Name = userDetail.Name;
             NameDisplay = userDetail.Name;
             Email = userDetail.Email;
             Phone = userDetail.Phone;
             Address = userDetail.Address;
             AvatarPath = userDetail.AvatarPath;
+            TotalProducts = userDetail.TotalProducts;
+            TotalBills = userDetail.TotalBills;
+            TotalMoneySpent = userDetail.TotalMoneySpent;
 
-            TotalProducts = 100;
-            TotalBills = 10;
-            TotalMoneySpent = 7890000;
+            if (AvatarPath == null)
+            {
+                AvatarPath = "ms-appx:///Assets/avatar_temp.png";
+            }
+
+            _nameRestore = Name;
+            _emailRestore = Email;
+            _phoneRestore = Phone;
+            _addressRestore = Address;
+        }
+
+        private async void acceptChangePasswordCommand()
+        {
+            var result = await _dao.ChangePasswordAsync(_userSession.GetId(), PasswordCurrent, PasswordNew);
+            if (result)
+            {
+                ShowDialogChangePassword = false;
+            }
+            else
+            {
+                ChangePasswordMessage = "Mật khẩu hiện tại không đúng !";
+            }
+        }
+
+        private void refuseChangePasswordCommand()
+        {
+            ShowDialogChangePassword = false;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

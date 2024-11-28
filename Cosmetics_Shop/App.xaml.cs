@@ -80,6 +80,7 @@ namespace Cosmetics_Shop
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<IEventAggregator, EventAggregator>();
             services.AddSingleton<IDao, SqlDao>();
+            services.AddSingleton<IFilePickerService, FilePickerService>();
             services.AddSingleton<UserSession>();
 
             // Add Transient

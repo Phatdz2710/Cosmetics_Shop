@@ -353,6 +353,36 @@ namespace Cosmetics_Shop.Models.DataService
             throw new NotImplementedException();
         }
 
+        public Task<object> GetInformationAsync(int userId, UserInformationType infoType)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> ChangeUserInformationAsync(int userId, UserInformationType infoType, string newValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> ChangeAllUserInformation(int userId, UserDetail userDetail)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> ChangePassword(int userId, string oldPassword, string newPassword)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> ChangeAllUserInformationAsync(int userId, UserDetail userDetail)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> ChangePasswordAsync(int userId, string oldPassword, string newPassword)
+        {
+            throw new NotImplementedException();
+        }
+
         //// Method to get a voucher by code
         //public Voucher GetVoucherByCode(string code)
         //{

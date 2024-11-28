@@ -8,31 +8,26 @@ namespace Cosmetics_Shop.Models
 {
     public class UserSession
     {
-        private UserBase UserInfo { get; set; }
+        private User UserInfo { get; set; }
 
-        public void SetUserInfo(UserBase userInfo)
+        public void SetUserInfo(User userInfo)
         {
             UserInfo = userInfo;
         }
 
         public string GetToken()
         {
-            return UserInfo.Token;
+            return UserInfo.GetToken();
         }
 
         public string GetRole()
         {
-            return UserInfo.DisplayRole();
-        }
-
-        public string GetName()
-        {
-            return UserInfo.Name;
+            return UserInfo.GetRole();
         }
 
         public int GetId()
         {
-            return UserInfo.Id;
+            return UserInfo.GetId();
         }
 
         public void Logout()

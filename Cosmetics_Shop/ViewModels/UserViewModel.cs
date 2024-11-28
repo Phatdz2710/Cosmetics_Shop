@@ -17,6 +17,7 @@ using System.Collections.ObjectModel;
 using Cosmetics_Shop.Models.DataService;
 using System.Runtime.CompilerServices;
 using Cosmetics_Shop.Services.EventAggregatorMessages;
+using Cosmetics_Shop.Enums;
 
 namespace Cosmetics_Shop.ViewModels
 {
@@ -105,15 +106,7 @@ namespace Cosmetics_Shop.ViewModels
 
             Suggestions = new ObservableCollection<string>();
 
-            if (_userSession.GetRole() == "Admin")
-            {
-                // Switch to Admin page
-                _navigationService.NavigateTo<AdminPage>();
-            }
-            else
-            {
-                _navigationService.NavigateTo<DashboardPage>();
-            }
+            _navigationService.NavigateTo<DashboardPage>();
 
             // Switch to Purchase page
             PurchaseButtonCommand = new RelayCommand(() =>
@@ -171,9 +164,16 @@ namespace Cosmetics_Shop.ViewModels
 
         private async void LoadUserButton()
         {
-            var userDetail = await _dao.GetUserDetailAsync(_userSession.GetId());
-            Username = userDetail.Name;
-            AvatarPath = userDetail.AvatarPath;
+            var userName = await _dao.GetInformationAsync(_userSession.GetId(), UserInformationType.Name);
+            var avatarPath = await _dao.GetInformationAsync(_userSession.GetId(), UserInformationType.AvatarPath);
+
+            if (avatarPath == null)
+            {
+                avatarPath = "ms-appx:///Assets/avatar_temp.png";
+            }
+
+            Username = (string)userName;
+            AvatarPath = (string)avatarPath;
         }
 
 

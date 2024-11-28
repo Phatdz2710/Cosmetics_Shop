@@ -44,6 +44,9 @@ namespace Cosmetics_Shop.Views
             IEventAggregator eventAggregator = App.ServiceProvider.GetService(typeof(IEventAggregator)) as IEventAggregator;
             // Close window
             eventAggregator.Subscribe<LogoutMessage>(WindowClose);
+
+            IFilePickerService filePickerService = App.ServiceProvider.GetService(typeof(IFilePickerService)) as IFilePickerService;
+            filePickerService.SetWindowFocus(this);
         }
 
         private void WindowClose(LogoutMessage message)

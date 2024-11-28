@@ -11,6 +11,6 @@ namespace Cosmetics_Shop.Services
     public struct LoginResult
     {
         public LoginStatus LoginStatus { get; set; }
-        public UserBase UserInfo { get; set; }
+        public User UserInfo { get; set; }
     }
 }

@@ -175,20 +175,11 @@ namespace Cosmetics_Shop.ViewModels
 
                     // Set Info to UserSession
                     var userSession = App.ServiceProvider.GetService(typeof(UserSession)) as UserSession;
-                    
+
                     // Set user info
-                    if (loginResult.UserInfo.DisplayRole() == "Admin")
-                    {
-                        userSession.SetUserInfo(new Admin(loginResult.UserInfo.Id, 
-                                                        loginResult.UserInfo.Name, 
-                                                        loginResult.UserInfo.Token));
-                    }
-                    else
-                    {
-                        userSession.SetUserInfo(new User(loginResult.UserInfo.Id,
-                                                        loginResult.UserInfo.Name,
-                                                        loginResult.UserInfo.Token));
-                    }
+                    userSession.SetUserInfo(new User(loginResult.UserInfo.GetId(),
+                                                        loginResult.UserInfo.GetToken(),
+                                                        loginResult.UserInfo.GetRole()));
 
                     // After lged in, switch to main window
                     var mainWindow = new MainWindow();

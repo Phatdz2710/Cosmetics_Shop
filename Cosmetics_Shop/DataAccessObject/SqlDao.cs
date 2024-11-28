@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -22,6 +23,8 @@ namespace Cosmetics_Shop.Models.DataService
 {
     public class SqlDao : IDao
     {
+
+        #region Get Product Thumbnails
 
         public async Task<SearchResult> GetListProductThumbnailAsync(
             string keyword = "",
@@ -116,6 +119,98 @@ namespace Cosmetics_Shop.Models.DataService
             }
         }
 
+        public async Task<List<ProductThumbnail>> GetListNewProductAsync()
+        {
+            using (var scope = App.ServiceProvider.CreateScope())
+            {
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                try
+                {
+                    var db = await _databaseContext.Products
+                        .OrderByDescending(p => p.CreatedAt)
+                        .Take(6)
+                        .Select(p => new ProductThumbnail(p.Id,
+                                p.Name,
+                                p.ImagePath,
+                                p.Price,
+                                p.Brand,
+                                p.AverageRating,
+                                p.Sold,
+                                p.Stock))
+                        .ToListAsync();
+
+                    return db;
+                }
+                catch (Exception)
+                {
+
+                    return new List<ProductThumbnail>();
+                }
+            }
+
+        }
+        public async Task<List<ProductThumbnail>> GetListBestSellerAsync()
+        {
+            using (var scope = App.ServiceProvider.CreateScope())
+            {
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                try
+                {
+                    var db = await _databaseContext.Products
+                        .OrderByDescending(p => p.AverageRating)
+                        .Take(6)
+                        .Select(p => new ProductThumbnail(p.Id,
+                                p.Name,
+                                p.ImagePath,
+                                p.Price,
+                                p.Brand,
+                                p.AverageRating,
+                                p.Sold,
+                                p.Stock))
+                        .ToListAsync();
+
+                    return db;
+                }
+                catch (Exception)
+                {
+                    return new List<ProductThumbnail>();
+                }
+            }
+        }
+
+        public async Task<List<ProductThumbnail>> GetListRecentlyViewAsync()
+        {
+            using (var scope = App.ServiceProvider.CreateScope())
+            {
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                var userSession = App.ServiceProvider.GetService(typeof(UserSession)) as UserSession;
+                try
+                {
+                    var query = _databaseContext.Orders.AsQueryable();
+
+                    var db = await query.Where(p => p.UserId == userSession.GetId())
+                        .OrderByDescending(p => p.OrderDate)
+                        .SelectMany(p => p.OrderItems)
+                        .Take(6)
+                        .Select(p => new ProductThumbnail(p.ProductId,
+                                p.Product.Name,
+                                p.Product.ImagePath,
+                                p.Product.Price,
+                                p.Product.Brand,
+                                p.Product.AverageRating,
+                                p.Product.Sold,
+                                p.Product.Stock))
+                        .ToListAsync();
+
+                    return db;
+                }
+                catch (Exception)
+                {
+                    return new List<ProductThumbnail>();
+                }
+            }
+        }
+
         public List<ProductDetail> GetListProductDetail()
         {
             var db = new List<ProductDetail>()
@@ -188,102 +283,9 @@ namespace Cosmetics_Shop.Models.DataService
             return null;
         }
 
-        public async Task<List<ProductThumbnail>> GetListNewProductAsync()
-        {
-            using (var scope = App.ServiceProvider.CreateScope())
-            {
-                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-                try
-                {
-                    var db = await _databaseContext.Products
-                        .OrderByDescending(p => p.CreatedAt)
-                        .Take(6)
-                        .Select(p => new ProductThumbnail(p.Id,
-                                p.Name,
-                                p.ImagePath,
-                                p.Price,
-                                p.Brand,
-                                p.AverageRating,
-                                p.Sold,
-                                p.Stock))
-                        .ToListAsync();
+        #endregion
 
-                    return db;
-                }
-                catch (Exception)
-                {
-                    
-                    return new List<ProductThumbnail>();
-                }
-            }
-            
-        }
-        public async Task<List<ProductThumbnail>> GetListBestSellerAsync()
-        {
-            using (var scope = App.ServiceProvider.CreateScope())
-            {
-                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-                try
-                {
-                    var db = await _databaseContext.Products
-                        .OrderByDescending(p => p.AverageRating)
-                        .Take(6)
-                        .Select(p => new ProductThumbnail(p.Id, 
-                                p.Name, 
-                                p.ImagePath,
-                                p.Price,
-                                p.Brand,
-                                p.AverageRating,
-                                p.Sold,
-                                p.Stock))
-                        .ToListAsync();
-
-                    return db;
-                }
-                catch (Exception)
-                {
-                    return new List<ProductThumbnail>();
-                }
-            }
-        }
-
-        public async Task<List<ProductThumbnail>> GetListRecentlyViewAsync()
-        {
-            using (var scope = App.ServiceProvider.CreateScope())
-            {
-                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-                var userSession = App.ServiceProvider.GetService(typeof(UserSession)) as UserSession;
-                try
-                {
-                    var query = _databaseContext.Orders.AsQueryable();
-
-                    var db = await query.Where(p => p.UserId == userSession.GetId())
-                        .OrderByDescending(p => p.OrderDate)
-                        .SelectMany(p => p.OrderItems)
-                        .Take(6)
-                        .Select(p => new ProductThumbnail(p.ProductId, 
-                                p.Product.Name,
-                                p.Product.ImagePath, 
-                                p.Product.Price, 
-                                p.Product.Brand, 
-                                p.Product.AverageRating, 
-                                p.Product.Sold, 
-                                p.Product.Stock))
-                        .ToListAsync();
-
-                    return db;
-                }
-                catch (Exception)
-                {
-                    return new List<ProductThumbnail>();
-                }
-            }
-        }
-
-        public void InsertProduct(ProductThumbnail product)
-        {
-            throw new NotImplementedException();
-        }
+        #region Login, Signup
 
         public async Task<LoginResult> CheckLoginAsync(string username, string password)
         {
@@ -313,19 +315,10 @@ namespace Cosmetics_Shop.Models.DataService
                         };
                     }
 
-                    if (account.Role == "Admin")
-                    {
-                        return new LoginResult
-                        {
-                            LoginStatus = LoginStatus.Success,
-                            UserInfo = new Admin(account.UserId, account.Username, account.Token)
-                        };
-                    }
-
                     return new LoginResult
                     {
                         LoginStatus = LoginStatus.Success,
-                        UserInfo = new User(account.UserId, account.Username, account.Token)
+                        UserInfo = new User(account.UserId, account.Token, account.Role)
                     };
                 }
                 catch (Exception)
@@ -333,15 +326,15 @@ namespace Cosmetics_Shop.Models.DataService
                     return new LoginResult
                     {
                         LoginStatus = LoginStatus.ConnectServerFailed,
-                        UserInfo = new User(0, "", "")
+                        UserInfo = new User(0 ,"", "")
                     };
                 }
             }
         }
 
-        public async Task<SignupStatus> DoSignupAsync(string username, 
-                                                    string password, 
-                                                    string confirmPassword, 
+        public async Task<SignupStatus> DoSignupAsync(string username,
+                                                    string password,
+                                                    string confirmPassword,
                                                     string email)
         {
             using (var scope = App.ServiceProvider.CreateScope())
@@ -379,7 +372,7 @@ namespace Cosmetics_Shop.Models.DataService
                     await _databaseContext.Accounts.AddAsync(newAccount);
                     await _databaseContext.SaveChangesAsync();
 
-                    
+
 
                     // Return if signup was successful
                     return SignupStatus.Success;
@@ -391,6 +384,9 @@ namespace Cosmetics_Shop.Models.DataService
             }
         }
 
+        #endregion
+
+        #region User Informations
 
         public async Task<UserDetail> GetUserDetailAsync(int userId)
         {
@@ -401,6 +397,20 @@ namespace Cosmetics_Shop.Models.DataService
                 {
                     var user = await _databaseContext.Users.FirstOrDefaultAsync(p => p.Id == userId);
 
+                    var totalProducts = await _databaseContext.Orders
+                        .Where(p => p.UserId == userId)
+                        .SelectMany(p => p.OrderItems)
+                        .SumAsync(p => p.Quantity);
+
+                    var totalBills = await _databaseContext.Orders
+                        .Where(p => p.UserId == userId)
+                        .CountAsync();
+
+                    var totalMoneySpent = await _databaseContext.Orders
+                        .Where(p => p.UserId == userId)
+                        .SelectMany(p => p.OrderItems)
+                        .SumAsync(p => p.Quantity * p.Product.Price);
+
                     if (user == null)
                     {
                         return new UserDetail
@@ -408,7 +418,11 @@ namespace Cosmetics_Shop.Models.DataService
                             Name = "",
                             Email = "",
                             Phone = "",
-                            Address = ""
+                            Address = "",
+                            AvatarPath = null,
+                            TotalMoneySpent = 0,
+                            TotalBills = 0,
+                            TotalProducts = 0
                         };
                     }
 
@@ -417,7 +431,11 @@ namespace Cosmetics_Shop.Models.DataService
                         Name = user.Name,
                         Email = user.Email,
                         Phone = user.Phone,
-                        Address = user.Address
+                        Address = user.Address,
+                        AvatarPath = user.AvatarPath,
+                        TotalMoneySpent = totalMoneySpent,
+                        TotalBills = totalBills,
+                        TotalProducts = totalProducts
                     };
                 }
                 catch (Exception)
@@ -427,10 +445,210 @@ namespace Cosmetics_Shop.Models.DataService
                         Name = "",
                         Email = "",
                         Phone = "",
-                        Address = ""
+                        Address = "",
+                        AvatarPath = null,
+                        TotalMoneySpent = 0,
+                        TotalBills = 0,
+                        TotalProducts = 0
                     };
                 }
             }
+        }
+
+        public async Task<object> GetInformationAsync(int userId, UserInformationType infoType)
+        {
+            using (var scope = App.ServiceProvider.CreateScope())
+            {
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+
+                try
+                {
+                    switch(infoType)
+                    {
+                        case UserInformationType.Name:
+                            var name = await _databaseContext.Users
+                                .Where(p => p.Id == userId)
+                                .Select(p => p.Name)
+                                .FirstOrDefaultAsync();
+                            return name;
+
+                        case UserInformationType.Email:
+                            var email = await _databaseContext.Users
+                                .Where(p => p.Id == userId)
+                                .Select(p => p.Email)
+                                .FirstOrDefaultAsync();
+                            return email;
+
+                        case UserInformationType.Phone:
+                            var phone = await _databaseContext.Users
+                                .Where(p => p.Id == userId)
+                                .Select(p => p.Phone)
+                                .FirstOrDefaultAsync();
+                            return phone;
+
+                        case UserInformationType.Address:
+                            var address = await _databaseContext.Users
+                                .Where(p => p.Id == userId)
+                                .Select(p => p.Address)
+                                .FirstOrDefaultAsync();
+                            return address;
+
+                        case UserInformationType.AvatarPath:
+                            var avatarPath = await _databaseContext.Users
+                                .Where(p => p.Id == userId)
+                                .Select(p => p.AvatarPath)
+                                .FirstOrDefaultAsync();
+                            return avatarPath;
+
+                        case UserInformationType.TotalMoneySpent:
+                            var totalMoneySpent = await _databaseContext.Orders
+                                .Where(p => p.UserId == userId)
+                                .SelectMany(p => p.OrderItems)
+                                .SumAsync(p => p.Quantity * p.Product.Price);
+                            return totalMoneySpent;
+
+                        case UserInformationType.TotalBills:
+                            var totalBills = await _databaseContext.Orders
+                                .Where(p => p.UserId == userId)
+                                .CountAsync();
+                            return totalBills;
+
+                        case UserInformationType.TotalProducts:
+                            var totalProducts = await _databaseContext.Orders
+                                .Where(p => p.UserId == userId)
+                                .SelectMany(p => p.OrderItems)
+                                .SumAsync(p => p.Quantity);
+                            return totalProducts;
+
+                        default:
+                            return null;
+                    }
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
+            }
+        }
+
+        public async Task<bool> ChangeUserInformationAsync (int userId, UserInformationType infoType, string newValue)  
+        {
+            using (var scope = App.ServiceProvider.CreateScope())
+            {
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+
+                try
+                {
+                    var user = await _databaseContext.Users.FirstOrDefaultAsync(p => p.Id == userId);
+
+                    if (user == null)
+                    {
+                        return false;
+                    }
+
+                    switch (infoType)
+                    {
+                        case UserInformationType.Name:
+                            user.Name = newValue;
+                            break;
+
+                        case UserInformationType.Email:
+                            user.Email = newValue;
+                            break;
+
+                        case UserInformationType.Phone:
+                            user.Phone = newValue;
+                            break;
+
+                        case UserInformationType.Address:
+                            user.Address = newValue;
+                            break;
+
+                        case UserInformationType.AvatarPath:
+                            user.AvatarPath = newValue;
+                            break;
+
+                        default:
+                            return false;
+                    }
+
+                    await _databaseContext.SaveChangesAsync();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
+        
+        public async Task<bool> ChangeAllUserInformationAsync(int userId, UserDetail userDetail)
+        {
+            using (var scope = App.ServiceProvider.CreateScope())
+            {
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+
+                try
+                {
+                    var user = await _databaseContext.Users.FirstOrDefaultAsync(p => p.Id == userId);
+
+                    if (user == null)
+                    {
+                        return false;
+                    }
+
+                    user.Name = userDetail.Name;
+                    user.Email = userDetail.Email;
+                    user.Phone = userDetail.Phone;
+                    user.Address = userDetail.Address;
+                    user.AvatarPath = userDetail.AvatarPath;
+
+                    await _databaseContext.SaveChangesAsync();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
+
+        public async Task<bool> ChangePasswordAsync(int userId, string oldPassword, string newPassword)
+        {
+            using (var scope = App.ServiceProvider.CreateScope())
+            {
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+
+                try
+                {
+                    var account = await _databaseContext.Accounts.FirstOrDefaultAsync(p => p.UserId == userId);
+
+                    if (account == null)
+                    {
+                        return false;
+                    }
+
+                    if (account.Password != oldPassword)
+                    {
+                        return false;
+                    }
+
+                    account.Password = newPassword;
+                    await _databaseContext.SaveChangesAsync();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+
+            }
+        }
+        #endregion
+
+        public void InsertProduct(ProductThumbnail product)
+        {
+            throw new NotImplementedException();
         }
 
         public List<CartThumbnail> GetListCartProduct()
@@ -516,6 +734,9 @@ namespace Cosmetics_Shop.Models.DataService
 
             return db;
         }
+
+
+
 
         //// Method to get a voucher by code
         //public Voucher GetVoucherByCode(string code)

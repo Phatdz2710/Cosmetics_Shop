@@ -51,7 +51,7 @@
                     Height="50"
                     Width="50"
                     Background="Black"
-                    Command="{x:Bind ViewModel.DashboardButtonCommand}"
+                    Command="{x:Bind ViewModel.DashboardButtonCommand, Mode=OneTime}"
                     ToolTipService.ToolTip="Trang chính"
                     ToolTipService.Placement="Left">
                 <Image Source="/Assets/dashboard_icon.png"/>
@@ -64,7 +64,7 @@
                     Height="50"
                     Width="50"
                     Background="Black"
-                    Command="{x:Bind ViewModel.PurchaseButtonCommand}"
+                    Command="{x:Bind ViewModel.PurchaseButtonCommand, Mode=OneTime}"
                     ToolTipService.ToolTip="Trang tìm kiếm"
                     ToolTipService.Placement="Left">
                 <Image Source="/Assets/search-icon.png"/>
@@ -96,7 +96,7 @@
                         VerticalAlignment="Center"
                         BorderThickness="2"
                         CornerRadius="5"
-                        Command="{x:Bind ViewModel.SearchButtonCommand}"/>
+                        Command="{x:Bind ViewModel.SearchButtonCommand, Mode=OneTime}"/>
             </StackPanel>
 
             <StackPanel Grid.Column="4"
@@ -106,14 +106,14 @@
                 <Button Height="60"
                         Width="60"
                         Background="Black"
-                        Command="{x:Bind ViewModel.CartButtonCommand}"
+                        Command="{x:Bind ViewModel.CartButtonCommand, Mode=OneTime}"
                         ToolTipService.ToolTip="Giỏ hàng"
                         ToolTipService.Placement="Left">
                     <Image Source="/Assets/cart_icon_1.png"/>
                 </Button>
 
                 <Button Background="Black"
-                        Command="{x:Bind ViewModel.AccountButtonCommand}"
+                        Command="{x:Bind ViewModel.AccountButtonCommand, Mode=OneTime}"
                         ToolTipService.ToolTip="Tài khoản"
                         ToolTipService.Placement="Left">
                     <StackPanel Orientation="Horizontal">
@@ -124,7 +124,7 @@
                             <Image Source="{x:Bind ViewModel.AvatarPath, Mode=OneWay, Converter={StaticResource StringToImageSourceConverter}}"/>
                         </Border>
                             
-                        <TextBlock Text="{x:Bind ViewModel.Username}"
+                        <TextBlock Text="{x:Bind ViewModel.Username, Mode=OneWay}"
                                    VerticalAlignment="Center"
                                    Margin="10 0 0 0"
                                    Foreground="White"/>

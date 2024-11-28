@@ -27,7 +27,7 @@ public partial class DatabaseContext : DbContext
     {
         modelBuilder.Entity<Account>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__accounts__3213E83FAA96BEC6");
+            entity.HasKey(e => e.Id).HasName("PK__accounts__3213E83FB88B3C25");
 
             entity.ToTable("accounts");
 
@@ -59,7 +59,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<Order>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__orders__3213E83F51C058B1");
+            entity.HasKey(e => e.Id).HasName("PK__orders__3213E83FF6A86527");
 
             entity.ToTable("orders");
 
@@ -85,7 +85,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<OrderItem>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__order_it__3213E83F2240EA14");
+            entity.HasKey(e => e.Id).HasName("PK__order_it__3213E83FF547EFF2");
 
             entity.ToTable("order_items");
 
@@ -107,7 +107,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<Product>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__products__3213E83FB2E94CA9");
+            entity.HasKey(e => e.Id).HasName("PK__products__3213E83FBB70D4D2");
 
             entity.ToTable("products");
 
@@ -146,7 +146,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__users__3213E83F606386F9");
+            entity.HasKey(e => e.Id).HasName("PK__users__3213E83F963BE3DA");
 
             entity.ToTable("users");
 
@@ -154,6 +154,9 @@ public partial class DatabaseContext : DbContext
             entity.Property(e => e.Address)
                 .HasMaxLength(50)
                 .HasColumnName("address");
+            entity.Property(e => e.AvatarPath)
+                .HasMaxLength(200)
+                .HasColumnName("avatar_path");
             entity.Property(e => e.Email)
                 .HasMaxLength(50)
                 .HasColumnName("email");
