@@ -223,6 +223,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                     _filterBrand = true;
                 }
 
+                PageIndex = 1;
                 if (_filterCategory)
                 {
                     await GetProductThumbnails(updateCategory: false);
@@ -247,6 +248,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                     _filterCategory = true;
                 }
 
+                PageIndex = 1;
                 if (_filterBrand)
                 {
                     await GetProductThumbnails(updateBrand: false);
@@ -257,18 +259,12 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 }
             });
 
-            FilterPriceCommand = new RelayCommand(async () =>
+            FilterPriceCommand = new RelayCommand(() =>
             {
-                PageIndex = 1;
-                await GetProductThumbnails();
+                SearchProduct(searchNewEntire: false);
             });
 
-            FirstLoadProductThumbnails();
-        }
-
-        private async void FirstLoadProductThumbnails()
-        {
-            await GetProductThumbnails();
+            SearchProduct();
         }
 
         private async Task GetProductThumbnails(bool updateBrand = true, bool updateCategory = true)

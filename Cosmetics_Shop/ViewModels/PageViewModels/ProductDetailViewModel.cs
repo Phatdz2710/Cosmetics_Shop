@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Cosmetics_Shop.ViewModels.UserControlViewModels;
+using System.Runtime.CompilerServices;
 
 
 namespace Cosmetics_Shop.ViewModels.PageViewModels
@@ -22,10 +23,19 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
     public class ProductDetailViewModel : INotifyPropertyChanged
     {
         private ProductDetail _productDetail;
+        private int _shippingFee;
+        private ShippingMethod _currentShippingMethod;
         public ObservableCollection<ReviewThumbnailViewModel> reviewThumbnail { get; set; }
         public ObservableCollection<CartThumbnailViewModel> Cart { get; set; }
 
-        private IDao dao = null;
+        private IDao _dao = null;
+
+        //Command
+        public ICommand PaidButtonCommand { get; set; }
+        public ICommand GoBackCommand { get; set; }
+
+        // Navigation service
+        private readonly INavigationService _navigationService;
         public ProductDetail ProductDetail
         {
             get => _productDetail;
@@ -35,16 +45,38 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(ProductDetail));
             }
         }
-
-        public ProductDetailViewModel()
+        public int ShippingFee
         {
-            dao = new MockDao();
+            get => _shippingFee;
+            set
+            {
+                if (_shippingFee != value)
+                {
+                    _shippingFee = value;
+                    OnPropertyChanged(); // Notify UI of change
+                }
+            }
+        }
+        public ProductDetailViewModel(INavigationService navigationService, IDao dao)
+        {
+            _dao = new MockDao();
+
+            _navigationService = navigationService;
+            PaidButtonCommand = new RelayCommand(() =>
+            {
+
+                _navigationService.NavigateTo<PaymentPage>();
+            });
+            GoBackCommand = new RelayCommand(() =>
+            {
+                _navigationService.GoBack();
+            });
         }
 
         public void LoadInitialReviews(int idProduct)
         {
             reviewThumbnail = new ObservableCollection<ReviewThumbnailViewModel>();
-            var review = dao.GetListReviewThumbnailByIDProduct(idProduct);
+            var review = _dao.GetListReviewThumbnailByIDProduct(idProduct);
             foreach (var item in review)
             {
                 var reviewThumbnailViewModel = App.ServiceProvider.GetService(typeof(ReviewThumbnailViewModel)) as ReviewThumbnailViewModel;
@@ -56,7 +88,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         public void ShowAllReviews()
         {
             // Fetch all reviews for the product
-            var allReviews = dao.GetListReviewThumbnailByIDProduct(ProductDetail.Id);
+            var allReviews = _dao.GetListReviewThumbnailByIDProduct(ProductDetail.Id);
 
             // Update the reviewThumbnail collection and notify the change
             reviewThumbnail.Clear(); // Clear existing reviews
@@ -72,7 +104,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         public void FilterReviewsByStarNumber(int starNumber)
         {
             // Fetch all reviews for the product
-            var allReviews = dao.GetListReviewThumbnailByIDProduct(ProductDetail.Id);
+            var allReviews = _dao.GetListReviewThumbnailByIDProduct(ProductDetail.Id);
 
             // Filter reviews based on the selected star number
             var filteredReviews = allReviews
@@ -94,15 +126,19 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             OnPropertyChanged(nameof(reviewThumbnail)); // Notify that the reviewThumbnail has changed
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public void LoadProductDetail(int id)
         {
             //dao = new MockDao();
-            ProductDetail = dao.GetProductDetail(id);
+            ProductDetail = _dao.GetProductDetail(id);
+        }
+        public List<ShippingMethod> GetShippingMethods()
+        {
+            return _dao.GetShippingMethods(); // Assuming _dao is initialized correctly in the constructor
         }
 
-        private void OnPropertyChanged(string propertyName)
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -111,7 +147,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         {
             Cart = new ObservableCollection<CartThumbnailViewModel>();
 
-            var cartProduct = dao.GetListCartProduct();
+            var cartProduct = _dao.GetListCartProduct();
 
             for (int i = 0; i < cartProduct.Count; i++)
             {
@@ -127,6 +163,8 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             cartThumbnailViewModel.GetType().GetProperty("CartThumbnail").SetValue(cartThumbnailViewModel, cart);
             Cart.Add(cartThumbnailViewModel as CartThumbnailViewModel);
         }
+
+
 
     }
 }

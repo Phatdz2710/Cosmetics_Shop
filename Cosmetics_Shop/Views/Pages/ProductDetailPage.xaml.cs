@@ -31,6 +31,7 @@ namespace Cosmetics_Shop.Views.Pages
 
             ViewModel.LoadProductDetail(productId);
             ViewModel.LoadInitialReviews(productId);
+            deliveryComboBox.ItemsSource = ViewModel.GetShippingMethods();
         }
 
         private void minusButton_Click(object sender, RoutedEventArgs e)
@@ -48,22 +49,6 @@ namespace Cosmetics_Shop.Views.Pages
                 amountTextBox.Text = (currentAmount + 1).ToString();
             }
         }
-
-        private void MenuFlyoutItem_Click(object sender, RoutedEventArgs e)
-        {
-            // Get the clicked MenuFlyoutItem
-            var menuItem = sender as MenuFlyoutItem;
-
-            // Update the content of the DropDownButton with the selected item's text
-            if (menuItem != null)
-            {
-                myDropDownButton.Content = menuItem.Text;
-            }
-        }
-
-        //private async void OnReviewButtonClicked(object sender, EventArgs e) =>
-        //    // Scroll to the reviewGrid
-        //    await scrollView.ScrollToAsync(reviewGrid, ScrollToPosition.Center, true);
 
         private void themvaogiohangButton_Click(object sender, RoutedEventArgs e)
         {

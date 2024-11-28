@@ -327,19 +327,40 @@ namespace Cosmetics_Shop.Models.DataService
             return filtered;
         }
 
-        //private List<Voucher> vouchers;
-
         //// Method to get all vouchers
         public List<Voucher> GetAllVouchers()
         {
             var db = new List<Voucher>
             {
-            new Voucher (1,"SAVE10",10,DateTime.Now.AddDays(30)),
-            new Voucher (2,"SAVE20",20,DateTime.Now.AddDays(60)),
-            new Voucher (3, "SAVE30", 30, DateTime.Now.AddDays(10)),
-            new Voucher (4, "WELCOME", 50, DateTime.Now.AddDays(15))
+            new Voucher (1,"SAVE10",10,DateTime.Now.AddDays(30), "Giảm 10%"),
+            new Voucher (2,"SAVE20",20,DateTime.Now.AddDays(60), "Giảm 20%"),
+            new Voucher (3, "SAVE30", 30, DateTime.Now.AddDays(10), "Giảm 30%"),
+            new Voucher (4, "WELCOME", 50, DateTime.Now.AddDays(15), "Giảm 50% - Lần đầu mua hàng")
             };
 
+            return db;
+        }
+
+        public List<PaymentProductThumbnail> GetAllPaymentProducts()
+        {
+            var db = new List<PaymentProductThumbnail>
+            {
+                new PaymentProductThumbnail(1, null, "Tẩy trang loreal", "Tươi mát", 150000, 2),
+                new PaymentProductThumbnail(2, null, "Tẩy trang loreal", "Sạch sâu", 150000, 2),
+                new PaymentProductThumbnail(3, null, "Tẩy trang Bioderma", "Tươi mát", 150000, 1)
+            };
+
+            return db;
+        }
+
+        public List<ShippingMethod> GetShippingMethods()
+        {
+            var db = new List<ShippingMethod>
+            {
+                new ShippingMethod(1, "Vận chuyển nhanh", 20000),
+                new ShippingMethod(2, "Vận chuyển hỏa tốc", 54000),
+                new ShippingMethod(3, "Vận chuyển tiết kiệm", 16500)
+            };
             return db;
         }
 
@@ -363,16 +384,6 @@ namespace Cosmetics_Shop.Models.DataService
             throw new NotImplementedException();
         }
 
-        public Task<bool> ChangeAllUserInformation(int userId, UserDetail userDetail)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> ChangePassword(int userId, string oldPassword, string newPassword)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<bool> ChangeAllUserInformationAsync(int userId, UserDetail userDetail)
         {
             throw new NotImplementedException();
@@ -382,43 +393,5 @@ namespace Cosmetics_Shop.Models.DataService
         {
             throw new NotImplementedException();
         }
-
-        //// Method to get a voucher by code
-        //public Voucher GetVoucherByCode(string code)
-        //{
-        //    return vouchers.FirstOrDefault(v => v.Code.Equals(code, StringComparison.OrdinalIgnoreCase));
-        //}
-
-        //// Method to add a new voucher
-        //public void AddVoucher(Voucher voucher)
-        //{
-        //    if (voucher != null)
-        //    {
-        //        voucher.Id = vouchers.Max(v => v.Id) + 1; // Assign a new ID
-        //        vouchers.Add(voucher);
-        //    }
-        //}
-
-        //// Method to delete a voucher by ID
-        //public void DeleteVoucher(int id)
-        //{
-        //    var voucher = vouchers.FirstOrDefault(v => v.Id == id);
-        //    if (voucher != null)
-        //    {
-        //        vouchers.Remove(voucher);
-        //    }
-        //}
-
-        //// Method to update an existing voucher
-        //public void UpdateVoucher(Voucher updatedVoucher)
-        //{
-        //    var voucher = vouchers.FirstOrDefault(v => v.Id == updatedVoucher.Id);
-        //    if (voucher != null)
-        //    {
-        //        voucher.Code = updatedVoucher.Code;
-        //        voucher.Discount = updatedVoucher.Discount;
-        //        voucher.ExpiryDate = updatedVoucher.ExpiryDate;
-        //    }
-        //}
     }
 }

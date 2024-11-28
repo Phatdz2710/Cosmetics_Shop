@@ -78,5 +78,8 @@ namespace Cosmetics_Shop.Models.DataService
         //void AddVoucher(Voucher voucher);
         //void DeleteVoucher(int id);
         //void UpdateVoucher(Voucher updatedVoucher);
+
+        List<PaymentProductThumbnail> GetAllPaymentProducts();
+        List<ShippingMethod> GetShippingMethods();
     }
 }

@@ -96,6 +96,8 @@ namespace Cosmetics_Shop
             services.AddTransient<CartPageViewModel>();
             services.AddTransient<CartThumbnailViewModel>();
             services.AddTransient<ReviewThumbnailViewModel>();
+            services.AddTransient<PaymentProductThumbnailViewModel>();
+            services.AddTransient<PaymentPageViewModel>();
 
             services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(
                 "Server=localhost,1433;Database=COSMETIC_SHOP;User Id=sa;Password=FatPr0@123;TrustServerCertificate=True;"

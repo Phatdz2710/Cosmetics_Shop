@@ -24,6 +24,8 @@
   <ItemGroup>
     <None Remove="Assets\stock_icon.png" />
     <None Remove="LoginWindow.xaml" />
+    <None Remove="Views\Controls\PaymentProductThumbnailControl.xaml" />
+    <None Remove="Views\Controls\PaymentProductThumbnailViewModel.xaml" />
     <None Remove="Views\Controls\ReviewThumbnailControl.xaml" />
     <None Remove="Views\MainWindow.xaml" />
     <None Remove="Views\Controls\ProductThumbnailControl.xaml" />
@@ -33,6 +35,7 @@
     <None Remove="Views\Pages\DashboardPage.xaml" />
     <None Remove="Views\Pages\LoginSignupControl.xaml" />
     <None Remove="Views\Pages\LoginSignupPage.xaml" />
+    <None Remove="Views\Pages\PaymentPage.xaml" />
     <None Remove="Views\Pages\PurchasePage.xaml" />
     <None Remove="Views\UserPage.xaml" />
   </ItemGroup>
@@ -99,6 +102,21 @@
     <Content Update="Assets\stock_icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\Controls\PaymentProductThumbnailControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\Controls\PaymentProductThumbnailViewModel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\Pages\PaymentPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 	
   <ItemGroup>
