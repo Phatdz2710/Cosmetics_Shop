@@ -25,15 +25,16 @@
         </Grid.ColumnDefinitions>
 
         <ScrollView Grid.Column="0"
-              Margin="10"
-              CornerRadius="10"
-              Background="White"
-              VerticalScrollBarVisibility="Hidden">
+                  Margin="10"
+                  CornerRadius="10"
+                  Background="White"
+                  VerticalScrollBarVisibility="Hidden">
             <StackPanel>
 
             <!-- Mục Lọc (theo giá) -->
             <StackPanel Margin="10">
 
+                <!-- Filter by Brands -->
                 <TextBlock Text="Thương hiệu"
                            FontSize="16"
                            FontWeight="Bold"
@@ -51,6 +52,7 @@
                     </ListView.ItemTemplate>
                 </ListView>
 
+                <!-- Filter by Categories -->
                 <TextBlock Text="Loại sản phẩm"
                            FontSize="16"
                            FontWeight="Bold"
@@ -68,11 +70,12 @@
                     </ListView.ItemTemplate>
                 </ListView>
 
+                <!-- Filter by Price -->
                 <TextBlock Text="Giá"
                            FontSize="16"
                            FontWeight="Bold"
                            Margin="0,0,0,5"/>
-
+                
                 <StackPanel Orientation="Vertical">
                     <NumberBox Width="160"
                              PlaceholderText="Thấp nhất"
@@ -109,12 +112,14 @@
                     <ComboBoxItem Content="Mới nhất"/>
                     <ComboBoxItem Content="Giá giảm dần"/>
                     <ComboBoxItem Content="Giá tăng dần"/>
-                    <ComboBoxItem Content="Tên sản phẩm"/>
+                    <ComboBoxItem Content="A - Z"/>
+                    <ComboBoxItem Content="Z - A"/>
                 </ComboBox>
             </StackPanel>
             </StackPanel>
         </ScrollView>
-
+        
+        <!-- Is Enabled -->
         <Grid Grid.Column="0"
               Margin="10"
               CornerRadius="10"
@@ -123,6 +128,7 @@
               Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
         </Grid>
 
+        
         <Grid Grid.Column="1"
               Background="#317256"
               Margin="10"

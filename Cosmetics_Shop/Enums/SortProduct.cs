@@ -8,9 +8,10 @@ namespace Cosmetics_Shop.Models.Enums
 {
     public enum SortProduct
     {
-        DateAscending = 0,
+        DateAscending   = 0,
         PriceDescending = 1,
-        PriceAscending = 2,
-        NameAscending = 3,
+        PriceAscending  = 2,
+        NameAscending   = 3,
+        NameDescending  = 4,
     }
 }

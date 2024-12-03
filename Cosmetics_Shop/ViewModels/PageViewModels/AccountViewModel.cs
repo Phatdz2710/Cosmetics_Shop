@@ -20,11 +20,14 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
 {
     public class AccountViewModel : INotifyPropertyChanged
     {
-        private readonly UserSession _userSession;
-        private readonly IDao _dao;
-        private readonly IEventAggregator _eventAggregator;
+        #region Dependency   
+        private readonly UserSession        _userSession;
+        private readonly IDao               _dao;
+        private readonly IEventAggregator   _eventAggregator;
         private readonly IFilePickerService _filePickerService;
+        #endregion
 
+        #region Fields
         private string _name;
         private string _nameDisplay;
         private string _email;
@@ -38,14 +41,15 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         private string _changeModeContent = "Thay đổi thông tin";
         private bool _showDialogChangePassword = false;
         private string _changePasswordMessage = "";
-
         private string _passwordCurrent = "";
         private string _passwordNew = "";
-
         private string _nameRestore;
         private string _emailRestore;
         private string _phoneRestore;
         private string _addressRestore;
+        #endregion
+
+        #region Properties Binding
         public string NameDisplay
         {
             get { return _nameDisplay; }
@@ -91,7 +95,6 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(Address));
             }
         }
-
         public int TotalProducts
         {
             get { return totalProducts; }
@@ -119,7 +122,6 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(TotalMoneySpent));
             }
         }
-
         public string AvatarPath
         {
 
@@ -148,7 +150,6 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(ShowDialogChangePassword));
             }
         }
-
         public string PasswordCurrent
         {
             get => _passwordCurrent;
@@ -158,7 +159,6 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(PasswordCurrent));
             }
         }
-
         public string PasswordNew
         {
             get => _passwordNew;
@@ -177,7 +177,6 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(ChangePasswordMessage));
             }
         }
-
         public string ChangeModeContent
         {
             get => _changeModeContent;
@@ -187,35 +186,37 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(ChangeModeContent));
             }
         }
+        #endregion
+
+        #region Commands
         public ICommand ChangeInfoModeCommand { get; set; }
         public ICommand SaveInfoCommand { get; set; }
         public ICommand ChangeAvatarCommand { get; set; }
         public ICommand ChangePasswordCommand { get; set; }
         public ICommand LogoutCommand { get; set; }
         public ICommand AcceptChangePasswordCommand { get; set; }
-
         public ICommand RefuseChangePasswordCommand { get; set; }
+        #endregion
 
 
-
-
-        public AccountViewModel(UserSession userSession, IDao dao, IEventAggregator eventAggregator, IFilePickerService filePickerService)
+        // Constructor
+        public AccountViewModel(UserSession userSession, 
+                                IDao        dao, 
+                                IEventAggregator    eventAggregator, 
+                                IFilePickerService  filePickerService)
         {
-            this._userSession = userSession;
-            this._eventAggregator = eventAggregator;
+            this._userSession       = userSession;
+            this._eventAggregator   = eventAggregator;
             this._filePickerService = filePickerService;
-            this._dao = dao;
+            this._dao               = dao;
 
             loadUserInformation();
             ChangeInforMode = false;
 
-            ChangeInfoModeCommand = new RelayCommand(changeInfoModeCommand);
-
-            SaveInfoCommand = new RelayCommand(saveInfoCommand);
-
-            LogoutCommand = new RelayCommand(logoutCommand);
-
-            ChangeAvatarCommand = new RelayCommand(changeAvatarCommand);
+            ChangeInfoModeCommand   = new RelayCommand(changeInfoModeCommand);
+            SaveInfoCommand         = new RelayCommand(saveInfoCommand);
+            LogoutCommand           = new RelayCommand(logoutCommand);
+            ChangeAvatarCommand     = new RelayCommand(changeAvatarCommand);
 
             AcceptChangePasswordCommand = new RelayCommand(acceptChangePasswordCommand);
             RefuseChangePasswordCommand = new RelayCommand(refuseChangePasswordCommand);
@@ -223,44 +224,49 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             ChangePasswordCommand = new RelayCommand(() =>
             {
                 ChangePasswordMessage = string.Empty;
-                PasswordCurrent = string.Empty;
-                PasswordNew = string.Empty;
+                PasswordCurrent     = string.Empty;
+                PasswordNew         = string.Empty;
                 ShowDialogChangePassword = true;
             });
         }
 
+        // Press Logout
         private void logoutCommand()
         {
             _userSession.Logout();
+
+            // Publish message to notify other view models (Logout)
             _eventAggregator.Publish(new LogoutMessage());
         }
 
+        // Press Save to save user information
         private async void saveInfoCommand()
         {
             await _dao.ChangeAllUserInformationAsync(_userSession.GetId(), new UserDetail()
             {
-                Name = Name,
-                Email = Email,
-                Phone = Phone,
+                Name    = Name,
+                Email   = Email,
+                Phone   = Phone,
                 Address = Address,
                 AvatarPath = AvatarPath
             });
 
-            _nameRestore = Name;
-            _emailRestore = Email;
-            _phoneRestore = Phone;
+            _nameRestore    = Name;
+            _emailRestore   = Email;
+            _phoneRestore   = Phone;
             _addressRestore = Address;
-            NameDisplay = Name;
+            NameDisplay     = Name;
 
             changeInfoModeCommand();
 
             _eventAggregator.Publish(new ChangeUsernameOrAvatarMessage()
             {
-                Name = Name,
-                AvatarPath = AvatarPath
+                Name        = Name,
+                AvatarPath  = AvatarPath
             });
         }
 
+        // Change mode to edit user information
         private void changeInfoModeCommand()
         {
             if (ChangeInforMode)
@@ -275,6 +281,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             ChangeModeContent = ChangeInforMode ? "Hủy" : "Thay đổi thông tin";
         }
 
+        // Open file picker to change avatar
         private async void changeAvatarCommand()
         {
 
@@ -299,6 +306,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
         }
 
+        // Load user information first time
         private async void loadUserInformation()
         {
             var userDetail = await _dao.GetUserDetailAsync(_userSession.GetId());
@@ -324,6 +332,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             _addressRestore = Address;
         }
 
+        // Press OK to change password
         private async void acceptChangePasswordCommand()
         {
             var result = await _dao.ChangePasswordAsync(_userSession.GetId(), PasswordCurrent, PasswordNew);
@@ -337,10 +346,13 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
         }
 
+        // Press Cancel to change password
         private void refuseChangePasswordCommand()
         {
             ShowDialogChangePassword = false;
         }
+
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propertyName)

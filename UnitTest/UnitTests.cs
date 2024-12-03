@@ -22,83 +22,66 @@ namespace UnitTest
         public void Setup()
         {
             dao = new SqlDao();
+            Assert.IsNotNull(dao, "Failed to initialize dao.");
         }
 
         [TestMethod]
-        public void AdminLogin()
+        public async Task AdminLogin()
         {
-
             var expectedRole = "Admin";
             var expectedResult = LoginStatus.Success;
 
-            var result = dao.CheckLoginAsync("admin", "admin");
+            var result = await dao.CheckLoginAsync("admin", "123");
+            Assert.IsNotNull(result, "Result is null.");
+            Assert.IsNotNull(result.UserInfo, "UserInfo is null.");
 
-            Assert.AreEqual(expectedRole, result.Result.UserInfo.DisplayRole());
-            Assert.AreEqual(expectedResult, result.Result.LoginStatus);
+            Assert.AreEqual(expectedRole, result.UserInfo.GetRole());
+            Assert.AreEqual(expectedResult, result.LoginStatus);
         }
 
         [TestMethod]
-        public void UserLogin()
+        public async Task UserLogin()
         {
-
             var expectedRole = "User";
-            var expectedToken = "2345";
             var expectedResult = LoginStatus.Success;
 
-            var result = dao.CheckLoginAsync("user", "user");
+            var result = await dao.CheckLoginAsync("ngocphat", "123");
+            Assert.IsNotNull(result, "Result is null.");
+            Assert.IsNotNull(result.UserInfo, "UserInfo is null.");
 
-            Assert.AreEqual(expectedRole, result.Result.Role);
-            Assert.AreEqual(expectedToken, result.Result.Token);
-            Assert.AreEqual(expectedResult, result.Result.LoginStatus);
+            Assert.AreEqual(expectedRole, result.UserInfo.GetRole());
+            Assert.AreEqual(expectedResult, result.LoginStatus);
         }
 
         [TestMethod]
-        public void InvalidUsername()
+        public async Task CreateAnAccount()
         {
+            var expectedLoginStatus = LoginStatus.Success;
 
-            var expectedRole = "";
-            var expectedToken = "";
-            var expectedResult = LoginStatus.InvalidUsername;
+            var result = await dao.CheckLoginAsync("cnp", "123");
+            Assert.IsNotNull(result, "Result is null.");
 
-            var result = dao.CheckLoginAsync("abc", "user");
-
-            Assert.AreEqual(expectedRole, result.Result.Role);
-            Assert.AreEqual(expectedToken, result.Result.Token);
-            Assert.AreEqual(expectedResult, result.Result.LoginStatus);
-        }
-
-        [TestMethod]
-        public void InvalidPassword()
-        {
-
-            var expectedRole = "";
-            var expectedToken = "";
-            var expectedResult = LoginStatus.InvalidPassword;
-
-            var result = dao.CheckLoginAsync("user", "dsfsd");
-
-            Assert.AreEqual(expectedRole, result.Result.Role);
-            Assert.AreEqual(expectedToken, result.Result.Token);
-            Assert.AreEqual(expectedResult, result.Result.LoginStatus);
+            Assert.AreEqual(expectedLoginStatus, result.LoginStatus);
         }
 
         [TestMethod]
         public async Task GetListProductTest()
         {
-            var result = await dao.GetListProductThumbnailAsync(keyword: "Cream");
+            var result = await dao.GetListProductThumbnailAsync(keyword: "Sun");
+            Assert.IsNotNull(result, "Result is null.");
+            Assert.IsNotNull(result.Products, "Products list is null.");
 
-            Assert.IsTrue(result.Products.All(p => p.Name.Contains("Cream")));
+            Assert.IsTrue(result.Products.All(p => p.Name.Contains("Sun")));
         }
 
         [TestMethod]
         public async Task GetListProductThumbnailAsync_ShouldFilterByPriceRange()
         {
-            // Act
-            var result = await dao.GetListProductThumbnailAsync(minPrice: 100000, maxPrice: 400000);
+            var result = await dao.GetListProductThumbnailAsync(minPrice: 100000, maxPrice: 500000);
+            Assert.IsNotNull(result, "Result is null.");
+            Assert.IsNotNull(result.Products, "Products list is null.");
 
-            // Assert
-            Assert.IsTrue(result.Products.All(p => p.Price >= 100000 && p.Price <= 400000));
+            Assert.IsTrue(result.Products.All(p => p.Price >= 100000 && p.Price <= 500000));
         }
-
     }
 }

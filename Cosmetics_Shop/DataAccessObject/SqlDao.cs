@@ -27,14 +27,14 @@ namespace Cosmetics_Shop.Models.DataService
         #region Get Product Thumbnails
 
         public async Task<SearchResult> GetListProductThumbnailAsync(
-            string keyword = "",
-            int pageIndex = 1,
-            int productsPerPage = 10,
+            string  keyword     = "",
+            int     pageIndex   = 1,
+            int     productsPerPage = 10,
             SortProduct sortProduct = SortProduct.DateAscending,
-            string filterBrand = "",
-            string filterCategory = "",
-            int minPrice = 0,
-            int maxPrice = int.MaxValue)
+            string  filterBrand     = "",
+            string  filterCategory  = "",
+            int     minPrice    = 0,
+            int     maxPrice    = int.MaxValue)
         {
             using (var scope = App.ServiceProvider.CreateScope())
             {
@@ -62,10 +62,11 @@ namespace Cosmetics_Shop.Models.DataService
 
                     query = sortProduct switch
                     {
-                        SortProduct.DateAscending => query.OrderBy(p => p.CreatedAt),
-                        SortProduct.PriceAscending => query.OrderBy(p => p.Price),
+                        SortProduct.DateAscending   => query.OrderBy(p => p.CreatedAt),
+                        SortProduct.PriceAscending  => query.OrderBy(p => p.Price),
                         SortProduct.PriceDescending => query.OrderByDescending(p => p.Price),
-                        SortProduct.NameAscending => query.OrderBy(p => p.Name),
+                        SortProduct.NameAscending   => query.OrderBy(p => p.Name),
+                        SortProduct.NameDescending  => query.OrderByDescending(p => p.Name),
                         _ => query,
                     };
 
@@ -85,35 +86,37 @@ namespace Cosmetics_Shop.Models.DataService
                                   .ToListAsync();
 
                     var resBrands = await _databaseContext.Products
-                                        .Where(p => query.Select(q => q.Brand).Contains(p.Brand))
+                                        .Where(p => query.Select(q => q.Brand)
+                                        .Contains(p.Brand))
                                         .Select(p => p.Brand)
                                         .Distinct()
                                         .ToListAsync();
 
                     var resCategories = await _databaseContext.Products
-                                        .Where(p => query.Select(q => q.Category).Contains(p.Category))
+                                        .Where(p => query.Select(q => q.Category)
+                                        .Contains(p.Category))
                                         .Select(p => p.Category)
                                         .Distinct()
                                         .ToListAsync();
 
                     return new SearchResult()
                     {
-                        Products = db,
-                        TotalPages = numPages == 0 ? 1 : numPages,
-                        TotalProducts = totalProduct,
-                        Brands = resBrands,
-                        Categories = resCategories
+                        Products        = db,
+                        TotalPages      = numPages == 0 ? 1 : numPages,
+                        TotalProducts   = totalProduct,
+                        Brands          = resBrands,
+                        Categories      = resCategories
                     };
                 }
                 catch (Exception)
                 {
                     return new SearchResult()
                     {
-                        Products = new List<ProductThumbnail>(),
-                        TotalPages = 1,
-                        TotalProducts = 0,
-                        Brands = new List<string>(),
-                        Categories = new List<string>()
+                        Products        = new List<ProductThumbnail>(),
+                        TotalPages      = 1,
+                        TotalProducts   = 0,
+                        Brands          = new List<string>(),
+                        Categories      = new List<string>()
                     };
                 }
             }
@@ -143,7 +146,6 @@ namespace Cosmetics_Shop.Models.DataService
                 }
                 catch (Exception)
                 {
-
                     return new List<ProductThumbnail>();
                 }
             }
@@ -191,15 +193,17 @@ namespace Cosmetics_Shop.Models.DataService
                     var db = await query.Where(p => p.UserId == userSession.GetId())
                         .OrderByDescending(p => p.OrderDate)
                         .SelectMany(p => p.OrderItems)
+                        .Select(p => p.Product)
+                        .Distinct()
                         .Take(6)
-                        .Select(p => new ProductThumbnail(p.ProductId,
-                                p.Product.Name,
-                                p.Product.ImagePath,
-                                p.Product.Price,
-                                p.Product.Brand,
-                                p.Product.AverageRating,
-                                p.Product.Sold,
-                                p.Product.Stock))
+                        .Select(p => new ProductThumbnail(p.Id,
+                                p.Name,
+                                p.ImagePath,
+                                p.Price,
+                                p.Brand,
+                                p.AverageRating,
+                                p.Sold,
+                                p.Stock))
                         .ToListAsync();
 
                     return db;
@@ -302,7 +306,7 @@ namespace Cosmetics_Shop.Models.DataService
                         return new LoginResult
                         {
                             LoginStatus = LoginStatus.InvalidUsername,
-                            UserInfo = new User(0, "", "")
+                            UserInfo    = new User(0, "", "")
                         };
                     }
 
@@ -311,14 +315,14 @@ namespace Cosmetics_Shop.Models.DataService
                         return new LoginResult
                         {
                             LoginStatus = LoginStatus.InvalidPassword,
-                            UserInfo = new User(0, "", "")
+                            UserInfo    = new User(0, "", "")
                         };
                     }
 
                     return new LoginResult
                     {
                         LoginStatus = LoginStatus.Success,
-                        UserInfo = new User(account.UserId, account.Token, account.Role)
+                        UserInfo    = new User(account.UserId, account.Token, account.Role)
                     };
                 }
                 catch (Exception)
@@ -326,7 +330,7 @@ namespace Cosmetics_Shop.Models.DataService
                     return new LoginResult
                     {
                         LoginStatus = LoginStatus.ConnectServerFailed,
-                        UserInfo = new User(0 ,"", "")
+                        UserInfo    = new User(0 ,"", "")
                     };
                 }
             }
@@ -352,26 +356,25 @@ namespace Cosmetics_Shop.Models.DataService
 
                     var newUser = new DBModels.User()
                     {
-                        Name = username,
-                        Email = email,
+                        Name    = username,
+                        Email   = email,
                         Address = null,
-                        Phone = null,
+                        Phone   = null,
                     };
                     await _databaseContext.Users.AddAsync(newUser);
                     await _databaseContext.SaveChangesAsync();
 
                     var newAccount = new DBModels.Account()
                     {
-                        Username = username,
-                        Password = password,
-                        Token = Guid.NewGuid().ToString(),
-                        Role = "User",
-                        UserId = newUser.Id
+                        Username    = username,
+                        Password    = password,
+                        Token       = Guid.NewGuid().ToString(),
+                        Role        = "User",
+                        UserId      = newUser.Id
                     };
 
                     await _databaseContext.Accounts.AddAsync(newAccount);
                     await _databaseContext.SaveChangesAsync();
-
 
 
                     // Return if signup was successful
@@ -415,41 +418,41 @@ namespace Cosmetics_Shop.Models.DataService
                     {
                         return new UserDetail
                         {
-                            Name = "",
-                            Email = "",
-                            Phone = "",
-                            Address = "",
-                            AvatarPath = null,
+                            Name        = "",
+                            Email       = "",
+                            Phone       = "",
+                            Address     = "",
+                            AvatarPath  = null,
                             TotalMoneySpent = 0,
-                            TotalBills = 0,
-                            TotalProducts = 0
+                            TotalBills      = 0,
+                            TotalProducts   = 0
                         };
                     }
 
                     return new UserDetail
                     {
-                        Name = user.Name,
-                        Email = user.Email,
-                        Phone = user.Phone,
-                        Address = user.Address,
-                        AvatarPath = user.AvatarPath,
+                        Name        = user.Name,
+                        Email       = user.Email,
+                        Phone       = user.Phone,
+                        Address     = user.Address,
+                        AvatarPath  = user.AvatarPath,
                         TotalMoneySpent = totalMoneySpent,
-                        TotalBills = totalBills,
-                        TotalProducts = totalProducts
+                        TotalBills      = totalBills,
+                        TotalProducts   = totalProducts
                     };
                 }
                 catch (Exception)
                 {
                     return new UserDetail
                     {
-                        Name = "",
-                        Email = "",
-                        Phone = "",
-                        Address = "",
-                        AvatarPath = null,
+                        Name        = "",
+                        Email       = "",
+                        Phone       = "",
+                        Address     = "",
+                        AvatarPath  = null,
                         TotalMoneySpent = 0,
-                        TotalBills = 0,
-                        TotalProducts = 0
+                        TotalBills      = 0,
+                        TotalProducts   = 0
                     };
                 }
             }
@@ -465,6 +468,7 @@ namespace Cosmetics_Shop.Models.DataService
                 {
                     switch(infoType)
                     {
+                        // Get user's name
                         case UserInformationType.Name:
                             var name = await _databaseContext.Users
                                 .Where(p => p.Id == userId)
@@ -472,6 +476,7 @@ namespace Cosmetics_Shop.Models.DataService
                                 .FirstOrDefaultAsync();
                             return name;
 
+                        // Get user's email
                         case UserInformationType.Email:
                             var email = await _databaseContext.Users
                                 .Where(p => p.Id == userId)
@@ -479,6 +484,7 @@ namespace Cosmetics_Shop.Models.DataService
                                 .FirstOrDefaultAsync();
                             return email;
 
+                        // Get user's phone number
                         case UserInformationType.Phone:
                             var phone = await _databaseContext.Users
                                 .Where(p => p.Id == userId)
@@ -486,13 +492,15 @@ namespace Cosmetics_Shop.Models.DataService
                                 .FirstOrDefaultAsync();
                             return phone;
 
+                        // Get user's address
                         case UserInformationType.Address:
                             var address = await _databaseContext.Users
                                 .Where(p => p.Id == userId)
                                 .Select(p => p.Address)
                                 .FirstOrDefaultAsync();
                             return address;
-
+                        
+                        // Get user's avatar path
                         case UserInformationType.AvatarPath:
                             var avatarPath = await _databaseContext.Users
                                 .Where(p => p.Id == userId)
@@ -500,6 +508,7 @@ namespace Cosmetics_Shop.Models.DataService
                                 .FirstOrDefaultAsync();
                             return avatarPath;
 
+                        // Get total money spent by user
                         case UserInformationType.TotalMoneySpent:
                             var totalMoneySpent = await _databaseContext.Orders
                                 .Where(p => p.UserId == userId)
@@ -507,12 +516,14 @@ namespace Cosmetics_Shop.Models.DataService
                                 .SumAsync(p => p.Quantity * p.Product.Price);
                             return totalMoneySpent;
 
+                        // Get total bills of user
                         case UserInformationType.TotalBills:
                             var totalBills = await _databaseContext.Orders
                                 .Where(p => p.UserId == userId)
                                 .CountAsync();
                             return totalBills;
 
+                        // Get total products bought by user
                         case UserInformationType.TotalProducts:
                             var totalProducts = await _databaseContext.Orders
                                 .Where(p => p.UserId == userId)
@@ -597,10 +608,10 @@ namespace Cosmetics_Shop.Models.DataService
                         return false;
                     }
 
-                    user.Name = userDetail.Name;
-                    user.Email = userDetail.Email;
-                    user.Phone = userDetail.Phone;
-                    user.Address = userDetail.Address;
+                    user.Name       = userDetail.Name;
+                    user.Email      = userDetail.Email;
+                    user.Phone      = userDetail.Phone;
+                    user.Address    = userDetail.Address;
                     user.AvatarPath = userDetail.AvatarPath;
 
                     await _databaseContext.SaveChangesAsync();

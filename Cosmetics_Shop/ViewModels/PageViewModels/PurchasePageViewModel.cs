@@ -16,6 +16,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.Graphics.Printing;
@@ -28,38 +29,46 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
     /// </summary>
     public class PurchasePageViewModel : INotifyPropertyChanged
     {
+        #region Singleton
         // Event aggregator for publish and subscribe
-        private readonly IEventAggregator _eventAggregator;
+        private readonly IEventAggregator   _eventAggregator    = null;
 
         // Navigation service
-        private readonly INavigationService _navigationService;
+        private readonly INavigationService _navigationService  = null;
 
         // Data access object
         private IDao _dao = null;
+        #endregion
 
+        #region ObservableCollections
         // Observable Collection
         public ObservableCollection<ProductThumbnailViewModel> ProductThumbnails { get; set; }
         public ObservableCollection<FilterCheckbox> Brands { get; set; }
         public ObservableCollection<FilterCheckbox> Categories { get; set; }
 
         private ProductThumbnailViewModel lazyLoading = null;
+        #endregion
 
         #region Fields
-        private string _keyword = "";
-        private int _totalProducts = 0;
-        private bool _filterBrand = false;
-        private bool _filterCategory = false;
-        private int pageIndex = 1;
-        private int productPerPage = 30;
-        private int totalPages = 1;
-        private bool visiPrevious = true;
-        private bool visiNext = true;
-        private string filterBrand = "";
-        private string filterCategory = "";
-        private string minPrice = "";
-        private string maxPrice = "";
-        private int selectedIndexSort = 0;
-        private bool isLoading = false;
+        private string  _keyword         = "";
+        private string  filterBrand      = "";
+        private string  filterCategory   = "";
+        private string  _minPrice        = "";
+        private string  _maxPrice        = "";
+        private bool    _filterBrand     = false;
+        private bool    _filterCategory  = false;
+        private bool    _isLoading       = false;
+        private bool    _visiPrevious    = true;
+        private bool    _visiNext        = true;
+        private int     _pageIndex       = 1;
+        private int     _productPerPage  = 30;
+        private int     _totalPages      = 1;
+        private int     _totalProducts   = 0;
+        private int     _selectedIndexSort = 0;
+
+        // Semaphore for thread synchronization
+        private SemaphoreSlim semaphore = new SemaphoreSlim(1, 1);
+
         #endregion
 
         #region Binding Properties
@@ -83,106 +92,107 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         }
         public int PageIndex
         {
-            get => pageIndex;
+            get => _pageIndex;
             set
             {
-                pageIndex = value;
+                _pageIndex = value;
                 OnPropertyChanged(nameof(PageIndex));
             }
         }
         public int ProductsPerPage
         {
-            get => productPerPage;
+            get => _productPerPage;
             set
             {
-                productPerPage = value;
+                _productPerPage = value;
                 OnPropertyChanged(nameof(ProductsPerPage));
             }
         }
         public int TotalPages
         {
-            get => totalPages;
+            get => _totalPages;
             set
             {
-                totalPages = value;
+                _totalPages = value;
                 OnPropertyChanged(nameof(TotalPages));
             }
         }
         public string MinPrice
         {
-            get => minPrice;
+            get => _minPrice;
             set
             {
-                minPrice = value;
+                _minPrice = value;
                 OnPropertyChanged(nameof(MinPrice));
             }
         }
         public string MaxPrice
         {
-            get => maxPrice;
+            get => _maxPrice;
             set
             {
-                maxPrice = value;
+                _maxPrice = value;
                 OnPropertyChanged(nameof(MaxPrice));
             }
         }
         public bool VisiPrevious
         {
-            get => visiPrevious;
+            get => _visiPrevious;
             set
             {
-                visiPrevious = value;
+                _visiPrevious = value;
                 OnPropertyChanged(nameof(VisiPrevious));
             }
         }
         public bool VisiNext
         {
-            get => visiNext;
+            get => _visiNext;
             set
             {
-                visiNext = value;
+                _visiNext = value;
                 OnPropertyChanged(nameof(VisiNext));
             }
         }
         public int SelectedIndexSort
         {
-            get => selectedIndexSort;
+            get => _selectedIndexSort;
             set
             {
-                selectedIndexSort = value;
+                _selectedIndexSort = value;
                 SearchProduct(searchNewEntire: false);
                 OnPropertyChanged(nameof(SelectedIndexSort));
             }
         }
         public bool IsLoading
         {
-            get => isLoading;
+            get => _isLoading;
             set
             {
-                isLoading = value;
+                _isLoading = value;
                 OnPropertyChanged(nameof(IsLoading));
             }
         }
 
         #endregion
 
+        #region Commands
         // Commands
         public ICommand NextPageCommand { get; }
         public ICommand PreviousPageCommand { get; }
         public ICommand CheckboxBrandCheckedCommand { get; }
         public ICommand CheckboxCategoryCheckedCommand { get; }
         public ICommand FilterPriceCommand { get; }
-
+        #endregion
 
 
         // Constructor
         public PurchasePageViewModel(INavigationService navigationService,
-                                        IEventAggregator eventAggregator,
-                                        IDao dao)
+                                     IEventAggregator   eventAggregator,
+                                     IDao dao)
         {
-            _eventAggregator = eventAggregator;
-            _navigationService = navigationService;
-            _dao = dao;
+            _eventAggregator    = eventAggregator;
+            _navigationService  = navigationService;
+            _dao                = dao;
 
             // Register event to listen from MainViewModel
             _eventAggregator.Subscribe<SearchEvent>((searchEvent) =>
@@ -194,11 +204,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             // Initialize list of product thumbnails
             ProductThumbnails = new ObservableCollection<ProductThumbnailViewModel>();
 
-            // Initialize list of brands
-            Brands = new ObservableCollection<FilterCheckbox>();
-            Categories = new ObservableCollection<FilterCheckbox>();
+            // Initialize list of brands and categories
+            Brands      = new ObservableCollection<FilterCheckbox>();
+            Categories  = new ObservableCollection<FilterCheckbox>();
 
-            NextPageCommand = new RelayCommand(async () =>
+            NextPageCommand     = new RelayCommand(async () =>
             {
                 PageIndex++;
                 await GetProductThumbnails();
@@ -210,17 +220,17 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 await GetProductThumbnails();
             });
 
-            CheckboxBrandCheckedCommand = new RelayCommand<int>(async (index) =>
+            CheckboxBrandCheckedCommand     = new RelayCommand<int>(async (index) =>
             {
                 if (Brands[index].IsChecked)
                 {
-                    filterBrand = "";
-                    _filterBrand = false;
+                    filterBrand     = "";
+                    _filterBrand    = false;
                 }
                 else
                 {
-                    filterBrand = Brands[index].Name;
-                    _filterBrand = true;
+                    filterBrand     = Brands[index].Name;
+                    _filterBrand    = true;
                 }
 
                 PageIndex = 1;
@@ -234,7 +244,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 }
             });
 
-            CheckboxCategoryCheckedCommand = new RelayCommand<int>(async (index) =>
+            CheckboxCategoryCheckedCommand  = new RelayCommand<int>(async (index) =>
             {
                 if (Categories[index].IsChecked)
                 {
@@ -269,127 +279,138 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
 
         private async Task GetProductThumbnails(bool updateBrand = true, bool updateCategory = true)
         {
-            int minPc, maxPc;
+            // Wait for other threads
+            await semaphore.WaitAsync();
             try
             {
-                minPc = string.IsNullOrEmpty(minPrice) ? 0 : int.Parse(minPrice);
-                maxPc = string.IsNullOrEmpty(maxPrice) ? int.MaxValue : int.Parse(maxPrice);
-
-                // Check valid minPrice
-                if (minPc < 0 || minPc > int.MaxValue)
+                int minPc, maxPc;
+                try
                 {
-                    ShowDialog("Giá thấp nhất không hợp lệ");
-                    MinPrice = "";
-                    MaxPrice = "";
-                    minPc = 0;
-                    maxPc = int.MaxValue;
-                }
+                    minPc = string.IsNullOrEmpty(_minPrice) ? 0 : int.Parse(_minPrice);
+                    maxPc = string.IsNullOrEmpty(_maxPrice) ? int.MaxValue : int.Parse(_maxPrice);
 
-                // Check valid maxPrice
-                if (maxPc < 0 || maxPc > int.MaxValue)
-                {
-                    ShowDialog("Giá cao nhất không hợp lệ");
-                    MinPrice = "";
-                    MaxPrice = "";
-                    minPc = 0;
-                    maxPc = int.MaxValue;
-                }
-
-                // Check if minPc is bigger than maxPc
-                if (minPc > maxPc)
-                {
-                    ShowDialog("Giá thấp nhất lớn hơn giá cao nhất");
-                    MinPrice = "";
-                    MaxPrice = "";
-                    minPc = 0;
-                    maxPc = int.MaxValue;
-                }
-            }
-            // If minPrice or maxPrice is less than int.MinValue or bigger than int.MaxValue
-            catch (OverflowException)
-            {
-                ShowDialog("Giá trị không hợp lệ");
-                MinPrice = "";
-                MaxPrice = "";
-                minPc = 0;
-                maxPc = int.MaxValue;
-            }
-
-            // Update group of Product thumbnails
-            ProductThumbnails?.Clear();
-            IsLoading = true;
-
-            // Get list of product thumbnails with keyword, page index, products per page, filter brand, min price, max price
-            SearchResult productQueryResult = await _dao.GetListProductThumbnailAsync(
-                        keyword: Keyword,
-                        pageIndex: PageIndex,
-                        productsPerPage: this.productPerPage,
-                        sortProduct: GetSortProductChoice(),
-                        filterBrand: filterBrand,
-                        filterCategory: filterCategory,
-                        minPrice: minPc,
-                        maxPrice: maxPc);
-
-            // Update total pages
-            TotalPages = productQueryResult.TotalPages;
-            TotalProducts = productQueryResult.TotalProducts;
-
-            // Check if total products equal zero (cannot find any product)
-            if (TotalProducts == 0)
-            {
-                ShowDialog("Không tìm thấy bất kỳ sản phẩm nào");
-            }
-
-            // Show or hide button next/previous page
-            VisiNext = PageIndex != totalPages;
-            VisiPrevious = PageIndex != 1;
-
-            for (int i = 0; i < productQueryResult.Products.Count; i++)
-            {
-                var productThumbnailViewModel = App.ServiceProvider.GetService(typeof(ProductThumbnailViewModel));
-                productThumbnailViewModel.GetType().GetProperty("ProductThumbnail").SetValue(productThumbnailViewModel, productQueryResult.Products[i]);
-                ProductThumbnails.Add(productThumbnailViewModel as ProductThumbnailViewModel);
-            }
-
-            if (updateBrand)
-            {
-                // Update list brand for filter
-                Brands?.Clear();
-                for (int i = 0; i < productQueryResult.Brands.Count; i++)
-                {
-                    Brands.Add(new FilterCheckbox()
+                    // Check valid minPrice
+                    if (minPc < 0 || minPc > int.MaxValue)
                     {
-                        Name = productQueryResult.Brands[i],
-                        Index = i,
-                        CheckedCommand = CheckboxBrandCheckedCommand,
-                        IsChecked = _filterBrand
-                    });
-                }
-            }
+                        ShowDialog("Giá thấp nhất không hợp lệ");
+                        MinPrice = "";
+                        MaxPrice = "";
+                        minPc = 0;
+                        maxPc = int.MaxValue;
+                    }
 
-            if (updateCategory)
-            {
-                // Update list category for filter
-                Categories?.Clear();
-                for (int i = 0; i < productQueryResult.Categories.Count; i++)
-                {
-                    Categories.Add(new FilterCheckbox()
+                    // Check valid maxPrice
+                    if (maxPc < 0 || maxPc > int.MaxValue)
                     {
-                        Name = productQueryResult.Categories[i],
-                        Index = i,
-                        CheckedCommand = CheckboxCategoryCheckedCommand,
-                        IsChecked = _filterCategory
-                    });
-                }
-            }
+                        ShowDialog("Giá cao nhất không hợp lệ");
+                        MinPrice = "";
+                        MaxPrice = "";
+                        minPc = 0;
+                        maxPc = int.MaxValue;
+                    }
 
-            IsLoading = false;
+                    // Check if minPc is bigger than maxPc
+                    if (minPc > maxPc)
+                    {
+                        ShowDialog("Giá thấp nhất lớn hơn giá cao nhất");
+                        MinPrice = "";
+                        MaxPrice = "";
+                        minPc = 0;
+                        maxPc = int.MaxValue;
+                    }
+                }
+                // If minPrice or maxPrice is less than int.MinValue or bigger than int.MaxValue
+                catch (OverflowException)
+                {
+                    ShowDialog("Giá trị không hợp lệ");
+                    MinPrice = "";
+                    MaxPrice = "";
+                    minPc = 0;
+                    maxPc = int.MaxValue;
+                }
+
+                // Update group of Product thumbnails
+                ProductThumbnails?.Clear();
+                IsLoading = true;
+
+                // Get list of product thumbnails with keyword, page index, products per page, filter brand, min price, max price
+                SearchResult productQueryResult = await _dao.GetListProductThumbnailAsync(
+                            keyword: Keyword,
+                            pageIndex: PageIndex,
+                            productsPerPage: _productPerPage,
+                            sortProduct: GetSortProductChoice(),
+                            filterBrand: filterBrand,
+                            filterCategory: filterCategory,
+                            minPrice: minPc,
+                            maxPrice: maxPc);
+
+                // Update total pages
+                TotalPages = productQueryResult.TotalPages;
+                TotalProducts = productQueryResult.TotalProducts;
+
+                // Check if total products equal zero (cannot find any product)
+                if (TotalProducts == 0)
+                {
+                    ShowDialog("Không tìm thấy bất kỳ sản phẩm nào");
+                }
+
+                // Show or hide button next/previous page
+                VisiNext = PageIndex != _totalPages;
+                VisiPrevious = PageIndex != 1;
+
+                for (int i = 0; i < productQueryResult.Products.Count; i++)
+                {
+                    var productThumbnailViewModel = App.ServiceProvider.GetService(typeof(ProductThumbnailViewModel));
+                    productThumbnailViewModel.GetType()
+                        .GetProperty("ProductThumbnail")
+                        .SetValue(productThumbnailViewModel, productQueryResult.Products[i]);
+                    ProductThumbnails.Add(productThumbnailViewModel as ProductThumbnailViewModel);
+                }
+
+                if (updateBrand)
+                {
+                    // Update list brand for filter
+                    Brands?.Clear();
+                    for (int i = 0; i < productQueryResult.Brands.Count; i++)
+                    {
+                        Brands.Add(new FilterCheckbox()
+                        {
+                            Name = productQueryResult.Brands[i],
+                            Index = i,
+                            CheckedCommand = CheckboxBrandCheckedCommand,
+                            IsChecked = _filterBrand
+                        });
+                    }
+                }
+
+                if (updateCategory)
+                {
+                    // Update list category for filter
+                    Categories?.Clear();
+                    for (int i = 0; i < productQueryResult.Categories.Count; i++)
+                    {
+                        Categories.Add(new FilterCheckbox()
+                        {
+                            Name = productQueryResult.Categories[i],
+                            Index = i,
+                            CheckedCommand = CheckboxCategoryCheckedCommand,
+                            IsChecked = _filterCategory
+                        });
+                    }
+                }
+
+                IsLoading = false;
+            }
+            finally
+            {
+                semaphore.Release();
+            }
         }
 
         // Sort product change
         public SortProduct GetSortProductChoice()
         {
-            switch (selectedIndexSort)
+            switch (_selectedIndexSort)
             {
                 case 0:
                     return SortProduct.DateAscending;
@@ -399,6 +420,8 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                     return SortProduct.PriceAscending;
                 case 3:
                     return SortProduct.NameAscending;
+                case 4:
+                    return SortProduct.NameDescending;
                 default:
                     return SortProduct.DateAscending;
             }
@@ -421,7 +444,6 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
 
             await GetProductThumbnails();
-
         }
 
 

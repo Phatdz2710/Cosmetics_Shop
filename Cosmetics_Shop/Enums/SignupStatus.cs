@@ -8,11 +8,11 @@ namespace Cosmetics_Shop.Enums
 {
     public enum SignupStatus
     {
-        Success = 0,
-        EmptyUsername = 1,
-        EmptyPassword = 2,
-        ConfirmPasswordWrong = 3,
-        UsernameAlreadyExists = 4,
-        ConnectServerFailed = 5
+        Success         = 0,
+        EmptyUsername   = 1,
+        EmptyPassword   = 2,
+        ConfirmPasswordWrong    = 3,
+        UsernameAlreadyExists   = 4,
+        ConnectServerFailed     = 5
     }
 }

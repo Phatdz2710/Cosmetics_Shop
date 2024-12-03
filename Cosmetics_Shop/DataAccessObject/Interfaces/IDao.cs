@@ -71,13 +71,7 @@ namespace Cosmetics_Shop.Models.DataService
 
         List<ReviewThumbnail> GetListReviewThumbnailByIDProduct(int idProduct);
 
-
         List<Voucher> GetAllVouchers();
-
-        //Voucher GetVoucherByCode(string code);
-        //void AddVoucher(Voucher voucher);
-        //void DeleteVoucher(int id);
-        //void UpdateVoucher(Voucher updatedVoucher);
 
         List<PaymentProductThumbnail> GetAllPaymentProducts();
         List<ShippingMethod> GetShippingMethods();

@@ -30,11 +30,11 @@ namespace Cosmetics_Shop.ViewModels
         // Event aggregator for publish and subscribe
         private readonly IEventAggregator _eventAggregator;
 
-        private string wrongMessage;
-        private string successMessage;
-        private Visibility messageVisibility;
-        private string loginSignupState;
-        private bool isEnabled = true; // Logged in
+        private string      wrongMessage;
+        private string      successMessage;
+        private Visibility  messageVisibility;
+        private string      loginSignupState;
+        private bool        isEnabled = true; // Logged in
 
         // Message about login failed
         public string WrongMessage
@@ -102,40 +102,37 @@ namespace Cosmetics_Shop.ViewModels
         public bool RememberMe { get; set; } = true;
 
         // Commands
-        public ICommand SwitchLoginCommand { get; set; }
+        public ICommand SwitchLoginCommand  { get; set; }
         public ICommand SwitchSignupCommand { get; set; }
-        public ICommand LoginCommand { get; set; }
-        public ICommand SignupCommand { get; set; }
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
+        public ICommand LoginCommand        { get; set; }
+        public ICommand SignupCommand       { get; set; }
 
         public LoginViewModel(IEventAggregator eventAggregator,
-                                IDao dao)
+                              IDao dao)
         {
             _dao = dao;
             _eventAggregator = eventAggregator;
 
-            WrongMessage = "";
-            SuccessMessage = "";
-            MessageVisibility = Visibility.Collapsed;
-            LoginSignupState = "Login";
+            WrongMessage    = "";
+            SuccessMessage  = "";
+            MessageVisibility   = Visibility.Collapsed;
+            LoginSignupState    = "Login";
 
             var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-            Username = localSettings.Values["Username"] as string;
-            Password = localSettings.Values["Password"] as string;
-            RememberMe = localSettings.Values["RememberMe"] as string != "";
+            Username    = localSettings.Values["Username"] as string;
+            Password    = localSettings.Values["Password"] as string;
+            RememberMe  = localSettings.Values["RememberMe"] as string != "";
 
             SwitchLoginCommand = new RelayCommand(() =>
             {
-                LoginSignupState = "Login";
-                MessageVisibility = Visibility.Collapsed;
+                LoginSignupState    = "Login";
+                MessageVisibility   = Visibility.Collapsed;
             });
 
             SwitchSignupCommand = new RelayCommand(() =>
             {
-                LoginSignupState = "Signup";
-                MessageVisibility = Visibility.Collapsed;
+                LoginSignupState    = "Signup";
+                MessageVisibility   = Visibility.Collapsed;
             });
 
             LoginCommand = new RelayCommand(() =>
@@ -162,15 +159,15 @@ namespace Cosmetics_Shop.ViewModels
                     var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
                     if (RememberMe)
                     {
-                        localSettings.Values["Username"] = Username;
-                        localSettings.Values["Password"] = Password;
-                        localSettings.Values["RememberMe"] = "Remember";
+                        localSettings.Values["Username"]    = Username;
+                        localSettings.Values["Password"]    = Password;
+                        localSettings.Values["RememberMe"]  = "Remember";
                     }
                     else
                     {
-                        localSettings.Values["Username"] = "";
-                        localSettings.Values["Password"] = "";
-                        localSettings.Values["RememberMe"] = "";
+                        localSettings.Values["Username"]    = "";
+                        localSettings.Values["Password"]    = "";
+                        localSettings.Values["RememberMe"]  = "";
                     }
 
                     // Set Info to UserSession
@@ -178,8 +175,8 @@ namespace Cosmetics_Shop.ViewModels
 
                     // Set user info
                     userSession.SetUserInfo(new User(loginResult.UserInfo.GetId(),
-                                                        loginResult.UserInfo.GetToken(),
-                                                        loginResult.UserInfo.GetRole()));
+                                                     loginResult.UserInfo.GetToken(),
+                                                     loginResult.UserInfo.GetRole()));
 
                     // After lged in, switch to main window
                     var mainWindow = new MainWindow();
@@ -208,10 +205,10 @@ namespace Cosmetics_Shop.ViewModels
 
         public async void DoSignup()
         {
-            SuccessMessage = "";
-            WrongMessage = "";
-            MessageVisibility = Visibility.Collapsed;
-            IsEnabled = false;
+            SuccessMessage      = "";
+            WrongMessage        = "";
+            MessageVisibility   = Visibility.Collapsed;
+            IsEnabled       = false;
             var loginStatus = await _dao.DoSignupAsync(UsernameSignup, PasswordSignup, ConfirmPasswordSingup, Email);
             IsEnabled = true;
 
@@ -240,5 +237,7 @@ namespace Cosmetics_Shop.ViewModels
                 
             }
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

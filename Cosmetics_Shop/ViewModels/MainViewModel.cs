@@ -13,12 +13,13 @@ namespace Cosmetics_Shop.ViewModels
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        private readonly UserSession _userSession;
+        private readonly UserSession        _userSession;
         private readonly INavigationService _navigationService;
-        public MainViewModel(INavigationService navigationService, UserSession userSession)
+        public MainViewModel(INavigationService navigationService, 
+                             UserSession        userSession)
         {
-            _userSession = userSession;
-            _navigationService = navigationService;
+            _userSession        = userSession;
+            _navigationService  = navigationService;
 
             if (_userSession.GetRole() == "Admin")
             {

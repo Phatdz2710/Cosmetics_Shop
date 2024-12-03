@@ -10,7 +10,7 @@ namespace Cosmetics_Shop.Services
 {
     public struct LoginResult
     {
-        public LoginStatus LoginStatus { get; set; }
-        public User UserInfo { get; set; }
+        public LoginStatus  LoginStatus { get; set; }
+        public User         UserInfo    { get; set; }
     }
 }

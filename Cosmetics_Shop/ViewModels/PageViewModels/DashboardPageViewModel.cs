@@ -24,14 +24,14 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         private IEventAggregator _eventAggregator = null;
 
         // Observable Collection
-        public ObservableCollection<ProductThumbnailViewModel> BestSeller { get; set; } = new ObservableCollection<ProductThumbnailViewModel>();
-        public ObservableCollection<ProductThumbnailViewModel> NewProducts { get; set; } = new ObservableCollection<ProductThumbnailViewModel>();
+        public ObservableCollection<ProductThumbnailViewModel> BestSeller   { get; set; } = new ObservableCollection<ProductThumbnailViewModel>();
+        public ObservableCollection<ProductThumbnailViewModel> NewProducts  { get; set; } = new ObservableCollection<ProductThumbnailViewModel>();
         public ObservableCollection<ProductThumbnailViewModel> RecentlyView { get; set; } = new ObservableCollection<ProductThumbnailViewModel>();
 
         // Constructor
-        public DashboardPageViewModel(INavigationService navigationService,
-                                        IEventAggregator eventAggregator,
-                                        IDao dao)
+        public DashboardPageViewModel(INavigationService    navigationService,
+                                      IEventAggregator      eventAggregator,
+                                      IDao dao)
         {
             _dao = dao;
             _eventAggregator = eventAggregator;
@@ -46,9 +46,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
 
         private async void LoadDashboardData()
         {
-            var bestSeller = await _dao.GetListBestSellerAsync();
-            var newProducts = await _dao.GetListNewProductAsync();
-            var recentlyView = await _dao.GetListRecentlyViewAsync();
+            var bestSeller      = await _dao.GetListBestSellerAsync();
+            var newProducts     = await _dao.GetListNewProductAsync();
+            var recentlyView    = await _dao.GetListRecentlyViewAsync();
 
             BestSeller.Clear();
             NewProducts.Clear();

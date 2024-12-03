@@ -145,11 +145,12 @@ namespace Cosmetics_Shop.ViewModels
             // Search button click event
             SearchButtonCommand = new RelayCommand(() =>
             {
+                // Navigate to Purchase page
                 _navigationService.NavigateTo<PurchasePage>();
-                SearchEvent searchEvent = new SearchEvent();
-                searchEvent.Keyword = Keyword;
 
                 // Publish event (send event to all subscribers)
+                SearchEvent searchEvent = new SearchEvent();
+                searchEvent.Keyword     = Keyword;
                 _eventAggregator.Publish(searchEvent);
             });
 
@@ -157,23 +158,23 @@ namespace Cosmetics_Shop.ViewModels
 
             _eventAggregator.Subscribe<ChangeUsernameOrAvatarMessage>((param) =>
             {
-                Username = param.Name;
-                AvatarPath = param.AvatarPath;
+                Username    = param.Name;
+                AvatarPath  = param.AvatarPath;
             });
         }
 
         private async void LoadUserButton()
         {
-            var userName = await _dao.GetInformationAsync(_userSession.GetId(), UserInformationType.Name);
-            var avatarPath = await _dao.GetInformationAsync(_userSession.GetId(), UserInformationType.AvatarPath);
+            var userName    = await _dao.GetInformationAsync(_userSession.GetId(), UserInformationType.Name);
+            var avatarPath  = await _dao.GetInformationAsync(_userSession.GetId(), UserInformationType.AvatarPath);
 
             if (avatarPath == null)
             {
                 avatarPath = "ms-appx:///Assets/avatar_temp.png";
             }
 
-            Username = (string)userName;
-            AvatarPath = (string)avatarPath;
+            Username    = (string)userName;
+            AvatarPath  = (string)avatarPath;
         }
 
 
