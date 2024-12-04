@@ -30,6 +30,7 @@ using Microsoft.EntityFrameworkCore;
 using Cosmetics_Shop.Services.EventAggregatorMessages;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using Cosmetics_Shop.ViewModels.AdminPageViewModels;
 
 namespace Cosmetics_Shop
 {
@@ -80,6 +81,9 @@ namespace Cosmetics_Shop
             services.AddTransient<ReviewThumbnailViewModel>();
             services.AddTransient<PaymentProductThumbnailViewModel>();
             services.AddTransient<PaymentPageViewModel>();
+            services.AddTransient<AccountManagerViewModel>();
+            //services.AddTransient<OrderManagerViewModel>();
+            services.AddTransient<ProductManagerViewModel>();
 
             var basePath = AppContext.BaseDirectory;
             var jsonFilePath = System.IO.Path.Combine(basePath, "appsettings.json");

@@ -4,7 +4,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Cosmetics_Shop.Views.Pages"
-    xmlns:objects="using:Cosmetics_Shop.Views.Objects"
+    xmlns:controls="using:Cosmetics_Shop.Views.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     NavigationCacheMode="Enabled"
@@ -49,7 +49,7 @@
 
                     <GridView.ItemTemplate>
                         <DataTemplate>
-                            <objects:ProductThumbnailControl ViewModel="{Binding}"
+                            <controls:ProductThumbnailControl ViewModel="{Binding}"
                                                              Height="243"
                                                              Width="200"/>
                         </DataTemplate>
@@ -89,7 +89,7 @@
 
                     <GridView.ItemTemplate>
                         <DataTemplate>
-                            <objects:ProductThumbnailControl ViewModel="{Binding}"
+                            <controls:ProductThumbnailControl ViewModel="{Binding}"
                                                              Height="243"
                                                              Width="200"/>
                         </DataTemplate>
@@ -129,7 +129,7 @@
 
                     <GridView.ItemTemplate>
                         <DataTemplate>
-                            <objects:ProductThumbnailControl ViewModel="{Binding}"
+                            <controls:ProductThumbnailControl ViewModel="{Binding}"
                                                              Height="243"
                                                              Width="200"/>
                         </DataTemplate>

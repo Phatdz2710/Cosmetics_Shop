@@ -30,10 +30,10 @@
 - **Trang Dashboard**:
   - Danh sách sản phẩm mới nhất.
   - Danh sách sản phẩm bán chạy nhất.
-  - Danh sách sản phẩm mua gần nhất.
+  - Danh sách sản phẩm mua gần nhất (cá nhân hóa theo người dùng).
 
 - **Trang tìm kiếm sản phẩm**:
-  - Tìm kiếm sản phẩm theo từ khóa (Search).
+  - Tìm kiếm sản phẩm theo từ khóa (Search). Có gợi ý tìm kiếm.
   - Tổng số sản phẩm tìm kiếm được.
   - Lọc sản phẩm (Filter):
     - Lọc theo khoảng giá (min - max).
@@ -44,9 +44,8 @@
       + Giá tăng/giảm dần
       + Sắp xếp theo tên sản phẩm.
   	- Danh sách thương hiệu và loại sản phẩm hiển thị đúng với các sản phẩm hiện có.
+    - Thông tin trên thumbnail sản phẩm (giá, đánh giá, tên sản phẩm, tồn kho, đã bán).
 
-- **Gợi ý khi tìm kiếm**
-  - Gợi ý sản phẩm dựa trên Keyword được nhập.
 
 - **Trang thông tin chi tiết sản phẩm**: 
   - ***Các chức năng hiển thị cơ bản***
@@ -72,19 +71,27 @@
     - Xóa sản phẩm khỏi Cart
     - Chức năng mua ngay (chuyển qua trang thanh toán): do chưa có trang thanh toán.
 
+- **Trang tài khoản**:
+  - Thay đổi thông tin cá nhân, avatar.
+  - Thay đổi mật khẩu.
+  - Thống kê mua hàng và trạng thái tài khoản.
+  - Đăng xuất.
+
 - **Trang dành cho Admin**:
   - Giao diện trang quản lý.
 
 
 ## Dữ liệu
-- Sử dụng Database với **SqlDao**.
+- Sử dụng Database **SqlDao** với **EntityFrameworkCore**.
 
 ## Công nghệ và kỹ thuật đã sử dụng
-- **Dependency Injection**: Inject các thuộc tính cần thiết (Singleton, ...).
+- **Dependency Injection**: Quản lý và tối ưu hóa việc sử dụng các dịch vụ.
 - **MVVM Pattern**: Xây dựng ứng dụng theo mô hình MVVM.
-- **Event Aggregator Pattern**: Trao đổi thông tin giữa các thành phần mà không cần biết đến nhau.
-- **Bất đồng bộ Async, Await**: Áp dụng cho các tính năng đăng nhập và tìm kiếm.
-- **Unit Test**: Kiểm thử cho chức năng đăng nhập và tìm kiếm.
+- **Event Aggregator Pattern**: Giao tiếp giữa các ViewModel, View.
+- **Bất đồng bộ Async, Await**: Xử lý các tác vụ đồng thời.
+- **Entity Framework Core**: Sử dụng để tương tác với Database.
+- **SemaphoreSlim**: Đồng bộ hóa các tác vụ đồng thời.
+- **Unit Test**: Kiểm thử cho chức năng.
 
 ## NuGet Packages 
 - `CommunityToolkit.Mvvm` (8.3.2)

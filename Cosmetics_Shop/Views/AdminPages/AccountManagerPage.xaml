@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="Cosmetics_Shop.Views.AdminPages.AccountManagerPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Cosmetics_Shop.Views.AdminPages"
+    xmlns:controls="using:Cosmetics_Shop.Views.Controls"
+    xmlns:converter="using:Cosmetics_Shop.Views.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    NavigationCacheMode="Enabled"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.Resources>
+        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </Page.Resources>
+
+    <Grid Background="White"
+          CornerRadius="20"
+          Margin="2"
+          Padding="10">
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.6*"/>
+            <RowDefinition Height="0.6*"/>
+            <RowDefinition Height="8*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Text="QUẢN LÝ TÀI KHOẢN"
+                   FontSize="30"
+                   FontWeight="SemiBold"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
+
+        <Button Grid.Row="1"
+                Content="Thêm tài khoản"
+                Height="35"
+                HorizontalAlignment="Right"
+                Background="#6BE38F"
+                Command="{x:Bind ViewModel.CreateAccountCommand, Mode=OneTime}"/>
+        
+        <Grid Grid.Row="2"
+              Background="#E0FFF1"
+              CornerRadius="5 5 0 0"
+              BorderThickness="1 1 1 0"
+              Padding="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" Text="ID"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       Margin="20 0 0 0"
+                       FontSize="17"/>
+
+            <TextBlock Grid.Column="1" Text="Username"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       FontSize="17"/>
+
+            <TextBlock Grid.Column="2" Text="Password"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       FontSize="17"/>
+
+            <TextBlock Grid.Column="3" Text="Role"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Left"
+                       FontSize="17"/>
+
+            <TextBlock Grid.Column="4" Text="Chỉnh sửa"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       FontSize="17"/>
+            
+            <TextBlock Grid.Column="5" Text="Xóa"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       FontSize="17"/>
+        </Grid>
+
+        <ScrollView Grid.Row="3"
+                    MinHeight="510"
+                    Background="#2B945E"
+                    VerticalAlignment="Top"
+                    CornerRadius="0 0 10 10">
+            <ListView ItemsSource="{x:Bind ViewModel.ListAccounts, Mode=OneWay}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <controls:AccountCellControl ViewModel="{Binding}"
+                                                     Height="45"
+                                                     Margin="0 10 0 0"/>
+
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </ScrollView>
+
+        <Grid Grid.Row="0"
+              Grid.RowSpan="4"
+              Background="Transparent"
+              CornerRadius="5"
+              Visibility="{x:Bind ViewModel.ShowForm, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Rectangle Fill="Black" Opacity="0.7"/>
+
+            <Grid Background="White"
+                  Margin="350 150 350 150"
+                  CornerRadius="10"
+                  Padding="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.5*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="{x:Bind ViewModel.FormTitle, Mode=OneWay}"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           FontSize="25"
+                           FontWeight="SemiBold"/>
+
+                <StackPanel Grid.Row="1">
+                    <TextBlock Text="Username"
+                               FontSize="17"
+                               FontWeight="SemiBold"
+                               Margin="10"/>
+                    <TextBox PlaceholderText="Username"
+                             Text="{x:Bind ViewModel.Username, Mode=TwoWay}"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="2">
+                    <TextBlock Text="Password"
+                               FontSize="17"
+                               FontWeight="SemiBold"
+                               Margin="10"/>
+                    <TextBox PlaceholderText="Password"
+                             Text="{x:Bind ViewModel.Password, Mode=TwoWay}"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="3">
+                    <TextBlock Text="Role"
+                               FontSize="17"
+                               FontWeight="SemiBold"
+                               Margin="10"/>
+
+                    <ComboBox x:Name="SortComboBox"
+                              HorizontalAlignment="Stretch"
+                              SelectedIndex="{x:Bind ViewModel.Role, Mode=TwoWay}">
+                        <ComboBoxItem Content="User"/>
+                        <ComboBoxItem Content="Admin"/>
+                    </ComboBox>
+
+                </StackPanel>
+
+                <StackPanel Grid.Row="4"
+                            Orientation="Horizontal"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center">
+                    <Button Width="100" Margin="10"
+                            Content="Xác nhận"
+                            Background="#6BE38F"
+                            Command="{x:Bind ViewModel.AcceptFormCommand, Mode=OneWay}"/>
+
+                    <Button Width="100" Margin="10"
+                            Content="Hủy"
+                            Background="Tomato"
+                            Foreground="White"
+                            Command="{x:Bind ViewModel.CancelFormCommand, Mode=OneWay}"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+        
+    </Grid>
+</Page>

@@ -5,7 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Cosmetics_Shop.Views.Pages"
     xmlns:brand="using:Cosmetics_Shop.Models"
-    xmlns:objects="using:Cosmetics_Shop.Views.Objects"
+    xmlns:objects="using:Cosmetics_Shop.Views.Controls"
     xmlns:converter="using:Cosmetics_Shop.Views.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -13,10 +13,10 @@
     NavigationCacheMode="Enabled"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <UserControl.Resources>
+    <Page.Resources>
         <converter:VNDCurrencyConverter x:Key="VNDCurrencyConverter"/>
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-    </UserControl.Resources>
+    </Page.Resources>
 
     <Grid Background="LightGray">
         <Grid.ColumnDefinitions>

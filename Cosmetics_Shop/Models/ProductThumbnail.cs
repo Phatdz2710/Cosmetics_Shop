@@ -16,6 +16,7 @@ namespace Cosmetics_Shop.Models
         public string   ImagePath   { get; set; }
         public int      Price       { get; set; }
         public string   Brand       { get; set; }
+        public string   Category    { get; set; }
         public double   Rating      { get; set; }
         public int      Stock       { get; set; }
         public int      Sold        { get; set; }
@@ -25,6 +26,7 @@ namespace Cosmetics_Shop.Models
             string  imagePath, 
             int     price, 
             string  brand, 
+            string  category,
             double  rating  = 0, 
             int     stock   = 0, 
             int     sold    = 0)
@@ -34,6 +36,7 @@ namespace Cosmetics_Shop.Models
             ImagePath   = imagePath;
             Price       = price;
             Brand       = brand;
+            Category    = category;
             Rating      = rating;
             Stock       = stock;
             Sold        = sold;

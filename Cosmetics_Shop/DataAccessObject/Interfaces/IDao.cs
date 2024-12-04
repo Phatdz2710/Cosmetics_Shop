@@ -1,4 +1,5 @@
-﻿using Cosmetics_Shop.Enums;
+﻿using Cosmetics_Shop.DataAccessObject.Data;
+using Cosmetics_Shop.Enums;
 using Cosmetics_Shop.Models.Enums;
 using Cosmetics_Shop.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -58,10 +59,19 @@ namespace Cosmetics_Shop.Models.DataService
         public Task<bool> ChangeAllUserInformationAsync(int userId, UserDetail userDetail);
 
         public Task<bool> ChangePasswordAsync(int userId, string oldPassword, string newPassword);
+
+
+        #endregion
+
+        #region For admin
+        Task<AccountSearchResult> GetListAccountAsync();
+        Task<bool> ChangeAccountInfoAsync(int id, string newUsername, string newPassword, string newRole);
+        Task<bool> DeleteAccount(int id);
+        Task<bool> CreateAccountAsync(string username, string password, string role);
+        Task<bool> ChangeProductInfoAsync(int id, string newName, string newBrand, string newCategory, int newPrice, int newInventory, int newSold, string newImagePath);
         
-
-        #endregion 
-
+        Task<bool> CreateProductAsync(string name, string brand, string category, int price, int sold, int inventory, string imagePath);
+        #endregion
 
         Task<List<string>> GetSuggestionsAsync(string keyword);
 

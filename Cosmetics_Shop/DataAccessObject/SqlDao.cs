@@ -1,4 +1,5 @@
-﻿using Cosmetics_Shop.DBModels;
+﻿using Cosmetics_Shop.DataAccessObject.Data;
+using Cosmetics_Shop.DBModels;
 using Cosmetics_Shop.Enums;
 using Cosmetics_Shop.Models.Enums;
 using Cosmetics_Shop.Services;
@@ -80,6 +81,7 @@ namespace Cosmetics_Shop.Models.DataService
                                         p.ImagePath,
                                         p.Price,
                                         p.Brand,
+                                        p.Category,
                                         p.AverageRating,
                                         p.Sold,
                                         p.Stock))
@@ -137,6 +139,7 @@ namespace Cosmetics_Shop.Models.DataService
                                 p.ImagePath,
                                 p.Price,
                                 p.Brand,
+                                p.Category,
                                 p.AverageRating,
                                 p.Sold,
                                 p.Stock))
@@ -166,6 +169,7 @@ namespace Cosmetics_Shop.Models.DataService
                                 p.ImagePath,
                                 p.Price,
                                 p.Brand,
+                                p.Category,
                                 p.AverageRating,
                                 p.Sold,
                                 p.Stock))
@@ -201,6 +205,7 @@ namespace Cosmetics_Shop.Models.DataService
                                 p.ImagePath,
                                 p.Price,
                                 p.Brand,
+                                p.Category,
                                 p.AverageRating,
                                 p.Sold,
                                 p.Stock))
@@ -657,6 +662,218 @@ namespace Cosmetics_Shop.Models.DataService
         }
         #endregion
 
+        #region For Admin
+
+        public async Task<AccountSearchResult> GetListAccountAsync()
+        {
+            try
+            {
+                using (var scope = App.ServiceProvider.CreateScope())
+                {
+                    var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+
+                    var db = await _databaseContext.Accounts
+                        .Select(p => new Account(p.UserId, p.Username, p.Password, p.Role))
+                        .ToListAsync();
+
+                    return new AccountSearchResult
+                    {
+                        ListAccounts = db,
+                        TotalPages = 1,
+                        TotalAccounts = db.Count
+                    };
+                }
+            }
+            catch (Exception)
+            {
+                return new AccountSearchResult
+                {
+                    ListAccounts = new List<Account>(),
+                    TotalPages = 1,
+                    TotalAccounts = 0
+                };
+
+            }
+        }
+
+        public async Task<bool> ChangeAccountInfoAsync(int id, string newUsername, string newPassword, string newRole)
+        {
+            using (var scope = App.ServiceProvider.CreateScope())
+            {
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+
+                try
+                {
+                    var account = await _databaseContext.Accounts.FirstOrDefaultAsync(p => p.UserId == id);
+
+                    if (account == null)
+                    {
+                        return false;
+                    }
+
+                    // Check new username
+                    var user = await _databaseContext.Accounts.FirstOrDefaultAsync(p => p.Username == newUsername && p.Id != id);
+                    if (user != null)
+                    {
+                        return false;
+                    }
+
+                    account.Username = newUsername;
+                    account.Password = newPassword;
+                    account.Role = newRole;
+
+                    await _databaseContext.SaveChangesAsync();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
+
+        public Task<bool> DeleteAccount(int id)
+        {
+            return Task.Run(() =>
+            {
+                using (var scope = App.ServiceProvider.CreateScope())
+                {
+                    var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+
+                    try
+                    {
+                        var account = _databaseContext.Accounts.FirstOrDefault(p => p.UserId == id);
+
+                        if (account == null)
+                        {
+                            return false;
+                        }
+
+                        _databaseContext.Accounts.Remove(account);
+                        _databaseContext.SaveChanges();
+                        return true;
+                    }
+                    catch (Exception)
+                    {
+                        return false;
+                    }
+                }
+            });
+        }
+
+        public async Task<bool> CreateAccountAsync(string username, string password, string role)
+        {
+            try
+            {
+                using (var scope = App.ServiceProvider.CreateScope())
+                {
+                    var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+
+                    var user = await _databaseContext.Accounts.FirstOrDefaultAsync(p => p.Username == username);
+
+                    if (user != null)
+                    {
+                        return false;
+                    }
+
+                    var newUser = new DBModels.User()
+                    {
+                        Name = username,
+                        Email = null,
+                        Address = null,
+                        Phone = null,
+                    };
+                    await _databaseContext.Users.AddAsync(newUser);
+                    await _databaseContext.SaveChangesAsync();
+
+                    var newAccount = new DBModels.Account()
+                    {
+                        Username = username,
+                        Password = password,
+                        Token = Guid.NewGuid().ToString(),
+                        Role = role,
+                        UserId = newUser.Id
+                    };
+
+                    await _databaseContext.Accounts.AddAsync(newAccount);
+                    await _databaseContext.SaveChangesAsync();
+
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> ChangeProductInfoAsync(int id, string newName, string newBrand, string newCategory, int newPrice, int newSold, int newInventory, string newImagePath)
+        {
+            using (var scope = App.ServiceProvider.CreateScope())
+            {
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+
+                try
+                {
+                    var product = await _databaseContext.Products.FirstOrDefaultAsync(p => p.Id == id);
+
+                    if (product == null)
+                    {
+                        return false;
+                    }
+
+                    product.Name = newName;
+                    product.Brand = newBrand;
+                    product.Category = newCategory;
+                    product.Price = newPrice;
+                    product.Stock = newInventory;
+                    product.Sold = newSold;
+                    product.ImagePath = newImagePath;
+
+                    await _databaseContext.SaveChangesAsync();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
+
+        public async Task<bool> CreateProductAsync(string name, string brand, string category, int price, int sold, int inventory, string imagePath)
+        {
+            try
+            {
+                using (var scope = App.ServiceProvider.CreateScope())
+                {
+                    var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+
+                    var newProduct = new DBModels.Product()
+                    {
+                        Name = name,
+                        Brand = brand,
+                        Category = category,
+                        Price = price,
+                        Stock = inventory,
+                        Sold = sold,
+                        ImagePath = imagePath,
+                        AverageRating = 0,
+                        CreatedAt = DateTime.Now
+                    };
+
+                    await _databaseContext.Products.AddAsync(newProduct);
+                    await _databaseContext.SaveChangesAsync();
+
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        #endregion
+
         public void InsertProduct(ProductThumbnail product)
         {
             throw new NotImplementedException();
@@ -781,5 +998,6 @@ namespace Cosmetics_Shop.Models.DataService
             };
             return db;
         }
+
     }
 }

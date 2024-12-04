@@ -3,7 +3,7 @@ using Cosmetics_Shop.Models;
 using Cosmetics_Shop.Models.DataService;
 using Cosmetics_Shop.Services;
 using Cosmetics_Shop.ViewModels.PageViewModels;
-using Cosmetics_Shop.Views.Objects;
+using Cosmetics_Shop.Views.Controls;
 using Cosmetics_Shop.Views.Pages;
 using Microsoft.UI.Xaml.Controls;
 using System;

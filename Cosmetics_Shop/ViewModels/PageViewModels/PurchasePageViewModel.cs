@@ -6,7 +6,7 @@ using Cosmetics_Shop.Services;
 using Cosmetics_Shop.Services.EventAggregatorMessages;
 using Cosmetics_Shop.Services.Interfaces;
 using Cosmetics_Shop.ViewModels.UserControlViewModels;
-using Cosmetics_Shop.Views.Objects;
+using Cosmetics_Shop.Views.Controls;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
