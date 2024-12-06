@@ -8,7 +8,7 @@
 
 ## Đánh giá công việc
 - **Châu Ngọc Phát**:
-  - Số giờ làm: 11 giờ
+  - Số giờ làm: 15 giờ
   - Đánh giá: 10/10
 - **Hồ Nguyễn Ngọc Duy**:
   - Số giờ làm: 2 giờ
@@ -78,7 +78,8 @@
   - Đăng xuất.
 
 - **Trang dành cho Admin**:
-  - Giao diện trang quản lý.
+  - Quản lý tài khoản (Thêm, xóa, sửa)
+  - Quản lý sản phẩm (Thêm, xóa, sửa)
 
 
 ## Dữ liệu

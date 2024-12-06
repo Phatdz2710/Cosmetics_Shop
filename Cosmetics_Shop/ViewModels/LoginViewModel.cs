@@ -29,6 +29,8 @@ namespace Cosmetics_Shop.ViewModels
         private readonly IDao _dao = null;
         // Event aggregator for publish and subscribe
         private readonly IEventAggregator _eventAggregator;
+        // Service provider
+        private readonly IServiceProvider _serviceProvider;
 
         private string      wrongMessage;
         private string      successMessage;
@@ -108,10 +110,12 @@ namespace Cosmetics_Shop.ViewModels
         public ICommand SignupCommand       { get; set; }
 
         public LoginViewModel(IEventAggregator eventAggregator,
-                              IDao dao)
+                              IDao dao,
+                              IServiceProvider serviceProvider)
         {
             _dao = dao;
             _eventAggregator = eventAggregator;
+            _serviceProvider = serviceProvider;
 
             WrongMessage    = "";
             SuccessMessage  = "";
@@ -171,7 +175,7 @@ namespace Cosmetics_Shop.ViewModels
                     }
 
                     // Set Info to UserSession
-                    var userSession = App.ServiceProvider.GetService(typeof(UserSession)) as UserSession;
+                    var userSession = _serviceProvider.GetService(typeof(UserSession)) as UserSession;
 
                     // Set user info
                     userSession.SetUserInfo(new User(loginResult.UserInfo.GetId(),

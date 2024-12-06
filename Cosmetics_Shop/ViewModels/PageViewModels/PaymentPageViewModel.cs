@@ -33,6 +33,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         // Navigation service
         private readonly INavigationService _navigationService;
 
+        // Service provider
+        private readonly IServiceProvider _serviceProvider;
+
         public int TotalPay
         {
             get => PaymentProduct.Sum(item => item.TotalPrice);
@@ -82,16 +85,20 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
 
         // Observable Collection
         public ObservableCollection<PaymentProductThumbnailViewModel> PaymentProduct { get; set; }
-        public PaymentPageViewModel(INavigationService navigationService, IDao dao)
+        public PaymentPageViewModel(INavigationService navigationService, 
+                                    IDao dao, 
+                                    IServiceProvider serviceProvider)
         {
             _dao = dao;
+            _serviceProvider = serviceProvider;
+
             PaymentProduct = new ObservableCollection<PaymentProductThumbnailViewModel>();
 
             var paymentProduct = _dao.GetAllPaymentProducts();
 
             for (int i = 0; i < paymentProduct.Count; i++)
             {
-                var paymentProductThumbnailViewModel = App.ServiceProvider.GetService(typeof(PaymentProductThumbnailViewModel));
+                var paymentProductThumbnailViewModel = _serviceProvider.GetService(typeof(PaymentProductThumbnailViewModel));
                 paymentProductThumbnailViewModel.GetType().GetProperty("PaymentProductThumbnail")
                     .SetValue(paymentProductThumbnailViewModel, paymentProduct[i]);
                 PaymentProduct.Add(paymentProductThumbnailViewModel as PaymentProductThumbnailViewModel);

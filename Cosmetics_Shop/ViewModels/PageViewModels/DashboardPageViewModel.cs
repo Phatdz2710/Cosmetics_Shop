@@ -23,18 +23,22 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         // Event Aggregator
         private IEventAggregator _eventAggregator = null;
 
+        // Service provider
+        private IServiceProvider _serviceProvider = null;
+
         // Observable Collection
         public ObservableCollection<ProductThumbnailViewModel> BestSeller   { get; set; } = new ObservableCollection<ProductThumbnailViewModel>();
         public ObservableCollection<ProductThumbnailViewModel> NewProducts  { get; set; } = new ObservableCollection<ProductThumbnailViewModel>();
         public ObservableCollection<ProductThumbnailViewModel> RecentlyView { get; set; } = new ObservableCollection<ProductThumbnailViewModel>();
 
         // Constructor
-        public DashboardPageViewModel(INavigationService    navigationService,
-                                      IEventAggregator      eventAggregator,
-                                      IDao dao)
+        public DashboardPageViewModel(IEventAggregator      eventAggregator,
+                                      IDao                  dao,
+                                      IServiceProvider      serviceProvider)
         {
             _dao = dao;
             _eventAggregator = eventAggregator;
+            _serviceProvider = serviceProvider;
 
             _eventAggregator.Subscribe<ReloadDashboardRequire>((searchEvent) =>
             {
@@ -56,21 +60,21 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
 
             for (int i = 0; i < bestSeller.Count; i++)
             {
-                var productThumbnailViewModel = App.ServiceProvider.GetService(typeof(ProductThumbnailViewModel));
+                var productThumbnailViewModel = _serviceProvider.GetService(typeof(ProductThumbnailViewModel));
                 productThumbnailViewModel.GetType().GetProperty("ProductThumbnail").SetValue(productThumbnailViewModel, bestSeller[i]);
                 BestSeller.Add(productThumbnailViewModel as ProductThumbnailViewModel);
             }
 
             for (int i = 0; i < newProducts.Count; i++)
             {
-                var productThumbnailViewModel = App.ServiceProvider.GetService(typeof(ProductThumbnailViewModel));
+                var productThumbnailViewModel = _serviceProvider.GetService(typeof(ProductThumbnailViewModel));
                 productThumbnailViewModel.GetType().GetProperty("ProductThumbnail").SetValue(productThumbnailViewModel, newProducts[i]);
                 NewProducts.Add(productThumbnailViewModel as ProductThumbnailViewModel);
             }
 
             for (int i = 0; i < recentlyView.Count; i++)
             {
-                var productThumbnailViewModel = App.ServiceProvider.GetService(typeof(ProductThumbnailViewModel));
+                var productThumbnailViewModel = _serviceProvider.GetService(typeof(ProductThumbnailViewModel));
                 productThumbnailViewModel.GetType().GetProperty("ProductThumbnail").SetValue(productThumbnailViewModel, recentlyView[i]);
                 RecentlyView.Add(productThumbnailViewModel as ProductThumbnailViewModel);
             }

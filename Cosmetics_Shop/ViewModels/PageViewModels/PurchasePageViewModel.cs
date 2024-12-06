@@ -37,7 +37,10 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         private readonly INavigationService _navigationService  = null;
 
         // Data access object
-        private IDao _dao = null;
+        private readonly IDao _dao = null;
+
+        // Service provider
+        private readonly IServiceProvider _serviceProvider = null;
         #endregion
 
         #region ObservableCollections
@@ -188,11 +191,13 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         // Constructor
         public PurchasePageViewModel(INavigationService navigationService,
                                      IEventAggregator   eventAggregator,
-                                     IDao dao)
+                                     IDao               dao,
+                                     IServiceProvider   serviceProvider)
         {
             _eventAggregator    = eventAggregator;
             _navigationService  = navigationService;
             _dao                = dao;
+            _serviceProvider    = serviceProvider;
 
             // Register event to listen from MainViewModel
             _eventAggregator.Subscribe<SearchEvent>((searchEvent) =>
@@ -360,7 +365,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
 
                 for (int i = 0; i < productQueryResult.Products.Count; i++)
                 {
-                    var productThumbnailViewModel = App.ServiceProvider.GetService(typeof(ProductThumbnailViewModel));
+                    var productThumbnailViewModel = _serviceProvider.GetService(typeof(ProductThumbnailViewModel));
                     productThumbnailViewModel.GetType()
                         .GetProperty("ProductThumbnail")
                         .SetValue(productThumbnailViewModel, productQueryResult.Products[i]);

@@ -65,7 +65,9 @@ namespace Cosmetics_Shop
             services.AddSingleton<IEventAggregator, EventAggregator>();
             services.AddSingleton<IDao, SqlDao>();
             services.AddSingleton<IFilePickerService, FilePickerService>();
+            services.AddSingleton<IServiceProvider, ServiceProvider>();
             services.AddSingleton<UserSession>();
+
 
             services.AddTransient<LoginViewModel>();
             services.AddTransient<UserViewModel>();

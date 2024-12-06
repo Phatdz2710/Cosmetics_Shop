@@ -24,8 +24,12 @@ namespace Cosmetics_Shop.Models.DataService
 {
     public class SqlDao : IDao
     {
-
+        private readonly IServiceProvider _serviceProvider = null;
         #region Get Product Thumbnails
+        public SqlDao(IServiceProvider serviceProvider)
+        {
+            _serviceProvider = serviceProvider;
+        }
 
         public async Task<SearchResult> GetListProductThumbnailAsync(
             string  keyword     = "",
@@ -37,7 +41,7 @@ namespace Cosmetics_Shop.Models.DataService
             int     minPrice    = 0,
             int     maxPrice    = int.MaxValue)
         {
-            using (var scope = App.ServiceProvider.CreateScope())
+            using (var scope = _serviceProvider.CreateScope())
             {
                 try
                 {
@@ -59,11 +63,11 @@ namespace Cosmetics_Shop.Models.DataService
                         query = query.Where(p => p.Category == filterCategory);
                     }
 
-                    query = query.Where(p => p.Price >= minPrice && p.Price <= maxPrice);
+                    query = query.Where(p => p.Price >= minPrice && p.Price <= maxPrice); 
 
                     query = sortProduct switch
                     {
-                        SortProduct.DateAscending   => query.OrderBy(p => p.CreatedAt),
+                        SortProduct.DateAscending   => query.OrderByDescending(p => p.CreatedAt),
                         SortProduct.PriceAscending  => query.OrderBy(p => p.Price),
                         SortProduct.PriceDescending => query.OrderByDescending(p => p.Price),
                         SortProduct.NameAscending   => query.OrderBy(p => p.Name),
@@ -126,7 +130,7 @@ namespace Cosmetics_Shop.Models.DataService
 
         public async Task<List<ProductThumbnail>> GetListNewProductAsync()
         {
-            using (var scope = App.ServiceProvider.CreateScope())
+            using (var scope = _serviceProvider.CreateScope())
             {
                 var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
                 try
@@ -156,7 +160,7 @@ namespace Cosmetics_Shop.Models.DataService
         }
         public async Task<List<ProductThumbnail>> GetListBestSellerAsync()
         {
-            using (var scope = App.ServiceProvider.CreateScope())
+            using (var scope = _serviceProvider.CreateScope())
             {
                 var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
                 try
@@ -186,10 +190,10 @@ namespace Cosmetics_Shop.Models.DataService
 
         public async Task<List<ProductThumbnail>> GetListRecentlyViewAsync()
         {
-            using (var scope = App.ServiceProvider.CreateScope())
+            using (var scope = _serviceProvider.CreateScope())
             {
                 var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-                var userSession = App.ServiceProvider.GetService(typeof(UserSession)) as UserSession;
+                var userSession = _serviceProvider.GetService(typeof(UserSession)) as UserSession;
                 try
                 {
                     var query = _databaseContext.Orders.AsQueryable();
@@ -298,7 +302,7 @@ namespace Cosmetics_Shop.Models.DataService
 
         public async Task<LoginResult> CheckLoginAsync(string username, string password)
         {
-            using (var scope = App.ServiceProvider.CreateScope())
+            using (var scope = _serviceProvider.CreateScope())
             {
                 var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
                 try
@@ -346,7 +350,7 @@ namespace Cosmetics_Shop.Models.DataService
                                                     string confirmPassword,
                                                     string email)
         {
-            using (var scope = App.ServiceProvider.CreateScope())
+            using (var scope = _serviceProvider.CreateScope())
             {
                 var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
                 try
@@ -398,7 +402,7 @@ namespace Cosmetics_Shop.Models.DataService
 
         public async Task<UserDetail> GetUserDetailAsync(int userId)
         {
-            using (var scope = App.ServiceProvider.CreateScope())
+            using (var scope = _serviceProvider.CreateScope())
             {
                 var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
                 try
@@ -465,7 +469,7 @@ namespace Cosmetics_Shop.Models.DataService
 
         public async Task<object> GetInformationAsync(int userId, UserInformationType infoType)
         {
-            using (var scope = App.ServiceProvider.CreateScope())
+            using (var scope = _serviceProvider.CreateScope())
             {
                 var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
 
@@ -549,7 +553,7 @@ namespace Cosmetics_Shop.Models.DataService
 
         public async Task<bool> ChangeUserInformationAsync (int userId, UserInformationType infoType, string newValue)  
         {
-            using (var scope = App.ServiceProvider.CreateScope())
+            using (var scope = _serviceProvider.CreateScope())
             {
                 var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
 
@@ -600,7 +604,7 @@ namespace Cosmetics_Shop.Models.DataService
         
         public async Task<bool> ChangeAllUserInformationAsync(int userId, UserDetail userDetail)
         {
-            using (var scope = App.ServiceProvider.CreateScope())
+            using (var scope = _serviceProvider.CreateScope())
             {
                 var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
 
@@ -631,7 +635,7 @@ namespace Cosmetics_Shop.Models.DataService
 
         public async Task<bool> ChangePasswordAsync(int userId, string oldPassword, string newPassword)
         {
-            using (var scope = App.ServiceProvider.CreateScope())
+            using (var scope = _serviceProvider.CreateScope())
             {
                 var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
 
@@ -668,7 +672,7 @@ namespace Cosmetics_Shop.Models.DataService
         {
             try
             {
-                using (var scope = App.ServiceProvider.CreateScope())
+                using (var scope = _serviceProvider.CreateScope())
                 {
                     var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
 
@@ -698,7 +702,7 @@ namespace Cosmetics_Shop.Models.DataService
 
         public async Task<bool> ChangeAccountInfoAsync(int id, string newUsername, string newPassword, string newRole)
         {
-            using (var scope = App.ServiceProvider.CreateScope())
+            using (var scope = _serviceProvider.CreateScope())
             {
                 var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
 
@@ -736,7 +740,7 @@ namespace Cosmetics_Shop.Models.DataService
         {
             return Task.Run(() =>
             {
-                using (var scope = App.ServiceProvider.CreateScope())
+                using (var scope = _serviceProvider.CreateScope())
                 {
                     var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
 
@@ -765,7 +769,7 @@ namespace Cosmetics_Shop.Models.DataService
         {
             try
             {
-                using (var scope = App.ServiceProvider.CreateScope())
+                using (var scope = _serviceProvider.CreateScope())
                 {
                     var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
 
@@ -809,7 +813,7 @@ namespace Cosmetics_Shop.Models.DataService
 
         public async Task<bool> ChangeProductInfoAsync(int id, string newName, string newBrand, string newCategory, int newPrice, int newSold, int newInventory, string newImagePath)
         {
-            using (var scope = App.ServiceProvider.CreateScope())
+            using (var scope = _serviceProvider.CreateScope())
             {
                 var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
 
@@ -844,7 +848,7 @@ namespace Cosmetics_Shop.Models.DataService
         {
             try
             {
-                using (var scope = App.ServiceProvider.CreateScope())
+                using (var scope = _serviceProvider.CreateScope())
                 {
                     var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
 
@@ -930,7 +934,7 @@ namespace Cosmetics_Shop.Models.DataService
         {
             return await Task.Run(async () =>
             {
-                using (var scope = App.ServiceProvider.CreateScope())
+                using (var scope = _serviceProvider.CreateScope())
                 {
                     var context = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
                     var query = context.Products.AsQueryable();

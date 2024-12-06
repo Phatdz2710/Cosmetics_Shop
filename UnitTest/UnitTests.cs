@@ -1,87 +1,152 @@
+﻿using Cosmetics_Shop.DBModels;
+using Cosmetics_Shop.Models;
 using Cosmetics_Shop.Models.DataService;
 using Cosmetics_Shop.Models.Enums;
 using Cosmetics_Shop.Services;
 using Cosmetics_Shop.Services.Interfaces;
+using Cosmetics_Shop.ViewModels.AdminPageViewModels;
+using Cosmetics_Shop.ViewModels;
 using Cosmetics_Shop.ViewModels.PageViewModels;
+using Cosmetics_Shop.ViewModels.UserControlViewModels;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.TestTools.UnitTesting.AppContainer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace UnitTest
 {
     [TestClass]
-    public class LoginTest
+    public class DAOTest
     {
-        private IDao dao = null;
+        public static IServiceProvider ServiceProvider { get; private set; }
+        public IDao dao = null;
 
         [TestInitialize]
         public void Setup()
         {
-            dao = new SqlDao();
-            Assert.IsNotNull(dao, "Failed to initialize dao.");
+            var services = new ServiceCollection();
+            ConfigureServices(services);
+            var serviceProvider = services.BuildServiceProvider();
+
+            dao = new SqlDao(serviceProvider);
+        }
+
+        private void ConfigureServices(ServiceCollection services)
+        {
+            services.AddSingleton<INavigationService, NavigationService>();
+            services.AddSingleton<IEventAggregator, EventAggregator>();
+            services.AddSingleton<IDao, SqlDao>();
+            services.AddSingleton<IFilePickerService, FilePickerService>();
+            services.AddSingleton<IServiceProvider, ServiceProvider>();
+            services.AddSingleton<UserSession>();
+
+
+            var basePath = AppContext.BaseDirectory;
+            var jsonFilePath = System.IO.Path.Combine(basePath, "appsettings.json");
+            var jsonContent = File.ReadAllText(jsonFilePath);
+            var rootNode = JsonNode.Parse(jsonContent);
+            var connectionString = rootNode["ConnectionStrings"]["DefaultConnection"].ToString();
+
+            services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(connectionString));
+
+            ServiceProvider = services.BuildServiceProvider();
         }
 
         [TestMethod]
-        public async Task AdminLogin()
+        public async Task ChangePassword()
         {
-            var expectedRole = "Admin";
-            var expectedResult = LoginStatus.Success;
+            // Kiểm tra đổi mật khẩu 
+            var result = await dao.ChangePasswordAsync(1, "123", "1234");
+            Assert.IsTrue(result);
+            // Trả lại mật khẩu cũ
+            await dao.ChangePasswordAsync(1, "1234", "123");
+            Assert.IsTrue(result);
 
-            var result = await dao.CheckLoginAsync("admin", "123");
-            Assert.IsNotNull(result, "Result is null.");
-            Assert.IsNotNull(result.UserInfo, "UserInfo is null.");
-
-            Assert.AreEqual(expectedRole, result.UserInfo.GetRole());
-            Assert.AreEqual(expectedResult, result.LoginStatus);
+            // Kiểm tra mật khẩu cũ không đúng
+            var result1 = await dao.ChangePasswordAsync(1, "12", "1234");
+            Assert.IsFalse(result1);
         }
 
         [TestMethod]
-        public async Task UserLogin()
+        public async Task CreateAndDeleteAccount()
         {
-            var expectedRole = "User";
-            var expectedResult = LoginStatus.Success;
+            // Tạo tài khoản
+            var result1 = await dao.CreateAccountAsync("test", "123", "User");
+            var result2 = await dao.CreateAccountAsync("test1", "123", "Admin");
+            var result3 = await dao.CreateAccountAsync("test1", "123", "User");
+            Assert.IsTrue(result1);
+            Assert.IsTrue(result2);
+            Assert.IsFalse(result3);
 
-            var result = await dao.CheckLoginAsync("ngocphat", "123");
-            Assert.IsNotNull(result, "Result is null.");
-            Assert.IsNotNull(result.UserInfo, "UserInfo is null.");
+            // Xóa tài khoản
+            var login1 = await dao.CheckLoginAsync("test", "123");
+            var login2 = await dao.CheckLoginAsync("test1", "123");
+            int id1 = login1.UserInfo.GetId();
+            int id2 = login2.UserInfo.GetId();
 
-            Assert.AreEqual(expectedRole, result.UserInfo.GetRole());
-            Assert.AreEqual(expectedResult, result.LoginStatus);
+            var del1 = await dao.DeleteAccount(id1);
+            var del2 = await dao.DeleteAccount(id2);
+            var del3 = await dao.DeleteAccount(id2);
+
+            Assert.IsTrue(del1);
+            Assert.IsTrue(del2);
+            Assert.IsFalse(del3);
         }
 
         [TestMethod]
-        public async Task CreateAnAccount()
+        public async Task LoginTest()
         {
-            var expectedLoginStatus = LoginStatus.Success;
+            var result1 = await dao.CheckLoginAsync("ngocphat", "123");
+            var result2 = await dao.CheckLoginAsync("admin", "123");
+            var result3 = await dao.CheckLoginAsync("cnp", "123");
+            var result4 = await dao.CheckLoginAsync("ngocphat", "1234");
 
-            var result = await dao.CheckLoginAsync("cnp", "123");
-            Assert.IsNotNull(result, "Result is null.");
+            Assert.AreEqual(LoginStatus.Success, result1.LoginStatus);
+            Assert.AreEqual(LoginStatus.Success, result2.LoginStatus);
+            Assert.AreEqual(LoginStatus.InvalidUsername, result3.LoginStatus);
+            Assert.AreEqual(LoginStatus.InvalidPassword, result4.LoginStatus);
 
-            Assert.AreEqual(expectedLoginStatus, result.LoginStatus);
+            Assert.AreEqual("User", result1.UserInfo.GetRole());
+            Assert.AreEqual("Admin", result2.UserInfo.GetRole());
         }
+
 
         [TestMethod]
         public async Task GetListProductTest()
         {
-            var result = await dao.GetListProductThumbnailAsync(keyword: "Sun");
-            Assert.IsNotNull(result, "Result is null.");
-            Assert.IsNotNull(result.Products, "Products list is null.");
+            var result1 = await dao.GetListProductThumbnailAsync(keyword: "Sun");
+            var result2 = await dao.GetListProductThumbnailAsync(keyword: "ngocphat");
 
-            Assert.IsTrue(result.Products.All(p => p.Name.Contains("Sun")));
+            Assert.IsTrue(result1.Products.All(p => p.Name.Contains("Sun")));
+            Assert.AreEqual(0, result2.Products.Count);
         }
 
         [TestMethod]
-        public async Task GetListProductThumbnailAsync_ShouldFilterByPriceRange()
+        public async Task GetListProductThumbnailAsync_FilterByPriceRange()
         {
             var result = await dao.GetListProductThumbnailAsync(minPrice: 100000, maxPrice: 500000);
-            Assert.IsNotNull(result, "Result is null.");
-            Assert.IsNotNull(result.Products, "Products list is null.");
 
             Assert.IsTrue(result.Products.All(p => p.Price >= 100000 && p.Price <= 500000));
+        }
+
+        [TestMethod]
+        public async Task GetListProductThumbnailAsync_FilterByBrandAndCategory()
+        {
+            var result1 = await dao.GetListProductThumbnailAsync(filterBrand: "L'Oreal", filterCategory: "Sunscreen");
+            var result2 = await dao.GetListProductThumbnailAsync(filterBrand: "L'Oreal");
+            var result3 = await dao.GetListProductThumbnailAsync(filterCategory: "Sunscreen");
+
+            Assert.IsTrue(result1.Products.All(p => p.Brand == "L'Oreal" && p.Category == "Sunscreen"));
+            Assert.IsTrue(result2.Products.All(p => p.Brand == "L'Oreal"));
+            Assert.IsTrue(result3.Products.All(p => p.Category == "Sunscreen"));
+
         }
     }
 }

@@ -28,7 +28,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         public ObservableCollection<ReviewThumbnailViewModel> reviewThumbnail { get; set; }
         public ObservableCollection<CartThumbnailViewModel> Cart { get; set; }
 
-        private IDao _dao = null;
+        private readonly IDao _dao = null;
+
+        private readonly IServiceProvider _serviceProvider = null;
 
         //Command
         public ICommand PaidButtonCommand { get; set; }
@@ -57,10 +59,10 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 }
             }
         }
-        public ProductDetailViewModel(INavigationService navigationService, IDao dao)
+        public ProductDetailViewModel(INavigationService navigationService, IDao dao, IServiceProvider serviceProvider)
         {
             _dao = new MockDao();
-
+            _serviceProvider = serviceProvider;
             _navigationService = navigationService;
             PaidButtonCommand = new RelayCommand(() =>
             {
@@ -79,7 +81,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             var review = _dao.GetListReviewThumbnailByIDProduct(idProduct);
             foreach (var item in review)
             {
-                var reviewThumbnailViewModel = App.ServiceProvider.GetService(typeof(ReviewThumbnailViewModel)) as ReviewThumbnailViewModel;
+                var reviewThumbnailViewModel = _serviceProvider.GetService(typeof(ReviewThumbnailViewModel)) as ReviewThumbnailViewModel;
                 reviewThumbnailViewModel.ReviewThumbnail = item; // Assuming ReviewThumbnail is a property
                 reviewThumbnail.Add(reviewThumbnailViewModel);
             }
@@ -94,7 +96,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             reviewThumbnail.Clear(); // Clear existing reviews
             foreach (var review in allReviews)
             {
-                var reviewThumbnailViewModel = App.ServiceProvider.GetService(typeof(ReviewThumbnailViewModel)) as ReviewThumbnailViewModel;
+                var reviewThumbnailViewModel = _serviceProvider.GetService(typeof(ReviewThumbnailViewModel)) as ReviewThumbnailViewModel;
                 reviewThumbnailViewModel.ReviewThumbnail = review;
                 reviewThumbnail.Add(reviewThumbnailViewModel); // Add all reviews
             }
@@ -111,7 +113,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 .Where(review => review.StarNumber == starNumber)
                 .Select(review =>
                 {
-                    var reviewThumbnailViewModel = App.ServiceProvider.GetService(typeof(ReviewThumbnailViewModel)) as ReviewThumbnailViewModel;
+                    var reviewThumbnailViewModel = _serviceProvider.GetService(typeof(ReviewThumbnailViewModel)) as ReviewThumbnailViewModel;
                     reviewThumbnailViewModel.ReviewThumbnail = review;
                     return reviewThumbnailViewModel;
                 }).ToList(); // Convert to list to evaluate count
@@ -151,7 +153,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
 
             for (int i = 0; i < cartProduct.Count; i++)
             {
-                var cartThumbnailViewModel = App.ServiceProvider.GetService(typeof(CartThumbnailViewModel));
+                var cartThumbnailViewModel = _serviceProvider.GetService(typeof(CartThumbnailViewModel));
                 cartThumbnailViewModel.GetType().GetProperty("CartThumbnail").SetValue(cartThumbnailViewModel, cartProduct[i]);
                 Cart.Add(cartThumbnailViewModel as CartThumbnailViewModel);
             }
@@ -159,7 +161,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
 
         public void AddNewProductToCart(CartThumbnail cart)
         {
-            var cartThumbnailViewModel = App.ServiceProvider.GetService(typeof(CartThumbnailViewModel));
+            var cartThumbnailViewModel = _serviceProvider.GetService(typeof(CartThumbnailViewModel));
             cartThumbnailViewModel.GetType().GetProperty("CartThumbnail").SetValue(cartThumbnailViewModel, cart);
             Cart.Add(cartThumbnailViewModel as CartThumbnailViewModel);
         }
