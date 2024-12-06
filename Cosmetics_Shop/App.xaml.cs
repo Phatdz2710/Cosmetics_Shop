@@ -21,7 +21,6 @@ using Cosmetics_Shop.Services;
 using Cosmetics_Shop.ViewModels;
 using Cosmetics_Shop.Views.Pages;
 using Cosmetics_Shop.Services.Interfaces;
-using Cosmetics_Shop.Models.DataService;
 using Cosmetics_Shop.Models;
 using Cosmetics_Shop.ViewModels.PageViewModels;
 using Cosmetics_Shop.ViewModels.UserControlViewModels;
@@ -31,9 +30,14 @@ using Cosmetics_Shop.Services.EventAggregatorMessages;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Cosmetics_Shop.ViewModels.AdminPageViewModels;
+using Cosmetics_Shop.DataAccessObject;
+using Cosmetics_Shop.DataAccessObject.Interfaces;
 
 namespace Cosmetics_Shop
 {
+    /// <summary>
+    /// Provides application-specific behavior to supplement the default Application class.
+    /// </summary>
     public partial class App : Application
     {
         public static IServiceProvider ServiceProvider { get; private set; }
@@ -59,6 +63,10 @@ namespace Cosmetics_Shop
             });
         }
 
+        /// <summary>
+        /// Configures the services required for the application.
+        /// </summary>
+        /// <param name="services"></param>
         private void ConfigureServices(ServiceCollection services)
         {
             services.AddSingleton<INavigationService, NavigationService>();

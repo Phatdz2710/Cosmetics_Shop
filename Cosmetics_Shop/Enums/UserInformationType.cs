@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.Enums
 {
+    /// <summary>
+    /// User Information Type
+    /// </summary>
     public enum UserInformationType
     {
         Name,

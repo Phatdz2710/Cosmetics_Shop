@@ -22,6 +22,9 @@ using Microsoft.UI.Xaml.Media.Animation;
 
 namespace Cosmetics_Shop.Views.Controls
 {
+    /// <summary>
+    /// Product thumbnail user control
+    /// </summary>
     public sealed partial class ProductThumbnailControl : UserControl
     {
         public ProductThumbnailViewModel ViewModel

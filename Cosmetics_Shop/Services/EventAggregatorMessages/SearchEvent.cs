@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.Services.EventAggregatorMessages
 {
+    /// <summary>
+    /// Search Event Message
+    /// </summary>
     public class SearchEvent
     {
         public string Keyword { get; set; }

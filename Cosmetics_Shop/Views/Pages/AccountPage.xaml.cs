@@ -21,7 +21,7 @@ using Cosmetics_Shop.Services.Interfaces;
 namespace Cosmetics_Shop.Views.Pages
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// Account page
     /// </summary>
     public sealed partial class AccountPage : Page
     {
@@ -30,8 +30,6 @@ namespace Cosmetics_Shop.Views.Pages
         {
             this.InitializeComponent();
             ViewModel = App.ServiceProvider.GetService(typeof(AccountViewModel)) as AccountViewModel;
-
-            
         }
     }
 }

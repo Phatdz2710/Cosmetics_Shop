@@ -9,6 +9,9 @@ using Windows.UI.Core;
 
 namespace Cosmetics_Shop.ViewModels.UserControlViewModels
 {
+    /// <summary>
+    /// View model for account cell
+    /// </summary>
     public class AccountCellViewModel : INotifyPropertyChanged
     {
         private string _username;
@@ -58,28 +61,37 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
         public ICommand DeleteCommand   { get; set; }
 
 
-        public AccountCellViewModel(int id, string username, string password, string role, ICommand editCommand, ICommand deleteCommand)
+        public AccountCellViewModel(int id, 
+                                    string username, 
+                                    string password, 
+                                    string role, 
+                                    ICommand editCommand, 
+                                    ICommand deleteCommand)
         {
-            _id         = id;
-            _username   = username;
-            _password   = password;
-            _role       = role;
-            EditCommand = editCommand;
-            DeleteCommand = deleteCommand;
+            _id             = id;
+            _username       = username;
+            _password       = password;
+            _role           = role;
+            EditCommand     = editCommand;
+            DeleteCommand   = deleteCommand;
         }
 
+        /// <summary>
+        /// Get ID of account
+        /// </summary>
+        /// <returns>ID of account</returns>
         public int GetID()
         {
             return _id;
         }
 
 
+        // For INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
 
     }
 }

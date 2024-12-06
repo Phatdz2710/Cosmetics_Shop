@@ -23,7 +23,7 @@ using Windows.UI.ViewManagement;
 namespace Cosmetics_Shop
 {
     /// <summary>
-    /// An empty window that can be used on its own or navigated to within a Frame.
+    /// Login window
     /// </summary>
     public sealed partial class LoginWindow : Window
     {

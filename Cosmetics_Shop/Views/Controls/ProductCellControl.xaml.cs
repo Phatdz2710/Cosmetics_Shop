@@ -19,6 +19,9 @@ using Windows.Foundation.Collections;
 
 namespace Cosmetics_Shop.Views.Controls
 {
+    /// <summary>
+    /// Product cell user control
+    /// </summary>
     public sealed partial class ProductCellControl : UserControl
     {
         public ProductCellViewModel ViewModel

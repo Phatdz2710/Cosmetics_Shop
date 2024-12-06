@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using Cosmetics_Shop.Models.DataService;
+using Cosmetics_Shop.DataAccessObject.Interfaces;
 using Cosmetics_Shop.Services.Interfaces;
 using Cosmetics_Shop.ViewModels.UserControlViewModels;
 using Cosmetics_Shop.Views.Pages;
@@ -18,9 +18,14 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
 {
     public class ProductManagerViewModel : INotifyPropertyChanged
     {
+        #region Singleton
+        // Data access object
         private readonly IDao _dao = null;
+        // File picker service
         private readonly IFilePickerService _filePickerService = null;
+        #endregion
 
+        #region Fields
         private ObservableCollection<ProductCellViewModel> listProducts = new ObservableCollection<ProductCellViewModel>();
 
         private bool    _visiPrevious = true;
@@ -36,7 +41,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
         private int     _productPrice = 0;
         private int     _productInventory = 0;
         private int     _productSold = 0;
+        #endregion
 
+        #region Properties for binding
         public ObservableCollection<ProductCellViewModel> ListProducts
         {
             get { return listProducts; }
@@ -169,8 +176,11 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
             }
         }
 
+        #endregion
+
+        #region Commands
         private ICommand _acceptFormCommand;
-        public ICommand AcceptFormCommand
+        public  ICommand AcceptFormCommand
         {
             get => _acceptFormCommand;
             set
@@ -179,16 +189,18 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(AcceptFormCommand));
             }
         }
-        public ICommand CancelFormCommand { get; set; }
-        public ICommand CreateProductCommand { get; set; }
-        public ICommand SelectImagePathCommand { get; set; }
-        public ICommand NextPageCommand { get; }
-        public ICommand PreviousPageCommand { get; }
+        public  ICommand CancelFormCommand      { get; set; }
+        public  ICommand CreateProductCommand   { get; set; }
+        public  ICommand SelectImagePathCommand { get; set; }
+        public  ICommand NextPageCommand        { get; }
+        public  ICommand PreviousPageCommand    { get; }
 
-        public ProductManagerViewModel(IDao dao,
-                                       IFilePickerService filePickerService)
+        #endregion
+
+        public ProductManagerViewModel(IDao                 dao,
+                                       IFilePickerService   filePickerService)
         {
-            this._dao = dao;
+            this._dao               = dao;
             this._filePickerService = filePickerService;
 
             LoadData();
@@ -217,35 +229,55 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 });
             });
 
-            CancelFormCommand = new RelayCommand(() =>
-            {
-                ShowForm = false;
-            });
-
-            SelectImagePathCommand = new RelayCommand(async () =>
-            {
-                var path = await _filePickerService.PickFileAsync(new List<string>()
-                {
-                    ".jpg", ".jpeg", ".png"
-                });
-
-                if (path == null) return;
-                ProductImagePath = path;
-            });
-
-            NextPageCommand = new RelayCommand(() =>
-            {
-                CurrentPage++;
-                LoadData();
-            });
-
-            PreviousPageCommand = new RelayCommand(() =>
-            {
-                CurrentPage--;
-                LoadData();
-            });
+            CancelFormCommand       = new RelayCommand(cancelFormCommand);
+            SelectImagePathCommand  = new RelayCommand(executeSelectImagePathAsyncCommand);
+            NextPageCommand         = new RelayCommand(nextPageCommand);
+            PreviousPageCommand     = new RelayCommand(previousPageCommand);
         }
 
+        /// <summary>
+        /// Cancels the form by hiding it.
+        /// </summary>
+        private void cancelFormCommand()
+        {
+            ShowForm = false;
+        }
+
+        /// <summary>
+        /// Allows the user to select an image file path and updates the product image path.
+        /// </summary>
+        private async void executeSelectImagePathAsyncCommand()
+        {
+            var path = await _filePickerService.PickFileAsync(new List<string>
+            {
+                ".jpg", ".jpeg", ".png"
+            });
+
+            if (path == null) return;
+            ProductImagePath = path;
+        }
+
+        /// <summary>
+        /// Command for go to next page
+        /// </summary>
+        private void nextPageCommand()
+        {
+            CurrentPage++;
+            LoadData();
+        }
+
+        /// <summary>
+        /// Command for go to previous page
+        /// </summary>
+        private void previousPageCommand()
+        {
+            CurrentPage--;
+            LoadData();
+        }
+
+        /// <summary>
+        /// Load data from database (All products)
+        /// </summary>
         private async void LoadData()
         {
             var result = await _dao.GetListProductThumbnailAsync("", CurrentPage, 20, Models.Enums.SortProduct.DateAscending, "", "", 0, int.MaxValue);
@@ -268,6 +300,8 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                     Category = item.Category,
                     Inventory = item.Stock,
                     Sold = item.Sold,
+
+                    // Edit command for each cell to show edit form
                     EditCommand = new RelayCommand(() =>
                     {
                         FormTitle = "Chỉnh sửa sản phẩm";
@@ -297,6 +331,8 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
         }
         
 
+
+        // For INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged(string propertyName)

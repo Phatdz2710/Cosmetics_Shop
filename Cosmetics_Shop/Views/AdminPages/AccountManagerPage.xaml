@@ -35,12 +35,22 @@
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"/>
 
-        <Button Grid.Row="1"
-                Content="Thêm tài khoản"
-                Height="35"
-                HorizontalAlignment="Right"
-                Background="#6BE38F"
-                Command="{x:Bind ViewModel.CreateAccountCommand, Mode=OneTime}"/>
+        <StackPanel Grid.Row="1"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            <Button Content="Tải lại"
+                    Height="35"
+                    Background="#C5FFE8"
+                    Width="100"
+                    Margin="0 0 10 0"
+                    Command="{x:Bind ViewModel.ReloadCommand, Mode=OneTime}"/>
+            
+            <Button Content="Thêm tài khoản"
+                    Height="35"
+                    Background="#6BE38F"
+                    Command="{x:Bind ViewModel.CreateAccountCommand, Mode=OneTime}"/>
+
+        </StackPanel>
         
         <Grid Grid.Row="2"
               Background="#E0FFF1"

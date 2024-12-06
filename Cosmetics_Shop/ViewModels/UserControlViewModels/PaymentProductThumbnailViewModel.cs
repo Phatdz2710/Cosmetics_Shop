@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using Cosmetics_Shop.Models;
-using Cosmetics_Shop.Models.DataService;
 using Cosmetics_Shop.Services;
 using Cosmetics_Shop.ViewModels.PageViewModels;
 using Cosmetics_Shop.Views.Controls;

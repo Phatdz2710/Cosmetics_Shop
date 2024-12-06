@@ -1,6 +1,5 @@
 ﻿using Cosmetics_Shop.DBModels;
 using Cosmetics_Shop.Models;
-using Cosmetics_Shop.Models.DataService;
 using Cosmetics_Shop.Models.Enums;
 using Cosmetics_Shop.Services;
 using Cosmetics_Shop.Services.Interfaces;
@@ -19,15 +18,23 @@ using System.Linq;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using System.IO;
+using Cosmetics_Shop.DataAccessObject;
+using Cosmetics_Shop.DataAccessObject.Interfaces;
 
 namespace UnitTest
 {
+    /// <summary>
+    /// Unit tests for the DAO (Data Access Object) class.
+    /// </summary>
     [TestClass]
     public class DAOTest
     {
         public static IServiceProvider ServiceProvider { get; private set; }
         public IDao dao = null;
 
+        /// <summary>
+        /// Initializes the test setup by configuring services and creating an instance of SqlDao.
+        /// </summary>
         [TestInitialize]
         public void Setup()
         {
@@ -38,6 +45,10 @@ namespace UnitTest
             dao = new SqlDao(serviceProvider);
         }
 
+        /// <summary>
+        /// Configures the services required for the tests, including reading the connection string from appsettings.json.
+        /// </summary>
+        /// <param name="services">The service collection to configure.</param>
         private void ConfigureServices(ServiceCollection services)
         {
             services.AddSingleton<INavigationService, NavigationService>();
@@ -46,7 +57,6 @@ namespace UnitTest
             services.AddSingleton<IFilePickerService, FilePickerService>();
             services.AddSingleton<IServiceProvider, ServiceProvider>();
             services.AddSingleton<UserSession>();
-
 
             var basePath = AppContext.BaseDirectory;
             var jsonFilePath = System.IO.Path.Combine(basePath, "appsettings.json");
@@ -59,6 +69,9 @@ namespace UnitTest
             ServiceProvider = services.BuildServiceProvider();
         }
 
+        /// <summary>
+        /// Tests the ChangePasswordAsync method.
+        /// </summary>
         [TestMethod]
         public async Task ChangePassword()
         {
@@ -74,6 +87,9 @@ namespace UnitTest
             Assert.IsFalse(result1);
         }
 
+        /// <summary>
+        /// Tests the CreateAccountAsync and DeleteAccount methods.
+        /// </summary>
         [TestMethod]
         public async Task CreateAndDeleteAccount()
         {
@@ -100,6 +116,9 @@ namespace UnitTest
             Assert.IsFalse(del3);
         }
 
+        /// <summary>
+        /// Tests the CheckLoginAsync method.
+        /// </summary>
         [TestMethod]
         public async Task LoginTest()
         {
@@ -117,7 +136,9 @@ namespace UnitTest
             Assert.AreEqual("Admin", result2.UserInfo.GetRole());
         }
 
-
+        /// <summary>
+        /// Tests the GetListProductThumbnailAsync method with a keyword filter.
+        /// </summary>
         [TestMethod]
         public async Task GetListProductTest()
         {
@@ -128,6 +149,9 @@ namespace UnitTest
             Assert.AreEqual(0, result2.Products.Count);
         }
 
+        /// <summary>
+        /// Tests the GetListProductThumbnailAsync method with a price range filter.
+        /// </summary>
         [TestMethod]
         public async Task GetListProductThumbnailAsync_FilterByPriceRange()
         {
@@ -136,6 +160,9 @@ namespace UnitTest
             Assert.IsTrue(result.Products.All(p => p.Price >= 100000 && p.Price <= 500000));
         }
 
+        /// <summary>
+        /// Tests the GetListProductThumbnailAsync method with brand and category filters.
+        /// </summary>
         [TestMethod]
         public async Task GetListProductThumbnailAsync_FilterByBrandAndCategory()
         {
@@ -146,7 +173,6 @@ namespace UnitTest
             Assert.IsTrue(result1.Products.All(p => p.Brand == "L'Oreal" && p.Category == "Sunscreen"));
             Assert.IsTrue(result2.Products.All(p => p.Brand == "L'Oreal"));
             Assert.IsTrue(result3.Products.All(p => p.Category == "Sunscreen"));
-
         }
     }
 }

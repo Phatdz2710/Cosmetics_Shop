@@ -20,6 +20,9 @@ using Windows.Foundation.Collections;
 
 namespace Cosmetics_Shop.Views.Controls
 {
+    /// <summary>
+    /// Account cell user control
+    /// </summary>
     public sealed partial class AccountCellControl : UserControl
     {
         public AccountCellViewModel ViewModel

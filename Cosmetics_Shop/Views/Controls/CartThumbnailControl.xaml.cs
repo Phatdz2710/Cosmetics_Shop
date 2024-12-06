@@ -17,7 +17,7 @@ using Cosmetics_Shop.ViewModels.UserControlViewModels;
 namespace Cosmetics_Shop.Views.Controls
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// Cart thumbnail user control
     /// </summary>
     public sealed partial class CartThumbnailControl : UserControl
     {

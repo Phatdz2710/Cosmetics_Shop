@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.Enums
 {
+    /// <summary>
+    /// Signup Status
+    /// </summary>
     public enum SignupStatus
     {
         Success         = 0,

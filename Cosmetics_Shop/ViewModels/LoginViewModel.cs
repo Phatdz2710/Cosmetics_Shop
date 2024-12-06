@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using Cosmetics_Shop.DataAccessObject.Interfaces;
 using Cosmetics_Shop.Enums;
 using Cosmetics_Shop.Models;
-using Cosmetics_Shop.Models.DataService;
 using Cosmetics_Shop.Models.Enums;
 using Cosmetics_Shop.Services;
 using Cosmetics_Shop.Services.EventAggregatorMessages;
@@ -23,21 +23,29 @@ using System.Windows.Input;
 
 namespace Cosmetics_Shop.ViewModels
 {
+    /// <summary>
+    /// View model for login window
+    /// </summary>
     public class LoginViewModel : INotifyPropertyChanged
     {
+        #region Singleton
         // Data access object
         private readonly IDao _dao = null;
-        // Event aggregator for publish and subscribe
+        // Event Aggregator
         private readonly IEventAggregator _eventAggregator;
         // Service provider
         private readonly IServiceProvider _serviceProvider;
+        #endregion
 
+        #region Fields
         private string      wrongMessage;
         private string      successMessage;
         private Visibility  messageVisibility;
         private string      loginSignupState;
         private bool        isEnabled = true; // Logged in
+        #endregion
 
+        #region Properties for binding
         // Message about login failed
         public string WrongMessage
         {
@@ -46,9 +54,10 @@ namespace Cosmetics_Shop.ViewModels
             {
                 wrongMessage = value;
                 this.MessageVisibility = Visibility.Visible;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(WrongMessage)));
+                OnPropertyChanged(nameof(WrongMessage));
             }
         }
+        // Message about login success
         public string SuccessMessage
         {
             get => successMessage;
@@ -56,7 +65,7 @@ namespace Cosmetics_Shop.ViewModels
             {
                 successMessage = value;
                 this.MessageVisibility = Visibility.Visible;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SuccessMessage)));
+                OnPropertyChanged(nameof(SuccessMessage));
             }
         }
 
@@ -67,7 +76,7 @@ namespace Cosmetics_Shop.ViewModels
             set
             {
                 messageVisibility = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MessageVisibility)));
+                OnPropertyChanged(nameof(MessageVisibility));
             }
         }
 
@@ -78,47 +87,51 @@ namespace Cosmetics_Shop.ViewModels
             set
             {
                 loginSignupState = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LoginSignupState)));
+                OnPropertyChanged(nameof(LoginSignupState));
             }
         }
 
+        // Enable or disable login button
         public bool IsEnabled
         {
             get => isEnabled;
             set
             {
                 isEnabled = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsEnabled)));
+                OnPropertyChanged(nameof(IsEnabled));
             }
         }
+
+        // For binding two-way
         public string Username { get; set; }
         public string Password { get; set; }
-
         public string UsernameSignup { get; set; }
         public string PasswordSignup { get; set; }
         public string ConfirmPasswordSingup { get; set; }
         public string Email { get; set; }
-
-
-
         public bool RememberMe { get; set; } = true;
 
+        #endregion
+
+        #region Commands
         // Commands
         public ICommand SwitchLoginCommand  { get; set; }
         public ICommand SwitchSignupCommand { get; set; }
         public ICommand LoginCommand        { get; set; }
         public ICommand SignupCommand       { get; set; }
+        #endregion
 
-        public LoginViewModel(IEventAggregator eventAggregator,
-                              IDao dao,
-                              IServiceProvider serviceProvider)
+        // Constructor
+        public LoginViewModel(IEventAggregator  eventAggregator,
+                              IDao              dao,
+                              IServiceProvider  serviceProvider)
         {
-            _dao = dao;
-            _eventAggregator = eventAggregator;
-            _serviceProvider = serviceProvider;
+            _dao                = dao;
+            _eventAggregator    = eventAggregator;
+            _serviceProvider    = serviceProvider;
 
-            WrongMessage    = "";
-            SuccessMessage  = "";
+            WrongMessage        = "";
+            SuccessMessage      = "";
             MessageVisibility   = Visibility.Collapsed;
             LoginSignupState    = "Login";
 
@@ -150,6 +163,9 @@ namespace Cosmetics_Shop.ViewModels
             });
         }
 
+        /// <summary>
+        /// Do login with username and password
+        /// </summary>
         public async void CheckLogin()
         {
             IsEnabled = false;
@@ -207,6 +223,9 @@ namespace Cosmetics_Shop.ViewModels
             }
         }
 
+        /// <summary>
+        /// Do signup
+        /// </summary>
         public async void DoSignup()
         {
             SuccessMessage      = "";
@@ -242,6 +261,12 @@ namespace Cosmetics_Shop.ViewModels
             }
         }
 
+
+        // For INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

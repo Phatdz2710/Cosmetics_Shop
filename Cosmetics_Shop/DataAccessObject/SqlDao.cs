@@ -1,6 +1,8 @@
 ﻿using Cosmetics_Shop.DataAccessObject.Data;
+using Cosmetics_Shop.DataAccessObject.Interfaces;
 using Cosmetics_Shop.DBModels;
 using Cosmetics_Shop.Enums;
+using Cosmetics_Shop.Models;
 using Cosmetics_Shop.Models.Enums;
 using Cosmetics_Shop.Services;
 using Cosmetics_Shop.ViewModels;
@@ -20,8 +22,11 @@ using Windows.ApplicationModel.Background;
 using Windows.Networking.NetworkOperators;
 using Windows.Security.Authentication.Web.Provider;
 
-namespace Cosmetics_Shop.Models.DataService
+namespace Cosmetics_Shop.DataAccessObject
 {
+    /// <summary>
+    /// Data Access Object for SQL Server
+    /// </summary>
     public class SqlDao : IDao
     {
         private readonly IServiceProvider _serviceProvider = null;
@@ -315,7 +320,7 @@ namespace Cosmetics_Shop.Models.DataService
                         return new LoginResult
                         {
                             LoginStatus = LoginStatus.InvalidUsername,
-                            UserInfo    = new User(0, "", "")
+                            UserInfo    = new Models.User(0, "", "")
                         };
                     }
 
@@ -324,14 +329,14 @@ namespace Cosmetics_Shop.Models.DataService
                         return new LoginResult
                         {
                             LoginStatus = LoginStatus.InvalidPassword,
-                            UserInfo    = new User(0, "", "")
+                            UserInfo    = new Models.User(0, "", "")
                         };
                     }
 
                     return new LoginResult
                     {
                         LoginStatus = LoginStatus.Success,
-                        UserInfo    = new User(account.UserId, account.Token, account.Role)
+                        UserInfo    = new Models.User(account.UserId, account.Token, account.Role)
                     };
                 }
                 catch (Exception)
@@ -339,7 +344,7 @@ namespace Cosmetics_Shop.Models.DataService
                     return new LoginResult
                     {
                         LoginStatus = LoginStatus.ConnectServerFailed,
-                        UserInfo    = new User(0 ,"", "")
+                        UserInfo    = new Models.User(0 ,"", "")
                     };
                 }
             }
@@ -677,7 +682,7 @@ namespace Cosmetics_Shop.Models.DataService
                     var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
 
                     var db = await _databaseContext.Accounts
-                        .Select(p => new Account(p.UserId, p.Username, p.Password, p.Role))
+                        .Select(p => new Models.Account(p.UserId, p.Username, p.Password, p.Role))
                         .ToListAsync();
 
                     return new AccountSearchResult
@@ -692,7 +697,7 @@ namespace Cosmetics_Shop.Models.DataService
             {
                 return new AccountSearchResult
                 {
-                    ListAccounts = new List<Account>(),
+                    ListAccounts = new List<Models.Account>(),
                     TotalPages = 1,
                     TotalAccounts = 0
                 };
@@ -1003,5 +1008,6 @@ namespace Cosmetics_Shop.Models.DataService
             return db;
         }
 
+        
     }
 }

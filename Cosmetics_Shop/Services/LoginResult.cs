@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.Services
 {
+    /// <summary>
+    /// Login Result
+    /// </summary>
     public struct LoginResult
     {
         public LoginStatus  LoginStatus { get; set; }

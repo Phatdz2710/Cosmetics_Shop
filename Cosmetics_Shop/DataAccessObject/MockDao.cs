@@ -1,5 +1,7 @@
 ﻿using Cosmetics_Shop.DataAccessObject.Data;
+using Cosmetics_Shop.DataAccessObject.Interfaces;
 using Cosmetics_Shop.Enums;
+using Cosmetics_Shop.Models;
 using Cosmetics_Shop.Models.Enums;
 using Cosmetics_Shop.Services;
 using Cosmetics_Shop.ViewModels;
@@ -12,8 +14,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Windows.Security.Authentication.Web.Provider;
 
-namespace Cosmetics_Shop.Models.DataService
+namespace Cosmetics_Shop.DataAccessObject
 {
+    /// <summary>
+    /// Mock data access object
+    /// </summary>
     public class MockDao : IDao
     {
         public async Task<SearchResult> GetListProductThumbnailAsync(

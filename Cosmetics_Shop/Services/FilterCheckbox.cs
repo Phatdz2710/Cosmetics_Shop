@@ -11,6 +11,9 @@ using Windows.UI.Popups;
 
 namespace Cosmetics_Shop.Models
 {
+    /// <summary>
+    /// Filter Checkbox
+    /// </summary>
     public struct FilterCheckbox
     { 
         public int      Index           { get; set; }

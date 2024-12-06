@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using Cosmetics_Shop.Models.DataService;
+using Cosmetics_Shop.DataAccessObject.Interfaces;
 using Cosmetics_Shop.ViewModels.UserControlViewModels;
 using System;
 using System.Collections.Generic;
@@ -12,10 +12,17 @@ using System.Windows.Input;
 
 namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
 {
+    /// <summary>
+    /// View model for AccountManager page
+    /// </summary>
     public class AccountManagerViewModel : INotifyPropertyChanged
     {
+        #region Singleton
+        // Data access object
         private readonly IDao _dao = null;
+        #endregion
 
+        #region Fields
         private ObservableCollection<AccountCellViewModel> _listAccounts;
 
         private int     _currentPage = 1;
@@ -28,6 +35,10 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
         private int     _role = 0;
         private int     _id = 0;
         private string  _formTitle = "";
+
+        #endregion
+
+        #region Properties for binding
         public ObservableCollection<AccountCellViewModel> ListAccounts
         {
             get { return _listAccounts; }
@@ -110,6 +121,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
             }
         }
 
+        #endregion
+
+        #region Commands
         private ICommand _acceptFormCommand;
         public ICommand AcceptFormCommand
         {
@@ -120,9 +134,10 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(AcceptFormCommand));
             }
         }
-        public ICommand CancelFormCommand { get; set; }
-        public ICommand CreateAccountCommand { get; set; }
-        
+        public ICommand CancelFormCommand       { get; set; }
+        public ICommand CreateAccountCommand    { get; set; }
+        public ICommand ReloadCommand           { get; set; }
+        #endregion
 
         public AccountManagerViewModel(IDao dao)
         {
@@ -132,19 +147,36 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
 
             CancelFormCommand = new RelayCommand(cancelFormCommand);
 
-            CreateAccountCommand = new RelayCommand(() =>
-            {
-                AcceptFormCommand = new RelayCommand(acceptCreateAccountCommand);
-                ShowForm = true;
-                FormTitle = "Tạo tài khoản";
-                Username = "";
-                Password = "";
-                Role = 0;
-            });
+            CreateAccountCommand    = new RelayCommand(createAccountCommand);
+            ReloadCommand           = new RelayCommand(reloadCommand);
 
             LoadData();
         }
 
+        /// <summary>
+        /// Reload data
+        /// </summary>
+        private void reloadCommand()
+        {
+            LoadData();
+        }
+
+        /// <summary>
+        /// Command to create account
+        /// </summary>
+        private void createAccountCommand()
+        {
+            AcceptFormCommand = new RelayCommand(acceptCreateAccountCommand);
+            ShowForm = true;
+            FormTitle = "Tạo tài khoản";
+            Username = "";
+            Password = "";
+            Role = 0;
+        }
+
+        /// <summary>
+        /// Load data from database
+        /// </summary>
         public async void LoadData()
         {
             var accountSearchResult = await _dao.GetListAccountAsync();
@@ -158,6 +190,7 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
             {
                 ListAccounts.Add(new AccountCellViewModel(account.ID, account.Username, account.Password, account.Role,
 
+                    // Edit command for each cell
                     editCommand: new RelayCommand(() =>
                     {
                         AcceptFormCommand = new RelayCommand(acceptChangeAccountInformationCommand);
@@ -169,6 +202,7 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                         _id = account.ID;
                     }),
 
+                    // Delete command for each cell
                     deleteCommand: new RelayCommand(async () =>
                     {
                         await _dao.DeleteAccount(account.ID);
@@ -177,6 +211,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
             }
         }
 
+        /// <summary>
+        /// Command to accept change account information
+        /// </summary>
         private async void acceptChangeAccountInformationCommand()
         {
             ShowForm = false;
@@ -188,6 +225,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
             }
         }
 
+        /// <summary>
+        /// Command to accept create account
+        /// </summary>
         private async void acceptCreateAccountCommand()
         {
             ShowForm = false;
@@ -199,6 +239,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
             }
         }
 
+        /// <summary>
+        /// Command to cancel form
+        /// </summary>
         private void cancelFormCommand()
         {
             ShowForm = false;

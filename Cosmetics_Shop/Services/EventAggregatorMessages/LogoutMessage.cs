@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.Services.EventAggregatorMessages
 {
+    /// <summary>
+    /// Logout Message
+    /// </summary>
     public class LogoutMessage
     { 
     }

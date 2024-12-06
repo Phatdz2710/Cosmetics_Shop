@@ -8,6 +8,9 @@ using Windows.ApplicationModel.Chat;
 
 namespace Cosmetics_Shop.Views.Converters
 {
+    /// <summary>
+    /// Converts name product to thumbnail
+    /// </summary>
     public class NameProductOnThumbnail : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)

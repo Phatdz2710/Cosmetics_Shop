@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.Services.EventAggregatorMessages
 {
+    /// <summary>
+    /// Change Username Or Avatar Message
+    /// </summary>
     public class ChangeUsernameOrAvatarMessage
     {
         public string AvatarPath { get; set; }

@@ -20,7 +20,7 @@ using Windows.Foundation.Collections;
 namespace Cosmetics_Shop.Views.AdminPages
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// Account manager page
     /// </summary>
     public sealed partial class AccountManagerPage : Page
     {

@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.DataAccessObject.Data
 {
+    /// <summary>
+    /// Account Search Result
+    /// </summary>
     public class AccountSearchResult
     {
         public List<Account> ListAccounts { get; set; }

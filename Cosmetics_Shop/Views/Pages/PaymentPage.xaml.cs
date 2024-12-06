@@ -21,7 +21,7 @@ using Cosmetics_Shop.Models;
 namespace Cosmetics_Shop.Views.Pages
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// Payment page
     /// </summary>
     public sealed partial class PaymentPage : Page
     {

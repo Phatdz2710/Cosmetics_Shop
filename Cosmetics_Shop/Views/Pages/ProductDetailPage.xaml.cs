@@ -20,6 +20,9 @@ using Cosmetics_Shop.Models;
 
 namespace Cosmetics_Shop.Views.Pages
 {
+    /// <summary>
+    /// Product detail page
+    /// </summary>
     public sealed partial class ProductDetailPage : Page
     {
         public ProductDetailViewModel ViewModel { get; }

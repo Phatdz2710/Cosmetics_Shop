@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using Cosmetics_Shop.DataAccessObject.Data;
+using Cosmetics_Shop.DataAccessObject.Interfaces;
 using Cosmetics_Shop.Models;
-using Cosmetics_Shop.Models.DataService;
 using Cosmetics_Shop.Models.Enums;
 using Cosmetics_Shop.Services;
 using Cosmetics_Shop.Services.EventAggregatorMessages;
@@ -25,7 +26,6 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
 {
     /// <summary>
     /// View model for PurchasePage
-    /// Singleton pattern
     /// </summary>
     public class PurchasePageViewModel : INotifyPropertyChanged
     {
@@ -180,11 +180,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
 
         #region Commands
         // Commands
-        public ICommand NextPageCommand { get; }
-        public ICommand PreviousPageCommand { get; }
-        public ICommand CheckboxBrandCheckedCommand { get; }
-        public ICommand CheckboxCategoryCheckedCommand { get; }
-        public ICommand FilterPriceCommand { get; }
+        public ICommand NextPageCommand         { get; } // Next page
+        public ICommand PreviousPageCommand     { get; } // Previous page
+        public ICommand CheckboxBrandCheckedCommand     { get; } // Checkbox brand checked
+        public ICommand CheckboxCategoryCheckedCommand  { get; } // Checkbox category checked
+        public ICommand FilterPriceCommand      { get; } // Filter price
         #endregion
 
 
@@ -198,6 +198,8 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             _navigationService  = navigationService;
             _dao                = dao;
             _serviceProvider    = serviceProvider;
+
+            SearchProduct();
 
             // Register event to listen from MainViewModel
             _eventAggregator.Subscribe<SearchEvent>((searchEvent) =>
@@ -213,75 +215,108 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             Brands      = new ObservableCollection<FilterCheckbox>();
             Categories  = new ObservableCollection<FilterCheckbox>();
 
-            NextPageCommand     = new RelayCommand(async () =>
-            {
-                PageIndex++;
-                await GetProductThumbnails();
-            });
+            NextPageCommand     = new RelayCommand(nextPageCommand);
+            PreviousPageCommand = new RelayCommand(previousPageCommand);
 
-            PreviousPageCommand = new RelayCommand(async () =>
-            {
-                PageIndex--;
-                await GetProductThumbnails();
-            });
-
-            CheckboxBrandCheckedCommand     = new RelayCommand<int>(async (index) =>
-            {
-                if (Brands[index].IsChecked)
-                {
-                    filterBrand     = "";
-                    _filterBrand    = false;
-                }
-                else
-                {
-                    filterBrand     = Brands[index].Name;
-                    _filterBrand    = true;
-                }
-
-                PageIndex = 1;
-                if (_filterCategory)
-                {
-                    await GetProductThumbnails(updateCategory: false);
-                }
-                else
-                {
-                    await GetProductThumbnails();
-                }
-            });
-
-            CheckboxCategoryCheckedCommand  = new RelayCommand<int>(async (index) =>
-            {
-                if (Categories[index].IsChecked)
-                {
-                    // Clear filter
-                    filterCategory = "";
-                    _filterCategory = false;
-                }
-                else
-                {
-                    filterCategory = Categories[index].Name;
-                    _filterCategory = true;
-                }
-
-                PageIndex = 1;
-                if (_filterBrand)
-                {
-                    await GetProductThumbnails(updateBrand: false);
-                }
-                else
-                {
-                    await GetProductThumbnails();
-                }
-            });
-
-            FilterPriceCommand = new RelayCommand(() =>
-            {
-                SearchProduct(searchNewEntire: false);
-            });
-
-            SearchProduct();
+            CheckboxBrandCheckedCommand     = new RelayCommand<int>(checkboxBrandCheckedCommand);
+            CheckboxCategoryCheckedCommand  = new RelayCommand<int>(checkboxCategoryCheckedCommand);
+            FilterPriceCommand              = new RelayCommand(filterPriceCommand);
         }
 
+        /// <summary>
+        /// Moves to the next page and refreshes the product thumbnails.
+        /// </summary>
+        private async void nextPageCommand()
+        {
+            PageIndex++;
+            await GetProductThumbnails();
+        }
+
+
+        /// <summary>
+        /// Moves to the previous page and refreshes the product thumbnails.
+        /// </summary>
+        private async void previousPageCommand()
+        {
+            PageIndex--;
+            await GetProductThumbnails();
+        }
+
+
+        /// <summary>
+        /// Handles the checkbox change event for brands. Updates the filter and refreshes the product thumbnails.
+        /// </summary>
+        /// <param name="index">The index of the selected brand.</param>
+        private async void checkboxBrandCheckedCommand(int index)
+        {
+            if (Brands[index].IsChecked)
+            {
+                filterBrand = "";
+                _filterBrand = false;
+            }
+            else
+            {
+                filterBrand = Brands[index].Name;
+                _filterBrand = true;
+            }
+
+            PageIndex = 1;
+            if (_filterCategory)
+            {
+                await GetProductThumbnails(updateCategory: false);
+            }
+            else
+            {
+                await GetProductThumbnails();
+            }
+        }
+
+
+        /// <summary>
+        /// Handles the checkbox change event for categories. Updates the filter and refreshes the product thumbnails.
+        /// </summary>
+        /// <param name="index">The index of the selected category.</param>
+        private async void checkboxCategoryCheckedCommand(int index)
+        {
+            if (Categories[index].IsChecked)
+            {
+                // Clear filter
+                filterCategory = "";
+                _filterCategory = false;
+            }
+            else
+            {
+                filterCategory = Categories[index].Name;
+                _filterCategory = true;
+            }
+
+            PageIndex = 1;
+            if (_filterBrand)
+            {
+                await GetProductThumbnails(updateBrand: false);
+            }
+            else
+            {
+                await GetProductThumbnails();
+            }
+        }
+
+
+        /// <summary>
+        /// Filter price command
+        /// </summary>
+        private void filterPriceCommand()
+        {
+            SearchProduct(searchNewEntire: false);
+        }
+
+
+        /// <summary>
+        /// Get list of product thumbnails
+        /// </summary>
+        /// <param name="updateBrand"> Update new list of brands </param>
+        /// <param name="updateCategory"> Update new list of categories </param>
+        /// <returns></returns>
         private async Task GetProductThumbnails(bool updateBrand = true, bool updateCategory = true)
         {
             // Wait for other threads
@@ -412,7 +447,12 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
         }
 
-        // Sort product change
+
+        
+        /// <summary>
+        /// By selectedIndexSort to get type of SortProduct
+        /// </summary>
+        /// <returns>Type of SortProduct</returns>
         public SortProduct GetSortProductChoice()
         {
             switch (_selectedIndexSort)
@@ -432,7 +472,12 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
         }
 
-        // Search product
+
+
+        /// <summary>
+        /// For new search product with new keyword or new sorting 
+        /// </summary>
+        /// <param name="searchNewEntire">Refresh the whole</param>
         public async void SearchProduct(bool searchNewEntire = true)
         {
             if (searchNewEntire)
@@ -452,14 +497,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         }
 
 
-        // For INotifyPropertyChanged
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
 
-        // Require View layer show a ContentDialog with message
+        /// <summary>
+        /// For show dialog when invalid price min max
+        /// </summary>
+        /// <param name="message">Message are send</param>
         private void ShowDialog(string message)
         {
             var _message = new InvalidPriceMinMaxMessageBox()
@@ -468,6 +510,16 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             };
 
             _eventAggregator.Publish(_message);
+        }
+
+
+
+
+        // For INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

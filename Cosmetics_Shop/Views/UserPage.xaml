@@ -121,7 +121,8 @@
                         <Border Width="30"
                                 Height="30"
                                 CornerRadius="40">
-                            <Image Source="{x:Bind ViewModel.AvatarPath, Mode=OneWay, Converter={StaticResource StringToImageSourceConverter}}"/>
+                            <Image Source="{x:Bind ViewModel.AvatarPath, Mode=OneWay, Converter={StaticResource StringToImageSourceConverter}}"
+                                   Stretch="UniformToFill"/>
                         </Border>
                             
                         <TextBlock Text="{x:Bind ViewModel.Username, Mode=OneWay}"

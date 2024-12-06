@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cosmetics_Shop.Models
+namespace Cosmetics_Shop.DataAccessObject.Data
 {
-    // Use this class to store user information when you get data from Database
+    /// <summary>
+    /// User Detail
+    /// </summary>
     public class UserDetail
     {
         public string   Name    { get; set; }

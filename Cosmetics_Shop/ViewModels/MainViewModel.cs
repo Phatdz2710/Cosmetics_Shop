@@ -11,10 +11,19 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.ViewModels
 {
+    /// <summary>
+    /// View model for main window
+    /// </summary>
     public class MainViewModel : INotifyPropertyChanged
     {
+        #region Singleton
+        // User Session
         private readonly UserSession        _userSession;
+        // Navigation Service
         private readonly INavigationService _navigationService;
+        #endregion
+
+        // Constructor
         public MainViewModel(INavigationService navigationService, 
                              UserSession        userSession)
         {
@@ -32,8 +41,8 @@ namespace Cosmetics_Shop.ViewModels
 
         }
 
+        // For INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
-
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

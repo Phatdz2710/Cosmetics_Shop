@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using Cosmetics_Shop.DataAccessObject.Interfaces;
 using Cosmetics_Shop.Models;
-using Cosmetics_Shop.Models.DataService;
 using Cosmetics_Shop.Services;
 using Cosmetics_Shop.Services.EventAggregatorMessages;
 using Cosmetics_Shop.Services.Interfaces;
@@ -15,8 +15,12 @@ using System.Windows.Input;
 
 namespace Cosmetics_Shop.ViewModels.PageViewModels
 {
+    /// <summary>
+    /// View model for DashboardPage
+    /// </summary>
     public class DashboardPageViewModel
     {
+        #region Singleton
         // Data access object
         private IDao _dao = null;
 
@@ -25,20 +29,23 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
 
         // Service provider
         private IServiceProvider _serviceProvider = null;
+        #endregion
 
+        #region Properties for binding
         // Observable Collection
         public ObservableCollection<ProductThumbnailViewModel> BestSeller   { get; set; } = new ObservableCollection<ProductThumbnailViewModel>();
         public ObservableCollection<ProductThumbnailViewModel> NewProducts  { get; set; } = new ObservableCollection<ProductThumbnailViewModel>();
         public ObservableCollection<ProductThumbnailViewModel> RecentlyView { get; set; } = new ObservableCollection<ProductThumbnailViewModel>();
+        #endregion
 
         // Constructor
         public DashboardPageViewModel(IEventAggregator      eventAggregator,
                                       IDao                  dao,
                                       IServiceProvider      serviceProvider)
         {
-            _dao = dao;
-            _eventAggregator = eventAggregator;
-            _serviceProvider = serviceProvider;
+            _dao                = dao;
+            _eventAggregator    = eventAggregator;
+            _serviceProvider    = serviceProvider;
 
             _eventAggregator.Subscribe<ReloadDashboardRequire>((searchEvent) =>
             {
@@ -48,6 +55,10 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             LoadDashboardData();
         }
 
+
+        /// <summary>
+        /// Load data for dashboard from database
+        /// </summary>
         private async void LoadDashboardData()
         {
             var bestSeller      = await _dao.GetListBestSellerAsync();

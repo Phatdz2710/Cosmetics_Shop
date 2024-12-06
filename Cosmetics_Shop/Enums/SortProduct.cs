@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.Models.Enums
 {
+    /// <summary>
+    /// Sort Product Mode
+    /// </summary>
     public enum SortProduct
     {
         DateAscending   = 0,

@@ -6,12 +6,15 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.Models
 {
+    /// <summary>
+    /// Store Account Information
+    /// </summary>
     public class Account
     {
-        public int ID { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public string Role { get; set; }
+        public int      ID          { get; set; }
+        public string   Username    { get; set; }
+        public string   Password    { get; set; }
+        public string   Role        { get; set; }
 
         public Account()
         {

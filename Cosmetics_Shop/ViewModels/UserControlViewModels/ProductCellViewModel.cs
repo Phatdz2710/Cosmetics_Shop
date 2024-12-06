@@ -8,6 +8,9 @@ using System.Windows.Input;
 
 namespace Cosmetics_Shop.ViewModels.UserControlViewModels
 {
+    /// <summary>
+    /// View model for product cell
+    /// </summary>
     public class ProductCellViewModel : INotifyPropertyChanged
     {
         private int _id;
@@ -86,7 +89,13 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
 
         public ProductCellViewModel() { }
 
-        public ProductCellViewModel(string name, int price, string brand, string category, int inventory, int sold, ICommand editCommand)
+        public ProductCellViewModel(string name, 
+                                    int price, 
+                                    string brand,
+                                    string category,
+                                    int inventory,
+                                    int sold,
+                                    ICommand editCommand)
         {
             Name        = name;
             Price       = price;
@@ -97,6 +106,8 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
             EditCommand = editCommand;
         }
 
+
+        // For INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
         {

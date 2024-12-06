@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using Cosmetics_Shop.Models;
-using Cosmetics_Shop.Models.DataService;
 using Cosmetics_Shop.Services;
 using Cosmetics_Shop.Services.EventAggregatorMessages;
 using Cosmetics_Shop.Services.Interfaces;
@@ -15,18 +14,26 @@ using System.Windows.Input;
 
 namespace Cosmetics_Shop.ViewModels
 {
+    /// <summary>
+    /// View Model for Admin Mode
+    /// </summary>
     public class AdminViewModel : INotifyPropertyChanged
     {
+        #region Singleton
+        // Navigation Service
         private readonly INavigationService _navigationService = null;
+        // User Session
         private readonly UserSession        _userSession = null;
+        // Event Aggregator
         private readonly IEventAggregator   _eventAggregator = null;
+        #endregion
 
-
+        #region Commands
         public ICommand AccountManagerCommand   { get; set; }
         public ICommand OrderManagerCommand     { get; set; }
         public ICommand ProductManagerComamnd   { get; set; }
         public ICommand LogoutCommand           { get; set; }
-
+        #endregion
 
         public AdminViewModel(INavigationService navigationService,
                               IEventAggregator   eventAggregator,
@@ -35,8 +42,6 @@ namespace Cosmetics_Shop.ViewModels
             _navigationService  = navigationService;
             _eventAggregator    = eventAggregator;
             _userSession        = userSession;
-
-            _userSession.GetId();
 
             _navigationService.NavigateTo<AccountManagerPage>();
 
@@ -64,8 +69,9 @@ namespace Cosmetics_Shop.ViewModels
             });
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
+        // INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

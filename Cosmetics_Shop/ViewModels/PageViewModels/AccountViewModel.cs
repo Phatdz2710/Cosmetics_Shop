@@ -1,7 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using Cosmetics_Shop.DataAccessObject.Data;
+using Cosmetics_Shop.DataAccessObject.Interfaces;
 using Cosmetics_Shop.Enums;
 using Cosmetics_Shop.Models;
-using Cosmetics_Shop.Models.DataService;
 using Cosmetics_Shop.Services;
 using Cosmetics_Shop.Services.EventAggregatorMessages;
 using Cosmetics_Shop.Services.Interfaces;
@@ -200,10 +201,10 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
 
 
         // Constructor
-        public AccountViewModel(UserSession userSession, 
-                                IDao        dao, 
+        public AccountViewModel(IDao                dao, 
                                 IEventAggregator    eventAggregator, 
-                                IFilePickerService  filePickerService)
+                                IFilePickerService  filePickerService,
+                                UserSession         userSession)
         {
             this._userSession       = userSession;
             this._eventAggregator   = eventAggregator;
@@ -219,18 +220,26 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             ChangeAvatarCommand     = new RelayCommand(changeAvatarCommand);
 
             AcceptChangePasswordCommand = new RelayCommand(acceptChangePasswordCommand);
-            RefuseChangePasswordCommand = new RelayCommand(refuseChangePasswordCommand);
+            RefuseChangePasswordCommand = new RelayCommand(cancelChangePasswordCommand);
 
-            ChangePasswordCommand = new RelayCommand(() =>
-            {
-                ChangePasswordMessage = string.Empty;
-                PasswordCurrent     = string.Empty;
-                PasswordNew         = string.Empty;
-                ShowDialogChangePassword = true;
-            });
+            ChangePasswordCommand = new RelayCommand(changePasswordCommand);
         }
 
-        // Press Logout
+        /// <summary>
+        /// Command for press change password
+        /// </summary>
+        public void changePasswordCommand() 
+        {
+            ChangePasswordMessage = string.Empty;
+            PasswordCurrent = string.Empty;
+            PasswordNew = string.Empty;
+            ShowDialogChangePassword = true;
+        }
+
+        
+        /// <summary>
+        /// Command for press Logout
+        /// </summary>
         private void logoutCommand()
         {
             _userSession.Logout();
@@ -239,7 +248,10 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             _eventAggregator.Publish(new LogoutMessage());
         }
 
-        // Press Save to save user information
+
+        /// <summary>
+        /// Command to press saving new information 
+        /// </summary>
         private async void saveInfoCommand()
         {
             await _dao.ChangeAllUserInformationAsync(_userSession.GetId(), new UserDetail()
@@ -266,7 +278,10 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             });
         }
 
-        // Change mode to edit user information
+        
+        /// <summary>
+        /// Command for press change information mode
+        /// </summary>
         private void changeInfoModeCommand()
         {
             if (ChangeInforMode)
@@ -281,7 +296,10 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             ChangeModeContent = ChangeInforMode ? "Hủy" : "Thay đổi thông tin";
         }
 
-        // Open file picker to change avatar
+        
+        /// <summary>
+        /// Command for press change avatar mode
+        /// </summary>
         private async void changeAvatarCommand()
         {
 
@@ -306,19 +324,23 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
         }
 
-        // Load user information first time
+        
+
+        /// <summary>
+        /// Load user information from database
+        /// </summary>
         private async void loadUserInformation()
         {
             var userDetail = await _dao.GetUserDetailAsync(_userSession.GetId());
 
-            Name = userDetail.Name;
-            NameDisplay = userDetail.Name;
-            Email = userDetail.Email;
-            Phone = userDetail.Phone;
-            Address = userDetail.Address;
-            AvatarPath = userDetail.AvatarPath;
-            TotalProducts = userDetail.TotalProducts;
-            TotalBills = userDetail.TotalBills;
+            Name            = userDetail.Name;
+            NameDisplay     = userDetail.Name;
+            Email           = userDetail.Email;
+            Phone           = userDetail.Phone;
+            Address         = userDetail.Address;
+            AvatarPath      = userDetail.AvatarPath;
+            TotalProducts   = userDetail.TotalProducts;
+            TotalBills      = userDetail.TotalBills;
             TotalMoneySpent = userDetail.TotalMoneySpent;
 
             if (AvatarPath == null)
@@ -326,13 +348,16 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 AvatarPath = "ms-appx:///Assets/avatar_temp.png";
             }
 
-            _nameRestore = Name;
-            _emailRestore = Email;
-            _phoneRestore = Phone;
+            _nameRestore    = Name;
+            _emailRestore   = Email;
+            _phoneRestore   = Phone;
             _addressRestore = Address;
         }
 
-        // Press OK to change password
+        
+        /// <summary>
+        /// Command for press accept change password
+        /// </summary>
         private async void acceptChangePasswordCommand()
         {
             var result = await _dao.ChangePasswordAsync(_userSession.GetId(), PasswordCurrent, PasswordNew);
@@ -346,14 +371,18 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
         }
 
-        // Press Cancel to change password
-        private void refuseChangePasswordCommand()
+        
+        /// <summary>
+        /// Command for press cancel change password
+        /// </summary>
+        private void cancelChangePasswordCommand()
         {
             ShowDialogChangePassword = false;
         }
 
 
 
+        // For INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propertyName)
         {

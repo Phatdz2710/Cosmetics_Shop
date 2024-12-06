@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using Cosmetics_Shop.Models;
-using Cosmetics_Shop.Models.DataService;
 using Cosmetics_Shop.Services;
 using Cosmetics_Shop.Views.Controls;
 using Cosmetics_Shop.Views.Pages;
@@ -15,11 +14,15 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Cosmetics_Shop.ViewModels.UserControlViewModels;
 using System.Runtime.CompilerServices;
+using Cosmetics_Shop.DataAccessObject;
+using Cosmetics_Shop.DataAccessObject.Interfaces;
 
 
 namespace Cosmetics_Shop.ViewModels.PageViewModels
 {
-
+    /// <summary>
+    /// View model for Product Detail Page
+    /// </summary>
     public class ProductDetailViewModel : INotifyPropertyChanged
     {
         private ProductDetail _productDetail;

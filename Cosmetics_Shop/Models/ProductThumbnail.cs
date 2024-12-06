@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.Models
 {
+    /// <summary>
+    /// Store Product Thumbnail Information
+    /// </summary>
     public class ProductThumbnail
     {
         public int      Id      { get; set; }
