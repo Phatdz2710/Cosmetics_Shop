@@ -171,7 +171,7 @@ namespace Cosmetics_Shop.DataAccessObject
                 try
                 {
                     var db = await _databaseContext.Products
-                        .OrderByDescending(p => p.AverageRating)
+                        .OrderByDescending(p => p.Sold)
                         .Take(6)
                         .Select(p => new ProductThumbnail(p.Id,
                                 p.Name,
