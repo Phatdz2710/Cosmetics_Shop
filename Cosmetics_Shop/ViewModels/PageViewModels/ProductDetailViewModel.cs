@@ -28,19 +28,19 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         private ProductDetail _productDetail;
         private int _shippingFee;
         private ShippingMethod _currentShippingMethod;
+        private PaymentProductThumbnail _productToPayment;
+
         public ObservableCollection<ReviewThumbnailViewModel> reviewThumbnail { get; set; }
         public ObservableCollection<CartThumbnailViewModel> Cart { get; set; }
 
         private readonly IDao _dao = null;
-
         private readonly IServiceProvider _serviceProvider = null;
+        private readonly INavigationService _navigationService;
 
         //Command
         public ICommand PaidButtonCommand { get; set; }
         public ICommand GoBackCommand { get; set; }
 
-        // Navigation service
-        private readonly INavigationService _navigationService;
         public ProductDetail ProductDetail
         {
             get => _productDetail;
@@ -62,14 +62,30 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 }
             }
         }
-        public ProductDetailViewModel(INavigationService navigationService, IDao dao, IServiceProvider serviceProvider)
+        public PaymentProductThumbnail ProductToPayment
         {
-            _dao = new MockDao();
+            get => _productToPayment;
+            set
+            {
+                if (_productToPayment != value)
+                {
+                    _productToPayment = value;
+                    OnPropertyChanged(); // Notify UI of change
+                }
+            }
+        }
+
+        public ProductDetailViewModel(INavigationService    navigationService, 
+                                      IDao                  dao, 
+                                      IServiceProvider      serviceProvider)
+        {
+            _dao = dao;
             _serviceProvider = serviceProvider;
             _navigationService = navigationService;
+            ProductToPayment = new PaymentProductThumbnail();
+
             PaidButtonCommand = new RelayCommand(() =>
             {
-
                 _navigationService.NavigateTo<PaymentPage>();
             });
             GoBackCommand = new RelayCommand(() =>
@@ -78,6 +94,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             });
         }
 
+        #region Reviews
         public void LoadInitialReviews(int idProduct)
         {
             reviewThumbnail = new ObservableCollection<ReviewThumbnailViewModel>();
@@ -130,16 +147,21 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
 
             OnPropertyChanged(nameof(reviewThumbnail)); // Notify that the reviewThumbnail has changed
         }
+        #endregion
 
-        public void LoadProductDetail(int id)
+        #region Product Detail
+        public async Task LoadProductDetailAsync(int id)
         {
-            //dao = new MockDao();
-            ProductDetail = _dao.GetProductDetail(id);
+            ProductDetail = await _dao.GetProductDetailAsync(id);
         }
+        #endregion
+
+        #region Shipping
         public List<ShippingMethod> GetShippingMethods()
         {
             return _dao.GetShippingMethods(); // Assuming _dao is initialized correctly in the constructor
         }
+        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -148,6 +170,20 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        #region Payment
+        public void SetInfo(PaymentProductThumbnail p)
+        {
+            ProductToPayment.Id = p.Id;
+            ProductToPayment.ProductName = p.ProductName;
+            ProductToPayment.Classification = p.Classification;
+            ProductToPayment.Price = p.Price;
+            ProductToPayment.Amount = p.Amount;
+        }
+
+
+        #endregion
+
+        #region Cart
         public void LoadListCart()
         {
             Cart = new ObservableCollection<CartThumbnailViewModel>();
@@ -168,7 +204,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             cartThumbnailViewModel.GetType().GetProperty("CartThumbnail").SetValue(cartThumbnailViewModel, cart);
             Cart.Add(cartThumbnailViewModel as CartThumbnailViewModel);
         }
-
+        #endregion
 
 
     }

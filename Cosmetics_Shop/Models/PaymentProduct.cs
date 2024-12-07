@@ -11,14 +11,14 @@ namespace Cosmetics_Shop.Models
     public class PaymentProduct
     {
         public int Id { get; set; }
-        Image ProductImage { get; set; }
+        string ProductImage { get; set; }
         public string ProductName { get; set; }
         public string Classification { get; set; }
         public int Price { get; set; }
         public int Amount {  get; set; }
         //public Voucher Voucher {  get; set; }
 
-        public PaymentProduct(int id, Image image, string productName, 
+        public PaymentProduct(int id, string image, string productName, 
             string classification, int price, int amount)
         {
             Id = id;

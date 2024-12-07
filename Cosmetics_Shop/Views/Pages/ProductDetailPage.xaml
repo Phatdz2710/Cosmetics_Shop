@@ -14,6 +14,7 @@
     <UserControl.Resources>
         <converter:VNDCurrencyConverter x:Key="VNDCurrencyConverter"/>
         <converter:AmountThousandToKConvert x:Key="AmountThousandToKConvert"/>
+        <converter:StringToImageSourceConverter x:Key="StringToImageSourceConverter"/>
     </UserControl.Resources>
 
     <ScrollView x:Name="scrollView">
@@ -73,8 +74,11 @@
                     </Grid.ColumnDefinitions>
 
                     <Image Grid.Column="0"
+                           x:Name="productImage"
                            HorizontalAlignment="Center"
-                           Source="ms-appx:///Assets/TaytrangBioderma.jpeg"
+                           Source="{x:Bind ViewModel.ProductDetail.ThumbnailImage, 
+                                     Mode=OneWay, 
+                                     Converter={StaticResource StringToImageSourceConverter}}"
                            Width="250"
                            Height="400"
                         />
@@ -83,6 +87,7 @@
                                 Background="White"
                                 Orientation="Vertical">
                         <TextBlock FontSize="25"
+                                   x:Name="productDetailName"
                                    TextWrapping="Wrap"
                                    Margin="0 20 10 0"
                                    Text="{x:Bind ViewModel.ProductDetail.Name, Mode=OneWay}"/>
@@ -95,10 +100,10 @@
                                     FontSize="15"
                                     >
                                 <TextBlock>
-                                    <Run Text="{x:Bind ViewModel.ProductDetail.review, Mode=OneWay,
-                                        Converter={StaticResource AmountThousandToKConvert}}" />
+                                    <Run Text="{x:Bind ViewModel.ProductDetail.review, Mode=OneWay}" />
                                     <Run Text=" Đánh giá" />
                                 </TextBlock>
+                                
                             </Button>
                             <TextBlock x:Name="soldTextBlock"
                                        FontSize="15"

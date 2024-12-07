@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -26,17 +26,23 @@ namespace Cosmetics_Shop.Views.Pages
     public sealed partial class ProductDetailPage : Page
     {
         public ProductDetailViewModel ViewModel { get; }
-        public int productId = 1;
+        public PaymentProductThumbnail product { get; set; }
+
+        public int proId = 1;
         public ProductDetailPage()
         {
             this.InitializeComponent();
             ViewModel = App.ServiceProvider.GetService(typeof(ProductDetailViewModel)) as ProductDetailViewModel;
 
-            ViewModel.LoadProductDetail(productId);
-            ViewModel.LoadInitialReviews(productId);
+            ViewModel.LoadInitialReviews(proId);
             deliveryComboBox.ItemsSource = ViewModel.GetShippingMethods();
+
+            string priceText = priceTextBlock.Text.Replace(" đ", "").Replace(",", "").Trim(); // Remove currency symbol and commas
+            product = new PaymentProductThumbnail(proId, null, productDetailName.Text, null, 0, int.Parse(amountTextBox.Text));
+            ViewModel.SetInfo(product);
         }
 
+        #region Click button
         private void minusButton_Click(object sender, RoutedEventArgs e)
         {
             if (int.TryParse(amountTextBox.Text, out int currentAmount) && currentAmount > 1)
@@ -44,7 +50,6 @@ namespace Cosmetics_Shop.Views.Pages
                 amountTextBox.Text = (currentAmount - 1).ToString();
             }
         }
-
         private void plusButton_Click(object sender, RoutedEventArgs e)
         {
             if (int.TryParse(amountTextBox.Text, out int currentAmount))
@@ -61,7 +66,6 @@ namespace Cosmetics_Shop.Views.Pages
             // Add the new product to the existing list
             ViewModel.AddNewProductToCart(newProduct);
         }
-
         private void FilterButton_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button button && button.Tag is string tag)
@@ -78,6 +82,18 @@ namespace Cosmetics_Shop.Views.Pages
                 }
             }
         }
+        #endregion
+
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        {
+            if (e.Parameter is int productId)
+            {
+                await ViewModel.LoadProductDetailAsync(productId);
+                proId = productId;
+            }
+        }
+
+
 
     }
 }
