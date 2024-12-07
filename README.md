@@ -92,10 +92,19 @@
    - Tên sản phẩm (A-Z, Z-A)
 
 ### 4. Trang chi tiết sản phẩm
+- Thêm khu vực hiển thị lượt đánh giá của sản phẩm, tùy chọn xem các lượt đánh giá theo số lượng sao
 
 ### 5. Trang giỏ hàng
+- Chức năng tính toán tổng giá tiền với các sản phẩm đã chọn dựa theo:
+   - Giá tiền x Số lượng
+   - Giá tiền sau khi số lượng thay đổi
+   - Giá tiền sau khi áp dụng voucher
 
 ### 6. Trang thanh toán
+- Giao diện trang thanh toán
+- Chức năng tính toán tổng giá tiền phải trả:
+   - Giá tiền x Số lượng
+   - Giá tiền sau khi áp dụng voucher
 
 ### 7. Trang tài khoản
 - Tính toán thông tin mua hàng:
@@ -124,7 +133,7 @@
 | Thành viên            | Công việc chính                                                                                                     |
 |-----------------------|---------------------------------------------------------------------------------------------------------------------|
 | **Châu Ngọc Phát**     | - Xây dựng cửa sổ và trang: Đăng nhập, Đăng ký, Dashboard, Tìm kiếm sản phẩm, Tài khoản, và Trang Admin.  <br>- Xây dựng lớp **Dao** (MockDao, SqlDao).  <br>- Triển khai: **MVVM Pattern**, **Dependency Injection**, **Event Aggregator**, và **Entity Framework Core**, xử lý logic bất đồng bộ bằng **Async/Await**, tối ưu với **SemaphoreSlim**.  <br>- Cài đặt **Unit Test**.|
-| **Vũ Thành Công**      | - Xây dựng và hoàn thiện các trang: Giỏ hàng, Chi tiết sản phẩm, Thanh toán.  <br>- Tích hợp các tính năng như: Tăng số lượng sản phẩm trong giỏ hàng, tính tổng tiền theo số lượng và voucher giảm giá.|
+| **Vũ Thành Công**      | - Xây dựng và hoàn thiện các trang: Giỏ hàng, Chi tiết sản phẩm, Thanh toán.  <br>- Tích hợp các tính năng như: Tăng số lượng sản phẩm trong giỏ hàng, tính tổng tiền theo số lượng và voucher giảm giá. <br>- Xây dựng lớp **Dao** (MockDao, SqlDao). <br>- Áp dụng các triển khai ở trên, xử lý logic bất đồng bộ bằng **Async/Await**.|
 | **Hồ Nguyễn Ngọc Duy** | - Phát triển và cải thiện giao diện Trang Admin, Trang tài khoản.|
 
 ## **Công Nghệ và Kỹ Thuật Đã Sử Dụng**
