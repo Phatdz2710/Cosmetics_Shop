@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using Cosmetics_Shop.DBModels;
 using Cosmetics_Shop.Models;
 using Cosmetics_Shop.Services;
 using Cosmetics_Shop.Views.Controls;
@@ -37,7 +38,7 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
 
             BuyButtonCommand = new RelayCommand(() =>
             {
-                _navigationService.NavigateTo<ProductDetailPage>();
+                _navigationService.NavigateTo<ProductDetailPage>(ProductThumbnail.Id);
             });
         }
 

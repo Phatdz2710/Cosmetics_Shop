@@ -33,6 +33,9 @@ namespace Cosmetics_Shop.Services
         /// <summary>
         /// Navigates back to the previous page in the navigation stack, if one exists.
         /// </summary>
+        /// 
+
+        void NavigateTo<TPage>(object parameter);
         void GoBack();
     }
 

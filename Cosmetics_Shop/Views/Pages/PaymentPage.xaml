@@ -97,18 +97,18 @@
                             Margin="20 0 0 0"
                             >
                         <TextBlock x:Name="nameTextBlock"
-                               Text="Ciel"
+                               Text="{x:Bind ViewModel.NameDisplay, Mode=OneWay}"
                                FontSize="15"
                                FontWeight="Bold"/>
                         <TextBlock x:Name="phoneNumberTextBlock"
-                               Text="0909909999"
+                               Text="{x:Bind ViewModel.Phone, Mode=OneWay}"
                                FontSize="15"
                                Margin="0 5 0 0"
                                FontWeight="Bold"/>
                     </StackPanel>
 
                     <TextBlock Grid.Column="1"
-                           Text="Ktx Khu B, Đường Nguyễn Du, Khu Phố 6, Phường Linh Trung, Phường Linh Trung, Thành Phố Thủ Đức, TP. Hồ Chí Minh"
+                           Text="{x:Bind ViewModel.Address, Mode=OneWay}"
                            TextWrapping="Wrap"
                            FontSize="15"
                            />

@@ -9,18 +9,18 @@ namespace Cosmetics_Shop.Models
 {
     public class ProductDetail
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public Image ThumbnailImage { get; set; }
-        public int Price { get; set; }
-        public int review { get; set; }
-        public int sold { get; set; }
-        public int availableAmount { get; set; }
-        public string danhMuc { get; set; }
-        public string kho { get; set; }
-        public string thuongHieu {  get; set; }
-        public string guiTu {  get; set; }
-        public string moTa { get; set; }
+        public int      Id              { get; set; }
+        public string   Name            { get; set; }
+        public string   ThumbnailImage  { get; set; }
+        public int      Price           { get; set; }
+        public double   review          { get; set; }
+        public int      sold            { get; set; }
+        public int      availableAmount { get; set; }
+        public string   danhMuc         { get; set; }
+        public string   kho             { get; set; }
+        public string   thuongHieu      { get; set; }
+        public string   guiTu           { get; set; }
+        public string   moTa            { get; set; }
 
         public ProductDetail()
         {
@@ -37,7 +37,7 @@ namespace Cosmetics_Shop.Models
             guiTu = "";
             moTa = "";
         }
-        public ProductDetail(int id, string name, Image thumbnailImage, int price,int revie, int sol, 
+        public ProductDetail(int id, string name, string thumbnailImage, int price,double revie, int sol, 
             int available, string danhMu, string kh, string thuongHie, string guiT, string moT)
         {
             Id = id;

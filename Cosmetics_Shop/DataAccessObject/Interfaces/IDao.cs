@@ -54,15 +54,7 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// <returns>
         /// A <see cref="ProductDetail"/> object containing detailed information about the product.
         /// </returns>
-        ProductDetail GetProductDetail(int idProduct);
 
-        /// <summary>
-        /// Asynchronously retrieves a list of the newest products.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="Task"/> representing the asynchronous operation, 
-        /// which returns a list of <see cref="ProductThumbnail"/> for the newest products.
-        /// </returns>
         Task<List<ProductThumbnail>> GetListNewProductAsync();
 
         /// <summary>
@@ -82,6 +74,16 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// which returns a list of <see cref="ProductThumbnail"/> for recently viewed products.
         /// </returns>
         Task<List<ProductThumbnail>> GetListRecentlyViewAsync();
+
+        Task<List<ProductDetail>> GetProductDetailsAsync();
+        Task<ProductDetail> GetProductDetailAsync(int idProduct);
+        /// <summary>
+        /// Asynchronously retrieves a list of the newest products.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="Task"/> representing the asynchronous operation, 
+        /// which returns a list of <see cref="ProductDetail"/> for the newest products.
+        /// </returns>
 
         #endregion
 
