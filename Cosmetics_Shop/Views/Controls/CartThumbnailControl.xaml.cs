@@ -47,14 +47,12 @@ namespace Cosmetics_Shop.Views.Controls
             if (ViewModel.CartThumbnail.Amount > 1)
             {
                 ViewModel.CartThumbnail.Amount--;
-                //ViewModel.CartPageViewModel.RecalculateTotalPay(); // Recalculate total pay
             }
         }
 
         private void plusButton_Click(object sender, RoutedEventArgs e)
         {
             ViewModel.CartThumbnail.Amount++;
-            //ViewModel.CartPageViewModel.RecalculateTotalPay();
         }
     }
 }

@@ -26,7 +26,6 @@ namespace Cosmetics_Shop.Views.Pages
     public sealed partial class ProductDetailPage : Page
     {
         public ProductDetailViewModel ViewModel { get; }
-        public PaymentProductThumbnail product { get; set; }
 
         public int proId = 1;
         public ProductDetailPage()
@@ -34,38 +33,56 @@ namespace Cosmetics_Shop.Views.Pages
             this.InitializeComponent();
             ViewModel = App.ServiceProvider.GetService(typeof(ProductDetailViewModel)) as ProductDetailViewModel;
 
-            ViewModel.LoadInitialReviews(proId);
+            ViewModel.LoadInitialReviews(1);
             deliveryComboBox.ItemsSource = ViewModel.GetShippingMethods();
-
-            string priceText = priceTextBlock.Text.Replace(" đ", "").Replace(",", "").Trim(); // Remove currency symbol and commas
-            product = new PaymentProductThumbnail(proId, null, productDetailName.Text, null, 0, int.Parse(amountTextBox.Text));
-            ViewModel.SetInfo(product);
         }
+
+        #region Navigation
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        {
+            if (e.Parameter is int productId)
+            {
+                await ViewModel.LoadProductDetailAsync(productId);
+
+                // Remove currency symbol and commas, and trim whitespace
+                string priceText = priceTextBlock.Text.Replace(" đ", "").Replace(",", "").Trim();
+
+                // Initialize variables for price and amount
+                int price = 0;
+                int amount = 0;
+
+                // Try to parse the price
+                if (!int.TryParse(priceText, out price))
+                {
+                    price = 0; // Default value
+                }
+
+                // Try to parse the amount
+                if (!int.TryParse(amountTextBox.Text, out amount))
+                {
+                    amount = 1; // Default value
+                }
+
+                // Create the product instance
+                var product = new PaymentProductThumbnail(productId, null, productDetailName.Text, price, amount);
+                ViewModel.SetInfo(product);
+            }
+        }
+        #endregion
 
         #region Click button
         private void minusButton_Click(object sender, RoutedEventArgs e)
         {
-            if (int.TryParse(amountTextBox.Text, out int currentAmount) && currentAmount > 1)
+            if (ViewModel.Amount > 1)
             {
-                amountTextBox.Text = (currentAmount - 1).ToString();
+                ViewModel.Amount--; // Decrease the amount
             }
         }
         private void plusButton_Click(object sender, RoutedEventArgs e)
         {
-            if (int.TryParse(amountTextBox.Text, out int currentAmount))
-            {
-                amountTextBox.Text = (currentAmount + 1).ToString();
-            }
+            ViewModel.Amount++; // Increase the amount
         }
 
-        private void themvaogiohangButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Create a new product to add to the existing cart   
-            var newProduct = new CartThumbnail(7, null, "New Product", "Description of new product", 200000, 1, 20000);
-
-            // Add the new product to the existing list
-            ViewModel.AddNewProductToCart(newProduct);
-        }
         private void FilterButton_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button button && button.Tag is string tag)
@@ -83,17 +100,6 @@ namespace Cosmetics_Shop.Views.Pages
             }
         }
         #endregion
-
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
-        {
-            if (e.Parameter is int productId)
-            {
-                await ViewModel.LoadProductDetailAsync(productId);
-                proId = productId;
-            }
-        }
-
-
 
     }
 }

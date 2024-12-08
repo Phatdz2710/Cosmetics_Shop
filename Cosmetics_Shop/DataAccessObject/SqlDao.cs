@@ -172,7 +172,7 @@ namespace Cosmetics_Shop.DataAccessObject
                 try
                 {
                     var db = await _databaseContext.Products
-                        .OrderByDescending(p => p.AverageRating)
+                        .OrderByDescending(p => p.Sold)
                         .Take(6)
                         .Select(p => new ProductThumbnail(p.Id,
                                 p.Name,
@@ -891,12 +891,10 @@ namespace Cosmetics_Shop.DataAccessObject
         {
             var db = new List<CartThumbnail>()
             {
-                new CartThumbnail(1, null, "Tẩy trang loreal", "Tươi mát", 150000, 2, 300000),
-                new CartThumbnail(2, null, "Tẩy trang loreal", "Sạch sâu", 150000, 2, 300000),
-                new CartThumbnail(3, null, "Tẩy trang Bioderma", "Tươi mát", 150000, 1, 150000),
-                new CartThumbnail(4, null, "Tẩy trang Bioderma", "Sạch sâu", 150000, 2, 300000),
-                new CartThumbnail(5, null, "Tẩy trang Ganier", "BHA", 130000, 1, 130000),
-                new CartThumbnail(6, null, "Kem chống nắng skinaqua", "Vạch vàng", 125000, 1, 125000)
+                new CartThumbnail(1, null, "Tẩy trang loreal", 150000, 2, 300000),
+                new CartThumbnail(3, null, "Tẩy trang Bioderma", 150000, 1, 150000),
+                new CartThumbnail(5, null, "Tẩy trang Ganier", 130000, 1, 130000),
+                new CartThumbnail(6, null, "Kem chống nắng skinaqua", 125000, 1, 125000)
             };
 
             return db;
@@ -972,9 +970,9 @@ namespace Cosmetics_Shop.DataAccessObject
         {
             var db = new List<PaymentProductThumbnail>
             {
-                new PaymentProductThumbnail(1, null, "Tẩy trang loreal", "Tươi mát", 150000, 2),
-                new PaymentProductThumbnail(2, null, "Tẩy trang loreal", "Sạch sâu", 150000, 2),
-                new PaymentProductThumbnail(3, null, "Tẩy trang Bioderma", "Tươi mát", 150000, 1)
+                new PaymentProductThumbnail(1, null, "Tẩy trang loreal", 150000, 2),
+                new PaymentProductThumbnail(2, null, "Tẩy trang loreal", 150000, 2),
+                new PaymentProductThumbnail(3, null, "Tẩy trang Bioderma", 150000, 1)
             };
 
             return db;
