@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="Cosmetics_Shop.Views.Controls.ProductCellControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Cosmetics_Shop.Views.Controls"
+    xmlns:converter="using:Cosmetics_Shop.Views.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <converter:NameProductOnThumbnail x:Key="NameProductOnThumbnail"/>
+        <converter:VNDCurrencyConverter x:Key="VNDCurrencyConverter"/>
+    </UserControl.Resources>
+
+    <Grid Background="White"
+          CornerRadius="5"
+          BorderThickness="1"
+          BorderBrush="LightGray">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Column="0" Text="{x:Bind ViewModel.Id, Mode=OneWay}"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Center"
+               Margin="20 0 0 0"
+               FontSize="17"/>
+
+        <TextBlock Grid.Column="1" Text="{x:Bind ViewModel.Name, Mode=OneWay, Converter={StaticResource NameProductOnThumbnail}}"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Center"
+               FontSize="17"/>
+
+        <TextBlock Grid.Column="2" 
+               HorizontalAlignment="Left"
+               VerticalAlignment="Center"
+               FontSize="17">
+            <Run Text="{x:Bind ViewModel.Price, Mode=OneWay, Converter={StaticResource VNDCurrencyConverter}}"/>
+            <Run Text="đ"/>
+        </TextBlock>
+
+        <TextBlock Grid.Column="3" Text="{x:Bind ViewModel.Brand, Mode=OneWay}"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Left"
+               FontSize="17"/>
+
+        <TextBlock Grid.Column="4" Text="{x:Bind ViewModel.Category, Mode=OneWay}"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Left"
+                   FontSize="17"/>
+
+        <TextBlock Grid.Column="5" Text="{x:Bind ViewModel.Inventory, Mode=OneWay}"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Left"
+                   FontSize="17"/>
+
+        <TextBlock Grid.Column="6" Text="{x:Bind ViewModel.Sold, Mode=OneWay}"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Left"
+                   FontSize="17"/>  
+
+        <Button Grid.Column="7" Content="Chỉnh sửa" Command="{x:Bind ViewModel.EditCommand, Mode=OneWay}"
+                Background="#4AFFA2"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"/>
+
+    </Grid>
+</UserControl>

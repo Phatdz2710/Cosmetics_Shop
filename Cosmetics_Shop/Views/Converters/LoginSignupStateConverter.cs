@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.Views.Converters
 {
+    /// <summary>
+    /// Converts login/signup state to visibility
+    /// </summary>
     public class LoginSignupStateConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)

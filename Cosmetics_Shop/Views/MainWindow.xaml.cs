@@ -16,6 +16,8 @@ using Cosmetics_Shop.ViewModels;
 using Cosmetics_Shop.Models;
 using Cosmetics_Shop.Views.Pages;
 using Cosmetics_Shop.Services;
+using Cosmetics_Shop.Services.Interfaces;
+using Cosmetics_Shop.Services.EventAggregatorMessages;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -23,20 +25,33 @@ using Cosmetics_Shop.Services;
 namespace Cosmetics_Shop.Views
 {
     /// <summary>
-    /// An empty window that can be used on its own or navigated to within a Frame.
+    /// Main window
     /// </summary>
     public sealed partial class MainWindow : Window
     {
         public MainViewModel ViewModel { get; set; }
+
         public MainWindow()
         {
             this.InitializeComponent();
-            this.AppWindow.Resize(new Windows.Graphics.SizeInt32(1600, 900));
+            this.AppWindow.Resize(new Windows.Graphics.SizeInt32(1700, 900));
             
             var navigationService = App.ServiceProvider.GetService(typeof(INavigationService)) as INavigationService;
             navigationService.Initialize(MainPageFrame);
 
             ViewModel = App.ServiceProvider.GetService(typeof(MainViewModel)) as MainViewModel;
+
+            IEventAggregator eventAggregator = App.ServiceProvider.GetService(typeof(IEventAggregator)) as IEventAggregator;
+            // Close window
+            eventAggregator.Subscribe<LogoutMessage>(WindowClose);
+
+            IFilePickerService filePickerService = App.ServiceProvider.GetService(typeof(IFilePickerService)) as IFilePickerService;
+            filePickerService.SetWindowFocus(this);
+        }
+
+        private void WindowClose(LogoutMessage message)
+        {
+            this.Close();
         }
     }
 }

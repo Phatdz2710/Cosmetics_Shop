@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="Cosmetics_Shop.Views.AdminPages.ProductManagerPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converter="using:Cosmetics_Shop.Views.Converters"
+    xmlns:controls="using:Cosmetics_Shop.Views.Controls"
+    xmlns:local="using:Cosmetics_Shop.Views.AdminPages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    NavigationCacheMode="Enabled"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.Resources>
+        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converter:StringToImageSourceConverter x:Key="StringToImageSourceConverter"/>
+    </Page.Resources>
+
+    <Grid Background="White"
+          CornerRadius="20"
+          Margin="2"
+          Padding="10">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.6*"/>
+            <RowDefinition Height="0.6*"/>
+            <RowDefinition Height="8*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0"
+               Text="QUẢN LÝ SẢN PHẨM"
+               FontSize="30"
+               FontWeight="SemiBold"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"/>
+
+        <Button Grid.Row="1"
+                Content="Thêm sản phẩm"
+                Height="35"
+                HorizontalAlignment="Right"
+                Background="#6BE38F"
+                Command="{x:Bind ViewModel.CreateProductCommand, Mode=OneTime}"/>
+
+        <Grid Grid.Row="2"
+              Background="#E0FFF1"
+              CornerRadius="5 5 0 0"
+              BorderThickness="1 1 1 0"
+              Padding="10 0 10 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" Text="ID"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Center"
+                   Margin="20 0 0 0"
+                   FontSize="17"/>
+
+            <TextBlock Grid.Column="1" Text="Name"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Center"
+                   FontSize="17"/>
+
+            <TextBlock Grid.Column="2" Text="Price"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Center"
+                   FontSize="17"/>
+
+            <TextBlock Grid.Column="3" Text="Brand"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Left"
+                   FontSize="17"/>
+
+            <TextBlock Grid.Column="4" Text="Category"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Left"
+                   FontSize="17"/>
+
+            <TextBlock Grid.Column="5" Text="Inventory"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Left"
+                   FontSize="17"/>
+            
+            <TextBlock Grid.Column="6" Text="Sold"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Left"
+                       FontSize="17"/>
+
+            <TextBlock Grid.Column="7" Text="Edit"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       FontSize="17"/>
+        </Grid>
+
+        <ScrollView Grid.Row="3"
+                MinHeight="450"
+                Background="#2B945E"
+                VerticalAlignment="Top"
+                CornerRadius="0 0 10 10">
+            <ListView ItemsSource="{x:Bind ViewModel.ListProducts}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <controls:ProductCellControl ViewModel="{Binding}"
+                                                     Height="50"
+                                                     Margin="0 10 0 0"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </ScrollView>
+
+        <Grid Grid.Row="4"
+              Width="300">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0"
+                    Width="100"
+                    Content="Previous"
+                    VerticalAlignment="Center"
+                    Background="LightGreen"
+                    Visibility="{x:Bind ViewModel.VisiPrevious, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{x:Bind ViewModel.PreviousPageCommand, Mode=OneTime}"/>
+
+            <TextBlock Grid.Column="1"
+                       VerticalAlignment="Center">
+                <Run Text="{x:Bind ViewModel.CurrentPage, Mode=OneWay}"/> <Run Text="/"/> <Run Text="{x:Bind ViewModel.TotalPage, Mode=OneWay}"/>
+            </TextBlock>
+
+            <Button Grid.Column="2"
+                    Width="100"
+                    Content="Next"
+                    VerticalAlignment="Center"
+                    Background="LightGreen"
+                    Visibility="{x:Bind ViewModel.VisiNext, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{x:Bind ViewModel.NextPageCommand, Mode=OneTime}"/>
+        </Grid>
+
+        <Grid Grid.Row="0"
+              Grid.RowSpan="5"
+              Background="Transparent"
+              CornerRadius="5"
+              Visibility="{x:Bind ViewModel.ShowForm, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Rectangle Fill="Black" Opacity="0.7"/>
+
+            <Grid Background="White"
+                  Margin="350 100 350 100"
+                  CornerRadius="10"
+                  Padding="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.5*"/>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="{x:Bind ViewModel.FormTitle, Mode=OneWay}"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       FontSize="25"
+                       FontWeight="SemiBold"/>
+
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Button Grid.Column="0"
+                            Grid.Row="0"
+                            Grid.ColumnSpan="2"
+                            Grid.RowSpan="2"
+                            CornerRadius="20"
+                            Height="170"
+                            Width="170"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            Command="{x:Bind ViewModel.SelectImagePathCommand, Mode=OneTime}">
+                        <Image Source="{x:Bind ViewModel.ProductImagePath, Mode=OneWay, Converter={StaticResource StringToImageSourceConverter}}"/>
+                    </Button>
+
+                    <StackPanel Grid.Column="1" Grid.Row="0">
+                        <TextBlock Text="Tên"/>
+                        <TextBox PlaceholderText="Tên"
+                                 Text="{x:Bind ViewModel.ProductName, Mode=TwoWay}"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Grid.Row="1">
+                        <TextBlock Text="Giá"/>
+                        <TextBox PlaceholderText="Giá"
+                                 Text="{x:Bind ViewModel.ProductPrice, Mode=TwoWay}"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="0" Grid.Row="2" Margin="0 5 0 0">
+                        <TextBlock Text="Thương hiệu"/>
+                        <TextBox PlaceholderText="Thương hiệu"
+                                 Text="{x:Bind ViewModel.ProductBrand, Mode=TwoWay}"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Grid.Row="2" Margin="5 5 0 0">
+                        <TextBlock Text="Loại sản phẩm"/>
+                        <TextBox PlaceholderText="Loại sản phẩm"
+                                 Text="{x:Bind ViewModel.ProductCategory, Mode=TwoWay}"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" Grid.ColumnSpan="2" Margin="5 5 0 0">
+                        <TextBlock Text="Tồn kho"/>
+                        <TextBox PlaceholderText="Tồn kho"
+                                 Text="{x:Bind ViewModel.ProductInventory, Mode=TwoWay}"
+                                 Width="200"
+                                 HorizontalAlignment="Left"/>
+                    </StackPanel>
+                </Grid>
+
+                <StackPanel Grid.Row="2"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center">
+                    <Button Width="100" Margin="10"
+                        Content="Xác nhận"
+                        Background="#6BE38F"
+                        Command="{x:Bind ViewModel.AcceptFormCommand, Mode=OneWay}"/>
+
+                    <Button Width="100" Margin="10"
+                        Content="Hủy"
+                        Background="Tomato"
+                        Foreground="White"
+                        Command="{x:Bind ViewModel.CancelFormCommand, Mode=OneWay}"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+
+    </Grid>
+</Page>

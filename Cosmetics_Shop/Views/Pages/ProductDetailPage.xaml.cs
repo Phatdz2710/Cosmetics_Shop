@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,58 +20,67 @@ using Cosmetics_Shop.Models;
 
 namespace Cosmetics_Shop.Views.Pages
 {
+    /// <summary>
+    /// Product detail page
+    /// </summary>
     public sealed partial class ProductDetailPage : Page
     {
         public ProductDetailViewModel ViewModel { get; }
-        public int productId = 1;
+
+        public int proId = 1;
         public ProductDetailPage()
         {
             this.InitializeComponent();
             ViewModel = App.ServiceProvider.GetService(typeof(ProductDetailViewModel)) as ProductDetailViewModel;
 
-            ViewModel.LoadProductDetail(productId);
-            ViewModel.LoadInitialReviews(productId);
+            ViewModel.LoadInitialReviews(1);
+            deliveryComboBox.ItemsSource = ViewModel.GetShippingMethods();
         }
 
+        #region Navigation
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        {
+            if (e.Parameter is int productId)
+            {
+                await ViewModel.LoadProductDetailAsync(productId);
+
+                // Remove currency symbol and commas, and trim whitespace
+                string priceText = priceTextBlock.Text.Replace(" đ", "").Replace(",", "").Trim();
+
+                // Initialize variables for price and amount
+                int price = 0;
+                int amount = 0;
+
+                // Try to parse the price
+                if (!int.TryParse(priceText, out price))
+                {
+                    price = 0; // Default value
+                }
+
+                // Try to parse the amount
+                if (!int.TryParse(amountTextBox.Text, out amount))
+                {
+                    amount = 1; // Default value
+                }
+
+                // Create the product instance
+                var product = new PaymentProductThumbnail(productId, null, productDetailName.Text, price, amount);
+                ViewModel.SetInfo(product);
+            }
+        }
+        #endregion
+
+        #region Click button
         private void minusButton_Click(object sender, RoutedEventArgs e)
         {
-            if (int.TryParse(amountTextBox.Text, out int currentAmount) && currentAmount > 1)
+            if (ViewModel.Amount > 1)
             {
-                amountTextBox.Text = (currentAmount - 1).ToString();
+                ViewModel.Amount--; // Decrease the amount
             }
         }
-
         private void plusButton_Click(object sender, RoutedEventArgs e)
         {
-            if (int.TryParse(amountTextBox.Text, out int currentAmount))
-            {
-                amountTextBox.Text = (currentAmount + 1).ToString();
-            }
-        }
-
-        private void MenuFlyoutItem_Click(object sender, RoutedEventArgs e)
-        {
-            // Get the clicked MenuFlyoutItem
-            var menuItem = sender as MenuFlyoutItem;
-
-            // Update the content of the DropDownButton with the selected item's text
-            if (menuItem != null)
-            {
-                myDropDownButton.Content = menuItem.Text;
-            }
-        }
-
-        //private async void OnReviewButtonClicked(object sender, EventArgs e) =>
-        //    // Scroll to the reviewGrid
-        //    await scrollView.ScrollToAsync(reviewGrid, ScrollToPosition.Center, true);
-
-        private void themvaogiohangButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Create a new product to add to the existing cart   
-            var newProduct = new CartThumbnail(7, null, "New Product", "Description of new product", 200000, 1, 20000);
-
-            // Add the new product to the existing list
-            ViewModel.AddNewProductToCart(newProduct);
+            ViewModel.Amount++; // Increase the amount
         }
 
         private void FilterButton_Click(object sender, RoutedEventArgs e)
@@ -90,6 +99,7 @@ namespace Cosmetics_Shop.Views.Pages
                 }
             }
         }
+        #endregion
 
     }
 }

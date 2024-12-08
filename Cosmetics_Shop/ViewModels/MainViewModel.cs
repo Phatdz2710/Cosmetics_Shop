@@ -11,14 +11,24 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.ViewModels
 {
+    /// <summary>
+    /// View model for main window
+    /// </summary>
     public class MainViewModel : INotifyPropertyChanged
     {
-        private readonly UserSession _userSession;
+        #region Singleton
+        // User Session
+        private readonly UserSession        _userSession;
+        // Navigation Service
         private readonly INavigationService _navigationService;
-        public MainViewModel(INavigationService navigationService, UserSession userSession)
+        #endregion
+
+        // Constructor
+        public MainViewModel(INavigationService navigationService, 
+                             UserSession        userSession)
         {
-            _userSession = userSession;
-            _navigationService = navigationService;
+            _userSession        = userSession;
+            _navigationService  = navigationService;
 
             if (_userSession.GetRole() == "Admin")
             {
@@ -31,8 +41,8 @@ namespace Cosmetics_Shop.ViewModels
 
         }
 
+        // For INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
-
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

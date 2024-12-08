@@ -23,7 +23,7 @@
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="20"/>
+            <RowDefinition Height="10"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="100"/>
         </Grid.RowDefinitions>
@@ -42,6 +42,20 @@
 				  Grid.ColumnSpan="2"
 				  Background="#317256"
 				  />
+
+        <Button x:Name="returnButton"
+                    Background="#317256"
+                    Grid.Column="0"
+                    Grid.Row="1"
+                    VerticalAlignment="Top"
+                    BorderBrush="#317256"
+                    Margin="10 0 0 0"
+                    Foreground="White"
+                    Command="{x:Bind ViewModel.GoBackCommand,
+                            Mode=OneWay}"
+                    >
+            <FontIcon Glyph="&#xE830;" />
+        </Button>
 
         <Grid Grid.Column="1" Grid.Row="2"
               VerticalAlignment="Bottom"
@@ -121,7 +135,9 @@
                             Height="50"
                             Width="200"
                             Foreground="White"
-                            Background="Red">
+                            Background="Red"
+                            Command="{x:Bind ViewModel.PaidButtonCommand,
+                                        Mode=OneWay}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Mua ngay"
                             Margin="10 0 0 0"
@@ -145,7 +161,7 @@
             <GridView.ItemTemplate>
                 <DataTemplate>
                     <controls:CartThumbnailControl ViewModel="{Binding}"
-                                                    MinWidth="1280"
+                                                    MinWidth="1100"
                                                       />
                 </DataTemplate>
             </GridView.ItemTemplate>

@@ -5,7 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Cosmetics_Shop.Views.Pages"
     xmlns:brand="using:Cosmetics_Shop.Models"
-    xmlns:objects="using:Cosmetics_Shop.Views.Objects"
+    xmlns:objects="using:Cosmetics_Shop.Views.Controls"
     xmlns:converter="using:Cosmetics_Shop.Views.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -13,9 +13,10 @@
     NavigationCacheMode="Enabled"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <UserControl.Resources>
+    <Page.Resources>
         <converter:VNDCurrencyConverter x:Key="VNDCurrencyConverter"/>
-    </UserControl.Resources>
+        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </Page.Resources>
 
     <Grid Background="LightGray">
         <Grid.ColumnDefinitions>
@@ -23,24 +24,26 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Column="0"
-              Margin="10"
-              CornerRadius="10"
-              Background="White">
+        <ScrollView Grid.Column="0"
+                  Margin="10"
+                  CornerRadius="10"
+                  Background="White"
+                  VerticalScrollBarVisibility="Hidden">
+            <StackPanel>
 
             <!-- Mục Lọc (theo giá) -->
             <StackPanel Margin="10">
 
+                <!-- Filter by Brands -->
                 <TextBlock Text="Thương hiệu"
                            FontSize="16"
                            FontWeight="Bold"
                            Margin="0,0,0,5"/>
 
-                <ListView Name="ListViewBrands" 
-                          MaxHeight="160"
+                <ListView MaxHeight="160"
                           ItemsSource="{x:Bind ViewModel.Brands}">
                     <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="brand:CheckboxBrandContent">
+                        <DataTemplate x:DataType="brand:FilterCheckbox">
                             <CheckBox Content="{x:Bind Name}"
                                       Command="{x:Bind CheckedCommand}"
                                       CommandParameter="{x:Bind Index}"
@@ -49,11 +52,30 @@
                     </ListView.ItemTemplate>
                 </ListView>
 
-                <TextBlock Text="Giá"
+                <!-- Filter by Categories -->
+                <TextBlock Text="Loại sản phẩm"
                            FontSize="16"
                            FontWeight="Bold"
                            Margin="0,0,0,5"/>
 
+                <ListView MaxHeight="160"
+                          ItemsSource="{x:Bind ViewModel.Categories}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="brand:FilterCheckbox">
+                            <CheckBox Content="{x:Bind Name}"
+                                      Command="{x:Bind CheckedCommand}"
+                                      CommandParameter="{x:Bind Index}"
+                                      IsChecked="{x:Bind IsChecked}"/>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <!-- Filter by Price -->
+                <TextBlock Text="Giá"
+                           FontSize="16"
+                           FontWeight="Bold"
+                           Margin="0,0,0,5"/>
+                
                 <StackPanel Orientation="Vertical">
                     <NumberBox Width="160"
                              PlaceholderText="Thấp nhất"
@@ -78,9 +100,6 @@
             </StackPanel>
 
 
-            <!--Command="{Binding ViewModel.CheckboxBrandCheckedCommand, 
-          ElementName=ListViewBrands}"-->
-
             <!-- Mục Sắp xếp -->
             <StackPanel Grid.Row="1" Margin="10">
                 <TextBlock Text="Sắp xếp"
@@ -93,16 +112,28 @@
                     <ComboBoxItem Content="Mới nhất"/>
                     <ComboBoxItem Content="Giá giảm dần"/>
                     <ComboBoxItem Content="Giá tăng dần"/>
-                    <ComboBoxItem Content="Tên sản phẩm"/>
+                    <ComboBoxItem Content="A - Z"/>
+                    <ComboBoxItem Content="Z - A"/>
                 </ComboBox>
             </StackPanel>
-        </StackPanel>
+            </StackPanel>
+        </ScrollView>
+        
+        <!-- Is Enabled -->
+        <Grid Grid.Column="0"
+              Margin="10"
+              CornerRadius="10"
+              Background="White"
+              Opacity="0.5"
+              Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+        </Grid>
 
+        
         <Grid Grid.Column="1"
               Background="#317256"
               Margin="10"
-              Padding="10"
               CornerRadius="10">
+
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.6*"/>
                 <RowDefinition Height="10*"/>
@@ -110,7 +141,8 @@
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Row="0"
-                       Foreground="White">
+                       Foreground="White"
+                       Margin="10 10 10 0">
                 <Run Text="Kết quả tìm kiếm cho từ khóa '"/>
                 <Run Text="{x:Bind ViewModel.Keyword, Mode=OneWay}"
                      Foreground="LightGreen"/>
@@ -118,16 +150,19 @@
                 <Run Text=" - "/>
                 <Run Text="Tổng số sản phẩm: "/>
                 <Run Text="{x:Bind ViewModel.TotalProducts, Mode=OneWay}"
-                     Foreground="LightGreen"/>
+                     Foreground="LightGreen"
+                     FontSize="15"
+                     FontWeight="Bold"/>
             </TextBlock>
 
             <GridView Grid.Row="1"
                       CornerRadius="10"
+                      Margin="10"
                       ItemsSource="{x:Bind ViewModel.ProductThumbnails}">
                 <GridView.ItemTemplate>
                     <DataTemplate>
-                        <objects:ProductThumbnailControl Height="270"
-                                                         Width="230"
+                        <objects:ProductThumbnailControl Height="250"
+                                                         Width="200"
                                                          ViewModel="{Binding}"/>
                     </DataTemplate>
                 </GridView.ItemTemplate>
@@ -140,7 +175,7 @@
                     <Button Content="Trước"
                             Width="80"
                             Command="{x:Bind ViewModel.PreviousPageCommand}"
-                            Visibility="{x:Bind ViewModel.VisiPrevious, Mode=OneWay}"/>
+                            Visibility="{x:Bind ViewModel.VisiPrevious, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                 </Grid>
 
                 <TextBlock VerticalAlignment="Center"
@@ -154,10 +189,23 @@
                     <Button Content="Sau"
                             Width="80"
                             Command="{x:Bind ViewModel.NextPageCommand}"
-                            Visibility="{x:Bind ViewModel.VisiNext, Mode=OneWay}"/>
+                            Visibility="{x:Bind ViewModel.VisiNext, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                 </Grid>
 
             </StackPanel>
+
+            <Grid Grid.Row="0"
+                  Grid.RowSpan="3"
+                  Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                <TextBlock VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           Text="Loading..."
+                           FontSize="25"
+                           Foreground="White"/>
+            </Grid>
+
+            
         </Grid>
     </Grid>
 </Page>

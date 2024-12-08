@@ -40,20 +40,11 @@
                      Margin="10 10 0 10"
                      />
             <TextBlock Grid.Column="2"
+                       Grid.ColumnSpan="2"
                        x:Name="productNameTextBlock"
                        Margin="10 40 0 0"
                        Text="{x:Bind ViewModel.CartThumbnail.ProductName, Mode=OneWay}"
                        TextWrapping="Wrap"/>
-
-            <DropDownButton Grid.Column="3"
-                            Content="{x:Bind ViewModel.CartThumbnail.Classification, Mode=OneWay}"
-                            Margin="50 0 0 0">
-                <DropDownButton.Flyout>
-                    <MenuFlyout Placement="Bottom">
-                        <MenuFlyoutItem Text="{x:Bind ViewModel.CartThumbnail.Classification, Mode=OneWay}"/>
-                    </MenuFlyout>
-                </DropDownButton.Flyout>
-            </DropDownButton>
 
             <TextBlock Grid.Column="4" 
                        x:Name="price"

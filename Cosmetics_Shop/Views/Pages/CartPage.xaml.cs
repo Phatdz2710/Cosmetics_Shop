@@ -23,7 +23,7 @@ using Cosmetics_Shop.Models; // Adjust the namespace as necessary
 namespace Cosmetics_Shop.Views.Pages
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// Cart page
     /// </summary>
     public sealed partial class CartPage : Page
     {

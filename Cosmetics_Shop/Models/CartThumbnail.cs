@@ -10,9 +10,9 @@ namespace Cosmetics_Shop.Models
 {
     public class CartThumbnail : Cart, INotifyPropertyChanged
     {
-        public CartThumbnail(int id, Image productImage, string productName, string classification,
+        public CartThumbnail(int id, string productImage, string productName,
             int price, int amount, int totalPrice)
-            : base(id, productImage, productName, classification, price, amount, totalPrice)
+            : base(id, productImage, productName, price, amount, totalPrice)
         { }
 
     }

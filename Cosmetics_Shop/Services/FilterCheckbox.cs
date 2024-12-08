@@ -11,11 +11,14 @@ using Windows.UI.Popups;
 
 namespace Cosmetics_Shop.Models
 {
-    public struct CheckboxBrandContent
+    /// <summary>
+    /// Filter Checkbox
+    /// </summary>
+    public struct FilterCheckbox
     { 
-        public int Index { get; set; }
-        public string Name { get; set; }
-        public ICommand CheckedCommand { get; set; }
-        public bool IsChecked { get; set; }
+        public int      Index           { get; set; }
+        public string   Name            { get; set; }
+        public ICommand CheckedCommand  { get; set; }
+        public bool     IsChecked       { get; set; }
     }
 }

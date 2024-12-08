@@ -40,7 +40,8 @@
                      BorderBrush="LightGray"
                      BorderThickness="1"
                      Margin="0,0,0,10"
-                     Text="{x:Bind ViewModel.Username, Mode=TwoWay}"/>
+                     Text="{x:Bind ViewModel.Username, Mode=TwoWay}"
+                     IsEnabled="{x:Bind ViewModel.IsEnabled, Mode=OneWay}"/>
 
             <PasswordBox x:Name="PasswordLogin"
                          PlaceholderText="Password"
@@ -50,15 +51,18 @@
                          BorderBrush="LightGray"
                          BorderThickness="1"
                          Margin="0,0,0,5"
-                         Password="{x:Bind ViewModel.Password, Mode=TwoWay}"/>
+                         Password="{x:Bind ViewModel.Password, Mode=TwoWay}"
+                         IsEnabled="{x:Bind ViewModel.IsEnabled, Mode=OneWay}"/>
 
-            <TextBlock  Text="{x:Bind ViewModel.WrongMessage, Mode=OneWay}"
+            <TextBlock Text="{x:Bind ViewModel.WrongMessage, Mode=OneWay}"
                        Foreground="Red"
-                       Visibility="{x:Bind ViewModel.MessageVisibility, Mode=OneWay}"/>
+                       Visibility="{x:Bind ViewModel.MessageVisibility, Mode=OneWay}"
+                       FontSize="15"/>
 
             <CheckBox x:Name="cbxRememeber" 
                         Content="Remember me"
-                      IsChecked="{x:Bind ViewModel.RememberMe, Mode=TwoWay}"/>
+                      IsChecked="{x:Bind ViewModel.RememberMe, Mode=TwoWay}"
+                      IsEnabled="{x:Bind ViewModel.IsEnabled, Mode=OneWay}"/>
 
             <Button Content="Login"
                     Background="#7CFFB9"
@@ -69,7 +73,8 @@
                     CornerRadius="8"
                     HorizontalAlignment="Stretch"
                     Margin="0,0,0,5"
-                    Command="{x:Bind ViewModel.LoginCommand}"/>
+                    Command="{x:Bind ViewModel.LoginCommand}"
+                    IsEnabled="{x:Bind ViewModel.IsEnabled, Mode=OneWay}"/>
 
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center">
@@ -80,7 +85,8 @@
                        Foreground="#31C777"
                        Background="Transparent"
                        VerticalAlignment="Center"
-                       Command="{x:Bind ViewModel.SwitchSignupCommand}"/>
+                       Command="{x:Bind ViewModel.SwitchSignupCommand}"
+                        IsEnabled="{x:Bind ViewModel.IsEnabled, Mode=OneWay}"/>
             </StackPanel>
 
         </StackPanel>
@@ -108,7 +114,9 @@
                      Background="#F0F0F0"
                      BorderBrush="LightGray"
                      BorderThickness="1"
-                     Margin="0,0,0,10"/>
+                     Margin="0,0,0,5"
+                     IsEnabled="{x:Bind ViewModel.IsEnabled, Mode=OneWay}"
+                     Text="{x:Bind ViewModel.UsernameSignup, Mode=TwoWay}"/>
 
             <PasswordBox x:Name="PasswordSignup"
                          PlaceholderText="Password"
@@ -117,7 +125,9 @@
                          Background="#F0F0F0"
                          BorderBrush="LightGray"
                          BorderThickness="1"
-                         Margin="0,0,0,5"/>
+                         Margin="0,0,0,5"
+                         IsEnabled="{x:Bind ViewModel.IsEnabled, Mode=OneWay}"
+                         Password="{x:Bind ViewModel.PasswordSignup, Mode=TwoWay}"/>
 
             <PasswordBox x:Name="ConfirmPasswordSignup"
                          PlaceholderText="Confirm password"
@@ -126,12 +136,29 @@
                          Background="#F0F0F0"
                          BorderBrush="LightGray"
                          BorderThickness="1"
-                         Margin="0,0,0,5"/>
+                         Margin="0,0,0,5"
+                         IsEnabled="{x:Bind ViewModel.IsEnabled, Mode=OneWay}"
+                         Password="{x:Bind ViewModel.ConfirmPasswordSingup, Mode=TwoWay}"/>
+            
+            <TextBox x:Name="EmaiSignup"
+                     PlaceholderText="Email"
+                     Padding="10"
+                     CornerRadius="8"
+                     Background="#F0F0F0"
+                     BorderBrush="LightGray"
+                     BorderThickness="1"
+                     Margin="0,0,0,5"
+                     IsEnabled="{x:Bind ViewModel.IsEnabled, Mode=OneWay}"
+                     Text="{x:Bind ViewModel.Email, Mode=TwoWay}"/>
 
-            <TextBlock Text="{x:Bind ViewModel.WrongMessage, Mode=OneWay}"
-                       Foreground="Red"
-                       FontSize="12"
-                       Visibility="{x:Bind ViewModel.MessageVisibility, Mode=OneWay}"/>
+            <TextBlock Foreground="Red"
+                       FontSize="15"
+                       Visibility="{x:Bind ViewModel.MessageVisibility, Mode=OneWay}">
+                <Run Text="{x:Bind ViewModel.WrongMessage, Mode=OneWay}"
+                     Foreground="Red"/>
+                <Run Text="{x:Bind ViewModel.SuccessMessage, Mode=OneWay}"
+                     Foreground="Green"/>
+            </TextBlock>
 
             <Button Content="Sign Up"
                     Background="#7CFFB9"
@@ -142,16 +169,18 @@
                     CornerRadius="8"
                     HorizontalAlignment="Stretch"
                     Margin="0,0,0,5"
-                    Command="{x:Bind ViewModel.SignupCommand}"/>
+                    Command="{x:Bind ViewModel.SignupCommand}"
+                    IsEnabled="{x:Bind ViewModel.IsEnabled, Mode=OneWay}"/>
 
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center">
                 
                 <Button Content="Login" 
-                           Margin="5 0 0 0"
-                           Foreground="#31C777"
-                           Command="{x:Bind ViewModel.SwitchLoginCommand}"
-                        Background="Transparent"/>
+                        Margin="5 0 0 0"
+                        Foreground="#31C777"
+                        Command="{x:Bind ViewModel.SwitchLoginCommand}"
+                        Background="Transparent"
+                        IsEnabled="{x:Bind ViewModel.IsEnabled, Mode=OneWay}"/>
             </StackPanel>
 
         </StackPanel>

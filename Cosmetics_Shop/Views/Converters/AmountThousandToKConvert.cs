@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.Views.Converters
 {
+    /// <summary>
+    /// Converts amount to "k" if it is greater than 1000
+    /// </summary>
     public class AmountThousandToKConvert : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)

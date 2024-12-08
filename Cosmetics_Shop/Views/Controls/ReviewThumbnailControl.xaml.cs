@@ -21,7 +21,7 @@ using Cosmetics_Shop.ViewModels;
 namespace Cosmetics_Shop.Views.Controls
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// Review thumbnail control
     /// </summary>
     public sealed partial class ReviewThumbnailControl : UserControl
     {

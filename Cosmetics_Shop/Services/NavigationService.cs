@@ -24,6 +24,14 @@ namespace Cosmetics_Shop.Services
             }
             _frame.Navigate(typeof(TPage));
         }
+        public void NavigateTo<TPage>(object parameter)
+        {
+            if (_frame == null)
+            {
+                throw new InvalidOperationException("Frame is not initialized");
+            }
+            _frame.Navigate(typeof(TPage), parameter);
+        }
 
         public void GoBack()
         {

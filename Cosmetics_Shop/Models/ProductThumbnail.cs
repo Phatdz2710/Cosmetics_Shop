@@ -1,4 +1,5 @@
 ﻿using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media.Imaging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,23 +9,43 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.Models
 {
+    /// <summary>
+    /// Store Product Thumbnail Information
+    /// </summary>
     public class ProductThumbnail
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string ImageThumbnalPath { get; set; }
-        public int Price { get; set; }
-        public string Brand { get; set; }
-        public double Rating { get; set; }
+        public int      Id      { get; set; }
+        public string   Name    { get; set; }
+        public string   ImagePath   { get; set; }
+        public int      Price       { get; set; }
+        public string   Brand       { get; set; }
+        public string   Category    { get; set; }
+        public double   Rating      { get; set; }
+        public int      Stock       { get; set; }
+        public int      Sold        { get; set; }
 
-        public ProductThumbnail(int id, string name, string imageThumbnailPath, int price, string brand, double rating = 0)
+        public ProductThumbnail(int id, 
+            string  name, 
+            string  imagePath, 
+            int     price, 
+            string  brand, 
+            string  category,
+            double  rating  = 0, 
+            int     stock   = 0, 
+            int     sold    = 0)
         {
-            Id = id;
-            Name = name;
-            ImageThumbnalPath = imageThumbnailPath;
-            Price = price;
-            Brand = brand;
-            Rating = rating;
+            Id          = id;
+            Name        = name;
+            ImagePath   = imagePath;
+            Price       = price;
+            Brand       = brand;
+            Category    = category;
+            Rating      = rating;
+            Stock       = stock;
+            Sold        = sold;
         }
+
+        public ProductThumbnail() 
+        { }
     }
 }

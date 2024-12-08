@@ -17,7 +17,7 @@ using Cosmetics_Shop.ViewModels.UserControlViewModels;
 namespace Cosmetics_Shop.Views.Controls
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// Cart thumbnail user control
     /// </summary>
     public sealed partial class CartThumbnailControl : UserControl
     {
@@ -47,14 +47,12 @@ namespace Cosmetics_Shop.Views.Controls
             if (ViewModel.CartThumbnail.Amount > 1)
             {
                 ViewModel.CartThumbnail.Amount--;
-                //ViewModel.CartPageViewModel.RecalculateTotalPay(); // Recalculate total pay
             }
         }
 
         private void plusButton_Click(object sender, RoutedEventArgs e)
         {
             ViewModel.CartThumbnail.Amount++;
-            //ViewModel.CartPageViewModel.RecalculateTotalPay();
         }
     }
 }

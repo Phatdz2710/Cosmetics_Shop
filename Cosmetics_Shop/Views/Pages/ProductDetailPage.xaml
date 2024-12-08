@@ -14,6 +14,8 @@
     <UserControl.Resources>
         <converter:VNDCurrencyConverter x:Key="VNDCurrencyConverter"/>
         <converter:AmountThousandToKConvert x:Key="AmountThousandToKConvert"/>
+        <converter:StringToImageSourceConverter x:Key="StringToImageSourceConverter"/>
+        <converter:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
     </UserControl.Resources>
 
     <ScrollView x:Name="scrollView">
@@ -25,8 +27,8 @@
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="400"/>
+                <RowDefinition Height="10"/>
+                <RowDefinition Height="*"/>
                 <RowDefinition Height="20"/>
                 <RowDefinition Height="250"/>
                 <RowDefinition Height="20"/>
@@ -52,11 +54,18 @@
             <Button x:Name="returnButton"
                     Background="#317256"
                     BorderBrush="#317256"
+                    Foreground="White"
+                    FontSize="20"
                     Margin="10 0 0 0"
+                    Grid.Row="1"
+                    VerticalAlignment="Top"
+                    Command="{x:Bind ViewModel.GoBackCommand,
+                                Mode=OneWay}"
                     >
                 <FontIcon Glyph="&#xE830;" />
             </Button>
-
+            
+            <!--Khu vuc hien thi anh, ten, gia san pham-->
             <StackPanel Grid.Column="1" Grid.Row="1"
                         Background="White">
                 <Grid>
@@ -66,8 +75,11 @@
                     </Grid.ColumnDefinitions>
 
                     <Image Grid.Column="0"
+                           x:Name="productImage"
                            HorizontalAlignment="Center"
-                           Source="ms-appx:///Assets/TaytrangBioderma.jpeg"
+                           Source="{x:Bind ViewModel.ProductDetail.ThumbnailImage, 
+                                     Mode=OneWay, 
+                                     Converter={StaticResource StringToImageSourceConverter}}"
                            Width="250"
                            Height="400"
                         />
@@ -76,6 +88,7 @@
                                 Background="White"
                                 Orientation="Vertical">
                         <TextBlock FontSize="25"
+                                   x:Name="productDetailName"
                                    TextWrapping="Wrap"
                                    Margin="0 20 10 0"
                                    Text="{x:Bind ViewModel.ProductDetail.Name, Mode=OneWay}"/>
@@ -88,10 +101,10 @@
                                     FontSize="15"
                                     >
                                 <TextBlock>
-                                    <Run Text="{x:Bind ViewModel.ProductDetail.review, Mode=OneWay,
-                                        Converter={StaticResource AmountThousandToKConvert}}" />
+                                    <Run Text="{x:Bind ViewModel.ProductDetail.review, Mode=OneWay}" />
                                     <Run Text=" Đánh giá" />
                                 </TextBlock>
+                                
                             </Button>
                             <TextBlock x:Name="soldTextBlock"
                                        FontSize="15"
@@ -134,63 +147,45 @@
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="0.2*"/>
-                                    <ColumnDefinition Width="0.3*"/>
-                                    <ColumnDefinition Width="0.5*"/>
+                                    <ColumnDefinition Width="0.25*"/>
+                                    <ColumnDefinition Width="0.55*"/>
                                 </Grid.ColumnDefinitions>
 
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="0.5*"/>
-                                    <RowDefinition Height="0.5*"/>
-                                </Grid.RowDefinitions>
-
                                 <StackPanel Grid.Column="1"
-                                            Grid.Row="0"
-                                            Margin="0 10 0 0"
-                                            Orientation="Horizontal"
-                                            VerticalAlignment="Center">
-                                    <FontIcon Glyph="&#xE811;"/>
-
-                                    <TextBlock Text="Vận chuyển tới"
-                                               Foreground="DarkGray"
-                                               Margin="10 0 0 0"
-                                               />
-                                </StackPanel>
-
-                                <TextBox Grid.Column="2" 
-                                         x:Name="deliveryTextBox"
-                                         Margin="0 0 20 0"/>
-
-                                <StackPanel Grid.Row="1" 
-                                            Grid.Column="1">
-                                    <StackPanel Grid.Column="1"
-                                                Grid.Row="0"
-                                                Margin="20 10 0 0"
+                                                Margin="0 10 0 0"
                                                 Orientation="Horizontal"
                                                 VerticalAlignment="Center">
-
-                                        <TextBlock Text="Phí vận chuyển"
+                                    <FontIcon Glyph="&#xE811;"/>
+                                    <TextBlock Text="Phí vận chuyển"
                                                    Foreground="DarkGray"
                                                    Margin="10 0 0 0"
                                                     />
-                                    </StackPanel>
                                 </StackPanel>
 
-                                <DropDownButton x:Name="myDropDownButton"
-                                                Grid.Column="2"
-                                                Grid.Row="1"
-                                                Content="0đ">
-                                    <DropDownButton.Flyout>
-                                        <MenuFlyout Placement="Bottom">
-                                            <MenuFlyoutItem Text="Nhanh - 16.500 đ" Click="MenuFlyoutItem_Click"/>
-                                            <MenuFlyoutItem Text="Hỏa tốc - 54.000 đ" Click="MenuFlyoutItem_Click"/>
-                                            <MenuFlyoutItem Text="Tiết kiệm - 20.000 đ" Click="MenuFlyoutItem_Click"/>
-                                        </MenuFlyout>
-                                    </DropDownButton.Flyout>
-                                </DropDownButton>
+                                <ComboBox x:Name="deliveryComboBox"
+                                            Grid.Column="2"
+                                            Margin="0,15,0,0"
+                                            Foreground="DarkBlue"
+                                            Background="White"
+                                            FontSize="15"
+                                            PlaceholderText="Chọn hình thức vận chuyển"
+                                            Width="260"
+                                            Height="40"              
+                                          >
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock>
+                                                <Run Text="{Binding Name}"/> - 
+                                                <Run Text="{Binding Price, 
+                                                    Converter={StaticResource VNDCurrencyConverter}}"/> đ
+                                            </TextBlock> 
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
                             </Grid>
                         </StackPanel>
 
-                        <StackPanel Margin="0 20 0 0">
+                        <StackPanel Margin="0 10 0 0">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="0.2*"/>
@@ -213,7 +208,9 @@
                                     <TextBox x:Name="amountTextBox" 
                                                Height="35" 
                                                Width="5" 
-                                               Text="1"
+                                               Text="{x:Bind ViewModel.Amount, 
+                                                        Mode=TwoWay, 
+                                                        UpdateSourceTrigger=PropertyChanged}"
                                                TextAlignment="Center"
                                     />
                                     <Button Name="plusButton" 
@@ -246,8 +243,7 @@
                                         Height="50"
                                         Foreground="Red"
                                         BorderBrush="Red"
-                                        BorderThickness="1.5"
-                                        Click="themvaogiohangButton_Click">
+                                        BorderThickness="1.5">
                                     <StackPanel Orientation="Horizontal">
                                         <FontIcon Glyph="&#xE7BF;" />
                                         <TextBlock Text="Thêm vào giỏ hàng"
@@ -262,7 +258,11 @@
                                         Height="50"
                                         Width="150"
                                         Foreground="White"
-                                        Background="Red">
+                                        Background="Red"
+                                        Command="{x:Bind ViewModel.PaidButtonCommand,
+                                                    Mode=OneWay}"
+                                        IsEnabled="{x:Bind ViewModel.IsNavigating, 
+                                                    Converter={StaticResource InverseBooleanConverter}}">
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="Mua ngay"
                                            Margin="10 0 0 0"
@@ -285,6 +285,7 @@
                   Background="#317256">
             </Grid>
 
+            <!--Khu vuc danh gia-->
             <Grid x:Name="reviewGrid" 
                   Grid.Column="1"
                   Grid.Row="3"

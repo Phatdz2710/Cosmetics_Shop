@@ -21,15 +21,17 @@ using Cosmetics_Shop.Services;
 using Cosmetics_Shop.ViewModels;
 using Cosmetics_Shop.Views.Pages;
 using Cosmetics_Shop.Services.Interfaces;
-using Cosmetics_Shop.Models.DataService;
 using Cosmetics_Shop.Models;
 using Cosmetics_Shop.ViewModels.PageViewModels;
 using Cosmetics_Shop.ViewModels.UserControlViewModels;
 using Cosmetics_Shop.DBModels;
 using Microsoft.EntityFrameworkCore;
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
+using Cosmetics_Shop.Services.EventAggregatorMessages;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using Cosmetics_Shop.ViewModels.AdminPageViewModels;
+using Cosmetics_Shop.DataAccessObject;
+using Cosmetics_Shop.DataAccessObject.Interfaces;
 
 namespace Cosmetics_Shop
 {
@@ -38,42 +40,43 @@ namespace Cosmetics_Shop
     /// </summary>
     public partial class App : Application
     {
-        /// <summary>
-        /// Initializes the singleton application object.  This is the first line of authored code
-        /// executed, and as such is the logical equivalent of main() or WinMain().
-        /// </summary>
-        /// 
         public static IServiceProvider ServiceProvider { get; private set; }
         public App()
         {
             this.InitializeComponent();
         }
 
-        /// <summary>
-        /// Invoked when the application is launched.
-        /// </summary>
-        /// <param name="args">Details about the launch request and process.</param>
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
-            // Cấu hình dịch vụ
             var services = new ServiceCollection();
             ConfigureServices(services);
             ServiceProvider = services.BuildServiceProvider();
 
-            // Activate Main Window
             m_window = new LoginWindow();
             m_window.Activate();
+
+            var eventAggregator = ServiceProvider.GetService<IEventAggregator>();
+            eventAggregator.Subscribe<LogoutMessage>((message) =>
+            {
+                m_window = new LoginWindow();
+                m_window.Activate();
+            });
         }
 
+        /// <summary>
+        /// Configures the services required for the application.
+        /// </summary>
+        /// <param name="services"></param>
         private void ConfigureServices(ServiceCollection services)
         {
-            // Add Singleton
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<IEventAggregator, EventAggregator>();
             services.AddSingleton<IDao, SqlDao>();
+            services.AddSingleton<IFilePickerService, FilePickerService>();
+            services.AddSingleton<IServiceProvider, ServiceProvider>();
             services.AddSingleton<UserSession>();
 
-            // Add Transient
+
             services.AddTransient<LoginViewModel>();
             services.AddTransient<UserViewModel>();
             services.AddTransient<AdminViewModel>();
@@ -82,19 +85,35 @@ namespace Cosmetics_Shop
             services.AddTransient<DashboardPageViewModel>();
             services.AddTransient<ProductThumbnailViewModel>();
             services.AddTransient<ProductDetailViewModel>();
+            services.AddTransient<AccountViewModel>();
             services.AddTransient<CartPageViewModel>();
             services.AddTransient<CartThumbnailViewModel>();
             services.AddTransient<ReviewThumbnailViewModel>();
+            services.AddTransient<PaymentProductThumbnailViewModel>();
+            services.AddTransient<PaymentPageViewModel>();
+            services.AddTransient<PaymentPageViewModel>(provider =>
+            {
+                var navigationService = provider.GetRequiredService<INavigationService>();
+                var dao = provider.GetRequiredService<IDao>();
+                var serviceProvider = provider;
+                var userSession = provider.GetRequiredService<UserSession>();
+                return new PaymentPageViewModel(navigationService, dao, serviceProvider, userSession, null); // Pass null for now
+            });
+            services.AddTransient<AccountManagerViewModel>();
+            //services.AddTransient<OrderManagerViewModel>();
+            services.AddTransient<ProductManagerViewModel>();
 
-            services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(
-                "Server=localhost,1433;Database=COSMETIC_SHOP;User Id=sa;Password=FatPr0@123;TrustServerCertificate=True;"
-                ));
+            var basePath = AppContext.BaseDirectory;
+            var jsonFilePath = System.IO.Path.Combine(basePath, "appsettings.json");
+            var jsonContent = File.ReadAllText(jsonFilePath);
+            var rootNode = JsonNode.Parse(jsonContent);
+            var connectionString = rootNode["ConnectionStrings"]["DefaultConnection"].ToString();
 
-            // Add Scoped
+            services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(connectionString));
+
             ServiceProvider = services.BuildServiceProvider();
         }
 
         private Window m_window;
     }
 }
-

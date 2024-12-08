@@ -1,26 +1,24 @@
-﻿
+﻿using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.ApplicationModel.Appointments;
 
 namespace Cosmetics_Shop.Models
 {
-    public abstract class UserBase
+    public class ShippingMethod 
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Token { get; set; }
+        public int Price { get; set; }
 
-        public UserBase(int id, string name, string token)
+        public ShippingMethod(int id, string name, int price)
         {
             Id = id;
             Name = name;
-            Token = token;
+            Price = price;
         }
-
-        public abstract string DisplayRole();
     }
 }

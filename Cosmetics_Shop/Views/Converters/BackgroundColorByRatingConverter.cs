@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.Views.Converters
 {
+    /// <summary>
+    /// Converts rating to background color
+    /// </summary>
     public class BackgroundColorByRatingConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)

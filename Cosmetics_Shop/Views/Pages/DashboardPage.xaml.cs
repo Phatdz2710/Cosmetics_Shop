@@ -20,7 +20,7 @@ using Windows.Foundation.Collections;
 namespace Cosmetics_Shop.Views.Pages
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// Dashboard page
     /// </summary>
     public sealed partial class DashboardPage : Page
     {

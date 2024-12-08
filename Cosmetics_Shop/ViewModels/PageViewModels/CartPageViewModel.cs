@@ -1,33 +1,47 @@
-﻿using Cosmetics_Shop.Models;
-using Cosmetics_Shop.Models.DataService;
+﻿using CommunityToolkit.Mvvm.Input;
+using Cosmetics_Shop.Models;
 using Cosmetics_Shop.Services;
 using Cosmetics_Shop.ViewModels.UserControlViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Cosmetics_Shop.Views.Pages;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using Cosmetics_Shop.DataAccessObject.Interfaces;
 
 namespace Cosmetics_Shop.ViewModels.PageViewModels
 {
+    /// <summary>
+    /// View model for CartPage
+    /// </summary>
     public class CartPageViewModel : INotifyPropertyChanged
     {
         // Data access object
         private IDao _dao = null;
 
+        #region Fields
         private bool _isAllChecked;
         private int _totalPay;
         private Voucher _currentVoucher;
+        #endregion
 
         // Observable Collection
         public ObservableCollection<CartThumbnailViewModel> Cart { get; set; }
 
-        // Expose the CartPageViewModel
+        //Command
+        public ICommand PaidButtonCommand { get; set; }
+        public ICommand GoBackCommand { get; set; }
 
+        // Navigation service
+        private readonly INavigationService _navigationService;
+
+        #region Properties Binding
         public bool IsAllChecked
         {
             get => _isAllChecked;
@@ -46,8 +60,6 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 }
             }
         }
-
-
         public int TotalPay
         {
             get => _totalPay;
@@ -74,13 +86,8 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 // If no items are checked, set TotalPay to 0
                 TotalPay = 0;
             }
-
-            // If there's a currently applied voucher, apply it
-            //if (_currentVoucher != null)
-            //{
-            //    ApplyVoucher(_currentVoucher);
-            //}
         }
+        #endregion
 
         public CartPageViewModel(INavigationService navigationService, IDao dao)
         {
@@ -105,8 +112,34 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
 
                 Cart.Add(cartThumbnailViewModel);
             }
+
+            _navigationService = navigationService;
+            PaidButtonCommand = new RelayCommand(() =>
+            {
+                var selectedProducts = Cart
+                .Where(item => item.IsChecked) // Get checked items
+                .Select(item => new PaymentProductThumbnail(
+                    item.CartThumbnail.Id, 
+                    null, // image
+                    item.CartThumbnail.ProductName,
+                    item.CartThumbnail.Price,
+                    item.CartThumbnail.Amount
+                ))
+                .ToList();
+
+                if (selectedProducts.Any())
+                {
+                    _navigationService.NavigateTo<PaymentPage>(selectedProducts); // Pass the list of selected products
+                }
+                //_navigationService.NavigateTo<PaymentPage>();
+            });
+            GoBackCommand = new RelayCommand(() =>
+            {
+                _navigationService.GoBack();
+            });
         }
 
+        #region Voucher
         public List<Voucher> GetAllVouchers()
         {
             return _dao.GetAllVouchers(); // Assuming _dao is initialized correctly in the constructor
@@ -133,6 +166,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 TotalPay = (int)Math.Max(TotalPay - discountAmount, 0);
             }
         }
+        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
 

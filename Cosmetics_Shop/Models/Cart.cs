@@ -10,12 +10,11 @@ namespace Cosmetics_Shop.Models
 {
     public class Cart : INotifyPropertyChanged
     {
-        public int Id { get; set; }
-        Image ProductImage { get; set; }
-        public string ProductName { get; set; }
-        public string Classification { get; set; }
-        public int Price { get; set; }
-        private int _amount;
+        public int      Id              { get; set; }
+        public string   ProductImage    { get; set; }
+        public string   ProductName     { get; set; }
+        public int      Price   { get; set; }
+        private int     _amount;
         public int Amount
         {
             get => _amount;
@@ -44,16 +43,19 @@ namespace Cosmetics_Shop.Models
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public Cart(int id, Image productImage, string productName, string classification, 
-            int price, int amount, int totalPrice)
+        public Cart(int     id, 
+                    string  productImage, 
+                    string  productName,
+                    int     price, 
+                    int     amount, 
+                    int     totalPrice)
         {
-            Id = id;
-            ProductImage = productImage;
-            ProductName = productName;
-            Classification = classification;
-            Price = price;
-            Amount = amount;
-            TotalPrice = totalPrice;
+            Id              = id;
+            ProductImage    = productImage;
+            ProductName     = productName;
+            Price           = price;
+            Amount          = amount;
+            TotalPrice      = totalPrice;
         }
 
     }

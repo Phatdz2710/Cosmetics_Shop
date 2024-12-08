@@ -1,4 +1,4 @@
-using Cosmetics_Shop.Services;
+using Cosmetics_Shop.Services.EventAggregatorMessages;
 using Cosmetics_Shop.Services.Interfaces;
 using Cosmetics_Shop.ViewModels;
 using Microsoft.UI.Xaml;
@@ -23,7 +23,7 @@ using Windows.UI.ViewManagement;
 namespace Cosmetics_Shop
 {
     /// <summary>
-    /// An empty window that can be used on its own or navigated to within a Frame.
+    /// Login window
     /// </summary>
     public sealed partial class LoginWindow : Window
     {
@@ -34,9 +34,9 @@ namespace Cosmetics_Shop
             this.LoginSignupFrame.Navigate(typeof(Views.Pages.LoginSignupPage));
 
             var eventAggregator = App.ServiceProvider.GetService(typeof(IEventAggregator)) as IEventAggregator;
-            eventAggregator.Subscribe<CloseWindowMessage>((param) =>
+            eventAggregator.Subscribe<CloseLoginWindowMessage>((param) =>
             {
-                this.Close();
+                    this.Close();
             });
         }
     }

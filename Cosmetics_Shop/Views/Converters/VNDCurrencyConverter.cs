@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.Views.Converters
 {
+    /// <summary>
+    /// Converts int to VND currency format
+    /// </summary>
     public class VNDCurrencyConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
