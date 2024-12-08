@@ -161,7 +161,7 @@
             <GridView.ItemTemplate>
                 <DataTemplate>
                     <controls:CartThumbnailControl ViewModel="{Binding}"
-                                                    MinWidth="1280"
+                                                    MinWidth="1100"
                                                       />
                 </DataTemplate>
             </GridView.ItemTemplate>

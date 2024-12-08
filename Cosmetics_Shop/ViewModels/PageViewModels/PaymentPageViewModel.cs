@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Cosmetics_Shop.DataAccessObject.Interfaces;
+using Cosmetics_Shop.DBModels;
 
 namespace Cosmetics_Shop.ViewModels.PageViewModels
 {
@@ -138,7 +139,8 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         public PaymentPageViewModel(INavigationService      navigationService, 
                                     IDao                    dao, 
                                     IServiceProvider        serviceProvider,
-                                    UserSession             userSession
+                                    UserSession             userSession,
+                                    List<PaymentProductThumbnail> products
                                     )
         {
             _dao                = dao;
@@ -148,17 +150,17 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
 
             PaymentProduct = new ObservableCollection<PaymentProductThumbnailViewModel>();
 
-            var paymentProduct = _dao.GetAllPaymentProducts();
-
-            for (int i = 0; i < paymentProduct.Count; i++)
+            // Iterate through the list of products and add them to the ObservableCollection
+            if (products != null)
             {
-                var paymentProductThumbnailViewModel = _serviceProvider.GetService(typeof(PaymentProductThumbnailViewModel));
-                paymentProductThumbnailViewModel.GetType().GetProperty("PaymentProductThumbnail")
-                    .SetValue(paymentProductThumbnailViewModel, paymentProduct[i]);
-                PaymentProduct.Add(paymentProductThumbnailViewModel as PaymentProductThumbnailViewModel);
+                foreach (var product in products)
+                {
+                    var paymentProductThumbnailViewModel = _serviceProvider.GetService<PaymentProductThumbnailViewModel>();
+                    paymentProductThumbnailViewModel.PaymentProductThumbnail = product; // Set the product
+                    PaymentProduct.Add(paymentProductThumbnailViewModel); // Add to the collection
+                }
             }
 
-            //PaymentProduct = paymentProducts;
             recalculateFinalFee();
             _navigationService = navigationService;
             GoBackCommand = new RelayCommand(() =>
@@ -219,10 +221,12 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         }
         #endregion
 
+        #region Calculation
         public void recalculateFinalFee()
         {
             FinalFee = TotalPay + ShippingFee - VoucherFee;
         }
+        #endregion
 
         #region User
         private async void loadUserInformation()
@@ -236,9 +240,6 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         }
         #endregion
 
-        #region Product
-
-        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
 

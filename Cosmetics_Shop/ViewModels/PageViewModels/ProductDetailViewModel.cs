@@ -25,22 +25,31 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
     /// </summary>
     public class ProductDetailViewModel : INotifyPropertyChanged
     {
+        #region Fields
         private ProductDetail _productDetail;
         private int _shippingFee;
         private ShippingMethod _currentShippingMethod;
-        private PaymentProductThumbnail _productToPayment;
+        //private PaymentProductThumbnail _productToPayment;
+        private List<PaymentProductThumbnail> _productsToPayment;
+        private bool _isNavigating;
+        private int _amount = 1;
+        #endregion
 
         public ObservableCollection<ReviewThumbnailViewModel> reviewThumbnail { get; set; }
         public ObservableCollection<CartThumbnailViewModel> Cart { get; set; }
 
+        #region Singleton
         private readonly IDao _dao = null;
         private readonly IServiceProvider _serviceProvider = null;
         private readonly INavigationService _navigationService;
+        #endregion
 
-        //Command
+        #region Command
         public ICommand PaidButtonCommand { get; set; }
         public ICommand GoBackCommand { get; set; }
+        #endregion
 
+        #region Properties Binding
         public ProductDetail ProductDetail
         {
             get => _productDetail;
@@ -62,18 +71,55 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 }
             }
         }
-        public PaymentProductThumbnail ProductToPayment
+        //public PaymentProductThumbnail ProductToPayment
+        //{
+        //    get => _productToPayment;
+        //    set
+        //    {
+        //        if (_productToPayment != value)
+        //        {
+        //            _productToPayment = value;
+        //            OnPropertyChanged(); // Notify UI of change
+        //        }
+        //    }
+        //}
+        public List<PaymentProductThumbnail> ProductsToPayment // Changed to List
         {
-            get => _productToPayment;
+            get => _productsToPayment;
             set
             {
-                if (_productToPayment != value)
+                if (_productsToPayment != value)
                 {
-                    _productToPayment = value;
+                    _productsToPayment = value;
                     OnPropertyChanged(); // Notify UI of change
                 }
             }
         }
+        public bool IsNavigating
+        {
+            get => _isNavigating;
+            set
+            {
+                if (_isNavigating != value)
+                {
+                    _isNavigating = value;
+                    OnPropertyChanged(); // Notify UI of change
+                }
+            }
+        }
+        public int Amount
+        {
+            get => _amount;
+            set
+            {
+                if (_amount != value)
+                {
+                    _amount = value;
+                    OnPropertyChanged(nameof(Amount));
+                }
+            }
+        }
+        #endregion
 
         public ProductDetailViewModel(INavigationService    navigationService, 
                                       IDao                  dao, 
@@ -82,12 +128,10 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             _dao = dao;
             _serviceProvider = serviceProvider;
             _navigationService = navigationService;
-            ProductToPayment = new PaymentProductThumbnail();
+            //ProductToPayment = new PaymentProductThumbnail();
+            ProductsToPayment = new List<PaymentProductThumbnail>();
 
-            PaidButtonCommand = new RelayCommand(() =>
-            {
-                _navigationService.NavigateTo<PaymentPage>();
-            });
+            PaidButtonCommand = new RelayCommand(ExecutePaidButtonCommand);
             GoBackCommand = new RelayCommand(() =>
             {
                 _navigationService.GoBack();
@@ -110,7 +154,8 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         public void ShowAllReviews()
         {
             // Fetch all reviews for the product
-            var allReviews = _dao.GetListReviewThumbnailByIDProduct(ProductDetail.Id);
+            //var allReviews = _dao.GetListReviewThumbnailByIDProduct(ProductDetail.Id);
+            var allReviews = _dao.GetListReviewThumbnailByIDProduct(1);
 
             // Update the reviewThumbnail collection and notify the change
             reviewThumbnail.Clear(); // Clear existing reviews
@@ -126,7 +171,8 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         public void FilterReviewsByStarNumber(int starNumber)
         {
             // Fetch all reviews for the product
-            var allReviews = _dao.GetListReviewThumbnailByIDProduct(ProductDetail.Id);
+            //var allReviews = _dao.GetListReviewThumbnailByIDProduct(ProductDetail.Id);
+            var allReviews = _dao.GetListReviewThumbnailByIDProduct(1);
 
             // Filter reviews based on the selected star number
             var filteredReviews = allReviews
@@ -134,9 +180,15 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 .Select(review =>
                 {
                     var reviewThumbnailViewModel = _serviceProvider.GetService(typeof(ReviewThumbnailViewModel)) as ReviewThumbnailViewModel;
-                    reviewThumbnailViewModel.ReviewThumbnail = review;
+                    //reviewThumbnailViewModel.ReviewThumbnail = review;
+                    if (reviewThumbnailViewModel != null)
+                    {
+                        reviewThumbnailViewModel.ReviewThumbnail = review; // Set the ReviewThumbnail property
+                    }
                     return reviewThumbnailViewModel;
-                }).ToList(); // Convert to list to evaluate count
+                })
+                .Where(viewModel => viewModel != null) // Ensure we only return valid view models
+                .ToList(); // Convert to list to evaluate count
 
             // Update the reviewThumbnail collection and notify the change
             reviewThumbnail.Clear(); // Clear existing reviews
@@ -171,15 +223,28 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         }
 
         #region Payment
-        public void SetInfo(PaymentProductThumbnail p)
+        public void ExecutePaidButtonCommand()
         {
-            ProductToPayment.Id = p.Id;
-            ProductToPayment.ProductName = p.ProductName;
-            ProductToPayment.Classification = p.Classification;
-            ProductToPayment.Price = p.Price;
-            ProductToPayment.Amount = p.Amount;
+            if (ProductsToPayment != null && ProductsToPayment.Count > 0)
+            {
+                IsNavigating = true; // Disable navigation
+                // Set the amount for each product in the list
+                foreach (var product in ProductsToPayment)
+                {
+                    product.Amount = Amount; // Set the amount for each product
+                }
+                // Navigate to the PaymentPage with the list of products
+                _navigationService.NavigateTo<PaymentPage>(ProductsToPayment);
+                IsNavigating = false;
+            }
         }
 
+        public void SetInfo(PaymentProductThumbnail p)
+        {
+            // Add the product to the list instead of setting a single product
+            ProductsToPayment.Add(p);
+            Amount = p.Amount; // Set the amount from the product
+        }
 
         #endregion
 

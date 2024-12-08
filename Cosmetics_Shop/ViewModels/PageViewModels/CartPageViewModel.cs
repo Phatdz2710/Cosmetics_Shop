@@ -25,9 +25,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         // Data access object
         private IDao _dao = null;
 
+        #region Fields
         private bool _isAllChecked;
         private int _totalPay;
         private Voucher _currentVoucher;
+        #endregion
 
         // Observable Collection
         public ObservableCollection<CartThumbnailViewModel> Cart { get; set; }
@@ -39,8 +41,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         // Navigation service
         private readonly INavigationService _navigationService;
 
-        // Expose the CartPageViewModel
-
+        #region Properties Binding
         public bool IsAllChecked
         {
             get => _isAllChecked;
@@ -59,7 +60,6 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 }
             }
         }
-
         public int TotalPay
         {
             get => _totalPay;
@@ -87,6 +87,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 TotalPay = 0;
             }
         }
+        #endregion
 
         public CartPageViewModel(INavigationService navigationService, IDao dao)
         {
@@ -115,8 +116,22 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             _navigationService = navigationService;
             PaidButtonCommand = new RelayCommand(() =>
             {
+                var selectedProducts = Cart
+                .Where(item => item.IsChecked) // Get checked items
+                .Select(item => new PaymentProductThumbnail(
+                    item.CartThumbnail.Id, 
+                    null, // image
+                    item.CartThumbnail.ProductName,
+                    item.CartThumbnail.Price,
+                    item.CartThumbnail.Amount
+                ))
+                .ToList();
 
-                _navigationService.NavigateTo<PaymentPage>();
+                if (selectedProducts.Any())
+                {
+                    _navigationService.NavigateTo<PaymentPage>(selectedProducts); // Pass the list of selected products
+                }
+                //_navigationService.NavigateTo<PaymentPage>();
             });
             GoBackCommand = new RelayCommand(() =>
             {
@@ -124,6 +139,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             });
         }
 
+        #region Voucher
         public List<Voucher> GetAllVouchers()
         {
             return _dao.GetAllVouchers(); // Assuming _dao is initialized correctly in the constructor
@@ -150,6 +166,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 TotalPay = (int)Math.Max(TotalPay - discountAmount, 0);
             }
         }
+        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
 
