@@ -272,7 +272,7 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// <returns>
         /// A <see cref="List{T}"/> of <see cref="Voucher"/> objects representing the available vouchers.
         /// </returns>
-        List<Voucher> GetAllVouchers();
+        List<Models.Voucher> GetAllVouchers();
 
         /// <summary>
         /// Retrieves a list of all products available for payment.
@@ -288,7 +288,7 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// <returns>
         /// A <see cref="List{T}"/> of <see cref="ShippingMethod"/> objects representing the available shipping methods.
         /// </returns>
-        List<ShippingMethod> GetShippingMethods();
+        List<Models.ShippingMethod> GetShippingMethods();
 
     }
 }

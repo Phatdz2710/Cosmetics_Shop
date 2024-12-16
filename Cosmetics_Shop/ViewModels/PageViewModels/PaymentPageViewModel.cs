@@ -37,8 +37,8 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         private int _voucherFee;
         private int _shippingFee;
         private int _finalFee;
-        private Voucher _currentVoucher;
-        private ShippingMethod _currentShippingMethod;
+        private Models.Voucher _currentVoucher;
+        private Models.ShippingMethod _currentShippingMethod;
 
         private string _name;
         private string _nameDisplay;
@@ -170,7 +170,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         }
 
         #region Voucher
-        public List<Voucher> GetAllVouchers()
+        public List<Models.Voucher> GetAllVouchers()
         {
             return _dao.GetAllVouchers(); // Assuming _dao is initialized correctly in the constructor
         }
@@ -191,7 +191,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
             recalculateFinalFee();
         }
-        public void ApplyVoucher(Voucher selectedVoucher)
+        public void ApplyVoucher(Models.Voucher selectedVoucher)
         {
             // Remove the previous voucher's effect if a new one is being applied
             if (selectedVoucher != _currentVoucher)
@@ -204,12 +204,12 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         #endregion
 
         #region Shipping
-        public List<ShippingMethod> GetShippingMethods()
+        public List<Models.ShippingMethod> GetShippingMethods()
         {
             return _dao.GetShippingMethods(); // Assuming _dao is initialized correctly in the constructor
         }
 
-        public void ApplyShipping(ShippingMethod selectedShippingMethod)
+        public void ApplyShipping(Models.ShippingMethod selectedShippingMethod)
         {
             // Remove the previous voucher's effect if a new one is being applied
             if (selectedShippingMethod != _currentShippingMethod)
