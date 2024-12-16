@@ -16,7 +16,7 @@
         <converter:StringToImageSourceConverter x:Key="StringToImageSourceConverter"/>
     </UserControl.Resources>
 
-    <Grid Background="White"
+    <Grid Background="{ThemeResource ProductThumbnailBackground}"
           CornerRadius="10"
           ToolTipService.ToolTip="{x:Bind ViewModel.ProductThumbnail.Name, Mode=OneWay}"
           ToolTipService.Placement="Right"
@@ -29,13 +29,16 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Image Grid.Row="0"
-                   x:Name="ImageProduct"
-                   Margin="5"
+        <Border Grid.Row="0"
+                CornerRadius="10"
+                Margin="8">
+            <Image x:Name="ImageProduct"
                    Source="{x:Bind ViewModel.ProductThumbnail.ImagePath, 
                             Mode=OneWay, 
                             Converter={StaticResource StringToImageSourceConverter}}"
                    Stretch="Fill"/>
+        </Border>
+        
 
 
         <Grid Grid.Row="1"
@@ -55,7 +58,7 @@
             <TextBlock Grid.Row="0"
                        Grid.Column="0"
                        Grid.ColumnSpan="2"
-                       Foreground="#52bf90"
+                       Foreground="{ThemeResource ProductThumbnailPriceForeground}"
                        VerticalAlignment="Center">
                 <Run Text="{x:Bind ViewModel.ProductThumbnail.Price, Mode=OneWay,
                                 Converter={StaticResource VNDCurrencyConverter}}"
@@ -86,6 +89,7 @@
                        Grid.ColumnSpan="2"
                        Text="{x:Bind ViewModel.ProductThumbnail.Name, Mode=OneWay, Converter={StaticResource NameProductOnThumbnailConverter}}"
                        FontSize="15"
+                       Foreground="{ThemeResource ProductThumbnailForeground}"
                        HorizontalAlignment="Left"/>
 
             <TextBlock Grid.Row="2"
@@ -93,7 +97,7 @@
                        Grid.ColumnSpan="2"
                        Text="{x:Bind ViewModel.ProductThumbnail.Brand, Mode=OneWay}"
                        FontSize="12"
-                       Foreground="#49ab81"
+                       Foreground="{ThemeResource ProductThumbnailBrandForeground}"
                        HorizontalAlignment="Left"
                        FontWeight="Bold"/>
 
@@ -108,6 +112,7 @@
                        VerticalAlignment="Center"/>
                 <TextBlock Text="{x:Bind ViewModel.ProductThumbnail.Stock, Mode=OneWay}"
                            FontSize="10"
+                           Foreground="{ThemeResource ProductThumbnailForeground}"
                            VerticalAlignment="Center"
                            Margin="3 0 0 0"/>
             </StackPanel>
@@ -120,6 +125,7 @@
                 <TextBlock Text="{x:Bind ViewModel.ProductThumbnail.Sold, Mode=OneWay}"
                            FontSize="10"
                            VerticalAlignment="Center"
+                           Foreground="{ThemeResource ProductThumbnailForeground}"
                            Margin="0 0 3 0"/>
                 <Image Source="/Assets/cart_icon.png"
                         Stretch="UniformToFill"

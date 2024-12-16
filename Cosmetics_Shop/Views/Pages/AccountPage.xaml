@@ -19,10 +19,10 @@
     </Page.Resources>
 
     <!-- Main page -->
-    <Grid Background="#FDFDFD">
+    <Grid Background="{ThemeResource AccountPageBackground}">
         
         
-        <Grid Background="#FDFDFD"
+        <Grid Background="{ThemeResource AccountPageBackground}"
               CornerRadius="20"
               Margin="230 50 230 50">
             
@@ -33,7 +33,7 @@
 
             <!-- Avatar + Button -->
             <Grid Grid.Column="0" Padding="10"
-                  Background="White"
+                  Background="{ThemeResource AccountPageChildBackground}"
                   CornerRadius="20"
                   BorderThickness="1"
                   BorderBrush="LightGray">
@@ -104,7 +104,8 @@
                            FontSize="20"
                            HorizontalAlignment="Center"
                            FontWeight="SemiBold"
-                           Margin="0 5 0 0"/>
+                           Margin="0 5 0 0"
+                           Foreground="{ThemeResource AccountPageForeground}"/>
 
                 <!-- Type account -->
                 <Border Grid.Row="2"
@@ -131,7 +132,7 @@
                 <!-- Button Contact -->
                 <Button Grid.Row="4"
                         CornerRadius="5"
-                        Background="White"
+                        Background="{ThemeResource AccountPageButtonNormalBackground}"
                         Content="Phản hồi"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
@@ -142,7 +143,7 @@
                 <!-- Button Change password -->
                 <Button Grid.Row="5"
                         CornerRadius="5"
-                        Background="White"
+                        Background="{ThemeResource AccountPageButtonNormalBackground}"
                         Content="Đổi mật khẩu"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
@@ -177,10 +178,11 @@
 
                 <!--  -->
                 <Grid Grid.Row="0"
-                      Background="White"
+                      Background="{ThemeResource AccountPageChildBackground}"
                       CornerRadius="20"
                       BorderThickness="1"
                       BorderBrush="LightGray">
+                    
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
@@ -189,14 +191,15 @@
 
                     <!-- Total amounts -->
                     <Grid Grid.Column="0"
-                          Background="#eff6ff"
+                          Background="{ThemeResource AccountPageTotalPriceBackground}"
                           CornerRadius="15"
                           Margin="10">
                         <TextBlock Text="Tổng tiền đã mua"
                                    VerticalAlignment="Top"
                                    HorizontalAlignment="Left"
                                    Margin="15 10 0 0"
-                                   Foreground="Black"
+                                   Foreground="{ThemeResource AccountPageForeground}"
+
                                    FontSize="15"
                                    FontFamily="Sans Serif"
                                    FontWeight="SemiLight"/>
@@ -204,12 +207,12 @@
                         <StackPanel Orientation="Horizontal"
                                     Margin="15 25 0 0">
                             <FontIcon Glyph="&#xE90E;" 
-                                      Foreground="#2563eb"
+                                      Foreground="{ThemeResource AccountPageTotalPriceForeground}"
                                       FontSize="20"
                                       VerticalAlignment="Center"
                                       Margin="0 0 10 0"/>
                             <TextBlock FontSize="25"
-                                       Foreground="#2563eb"
+                                       Foreground="{ThemeResource AccountPageTotalPriceForeground}"
                                        VerticalAlignment="Center">
                                 <Run Text="{x:Bind ViewModel.TotalMoneySpent, Mode=OneWay, Converter={StaticResource VNDCurrencyConverter}}"
                                      FontWeight="SemiBold"/>
@@ -220,14 +223,15 @@
 
                     <!-- Total bills -->
                     <Grid Grid.Column="1"
-                          Background="#f0fdf4"
+                          Background="{ThemeResource AccountPageTotalBillsBackground}"
                           CornerRadius="15"
                           Margin="10">
                         <TextBlock Text="Tổng đơn hàng"
                                    VerticalAlignment="Top"
                                    HorizontalAlignment="Left"
-                                   Margin="15 10 0 0"
-                                   Foreground="Black"
+                                   Margin="15 10 0 0"                                 
+                                   Foreground="{ThemeResource AccountPageForeground}"
+
                                    FontSize="15"
                                    FontFamily="Sans Serif"
                                    FontWeight="SemiLight"/>
@@ -235,28 +239,28 @@
                         <StackPanel Orientation="Horizontal"
                                     Margin="15 25 0 0">
                             <FontIcon Glyph="&#xE7BF;" 
-                                      Foreground="#16a34a"
+                                      Foreground="{ThemeResource AccountPageTotalBillsForeground}"
                                       FontSize="20"
                                       VerticalAlignment="Center"
                                       Margin="0 0 10 0"/>
                             <TextBlock Text="{x:Bind ViewModel.TotalBills, Mode=OneWay}"
                                        FontSize="25"
                                        FontWeight="SemiBold"
-                                       Foreground="#16a34a"
+                                       Foreground="{ThemeResource AccountPageTotalBillsForeground}"
                                        VerticalAlignment="Center"/>
                         </StackPanel>
                     </Grid>
 
                     <!-- Total products -->
                     <Grid Grid.Column="2"
-                            Background="#faf5ff"
+                            Background="{ThemeResource AccountPageTotalProductsBackground}"
                             CornerRadius="15"
                             Margin="10">
                         <TextBlock Text="Số sản phầm đã mua"
                                  VerticalAlignment="Top"
                                  HorizontalAlignment="Left"
                                  Margin="15 10 0 0"
-                                 Foreground="Black"
+                                 Foreground="{ThemeResource AccountPageForeground}"
                                  FontSize="15"
                                  FontFamily="Sans Serif"
                                  FontWeight="SemiLight"/>
@@ -264,21 +268,21 @@
                         <StackPanel Orientation="Horizontal"
                                     Margin="15 25 0 0">
                             <FontIcon Glyph="&#xE9D2;" 
-                                        Foreground="#9333ea"
+                                        Foreground="{ThemeResource AccountPageTotalProductsForeground}"
                                         FontSize="20"
                                         VerticalAlignment="Center"
                                         Margin="0 0 10 0"/>
                             <TextBlock Text="{x:Bind ViewModel.TotalProducts, Mode=OneWay}"
                                      FontSize="25"
                                      FontWeight="SemiBold"
-                                     Foreground="#9333ea"
+                                     Foreground="{ThemeResource AccountPageTotalProductsForeground}"
                                      VerticalAlignment="Center"/>
                         </StackPanel>
                     </Grid>
                 </Grid>
 
                 <Grid Grid.Row="1"
-                      Background="White"
+                      Background="{ThemeResource AccountPageChildBackground}"
                       CornerRadius="20"
                       Margin="0 5 0 0"
                       Padding="40 10 0 0"
@@ -296,7 +300,8 @@
                                Text="Thông tin tài khoản"
                                FontSize="23"
                                FontWeight="SemiBold"
-                               VerticalAlignment="Center"/>
+                               VerticalAlignment="Center"
+                               Foreground="{ThemeResource AccountPageForeground}"/>
 
                     <StackPanel Grid.Row="1"
                                 Orientation="Vertical">
@@ -304,13 +309,14 @@
                                     Margin="0 0 0 5">
                             <Image/>
                             <TextBlock Text="Tên"
-                                       FontSize="17"/>
+                                       FontSize="17" Foreground="{ThemeResource AccountPageForeground}"/>
                         </StackPanel>
                         <TextBox PlaceholderText="Tên"
                                  Text="{x:Bind ViewModel.Name, Mode=TwoWay}"
                                  Width="500"
                                  HorizontalAlignment="Left"
-                                 IsEnabled="{x:Bind ViewModel.ChangeInforMode, Mode=OneWay}"/>
+                                 IsEnabled="{x:Bind ViewModel.ChangeInforMode, Mode=OneWay}"
+                                 Foreground="{ThemeResource AccountPageForeground}"/>
                     </StackPanel>
                     
                     <StackPanel Grid.Row="2"
@@ -319,13 +325,15 @@
                                     Margin="0 0 0 5">
                             <Image/>
                             <TextBlock Text="Email"
-                                       FontSize="17"/>
+                                       FontSize="17"
+                                       Foreground="{ThemeResource AccountPageForeground}"/>
                         </StackPanel>
                         <TextBox PlaceholderText="Email"
                                  Text="{x:Bind ViewModel.Email, Mode=TwoWay}"
                                  Width="500"
                                  HorizontalAlignment="Left"
-                                 IsEnabled="{x:Bind ViewModel.ChangeInforMode, Mode=OneWay}"/>
+                                 IsEnabled="{x:Bind ViewModel.ChangeInforMode, Mode=OneWay}"
+                                 Foreground="{ThemeResource AccountPageForeground}"/>
                     </StackPanel>
                     
                     <StackPanel Grid.Row="3"
@@ -334,13 +342,15 @@
                                     Margin="0 0 0 5">
                             <Image/>
                             <TextBlock Text="Số điện thoại"
-                                       FontSize="17"/>
+                                       FontSize="17"
+                                       Foreground="{ThemeResource AccountPageForeground}"/>
                         </StackPanel>
                         <TextBox PlaceholderText="Số điện thoại"
                                  Text="{x:Bind ViewModel.Phone, Mode=TwoWay}"
                                  Width="500"
                                  HorizontalAlignment="Left"
-                                 IsEnabled="{x:Bind ViewModel.ChangeInforMode, Mode=OneWay}"/>
+                                 IsEnabled="{x:Bind ViewModel.ChangeInforMode, Mode=OneWay}"
+                                 Foreground="{ThemeResource AccountPageForeground}"/>
                     </StackPanel>
                     
                     <StackPanel Grid.Row="4"
@@ -349,26 +359,29 @@
                                     Margin="0 0 0 5">
                             <Image/>
                             <TextBlock Text="Địa chỉ"
-                                       FontSize="17"/>
+                                       FontSize="17"
+                                       Foreground="{ThemeResource AccountPageForeground}"/>
                         </StackPanel>
                         <TextBox PlaceholderText="Địa chỉ"
                                  Text="{x:Bind ViewModel.Address, Mode=TwoWay}"
                                  Width="500"
                                  HorizontalAlignment="Left"
-                                 IsEnabled="{x:Bind ViewModel.ChangeInforMode, Mode=OneWay}"/>
+                                 IsEnabled="{x:Bind ViewModel.ChangeInforMode, Mode=OneWay}"
+                                 Foreground="{ThemeResource AccountPageForeground}"/>
                     </StackPanel>
                     <StackPanel Grid.Row="5"
                                 Orientation="Horizontal">
                         <Button Content="{x:Bind ViewModel.ChangeModeContent, Mode=OneWay}"
                                 Margin="0 0 5 0"
                                 BorderThickness="1.5"
-                                Command="{x:Bind ViewModel.ChangeInfoModeCommand, Mode=OneTime}"/>
+                                Command="{x:Bind ViewModel.ChangeInfoModeCommand, Mode=OneTime}"
+                                Foreground="{ThemeResource AccountPageForeground}"/>
                         <Button Content="Lưu thay đổi"
                                 BorderThickness="1.5"
                                 Background="#49ab81"
-                                Foreground="White"
                                 Command="{x:Bind ViewModel.SaveInfoCommand, Mode=OneTime}"
-                                Visibility="{x:Bind ViewModel.ChangeInforMode, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                Visibility="{x:Bind ViewModel.ChangeInforMode, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Foreground="{ThemeResource AccountPageSaveButtonForeground}"/>
                     </StackPanel>
                 </Grid>
 
@@ -381,7 +394,7 @@
             <Grid Background="Black" 
                   Opacity="0.5"/>
 
-            <Grid Background="White"
+            <Grid Background="{ThemeResource AccountPageBackground}"
                     CornerRadius="20"
                     Width="400"
                     Height="200">
@@ -398,10 +411,12 @@
                            FontWeight="SemiBold"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
-                           FontSize="20"/>
+                           FontSize="20"
+                           Foreground="{ThemeResource AccountPageForeground}"/>
                 
                 <TextBox Grid.Row="1"
                          PlaceholderText="Mật khẩu hiện tại"
+                         Foreground="{ThemeResource AccountPageForeground}"
                          VerticalAlignment="Center"
                          Margin="10 5 10 5"
                          BorderThickness="1"
@@ -410,6 +425,7 @@
 
                 <TextBox Grid.Row="2"
                          PlaceholderText="Mật khẩu mới"
+                         Foreground="{ThemeResource AccountPageForeground}"
                          VerticalAlignment="Center"
                          BorderThickness="1"
                          BorderBrush="LightGray"

@@ -14,6 +14,7 @@
     <Page.Resources>
         <converter:StringToImageSourceConverter x:Key="StringToImageSourceConverter"/>
     </Page.Resources>
+   
 
 
     <Grid>
@@ -35,15 +36,16 @@
                 <ColumnDefinition Width="0.3*"/>
                 <ColumnDefinition Width="2.5*"
                                   MinWidth="700"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="1.5*"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0"
-                       Text="LOGO"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       Foreground="White"
-                       FontSize="30"/>
+            <Border CornerRadius="20"
+                    Height="57"
+                    Width="57">
+                <Image Source="/Assets/app_logo.png"
+                       Stretch="Uniform"/>       
+            </Border>
+            
 
             <Button Grid.Column="1"
                     HorizontalAlignment="Center"
@@ -75,9 +77,9 @@
                         HorizontalAlignment="Center"
                         Orientation="Horizontal">
                 <AutoSuggestBox Grid.Column="0"
-                             Background="White"
                              PlaceholderText="Tìm kiếm"
                              Margin="10 10 0 10"
+                             Background="{ThemeResource AppBackground}"
                              Width="600"
                              VerticalAlignment="Center"
                              BorderThickness="2"
@@ -124,13 +126,27 @@
                             <Image Source="{x:Bind ViewModel.AvatarPath, Mode=OneWay, Converter={StaticResource StringToImageSourceConverter}}"
                                    Stretch="UniformToFill"/>
                         </Border>
-                            
+
                         <TextBlock Text="{x:Bind ViewModel.Username, Mode=OneWay}"
                                    VerticalAlignment="Center"
                                    Margin="10 0 0 0"
                                    Foreground="White"/>
                     </StackPanel>
                 </Button>
+
+                <ComboBox x:Name="ChangeThemeCombobox"
+                          Width="100"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center"
+                          Margin="20 0 0 0"
+                          Background="{ThemeResource AppBackground}"
+                          SelectionChanged="ThemeComboBox_SelectionChanged">
+                    
+                    <ComboBoxItem Content="Light" Tag="Light" />
+                    <ComboBoxItem Content="Dark" Tag="Dark" />
+                    <ComboBoxItem Content="System" Tag="Default" />
+                </ComboBox>
+
             </StackPanel>
         </Grid>
 

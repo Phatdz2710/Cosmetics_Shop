@@ -10,15 +10,14 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    NavigationCacheMode="Enabled"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    NavigationCacheMode="Enabled">
 
     <Page.Resources>
         <converter:VNDCurrencyConverter x:Key="VNDCurrencyConverter"/>
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Page.Resources>
 
-    <Grid Background="LightGray">
+    <Grid Background="{ThemeResource AppBackground}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250"/>
             <ColumnDefinition Width="*"/>
@@ -27,7 +26,7 @@
         <ScrollView Grid.Column="0"
                   Margin="10"
                   CornerRadius="10"
-                  Background="White"
+                  Background="{ThemeResource PurchasePageFilterBackground}"
                   VerticalScrollBarVisibility="Hidden">
             <StackPanel>
 
@@ -38,7 +37,8 @@
                 <TextBlock Text="Thương hiệu"
                            FontSize="16"
                            FontWeight="Bold"
-                           Margin="0,0,0,5"/>
+                           Margin="0,0,0,5"
+                           Foreground="{ThemeResource PurchasePageFilterForeground}"/>
 
                 <ListView MaxHeight="160"
                           ItemsSource="{x:Bind ViewModel.Brands}">
@@ -47,7 +47,8 @@
                             <CheckBox Content="{x:Bind Name}"
                                       Command="{x:Bind CheckedCommand}"
                                       CommandParameter="{x:Bind Index}"
-                                      IsChecked="{x:Bind IsChecked}"/>
+                                      IsChecked="{x:Bind IsChecked}"
+                                      Foreground="{ThemeResource PurchasePageFilterForeground}"/>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
@@ -56,7 +57,8 @@
                 <TextBlock Text="Loại sản phẩm"
                            FontSize="16"
                            FontWeight="Bold"
-                           Margin="0,0,0,5"/>
+                           Margin="0,0,0,5"
+                           Foreground="{ThemeResource PurchasePageFilterForeground}"/>
 
                 <ListView MaxHeight="160"
                           ItemsSource="{x:Bind ViewModel.Categories}">
@@ -65,7 +67,8 @@
                             <CheckBox Content="{x:Bind Name}"
                                       Command="{x:Bind CheckedCommand}"
                                       CommandParameter="{x:Bind Index}"
-                                      IsChecked="{x:Bind IsChecked}"/>
+                                      IsChecked="{x:Bind IsChecked}"
+                                      Foreground="{ThemeResource PurchasePageFilterForeground}"/>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
@@ -74,27 +77,34 @@
                 <TextBlock Text="Giá"
                            FontSize="16"
                            FontWeight="Bold"
-                           Margin="0,0,0,5"/>
+                           Margin="0,0,0,5"
+                           Foreground="{ThemeResource PurchasePageFilterForeground}"/>
                 
                 <StackPanel Orientation="Vertical">
                     <NumberBox Width="160"
                              PlaceholderText="Thấp nhất"
                              HorizontalAlignment="Left"
-                               Text="{x:Bind ViewModel.MinPrice, Mode=TwoWay}"/>
+                             Text="{x:Bind ViewModel.MinPrice, Mode=TwoWay}"
+                             Foreground="{ThemeResource PurchasePageFilterForeground}"
+                             Background="{ThemeResource PurchasePageFilterPriceBoxBackground}"/>
                     <TextBlock Text="đến"
                                VerticalAlignment="Center"
-                               Margin="10"/>
+                               Margin="10"
+                               Foreground="{ThemeResource PurchasePageFilterForeground}"/>
                     <NumberBox Width="160"
                                PlaceholderText="Cao nhất"
                                HorizontalAlignment="Left"
-                               Text="{x:Bind ViewModel.MaxPrice, Mode=TwoWay}"/>
+                               Text="{x:Bind ViewModel.MaxPrice, Mode=TwoWay}"
+                               Foreground="{ThemeResource PurchasePageFilterForeground}"
+                             Background="{ThemeResource PurchasePageFilterPriceBoxBackground}"/>
+                    
                     <Button Content="Xác nhận"
                             HorizontalAlignment="Center"
                             Width="200"
                             Command="{x:Bind ViewModel.FilterPriceCommand}"
                             Margin="0 10 0 0"
-                            Background="#49ab81"
-                            Foreground="White"
+                            Background="{ThemeResource PurchasePageFilterButtonBackground}"
+                            Foreground="{ThemeResource PurchasePageFilterButtonForeground}"
                             CornerRadius="5"/>
                 </StackPanel>
             </StackPanel>
@@ -105,15 +115,17 @@
                 <TextBlock Text="Sắp xếp"
                    FontSize="16"
                    FontWeight="Bold"
-                   Margin="0,0,0,5"/>
+                   Margin="0,0,0,5"
+                           Foreground="{ThemeResource PurchasePageFilterForeground}"/>
                 <ComboBox x:Name="SortComboBox"
                           HorizontalAlignment="Stretch"
-                          SelectedIndex="{x:Bind ViewModel.SelectedIndexSort, Mode=TwoWay}">
-                    <ComboBoxItem Content="Mới nhất"/>
-                    <ComboBoxItem Content="Giá giảm dần"/>
-                    <ComboBoxItem Content="Giá tăng dần"/>
-                    <ComboBoxItem Content="A - Z"/>
-                    <ComboBoxItem Content="Z - A"/>
+                          SelectedIndex="{x:Bind ViewModel.SelectedIndexSort, Mode=TwoWay}"
+                          Foreground="{ThemeResource PurchasePageFilterForeground}">
+                        <ComboBoxItem Content="Mới nhất" Foreground="{ThemeResource PurchasePageFilterForeground}"/>
+                        <ComboBoxItem Content="Giá giảm dần" Foreground="{ThemeResource PurchasePageFilterForeground}"/>
+                        <ComboBoxItem Content="Giá tăng dần" Foreground="{ThemeResource PurchasePageFilterForeground}"/>
+                        <ComboBoxItem Content="A - Z" Foreground="{ThemeResource PurchasePageFilterForeground}"/>
+                        <ComboBoxItem Content="Z - A" Foreground="{ThemeResource PurchasePageFilterForeground}"/>
                 </ComboBox>
             </StackPanel>
             </StackPanel>
@@ -123,14 +135,14 @@
         <Grid Grid.Column="0"
               Margin="10"
               CornerRadius="10"
-              Background="White"
+              Background="Transparent"
               Opacity="0.5"
               Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
         </Grid>
 
         
         <Grid Grid.Column="1"
-              Background="#317256"
+              Background="{ThemeResource DashboardGridViewBackground}"
               Margin="10"
               CornerRadius="10">
 
@@ -141,16 +153,16 @@
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Row="0"
-                       Foreground="White"
-                       Margin="10 10 10 0">
+                       Margin="10 10 10 0"
+                       Foreground="{ThemeResource PurchasePageGridViewForeground}">
                 <Run Text="Kết quả tìm kiếm cho từ khóa '"/>
                 <Run Text="{x:Bind ViewModel.Keyword, Mode=OneWay}"
-                     Foreground="LightGreen"/>
+                     Foreground="{ThemeResource PurchasePageGridViewTotalPriceForeground}"/>
                 <Run Text="'"/>
                 <Run Text=" - "/>
                 <Run Text="Tổng số sản phẩm: "/>
                 <Run Text="{x:Bind ViewModel.TotalProducts, Mode=OneWay}"
-                     Foreground="LightGreen"
+                     Foreground="{ThemeResource PurchasePageGridViewTotalPriceForeground}"
                      FontSize="15"
                      FontWeight="Bold"/>
             </TextBlock>
@@ -173,13 +185,14 @@
                         HorizontalAlignment="Center">
                 <Grid Width="80">
                     <Button Content="Trước"
+                            Background="{ThemeResource PurchasePageGridViewButtonBackground}"
                             Width="80"
                             Command="{x:Bind ViewModel.PreviousPageCommand}"
                             Visibility="{x:Bind ViewModel.VisiPrevious, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                 </Grid>
 
                 <TextBlock VerticalAlignment="Center"
-                           Foreground="White"
+                            Foreground="{ThemeResource PurchasePageGridViewForeground}"
                            Margin="10 0 10 0">
                     <Run Text="{x:Bind ViewModel.PageIndex, Mode=OneWay}"/> 
                     <Run Text=" / "/>
@@ -187,6 +200,7 @@
                 </TextBlock>
                 <Grid Width="80">
                     <Button Content="Sau"
+                            Background="{ThemeResource PurchasePageGridViewButtonBackground}"
                             Width="80"
                             Command="{x:Bind ViewModel.NextPageCommand}"
                             Visibility="{x:Bind ViewModel.VisiNext, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"/>
@@ -202,7 +216,7 @@
                            HorizontalAlignment="Center"
                            Text="Loading..."
                            FontSize="25"
-                           Foreground="White"/>
+                           Foreground="{ThemeResource PurchasePageGridViewForeground}"/>
             </Grid>
 
             

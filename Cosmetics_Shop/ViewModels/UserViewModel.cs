@@ -18,6 +18,7 @@ using System.Runtime.CompilerServices;
 using Cosmetics_Shop.Services.EventAggregatorMessages;
 using Cosmetics_Shop.Enums;
 using Cosmetics_Shop.DataAccessObject.Interfaces;
+using Microsoft.UI.Xaml;
 
 namespace Cosmetics_Shop.ViewModels
 {
@@ -98,6 +99,7 @@ namespace Cosmetics_Shop.ViewModels
         public ICommand AdminButtonCommand { get; }
         public ICommand AccountButtonCommand { get; }
         public ICommand DashboardButtonCommand { get; }
+        public ICommand ChangeThemeButtonCommand { get; }
 
         // Search button command
         public ICommand SearchButtonCommand { get; }
@@ -136,6 +138,9 @@ namespace Cosmetics_Shop.ViewModels
 
             // Search button click event
             SearchButtonCommand     = new RelayCommand(ExecuteSearchButtonCommand);
+
+            // Change theme button click event
+            // ChangeThemeButtonCommand = new RelayCommand(ChangeThemeButton);
 
             LoadUserButton();
 

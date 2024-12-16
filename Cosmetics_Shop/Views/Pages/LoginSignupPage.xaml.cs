@@ -29,6 +29,22 @@ namespace Cosmetics_Shop.Views.Pages
         {
             this.InitializeComponent();
             ViewModel = App.ServiceProvider.GetService(typeof(LoginViewModel)) as LoginViewModel;
+
+            var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            string theme = localSettings.Values["Theme"] as string;
+
+            if (theme == "Light")
+            {
+                this.RequestedTheme = ElementTheme.Light;
+            }
+            else if (theme == "Dark")
+            {
+                this.RequestedTheme = ElementTheme.Dark;
+            }
+            else
+            {
+                this.RequestedTheme = ElementTheme.Default;
+            }
         }
     }
 }

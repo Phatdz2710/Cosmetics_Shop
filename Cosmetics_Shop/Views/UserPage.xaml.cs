@@ -35,6 +35,25 @@ namespace Cosmetics_Shop.Views
             rootFrame.NavigationFailed += RootFrame_NavigationFailed;
 
             ViewModel = (UserViewModel)App.ServiceProvider.GetService(typeof(UserViewModel));
+
+            var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            string theme = localSettings.Values["Theme"] as string;
+
+            if (theme == "Light")
+            {
+                ChangeThemeCombobox.SelectedIndex = 0;
+                this.RequestedTheme = ElementTheme.Light;
+            }
+            else if (theme == "Dark")
+            {
+                ChangeThemeCombobox.SelectedIndex = 1;
+                this.RequestedTheme = ElementTheme.Dark;
+            }
+            else
+            {
+                ChangeThemeCombobox.SelectedIndex = 2;
+                this.RequestedTheme = ElementTheme.Default;
+            }
         }
 
         private void RootFrame_NavigationFailed(object sender, Microsoft.UI.Xaml.Navigation.NavigationFailedEventArgs e)
@@ -45,6 +64,33 @@ namespace Cosmetics_Shop.Views
         private void AutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
 
+        }
+
+        /// <summary>
+        /// Change Theme 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ThemeComboBox_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            var themeSelected = ChangeThemeCombobox.SelectedIndex;
+            var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+
+            switch (themeSelected)
+            {
+                case 0:
+                    this.RequestedTheme = ElementTheme.Light;
+                    localSettings.Values["Theme"] = "Light";
+                    break;
+                case 1:
+                    this.RequestedTheme = ElementTheme.Dark;
+                    localSettings.Values["Theme"] = "Dark";
+                    break;
+                case 2:
+                    this.RequestedTheme = ElementTheme.Default;
+                    localSettings.Values["Theme"] = "Default";
+                    break;
+            }
         }
     }
 }

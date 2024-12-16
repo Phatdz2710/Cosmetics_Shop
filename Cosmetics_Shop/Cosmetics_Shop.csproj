@@ -24,6 +24,7 @@
   <ItemGroup>
     <None Remove="Assets\stock_icon.png" />
     <None Remove="LoginWindow.xaml" />
+    <None Remove="Themes\Theme.xaml" />
     <None Remove="Views\AdminPages\AccountManagerPage.xaml" />
     <None Remove="Views\AdminPages\OrderManagerPage.xaml" />
     <None Remove="Views\AdminPages\ProductManagerPage.xaml" />
@@ -102,6 +103,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Update="Assets\admin_logo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Assets\app_logo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="Assets\avatar_temp.png">
