@@ -15,19 +15,29 @@ public partial class DatabaseContext : DbContext
 
     public virtual DbSet<Account> Accounts { get; set; }
 
+    public virtual DbSet<Cart> Carts { get; set; }
+
     public virtual DbSet<Order> Orders { get; set; }
 
     public virtual DbSet<OrderItem> OrderItems { get; set; }
 
+    public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
+
     public virtual DbSet<Product> Products { get; set; }
 
+    public virtual DbSet<ProductRating> ProductRatings { get; set; }
+
+    public virtual DbSet<ShippingMethod> ShippingMethods { get; set; }
+
     public virtual DbSet<User> Users { get; set; }
+
+    public virtual DbSet<Voucher> Vouchers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Account>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__accounts__3213E83FB88B3C25");
+            entity.HasKey(e => e.Id).HasName("PK__accounts__3213E83FF5FACCC1");
 
             entity.ToTable("accounts");
 
@@ -57,35 +67,57 @@ public partial class DatabaseContext : DbContext
                 .HasConstraintName("accounts_user_id_foreign");
         });
 
+        modelBuilder.Entity<Cart>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__carts__3213E83F0630C3CE");
+
+            entity.ToTable("carts");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.ProductId).HasColumnName("product_id");
+            entity.Property(e => e.Quantity).HasColumnName("quantity");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+
+            entity.HasOne(d => d.Product).WithMany(p => p.Carts)
+                .HasForeignKey(d => d.ProductId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("carts_product_id_foreign");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Carts)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("carts_user_id_foreign");
+        });
+
         modelBuilder.Entity<Order>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__orders__3213E83FF6A86527");
+            entity.HasKey(e => e.Id).HasName("PK__orders__3213E83FBDA2DB77");
 
             entity.ToTable("orders");
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.IsApproved)
-                .IsRequired()
-                .HasDefaultValueSql("('0')")
-                .HasColumnName("is_approved");
             entity.Property(e => e.OrderDate).HasColumnName("order_date");
             entity.Property(e => e.OrderStatus)
-                .IsRequired()
-                .HasMaxLength(50)
+                .HasDefaultValueSql("('0')")
                 .HasColumnName("order_status");
             entity.Property(e => e.PaymentMethod).HasColumnName("payment_method");
             entity.Property(e => e.ShippingMethod).HasColumnName("shipping_method");
             entity.Property(e => e.UserId).HasColumnName("user_id");
+            entity.Property(e => e.VoucherId).HasColumnName("voucher_id");
 
             entity.HasOne(d => d.User).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("orders_user_id_foreign");
+
+            entity.HasOne(d => d.Voucher).WithMany(p => p.Orders)
+                .HasForeignKey(d => d.VoucherId)
+                .HasConstraintName("orders_voucher_id_foreign");
         });
 
         modelBuilder.Entity<OrderItem>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__order_it__3213E83FF547EFF2");
+            entity.HasKey(e => e.Id).HasName("PK__order_it__3213E83FB7C2E0AD");
 
             entity.ToTable("order_items");
 
@@ -105,9 +137,22 @@ public partial class DatabaseContext : DbContext
                 .HasConstraintName("order_items_product_id_foreign");
         });
 
+        modelBuilder.Entity<PaymentMethod>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__payment___3213E83FBE1F933F");
+
+            entity.ToTable("payment_methods");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.MethodName)
+                .IsRequired()
+                .HasMaxLength(50)
+                .HasColumnName("method_name");
+        });
+
         modelBuilder.Entity<Product>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__products__3213E83FBB70D4D2");
+            entity.HasKey(e => e.Id).HasName("PK__products__3213E83F9F60C51D");
 
             entity.ToTable("products");
 
@@ -144,9 +189,48 @@ public partial class DatabaseContext : DbContext
             entity.Property(e => e.Stock).HasColumnName("stock");
         });
 
+        modelBuilder.Entity<ProductRating>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__product___3213E83FC67E29BB");
+
+            entity.ToTable("product_ratings");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.ProductId).HasColumnName("product_id");
+            entity.Property(e => e.Rating).HasColumnName("rating");
+            entity.Property(e => e.RatingDate).HasColumnName("rating_date");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+
+            entity.HasOne(d => d.Product).WithMany(p => p.ProductRatings)
+                .HasForeignKey(d => d.ProductId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("product_ratings_product_id_foreign");
+
+            entity.HasOne(d => d.User).WithMany(p => p.ProductRatings)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("product_ratings_user_id_foreign");
+        });
+
+        modelBuilder.Entity<ShippingMethod>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__shipping__3213E83F4770C715");
+
+            entity.ToTable("shipping_methods");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.MethodName)
+                .IsRequired()
+                .HasMaxLength(50)
+                .HasColumnName("method_name");
+            entity.Property(e => e.ShippingCost)
+                .HasColumnType("decimal(8, 2)")
+                .HasColumnName("shipping_cost");
+        });
+
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__users__3213E83F963BE3DA");
+            entity.HasKey(e => e.Id).HasName("PK__users__3213E83F70089D92");
 
             entity.ToTable("users");
 
@@ -167,6 +251,34 @@ public partial class DatabaseContext : DbContext
             entity.Property(e => e.Phone)
                 .HasMaxLength(50)
                 .HasColumnName("phone");
+        });
+
+        modelBuilder.Entity<Voucher>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__vouchers__3213E83F8A8BFF28");
+
+            entity.ToTable("vouchers");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Code)
+                .IsRequired()
+                .HasMaxLength(50)
+                .HasColumnName("code");
+            entity.Property(e => e.Description)
+                .HasMaxLength(1000)
+                .HasColumnName("description");
+            entity.Property(e => e.DiscountAmount)
+                .HasColumnType("decimal(8, 2)")
+                .HasColumnName("discount_amount");
+            entity.Property(e => e.IsActive)
+                .IsRequired()
+                .HasDefaultValueSql("('1')")
+                .HasColumnName("is_active");
+            entity.Property(e => e.PercentageDiscount)
+                .HasColumnType("decimal(8, 2)")
+                .HasColumnName("percentage_discount");
+            entity.Property(e => e.ValidFrom).HasColumnName("valid_from");
+            entity.Property(e => e.ValidTo).HasColumnName("valid_to");
         });
 
         OnModelCreatingPartial(modelBuilder);

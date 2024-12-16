@@ -100,7 +100,7 @@ namespace Cosmetics_Shop
                 return new PaymentPageViewModel(navigationService, dao, serviceProvider, userSession, null); // Pass null for now
             });
             services.AddTransient<AccountManagerViewModel>();
-            //services.AddTransient<OrderManagerViewModel>();
+            services.AddTransient<OrderManagerViewModel>();
             services.AddTransient<ProductManagerViewModel>();
 
             var basePath = AppContext.BaseDirectory;

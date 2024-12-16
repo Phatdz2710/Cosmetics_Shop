@@ -1,4 +1,5 @@
 ﻿using Cosmetics_Shop.DataAccessObject.Data;
+using Cosmetics_Shop.DBModels;
 using Cosmetics_Shop.Enums;
 using Cosmetics_Shop.Models;
 using Cosmetics_Shop.Models.Enums;
@@ -128,6 +129,20 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         public Task<bool> ChangeAllUserInformationAsync(int userId, UserDetail userDetail);
 
         public Task<bool> ChangePasswordAsync(int userId, string oldPassword, string newPassword);
+
+
+        #endregion
+
+        #region For Cart And Order
+
+        //Task<bool> AddToCartAsync(int userId, int productId, int quantity);
+        //Task<bool> AddToOrderAsync(int userId, List<CartProduct> listCartProduct);
+        //Task<bool> DeleteFromCartAsync(int userId, int cartId);
+        //Task<bool> UpdateCartAsync(int userId, int cartId, int quantity);
+        //Task<bool> CancelOrderAsync(int orderId);
+        //Task<List<Order>> GetListOrderAsync(int userId);
+        //Task<List<OrderItem>> GetListOrderItemAsync(int orderId);
+        //Task<List<CartProduct>> GetListCartProductAsync(int userId);
 
 
         #endregion
