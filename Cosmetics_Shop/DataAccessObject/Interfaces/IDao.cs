@@ -272,7 +272,7 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// <returns>
         /// A <see cref="List{T}"/> of <see cref="Voucher"/> objects representing the available vouchers.
         /// </returns>
-        List<Models.Voucher> GetAllVouchers();
+        Task<List<DBModels.Voucher>> GetAllVouchersAsync();
 
         /// <summary>
         /// Retrieves a list of all products available for payment.
@@ -288,7 +288,7 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// <returns>
         /// A <see cref="List{T}"/> of <see cref="ShippingMethod"/> objects representing the available shipping methods.
         /// </returns>
-        List<Models.ShippingMethod> GetShippingMethods();
+        Task<List<DBModels.ShippingMethod>> GetShippingMethodsAsync();
 
     }
 }

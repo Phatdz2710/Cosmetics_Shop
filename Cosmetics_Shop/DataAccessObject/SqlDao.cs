@@ -953,17 +953,33 @@ namespace Cosmetics_Shop.DataAccessObject
             });
         }
 
-        public List<Models.Voucher> GetAllVouchers()
+        public async Task<List<DBModels.Voucher>> GetAllVouchersAsync()
         {
-            var db = new List<Models.Voucher>
+            using (var scope = _serviceProvider.CreateScope())
             {
-            new Models.Voucher (1,"SAVE10",10,DateTime.Now.AddDays(30), "Giảm 10%"),
-            new Models.Voucher (2,"SAVE20",20,DateTime.Now.AddDays(60), "Giảm 20%"),
-            new Models.Voucher (3, "SAVE30", 30, DateTime.Now.AddDays(10), "Giảm 30%"),
-            new Models.Voucher (4, "WELCOME", 50, DateTime.Now.AddDays(15), "Giảm 50% - Lần đầu mua hàng")
-            };
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                try
+                {
+                    var db = await _databaseContext.Vouchers
+                        .Select(p => new DBModels.Voucher(
+                            p.Id,
+                            p.Code,
+                            p.DiscountAmount,
+                            p.PercentageDiscount,
+                            p.Description,
+                            p.ValidFrom,
+                            p.ValidTo,
+                            p.IsActive
+                            ))
+                        .ToListAsync();
+                    return db;
+                }
+                catch (Exception)
+                {
+                    return new List<DBModels.Voucher>();
+                }
+            }
 
-            return db;
         }
 
         public List<PaymentProductThumbnail> GetAllPaymentProducts()
@@ -978,15 +994,26 @@ namespace Cosmetics_Shop.DataAccessObject
             return db;
         }
 
-        public List<Models.ShippingMethod> GetShippingMethods()
+        public async Task<List<DBModels.ShippingMethod>> GetShippingMethodsAsync()
         {
-            var db = new List<Models.ShippingMethod>
+            using (var scope = _serviceProvider.CreateScope())
             {
-                new Models.ShippingMethod(1, "Vận chuyển nhanh", 20000),
-                new Models.ShippingMethod(2, "Vận chuyển hỏa tốc", 54000),
-                new Models.ShippingMethod(3, "Vận chuyển tiết kiệm", 16500)
-            };
-            return db;
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                try
+                {
+                    var db = await _databaseContext.ShippingMethods
+                        .Select(p => new DBModels.ShippingMethod(
+                            p.Id,
+                            p.MethodName,
+                            p.ShippingCost))
+                        .ToListAsync();
+                    return db;
+                }
+                catch (Exception)
+                {
+                    return new List<DBModels.ShippingMethod>();
+                }
+            }
         }
     }
 }

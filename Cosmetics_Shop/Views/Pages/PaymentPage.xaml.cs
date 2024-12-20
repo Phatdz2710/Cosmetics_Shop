@@ -39,7 +39,7 @@ namespace Cosmetics_Shop.Views.Pages
         }
 
         #region Navigation
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             if (e.Parameter is List<PaymentProductThumbnail> products)
             {
@@ -52,8 +52,8 @@ namespace Cosmetics_Shop.Views.Pages
                 // Create the ViewModel with the product parameter
                 ViewModel = new PaymentPageViewModel(navigationService, dao, serviceProvider, userSession, products);
 
-                voucherComboBox.ItemsSource = ViewModel.GetAllVouchers();
-                deliveryComboBox.ItemsSource = ViewModel.GetShippingMethods();
+                voucherComboBox.ItemsSource = await ViewModel.GetAllVouchersAsync();
+                deliveryComboBox.ItemsSource = await ViewModel.GetShippingMethodsAsync();
             }
         }
         #endregion
@@ -61,7 +61,7 @@ namespace Cosmetics_Shop.Views.Pages
         #region Combobox
         private void voucherComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (voucherComboBox.SelectedItem is Voucher selectedVoucher)
+            if (voucherComboBox.SelectedItem is DBModels.Voucher selectedVoucher)
             {
                 ViewModel.ApplyVoucher(selectedVoucher);
             }
@@ -69,7 +69,7 @@ namespace Cosmetics_Shop.Views.Pages
 
         private void deliveryComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (deliveryComboBox.SelectedItem is ShippingMethod selectedShippingMethod)
+            if (deliveryComboBox.SelectedItem is DBModels.ShippingMethod selectedShippingMethod)
             {
                 ViewModel.ApplyShipping(selectedShippingMethod);
             }

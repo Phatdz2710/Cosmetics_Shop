@@ -37,8 +37,8 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         private int _voucherFee;
         private int _shippingFee;
         private int _finalFee;
-        private Models.Voucher _currentVoucher;
-        private Models.ShippingMethod _currentShippingMethod;
+        private DBModels.Voucher _currentVoucher;
+        private DBModels.ShippingMethod _currentShippingMethod;
 
         private string _name;
         private string _nameDisplay;
@@ -170,9 +170,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         }
 
         #region Voucher
-        public List<Models.Voucher> GetAllVouchers()
+        public async Task<List<DBModels.Voucher>> GetAllVouchersAsync()
         {
-            return _dao.GetAllVouchers(); // Assuming _dao is initialized correctly in the constructor
+            return await _dao.GetAllVouchersAsync();
         }
 
         public void calculateVoucher()
@@ -180,10 +180,18 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             if (_currentVoucher != null)
             {
                 // Assuming selectedVoucher.Discount is a decimal representing a percentage (e.g., 10 for 10%)
-                int discountPercentage = _currentVoucher.Discount; // This should be a value between 0 and 100
+                decimal discountAmount = _currentVoucher.DiscountAmount;
+                decimal percent = _currentVoucher.PercentageDiscount;
 
                 // Calculate the discount amount based on the current TotalPay
-                VoucherFee = (int)(TotalPay * (discountPercentage / 100.0)); // Calculate percentage discount
+                if (discountAmount != 0)
+                {
+                    VoucherFee = (int)discountAmount;
+                }
+                else
+                {
+                    VoucherFee = (int)(TotalPay * percent); // Calculate percentage discount
+                }
             }
             else
             {
@@ -191,7 +199,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
             recalculateFinalFee();
         }
-        public void ApplyVoucher(Models.Voucher selectedVoucher)
+        public void ApplyVoucher(DBModels.Voucher selectedVoucher)
         {
             // Remove the previous voucher's effect if a new one is being applied
             if (selectedVoucher != _currentVoucher)
@@ -204,18 +212,18 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         #endregion
 
         #region Shipping
-        public List<Models.ShippingMethod> GetShippingMethods()
+        public async Task<List<DBModels.ShippingMethod>> GetShippingMethodsAsync()
         {
-            return _dao.GetShippingMethods(); // Assuming _dao is initialized correctly in the constructor
+            return await _dao.GetShippingMethodsAsync(); 
         }
 
-        public void ApplyShipping(Models.ShippingMethod selectedShippingMethod)
+        public void ApplyShipping(DBModels.ShippingMethod selectedShippingMethod)
         {
             // Remove the previous voucher's effect if a new one is being applied
             if (selectedShippingMethod != _currentShippingMethod)
             {
                 _currentShippingMethod = selectedShippingMethod; // Update the current voucher
-                ShippingFee = _currentShippingMethod.Price;
+                ShippingFee = (int)_currentShippingMethod.ShippingCost;
                 recalculateFinalFee();
             }
         }

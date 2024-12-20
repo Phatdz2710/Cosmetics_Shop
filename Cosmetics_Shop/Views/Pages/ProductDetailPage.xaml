@@ -175,9 +175,10 @@
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
                                             <TextBlock>
-                                                <Run Text="{Binding Name}"/> - 
-                                                <Run Text="{Binding Price, 
-                                                    Converter={StaticResource VNDCurrencyConverter}}"/> đ
+                                                <Run Text="{Binding MethodName}"/> 
+                                                <!--- 
+                                                <Run Text="{Binding ShippingCost
+                                                    }"/> đ-->
                                             </TextBlock> 
                                         </DataTemplate>
                                     </ComboBox.ItemTemplate>

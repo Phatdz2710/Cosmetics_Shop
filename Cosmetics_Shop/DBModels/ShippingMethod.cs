@@ -12,4 +12,10 @@ public partial class ShippingMethod
     public string MethodName { get; set; }
 
     public decimal ShippingCost { get; set; }
+    public ShippingMethod(int id, string name, decimal price)
+    {
+        Id = id;
+        MethodName = name;
+        ShippingCost = price;
+    }
 }

@@ -34,7 +34,15 @@ namespace Cosmetics_Shop.Views.Pages
             ViewModel = App.ServiceProvider.GetService(typeof(ProductDetailViewModel)) as ProductDetailViewModel;
 
             ViewModel.LoadInitialReviews(1);
-            deliveryComboBox.ItemsSource = ViewModel.GetShippingMethods();
+
+            // Moved the async code to Loaded event
+            this.Loaded += ProductDetailPage_Loaded;
+        }
+
+        private async void ProductDetailPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Now you can safely call async code here
+            deliveryComboBox.ItemsSource = await ViewModel.GetShippingMethodsAsync();
         }
 
         #region Navigation

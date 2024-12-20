@@ -28,7 +28,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         #region Fields
         private ProductDetail _productDetail;
         private int _shippingFee;
-        private ShippingMethod _currentShippingMethod;
+        private DBModels.ShippingMethod _currentShippingMethod;
         //private PaymentProductThumbnail _productToPayment;
         private List<PaymentProductThumbnail> _productsToPayment;
         private bool _isNavigating;
@@ -209,9 +209,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         #endregion
 
         #region Shipping
-        public List<ShippingMethod> GetShippingMethods()
+        public async Task<List<DBModels.ShippingMethod>> GetShippingMethodsAsync()
         {
-            return _dao.GetShippingMethods(); // Assuming _dao is initialized correctly in the constructor
+            return await _dao.GetShippingMethodsAsync(); 
         }
         #endregion
 
