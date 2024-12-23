@@ -33,10 +33,10 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" />
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.240923002" />
-    <PackageReference Include="MSTest.TestAdapter" Version="3.6.2" />
-    <PackageReference Include="MSTest.TestFramework" Version="3.6.2" />
-    <PackageReference Include="Microsoft.TestPlatform.TestHost" Version="17.11.1">
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.241114003" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.7.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.7.0" />
+    <PackageReference Include="Microsoft.TestPlatform.TestHost" Version="17.12.0">
       <ExcludeAssets>build</ExcludeAssets>
     </PackageReference>
     <Manifest Include="$(ApplicationManifest)" />

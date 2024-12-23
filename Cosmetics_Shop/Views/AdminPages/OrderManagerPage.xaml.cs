@@ -24,7 +24,7 @@ namespace Cosmetics_Shop.Views.AdminPages
     /// </summary>
     public sealed partial class OrderManagerPage : Page
     {
-        public OrderManagerViewModel ViewModel = null;
+        public OrderManagerViewModel ViewModel { get; set; }
         public OrderManagerPage()
         {
             this.InitializeComponent();

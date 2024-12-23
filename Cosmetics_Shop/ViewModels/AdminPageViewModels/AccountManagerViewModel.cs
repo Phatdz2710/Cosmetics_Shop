@@ -1,6 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using Cosmetics_Shop.DataAccessObject.Interfaces;
+using Cosmetics_Shop.Services.Interfaces;    
 using Cosmetics_Shop.ViewModels.UserControlViewModels;
+using Cosmetics_Shop.Views.Pages;
+using Microsoft.UI.Xaml;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.UI.Input;
 
 namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
 {
