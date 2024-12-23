@@ -18,6 +18,12 @@
               x:Name="image">
             <Image Source="/Assets/login_background.jpg"
                    Stretch="Fill"/>
+            <TextBlock Text="COSMETIC SHOP" 
+               HorizontalAlignment="Center" 
+               VerticalAlignment="Center" 
+               Foreground= "CornflowerBlue"
+               FontSize="50" 
+               FontWeight="Bold" />
         </Grid>
 
         <Frame x:Name="LoginSignupFrame"
