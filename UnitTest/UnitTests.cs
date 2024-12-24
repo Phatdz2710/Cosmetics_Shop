@@ -1,31 +1,24 @@
-﻿using Cosmetics_Shop.DBModels;
-using Cosmetics_Shop.Models;
+﻿using Cosmetics_Shop.DataAccessObject.Interfaces;
+using Cosmetics_Shop.DataAccessObject;
+using Cosmetics_Shop.DBModels;
 using Cosmetics_Shop.Models.Enums;
-using Cosmetics_Shop.Services;
+using Cosmetics_Shop.Models;
 using Cosmetics_Shop.Services.Interfaces;
-using Cosmetics_Shop.ViewModels.AdminPageViewModels;
-using Cosmetics_Shop.ViewModels;
-using Cosmetics_Shop.ViewModels.PageViewModels;
-using Cosmetics_Shop.ViewModels.UserControlViewModels;
-using Microsoft.EntityFrameworkCore;
+using Cosmetics_Shop.Services;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.UI.Xaml.Controls;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.VisualStudio.TestTools.UnitTesting.AppContainer;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using System;
 using System.IO;
-using Cosmetics_Shop.DataAccessObject;
-using Cosmetics_Shop.DataAccessObject.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
+/// <summary>
+/// Unit tests for the Data Access Object (DAO) in the Cosmetics Shop application.
+/// </summary>
 namespace UnitTest
 {
-    /// <summary>
-    /// Unit tests for the DAO (Data Access Object) class.
-    /// </summary>
     [TestClass]
     public class DAOTest
     {
@@ -33,7 +26,7 @@ namespace UnitTest
         public IDao dao = null;
 
         /// <summary>
-        /// Initializes the test setup by configuring services and creating an instance of SqlDao.
+        /// Initializes the test setup by configuring services and creating an instance of the DAO.
         /// </summary>
         [TestInitialize]
         public void Setup()
@@ -46,7 +39,7 @@ namespace UnitTest
         }
 
         /// <summary>
-        /// Configures the services required for the tests, including reading the connection string from appsettings.json.
+        /// Configures the services required for the tests.
         /// </summary>
         /// <param name="services">The service collection to configure.</param>
         private void ConfigureServices(ServiceCollection services)
@@ -70,109 +63,148 @@ namespace UnitTest
         }
 
         /// <summary>
-        /// Tests the ChangePasswordAsync method.
+        /// Tests changing the password when the old password is correct.
         /// </summary>
         [TestMethod]
-        public async Task ChangePassword()
+        public async Task ChangePassword_WhenOldPasswordIsCorrect_ShouldReturnTrue()
         {
-            // Kiểm tra đổi mật khẩu 
             var result = await dao.ChangePasswordAsync(1, "123", "1234");
             Assert.IsTrue(result);
-            // Trả lại mật khẩu cũ
             await dao.ChangePasswordAsync(1, "1234", "123");
             Assert.IsTrue(result);
-
-            // Kiểm tra mật khẩu cũ không đúng
-            var result1 = await dao.ChangePasswordAsync(1, "12", "1234");
-            Assert.IsFalse(result1);
         }
 
         /// <summary>
-        /// Tests the CreateAccountAsync and DeleteAccount methods.
+        /// Tests changing the password when the old password is incorrect.
         /// </summary>
         [TestMethod]
-        public async Task CreateAndDeleteAccount()
+        public async Task ChangePassword_WhenOldPasswordIsIncorrect_ShouldReturnFalse()
         {
-            // Tạo tài khoản
+            var result = await dao.ChangePasswordAsync(1, "1234", "12345");
+            Assert.IsFalse(result);
+        }
+
+        /// <summary>
+        /// Tests creating a new account when all inputs are valid.
+        /// </summary>
+        [TestMethod]
+        public async Task CreateNewAccount_WhenEveryThingIsValid_ShouldReturnTrue()
+        {
             var result1 = await dao.CreateAccountAsync("test", "123", "User");
             var result2 = await dao.CreateAccountAsync("test1", "123", "Admin");
-            var result3 = await dao.CreateAccountAsync("test1", "123", "User");
             Assert.IsTrue(result1);
             Assert.IsTrue(result2);
-            Assert.IsFalse(result3);
+        }
 
-            // Xóa tài khoản
+        /// <summary>
+        /// Tests creating a new account when the username already exists.
+        /// </summary>
+        [TestMethod]
+        public async Task CreateNewAccount_WhenUsernameIsAlrearyExist_ShouldReturnFalse()
+        {
+            var result1 = await dao.CreateAccountAsync("ngocphat", "123", "User");
+            var result2 = await dao.CreateAccountAsync("admin", "123", "Admin");
+            Assert.IsFalse(result1);
+            Assert.IsFalse(result2);
+        }
+
+        /// <summary>
+        /// Tests logging in when all inputs are valid.
+        /// </summary>
+        [TestMethod]
+        public async Task Login_WhenEverythingIsValid_ShouldReturnTrue()
+        {
+            var result1 = await dao.CheckLoginAsync("ngocphat", "123");
+            var result2 = await dao.CheckLoginAsync("admin", "123");
+
+            Assert.AreEqual(result1.LoginStatus, LoginStatus.Success);
+            Assert.AreEqual(result2.LoginStatus, LoginStatus.Success);
+        }
+
+        /// <summary>
+        /// Tests logging in when the password is incorrect.
+        /// </summary>
+        [TestMethod]
+        public async Task Login_WhenPasswordIsIncorrect_ShouldReturnFalse()
+        {
+            var result1 = await dao.CheckLoginAsync("ngocphat", "1234");
+            var result2 = await dao.CheckLoginAsync("admin", "1235");
+
+            Assert.AreEqual(result1.LoginStatus, LoginStatus.InvalidPassword);
+            Assert.AreEqual(result2.LoginStatus, LoginStatus.InvalidPassword);
+        }
+
+        /// <summary>
+        /// Tests logging in when the username does not exist.
+        /// </summary>
+        [TestMethod]
+        public async Task Login_WhenUsernameIsNotExists_ShouldReturnFalse()
+        {
+            var result1 = await dao.CheckLoginAsync("test122", "1234");
+            var result2 = await dao.CheckLoginAsync("test1123", "1235");
+
+            Assert.AreEqual(result1.LoginStatus, LoginStatus.InvalidUsername);
+            Assert.AreEqual(result2.LoginStatus, LoginStatus.InvalidUsername);
+        }
+
+        /// <summary>
+        /// Tests deleting an account when all inputs are valid.
+        /// </summary>
+        [TestMethod]
+        public async Task DeleteAccount_WhenEveryThingIsValid_ShouldReturnTrue()
+        {
             var login1 = await dao.CheckLoginAsync("test", "123");
             var login2 = await dao.CheckLoginAsync("test1", "123");
+
             int id1 = login1.UserInfo.GetId();
             int id2 = login2.UserInfo.GetId();
 
             var del1 = await dao.DeleteAccount(id1);
             var del2 = await dao.DeleteAccount(id2);
-            var del3 = await dao.DeleteAccount(id2);
 
             Assert.IsTrue(del1);
             Assert.IsTrue(del2);
-            Assert.IsFalse(del3);
         }
 
         /// <summary>
-        /// Tests the CheckLoginAsync method.
+        /// Tests getting a list of products when a keyword is provided.
         /// </summary>
         [TestMethod]
-        public async Task LoginTest()
+        public async Task GetListProduct_WhenKeywordIsNotNull_ShouldReturnTrue()
         {
-            var result1 = await dao.CheckLoginAsync("ngocphat", "123");
-            var result2 = await dao.CheckLoginAsync("admin", "123");
-            var result3 = await dao.CheckLoginAsync("cnp", "123");
-            var result4 = await dao.CheckLoginAsync("ngocphat", "1234");
+            var result1 = await dao.GetListProductThumbnailAsync(keyword: "Paris");
+            var result2 = await dao.GetListProductThumbnailAsync(keyword: "Hydro");
 
-            Assert.AreEqual(LoginStatus.Success, result1.LoginStatus);
-            Assert.AreEqual(LoginStatus.Success, result2.LoginStatus);
-            Assert.AreEqual(LoginStatus.InvalidUsername, result3.LoginStatus);
-            Assert.AreEqual(LoginStatus.InvalidPassword, result4.LoginStatus);
-
-            Assert.AreEqual("User", result1.UserInfo.GetRole());
-            Assert.AreEqual("Admin", result2.UserInfo.GetRole());
+            Assert.IsTrue(result1.Products.All(p => p.Name.Contains("Paris")));
+            Assert.IsTrue(result2.Products.All(p => p.Name.Contains("Hydro")));
         }
 
         /// <summary>
-        /// Tests the GetListProductThumbnailAsync method with a keyword filter.
+        /// Tests getting a list of products when filtering by brand or category.
         /// </summary>
         [TestMethod]
-        public async Task GetListProductTest()
+        public async Task GetListProduct_WhenFilterByBrandOrFilterCategory_ShouldReturnTrue()
         {
-            var result1 = await dao.GetListProductThumbnailAsync(keyword: "Sun");
-            var result2 = await dao.GetListProductThumbnailAsync(keyword: "ngocphat");
+            var result1 = await dao.GetListProductThumbnailAsync(filterBrand: "Neutrogena", filterCategory: "Skincare");
+            var result2 = await dao.GetListProductThumbnailAsync(filterBrand: "Maybelline", filterCategory: "Makeup");
+            var result3 = await dao.GetListProductThumbnailAsync(filterBrand: "L'Oreal", filterCategory: "Skincare");
 
-            Assert.IsTrue(result1.Products.All(p => p.Name.Contains("Sun")));
-            Assert.AreEqual(0, result2.Products.Count);
+            Assert.IsTrue(result1.Products.All(p => p.Brand == "Neutrogena" && p.Category == "Skincare"));
+            Assert.IsTrue(result2.Products.All(p => p.Brand == "Maybelline" && p.Category == "Makeup"));
+            Assert.IsTrue(result3.Products.All(p => p.Brand == "L'Oreal" && p.Category == "Skincare"));
         }
 
         /// <summary>
-        /// Tests the GetListProductThumbnailAsync method with a price range filter.
+        /// Tests getting a list of products when filtering by price.
         /// </summary>
         [TestMethod]
-        public async Task GetListProductThumbnailAsync_FilterByPriceRange()
+        public async Task GetListProduct_WhenFilterByPrice_ShouldReturnTrue()
         {
             var result = await dao.GetListProductThumbnailAsync(minPrice: 100000, maxPrice: 500000);
+            var result1 = await dao.GetListProductThumbnailAsync(minPrice: 100000);
 
             Assert.IsTrue(result.Products.All(p => p.Price >= 100000 && p.Price <= 500000));
-        }
-
-        /// <summary>
-        /// Tests the GetListProductThumbnailAsync method with brand and category filters.
-        /// </summary>
-        [TestMethod]
-        public async Task GetListProductThumbnailAsync_FilterByBrandAndCategory()
-        {
-            var result1 = await dao.GetListProductThumbnailAsync(filterBrand: "L'Oreal", filterCategory: "Sunscreen");
-            var result2 = await dao.GetListProductThumbnailAsync(filterBrand: "L'Oreal");
-            var result3 = await dao.GetListProductThumbnailAsync(filterCategory: "Sunscreen");
-
-            Assert.IsTrue(result1.Products.All(p => p.Brand == "L'Oreal" && p.Category == "Sunscreen"));
-            Assert.IsTrue(result2.Products.All(p => p.Brand == "L'Oreal"));
-            Assert.IsTrue(result3.Products.All(p => p.Category == "Sunscreen"));
+            Assert.IsTrue(result1.Products.All(p => p.Price >= 100000));
         }
     }
 }

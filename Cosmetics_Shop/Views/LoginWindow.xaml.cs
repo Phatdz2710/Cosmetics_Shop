@@ -29,7 +29,7 @@ namespace Cosmetics_Shop
     {
         public LoginWindow()
         {
-            this.InitializeComponent();
+            this. InitializeComponent();
             this.AppWindow.Resize(new Windows.Graphics.SizeInt32(1200, 750));
             this.LoginSignupFrame.Navigate(typeof(Views.Pages.LoginSignupPage));
 

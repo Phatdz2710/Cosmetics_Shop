@@ -360,5 +360,20 @@ namespace Cosmetics_Shop.DataAccessObject
         {
             throw new NotImplementedException();
         }
+
+        public Task<string> GetUserLevelAsync(int userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> GetProductDescriptionAsync(int productId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> ChangeProductInfoAsync(int id, string newName, string newBrand, string newCategory, int newPrice, int newInventory, int newSold, string newImagePath, string newDescription)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

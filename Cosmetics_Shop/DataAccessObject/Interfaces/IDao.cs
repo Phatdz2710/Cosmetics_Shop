@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.System.UserProfile;
 
+
 namespace Cosmetics_Shop.DataAccessObject.Interfaces
 {
     /// <summary>
@@ -49,14 +50,15 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
             int maxPrice = int.MaxValue);
 
         /// <summary>
-        /// Retrieves the details of a specific product by its ID.
+        /// Asynchronously retrieves a list of new products.
         /// </summary>
-        /// <param name="idProduct">The ID of the product to retrieve.</param>
         /// <returns>
-        /// A <see cref="ProductDetail"/> object containing detailed information about the product.
+        /// A <see cref="ProductThumbnail"/> representing the new products.
         /// </returns>
-
         Task<List<ProductThumbnail>> GetListNewProductAsync();
+
+
+
 
         /// <summary>
         /// Asynchronously retrieves a list of the best-selling products.
@@ -67,6 +69,9 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// </returns>
         Task<List<ProductThumbnail>> GetListBestSellerAsync();
 
+
+
+
         /// <summary>
         /// Asynchronously retrieves a list of recently viewed products for the current user.
         /// </summary>
@@ -76,15 +81,37 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// </returns>
         Task<List<ProductThumbnail>> GetListRecentlyViewAsync();
 
-        Task<List<ProductDetail>> GetProductDetailsAsync();
-        Task<ProductDetail> GetProductDetailAsync(int idProduct);
+
+
+
         /// <summary>
-        /// Asynchronously retrieves a list of the newest products.
+        /// Asynchronously retrieves a detailed information of all product.
         /// </summary>
         /// <returns>
         /// A <see cref="Task"/> representing the asynchronous operation, 
-        /// which returns a list of <see cref="ProductDetail"/> for the newest products.
+        /// which returns a list of <see cref="ProductDetail"/> for all product details.
         /// </returns>
+        Task<List<ProductDetail>> GetProductDetailsAsync();
+
+        /// <summary>
+        /// Asynchronously retrieves a detailed information of a specific product.
+        /// </summary>
+        /// <param name="idProduct"></param>
+        /// <returns>
+        /// A <see cref="Task"/> representing the asynchronous operation
+        /// which returns a <see cref="ProductDetail"/> for product details.
+        /// </returns>
+        Task<ProductDetail> GetProductDetailAsync(int idProduct);
+
+
+        /// <summary>
+        /// Asynchronously retrieves the description of a specific product.
+        /// </summary>
+        /// <param name="productId"></param>
+        /// A <see cref="Task"/> representing the asynchronous operation
+        /// which returns a <see cref="string"/> for product's description.
+        /// <returns></returns>
+        Task<string> GetProductDescriptionAsync(int productId);
 
         #endregion
 
@@ -118,16 +145,63 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
 
         #region Get User Information
 
-        // Get all user information
+        /// <summary>
+        /// Asynchronously retrieves the user all information for a specific user.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns>
+        /// A <see cref="Task"/> representing the asynchronous operation, 
+        /// which returns a <see cref="UserDetail"/> for user's detail.
+        /// </returns>
         Task<UserDetail> GetUserDetailAsync(int userId);
 
-        // Get only one field of user information
+        /// <summary>
+        /// Asynchronously retrieves the user information for a specific user.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="infoType"></param>
+        /// <returns>
+        /// A <see cref="Task"/> representing the asynchronous operation, 
+        /// which returns a <see cref="object"/> for user's information.
+        /// </returns>
         Task<object> GetInformationAsync(int userId, UserInformationType infoType);
 
+
+        /// <summary>
+        /// Asynchronously retrieves the user information for a specific user.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="infoType"></param>
+        /// <param name="newValue"></param>
+        /// <returns>
+        /// A <see cref="Task"/> representing the asynchronous operation,
+        /// which returns a <see cref="bool"/> for result of change information.
+        /// </returns>
         public Task<bool> ChangeUserInformationAsync(int userId, UserInformationType infoType, string newValue);
         
+
+        /// <summary>
+        /// Asynchronously retrieves the user information for a specific user.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="userDetail"></param>
+        /// <returns>
+        /// A <see cref="Task"/> representing the asynchronous operation,
+        /// which returns a <see cref="bool"/> for result of change all information.
+        /// </returns>
         public Task<bool> ChangeAllUserInformationAsync(int userId, UserDetail userDetail);
 
+
+        /// <summary>
+        /// Asynchronously retrieves the user information for a specific user.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="oldPassword"></param>
+        /// <param name="newPassword"></param>
+        /// <returns>
+        /// A <see cref="Task"/> representing the asynchronous operation,
+        /// which returns a <see cref="bool"/> for result of change password.
+        /// </returns>
         public Task<bool> ChangePasswordAsync(int userId, string oldPassword, string newPassword);
 
 
@@ -208,7 +282,7 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// A <see cref="Task"/> representing the asynchronous operation, 
         /// which returns a boolean indicating whether the update was successful.
         /// </returns>
-        Task<bool> ChangeProductInfoAsync(int id, string newName, string newBrand, string newCategory, int newPrice, int newInventory, int newSold, string newImagePath);
+        Task<bool> ChangeProductInfoAsync(int id, string newName, string newBrand, string newCategory, int newPrice, int newInventory, int newSold, string newImagePath, string newDescription);
 
         /// <summary>
         /// Asynchronously creates a new product.
@@ -225,6 +299,17 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// which returns a boolean indicating whether the product creation was successful.
         /// </returns>
         Task<bool> CreateProductAsync(string name, string brand, string category, int price, int sold, int inventory, string imagePath);
+
+
+        /// <summary>
+        /// Asynchronously retrieves the user's level of a specific user.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns>
+        /// A <see cref="Task"/> representing the asynchronous operation,
+        /// which returns a <see cref="string"/> for user's level.
+        /// </returns>
+        Task<string> GetUserLevelAsync(int userId);
 
         #endregion
 

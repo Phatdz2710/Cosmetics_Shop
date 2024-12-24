@@ -40,8 +40,7 @@
 
         <Grid Grid.Row="0"
 				  Grid.ColumnSpan="2"
-				  Background="#317256"
-				  />
+				  Background="#317256"/>
 
         <Button x:Name="returnButton"
                     Background="#317256"

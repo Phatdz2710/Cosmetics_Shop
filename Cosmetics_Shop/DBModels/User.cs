@@ -17,6 +17,8 @@ public partial class User
 
     public string Address { get; set; }
 
+    public DateTime CreateTime { get; set; }
+
     public string AvatarPath { get; set; }
 
     public virtual ICollection<Account> Accounts { get; set; } = new List<Account>();

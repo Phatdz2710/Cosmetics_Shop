@@ -49,6 +49,10 @@ namespace Cosmetics_Shop.Views
             filePickerService.SetWindowFocus(this);
         }
 
+        /// <summary>
+        /// Close main window when log out (viewmodel sends a log out message
+        /// </summary>
+        /// <param name="message"></param>
         private void WindowClose(LogoutMessage message)
         {
             this.Close();

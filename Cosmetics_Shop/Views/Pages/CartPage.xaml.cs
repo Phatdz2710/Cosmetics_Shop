@@ -37,7 +37,11 @@ namespace Cosmetics_Shop.Views.Pages
             voucherComboBox.ItemsSource = ViewModel.GetAllVouchers();
         }
 
-
+        /// <summary>
+        /// Select voucher
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void voucherComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (voucherComboBox.SelectedItem is Voucher selectedVoucher)

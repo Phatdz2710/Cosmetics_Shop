@@ -7,7 +7,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="using:Cosmetics_Shop.Views.Converters"
-    NavigationCacheMode="Enabled"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -16,6 +15,8 @@
         <converters:VNDCurrencyConverter x:Key="VNDCurrencyConverter"/>
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converters:StringToImageSourceConverter x:Key="StringToImageSourceConverter"/>
+        <converters:UserLevelConverter x:Key="UserLevelConverter"/>
+        <converters:MessageForegroundConverter x:Key="MessageForegroundConverter"/>
     </Page.Resources>
 
     <!-- Main page -->
@@ -110,14 +111,15 @@
                 <!-- Type account -->
                 <Border Grid.Row="2"
                         CornerRadius="8"
-                        Background="LightGreen"
+                        Background="{x:Bind ViewModel.UserLevel, Mode=OneWay, Converter={StaticResource UserLevelConverter}}"
                         Width="70"
                         Height="37"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center">
                     <TextBlock VerticalAlignment="Center"
                                HorizontalAlignment="Center"
-                               Text="Normal"/>
+                               Text="{x:Bind ViewModel.UserLevel, Mode=OneWay}"
+                               Foreground="White"/>
                 </Border>
 
                 <!-- Date create at -->
@@ -126,19 +128,8 @@
                            HorizontalAlignment="Center"
                            Foreground="Gray">
                     <Run Text="Thành viên từ: "/>
-                    <Run Text="27/11/2024"/>
+                    <Run Text="{x:Bind ViewModel.CreateTime, Mode=OneWay}"/>
                 </TextBlock>
-
-                <!-- Button Contact -->
-                <Button Grid.Row="4"
-                        CornerRadius="5"
-                        Background="{ThemeResource AccountPageButtonNormalBackground}"
-                        Content="Phản hồi"
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Center"
-                        Width="200"
-                        Height="40"
-                        BorderThickness="1.5"/>
 
                 <!-- Button Change password -->
                 <Button Grid.Row="5"
@@ -294,6 +285,7 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="0.3*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0"
@@ -309,7 +301,7 @@
                                     Margin="0 0 0 5">
                             <Image/>
                             <TextBlock Text="Tên"
-                                       FontSize="17" Foreground="{ThemeResource AccountPageForeground}"/>
+                                       FontSize="15" Foreground="{ThemeResource AccountPageForeground}"/>
                         </StackPanel>
                         <TextBox PlaceholderText="Tên"
                                  Text="{x:Bind ViewModel.Name, Mode=TwoWay}"
@@ -325,7 +317,7 @@
                                     Margin="0 0 0 5">
                             <Image/>
                             <TextBlock Text="Email"
-                                       FontSize="17"
+                                       FontSize="15"
                                        Foreground="{ThemeResource AccountPageForeground}"/>
                         </StackPanel>
                         <TextBox PlaceholderText="Email"
@@ -342,7 +334,7 @@
                                     Margin="0 0 0 5">
                             <Image/>
                             <TextBlock Text="Số điện thoại"
-                                       FontSize="17"
+                                       FontSize="15"
                                        Foreground="{ThemeResource AccountPageForeground}"/>
                         </StackPanel>
                         <TextBox PlaceholderText="Số điện thoại"
@@ -359,7 +351,7 @@
                                     Margin="0 0 0 5">
                             <Image/>
                             <TextBlock Text="Địa chỉ"
-                                       FontSize="17"
+                                       FontSize="15"
                                        Foreground="{ThemeResource AccountPageForeground}"/>
                         </StackPanel>
                         <TextBox PlaceholderText="Địa chỉ"
@@ -369,7 +361,11 @@
                                  IsEnabled="{x:Bind ViewModel.ChangeInforMode, Mode=OneWay}"
                                  Foreground="{ThemeResource AccountPageForeground}"/>
                     </StackPanel>
-                    <StackPanel Grid.Row="5"
+                    <TextBlock Grid.Row="5"
+                               Text="{x:Bind ViewModel.ChangeInfoMessage, Mode=OneWay}"
+                               Foreground="{x:Bind ViewModel.ChangeInfoMessage, Mode=OneWay, Converter={StaticResource MessageForegroundConverter}}"
+                               VerticalAlignment="Center"/>
+                    <StackPanel Grid.Row="6"
                                 Orientation="Horizontal">
                         <Button Content="{x:Bind ViewModel.ChangeModeContent, Mode=OneWay}"
                                 Margin="0 0 5 0"
@@ -397,8 +393,9 @@
             <Grid Background="{ThemeResource AccountPageBackground}"
                     CornerRadius="20"
                     Width="400"
-                    Height="200">
+                    Height="250">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
@@ -414,32 +411,41 @@
                            FontSize="20"
                            Foreground="{ThemeResource AccountPageForeground}"/>
                 
-                <TextBox Grid.Row="1"
+                <PasswordBox Grid.Row="1"
                          PlaceholderText="Mật khẩu hiện tại"
                          Foreground="{ThemeResource AccountPageForeground}"
                          VerticalAlignment="Center"
                          Margin="10 5 10 5"
                          BorderThickness="1"
                          BorderBrush="LightGray"
-                         Text="{x:Bind ViewModel.PasswordCurrent, Mode=TwoWay}"/>
+                         Password="{x:Bind ViewModel.PasswordCurrent, Mode=TwoWay}"/>
 
-                <TextBox Grid.Row="2"
+                <PasswordBox Grid.Row="2"
                          PlaceholderText="Mật khẩu mới"
                          Foreground="{ThemeResource AccountPageForeground}"
                          VerticalAlignment="Center"
                          BorderThickness="1"
                          BorderBrush="LightGray"
                          Margin="10 5 10 5"
-                         Text="{x:Bind ViewModel.PasswordNew, Mode=TwoWay}"/>
+                         Password="{x:Bind ViewModel.PasswordNew, Mode=TwoWay}"/>
 
-                <TextBlock Grid.Row="3"
+                <PasswordBox Grid.Row="3"
+                             PlaceholderText="Xác nhận mật khẩu mới"
+                             Foreground="{ThemeResource AccountPageForeground}"
+                             VerticalAlignment="Center"
+                             BorderThickness="1"
+                             BorderBrush="LightGray"
+                             Margin="10 5 10 5"
+                             Password="{x:Bind ViewModel.ConfirmPasswordNew, Mode=TwoWay}"/>
+
+                <TextBlock Grid.Row="4"
                            VerticalAlignment="Center"
                            Margin="20 0 0 0"
                            HorizontalAlignment="Left"
                            Text="{x:Bind ViewModel.ChangePasswordMessage, Mode=OneWay}"
                            Foreground="Red"/>
 
-                <StackPanel Grid.Row="4" Orientation="Horizontal"
+                <StackPanel Grid.Row="5" Orientation="Horizontal"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center">
                     <Button Content="Xác nhận"

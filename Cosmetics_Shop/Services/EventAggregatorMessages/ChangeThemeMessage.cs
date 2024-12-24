@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.Services.EventAggregatorMessages
 {
+    /// <summary>
+    /// Ping message to change the theme.
+    /// </summary>
     public class ChangeThemeMessage
     {
-        // The theme to change to
+        
     }
 }

@@ -93,8 +93,8 @@ namespace Cosmetics_Shop.DataAccessObject
                                         p.Brand,
                                         p.Category,
                                         p.AverageRating,
-                                        p.Sold,
-                                        p.Stock))
+                                        p.Stock,
+                                        p.Sold))
                                   .ToListAsync();
 
                     var resBrands = await _databaseContext.Products
@@ -151,8 +151,8 @@ namespace Cosmetics_Shop.DataAccessObject
                                 p.Brand,
                                 p.Category,
                                 p.AverageRating,
-                                p.Sold,
-                                p.Stock))
+                                p.Stock,
+                                p.Sold))
                         .ToListAsync();
 
                     return db;
@@ -173,7 +173,7 @@ namespace Cosmetics_Shop.DataAccessObject
                 {
                     var db = await _databaseContext.Products
                         .OrderByDescending(p => p.Sold)
-                        .Take(6)
+                        .Take(5)
                         .Select(p => new ProductThumbnail(p.Id,
                                 p.Name,
                                 p.ImagePath,
@@ -181,8 +181,8 @@ namespace Cosmetics_Shop.DataAccessObject
                                 p.Brand,
                                 p.Category,
                                 p.AverageRating,
-                                p.Sold,
-                                p.Stock))
+                                p.Stock,
+                                p.Sold))
                         .ToListAsync();
 
                     return db;
@@ -217,8 +217,8 @@ namespace Cosmetics_Shop.DataAccessObject
                                 p.Brand,
                                 p.Category,
                                 p.AverageRating,
-                                p.Sold,
-                                p.Stock))
+                                p.Stock,
+                                p.Sold))
                         .ToListAsync();
 
                     return db;
@@ -300,6 +300,27 @@ namespace Cosmetics_Shop.DataAccessObject
             }
         }
 
+        public async Task<string> GetProductDescriptionAsync(int productId)
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                try
+                {
+                    var description = await _databaseContext.Products
+                        .Where(p => p.Id == productId)
+                        .Select(p => p.Description)
+                        .FirstOrDefaultAsync();
+
+                    return description;
+                }
+                catch (Exception)
+                {
+                    return "";
+                }
+            }
+        }
+
         #endregion
 
         #region Login, Signup
@@ -367,12 +388,18 @@ namespace Cosmetics_Shop.DataAccessObject
 
                     if (user != null) return SignupStatus.UsernameAlreadyExists;
 
+                    if (email != string.Empty && !email.IsValidEmail())
+                    {
+                        return SignupStatus.InvalidEmail;
+                    }
+
                     var newUser = new DBModels.User()
                     {
                         Name    = username,
                         Email   = email,
                         Address = null,
                         Phone   = null,
+                        CreateTime = DateTime.Now
                     };
                     await _databaseContext.Users.AddAsync(newUser);
                     await _databaseContext.SaveChangesAsync();
@@ -427,6 +454,11 @@ namespace Cosmetics_Shop.DataAccessObject
                         .SelectMany(p => p.OrderItems)
                         .SumAsync(p => p.Quantity * p.Product.Price);
 
+                    var createTime = await _databaseContext.Users
+                        .Where(p => p.Id == userId)
+                        .Select(p => p.CreateTime)
+                        .FirstOrDefaultAsync();
+
                     if (user == null)
                     {
                         return new UserDetail
@@ -438,7 +470,8 @@ namespace Cosmetics_Shop.DataAccessObject
                             AvatarPath  = null,
                             TotalMoneySpent = 0,
                             TotalBills      = 0,
-                            TotalProducts   = 0
+                            TotalProducts   = 0,
+                            CreateTime      = createTime
                         };
                     }
 
@@ -451,21 +484,23 @@ namespace Cosmetics_Shop.DataAccessObject
                         AvatarPath  = user.AvatarPath,
                         TotalMoneySpent = totalMoneySpent,
                         TotalBills      = totalBills,
-                        TotalProducts   = totalProducts
+                        TotalProducts   = totalProducts,
+                        CreateTime      = createTime
                     };
                 }
                 catch (Exception)
                 {
                     return new UserDetail
                     {
-                        Name        = "",
-                        Email       = "",
-                        Phone       = "",
-                        Address     = "",
-                        AvatarPath  = null,
+                        Name = "",
+                        Email = "",
+                        Phone = "",
+                        Address = "",
+                        AvatarPath = null,
                         TotalMoneySpent = 0,
-                        TotalBills      = 0,
-                        TotalProducts   = 0
+                        TotalBills = 0,
+                        TotalProducts = 0,
+                        CreateTime = DateTime.MinValue
                     };
                 }
             }
@@ -681,7 +716,7 @@ namespace Cosmetics_Shop.DataAccessObject
                     var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
 
                     var db = await _databaseContext.Accounts
-                        .Select(p => new Models.Account(p.UserId, p.Username, p.Password, p.Role))
+                        .Select(p => new Models.Account(p.UserId, p.Username, p.Password, p.Role, p.UserId))
                         .ToListAsync();
 
                     return new AccountSearchResult
@@ -777,6 +812,11 @@ namespace Cosmetics_Shop.DataAccessObject
                 {
                     var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
 
+                    if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+                    {
+                        return false;
+                    }
+
                     var user = await _databaseContext.Accounts.FirstOrDefaultAsync(p => p.Username == username);
 
                     if (user != null)
@@ -790,6 +830,7 @@ namespace Cosmetics_Shop.DataAccessObject
                         Email = null,
                         Address = null,
                         Phone = null,
+                        CreateTime = DateTime.Now
                     };
                     await _databaseContext.Users.AddAsync(newUser);
                     await _databaseContext.SaveChangesAsync();
@@ -815,11 +856,16 @@ namespace Cosmetics_Shop.DataAccessObject
             }
         }
 
-        public async Task<bool> ChangeProductInfoAsync(int id, string newName, string newBrand, string newCategory, int newPrice, int newSold, int newInventory, string newImagePath)
+        public async Task<bool> ChangeProductInfoAsync(int id, string newName, string newBrand, string newCategory, int newPrice, int newSold, int newInventory, string newImagePath, string newDescription)
         {
             using (var scope = _serviceProvider.CreateScope())
             {
                 var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+
+                if (string.IsNullOrEmpty(newName) || string.IsNullOrEmpty(newBrand) || string.IsNullOrEmpty(newCategory) || newPrice < 0 || newInventory < 0)
+                {
+                    return false;
+                }
 
                 try
                 {
@@ -830,13 +876,14 @@ namespace Cosmetics_Shop.DataAccessObject
                         return false;
                     }
 
-                    product.Name = newName;
-                    product.Brand = newBrand;
+                    product.Name    = newName;
+                    product.Brand   = newBrand;
                     product.Category = newCategory;
-                    product.Price = newPrice;
-                    product.Stock = newInventory;
-                    product.Sold = newSold;
+                    product.Price   = newPrice;
+                    product.Stock   = newInventory;
+                    product.Sold    = newSold;
                     product.ImagePath = newImagePath;
+                    product.Description = newDescription;
 
                     await _databaseContext.SaveChangesAsync();
                     return true;
@@ -848,13 +895,18 @@ namespace Cosmetics_Shop.DataAccessObject
             }
         }
 
-        public async Task<bool> CreateProductAsync(string name, string brand, string category, int price, int sold, int inventory, string imagePath)
+        public async Task<bool> CreateProductAsync(string name, string brand, string category, int price, int inventory, int sold, string imagePath)
         {
             try
             {
                 using (var scope = _serviceProvider.CreateScope())
                 {
                     var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+
+                    if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(brand) || string.IsNullOrEmpty(category) || price < 0 || inventory < 0)
+                    {
+                        return false;
+                    }
 
                     var newProduct = new DBModels.Product()
                     {
@@ -880,6 +932,41 @@ namespace Cosmetics_Shop.DataAccessObject
                 return false;
             }
         }
+
+        public async Task<string> GetUserLevelAsync(int userId)
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+
+                try
+                {
+                    var totalMoneySpent = await _databaseContext.Orders
+                        .Where(p => p.UserId == userId)
+                        .SelectMany(p => p.OrderItems)
+                        .SumAsync(p => p.Quantity * p.Product.Price);
+
+                    if (totalMoneySpent >= 20000000)
+                    {
+                        return "ULTRA";
+                    }
+                    else if (totalMoneySpent >= 10000000)
+                    {
+                        return "VIP";
+                    }
+                    else
+                    {
+                        return "NORMAL";
+                    }
+
+                }
+                catch (Exception)
+                {
+                    return "NORMAL";
+                }
+            }
+        }
+        
         #endregion
 
         public void InsertProduct(ProductThumbnail product)

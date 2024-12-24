@@ -37,7 +37,7 @@ public partial class DatabaseContext : DbContext
     {
         modelBuilder.Entity<Account>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__accounts__3213E83FF5FACCC1");
+            entity.HasKey(e => e.Id).HasName("PK__accounts__3213E83F22E98F85");
 
             entity.ToTable("accounts");
 
@@ -69,7 +69,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<Cart>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__carts__3213E83F0630C3CE");
+            entity.HasKey(e => e.Id).HasName("PK__carts__3213E83FFE1AD4B9");
 
             entity.ToTable("carts");
 
@@ -91,7 +91,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<Order>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__orders__3213E83FBDA2DB77");
+            entity.HasKey(e => e.Id).HasName("PK__orders__3213E83F8AF7551A");
 
             entity.ToTable("orders");
 
@@ -117,7 +117,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<OrderItem>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__order_it__3213E83FB7C2E0AD");
+            entity.HasKey(e => e.Id).HasName("PK__order_it__3213E83F87E669A7");
 
             entity.ToTable("order_items");
 
@@ -139,7 +139,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<PaymentMethod>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__payment___3213E83FBE1F933F");
+            entity.HasKey(e => e.Id).HasName("PK__payment___3213E83F67D8CE70");
 
             entity.ToTable("payment_methods");
 
@@ -152,7 +152,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<Product>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__products__3213E83F9F60C51D");
+            entity.HasKey(e => e.Id).HasName("PK__products__3213E83F6853D63A");
 
             entity.ToTable("products");
 
@@ -182,6 +182,9 @@ public partial class DatabaseContext : DbContext
                 .IsRequired()
                 .HasMaxLength(100)
                 .HasColumnName("name");
+            entity.Property(e => e.NumReview)
+                .HasDefaultValueSql("('0')")
+                .HasColumnName("num_review");
             entity.Property(e => e.Price).HasColumnName("price");
             entity.Property(e => e.Sold)
                 .HasDefaultValueSql("('0')")
@@ -191,13 +194,15 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<ProductRating>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__product___3213E83FC67E29BB");
+            entity.HasKey(e => e.Id).HasName("PK__product___3213E83F74BB2A34");
 
             entity.ToTable("product_ratings");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.ProductId).HasColumnName("product_id");
-            entity.Property(e => e.Rating).HasColumnName("rating");
+            entity.Property(e => e.Rating)
+                .HasDefaultValueSql("('0')")
+                .HasColumnName("rating");
             entity.Property(e => e.RatingDate).HasColumnName("rating_date");
             entity.Property(e => e.UserId).HasColumnName("user_id");
 
@@ -214,7 +219,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<ShippingMethod>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__shipping__3213E83F4770C715");
+            entity.HasKey(e => e.Id).HasName("PK__shipping__3213E83FA054AE17");
 
             entity.ToTable("shipping_methods");
 
@@ -230,7 +235,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__users__3213E83F70089D92");
+            entity.HasKey(e => e.Id).HasName("PK__users__3213E83F0E75FD1C");
 
             entity.ToTable("users");
 
@@ -241,6 +246,7 @@ public partial class DatabaseContext : DbContext
             entity.Property(e => e.AvatarPath)
                 .HasMaxLength(200)
                 .HasColumnName("avatar_path");
+            entity.Property(e => e.CreateTime).HasColumnName("create_time");
             entity.Property(e => e.Email)
                 .HasMaxLength(50)
                 .HasColumnName("email");
@@ -255,7 +261,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<Voucher>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__vouchers__3213E83F8A8BFF28");
+            entity.HasKey(e => e.Id).HasName("PK__vouchers__3213E83F41161870");
 
             entity.ToTable("vouchers");
 

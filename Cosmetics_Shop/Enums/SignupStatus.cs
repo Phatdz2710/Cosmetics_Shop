@@ -7,7 +7,13 @@ using System.Threading.Tasks;
 namespace Cosmetics_Shop.Enums
 {
     /// <summary>
-    /// Signup Status
+    /// Enum representing the status of a signup attempt.
+    /// Success: The signup was successful.
+    /// EmptyUsername: The username is empty.
+    /// EmptyPassword: The password is empty.
+    /// ConfirmPasswordWrong: The confirm password is wrong.
+    /// UsernameAlreadyExists: The username already exists.
+    /// ConnectServerFailed: The connection to the server failed.
     /// </summary>
     public enum SignupStatus
     {
@@ -16,6 +22,7 @@ namespace Cosmetics_Shop.Enums
         EmptyPassword   = 2,
         ConfirmPasswordWrong    = 3,
         UsernameAlreadyExists   = 4,
-        ConnectServerFailed     = 5
+        ConnectServerFailed     = 5,
+        InvalidEmail           = 6
     }
 }

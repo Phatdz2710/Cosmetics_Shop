@@ -14,21 +14,48 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="1" 
-              x:Name="image">
-            <Image Source="/Assets/login_background.jpg"
+        <Grid Grid.Column="1" x:Name="LoginBackground">
+            <!-- Nền gradient xanh lá -->
+
+            <Image Source="/Assets/background_login.jpeg"
                    Stretch="Fill"/>
-            <TextBlock Text="COSMETIC SHOP" 
-               HorizontalAlignment="Center" 
-               VerticalAlignment="Center" 
-               Foreground= "CornflowerBlue"
-               FontSize="50" 
-               FontWeight="Bold" />
+            <Rectangle Fill="Black"
+                       Opacity="0.5"/>
+
+
+            <!-- Nội dung -->
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
+                <!-- Tiêu đề chính -->
+                <Grid>
+                    <TextBlock Text="COSMETIC SHOP" 
+                               Margin="0 3 3 0"
+                               HorizontalAlignment="Center" 
+                               Foreground="LightGreen" 
+                               FontSize="50" 
+                               FontWeight="Bold" 
+                               TextAlignment="Center" />
+                    <TextBlock Text="COSMETIC SHOP" 
+                               HorizontalAlignment="Center" 
+                               Foreground="White" 
+                               FontSize="50" 
+                               FontWeight="Bold" 
+                               TextAlignment="Center" />
+                    
+                </Grid>
+                
+
+                <!-- Phụ đề hoặc slogan -->
+                <TextBlock Text="Enhancing Natural Beauty" 
+                   HorizontalAlignment="Center" 
+                   Foreground="#E8F5E9" 
+                   FontSize="20" 
+                   TextAlignment="Center" />
+            </StackPanel>
         </Grid>
+
+
 
         <Frame x:Name="LoginSignupFrame"
                Grid.Column="0"/>
-
-
     </Grid>
 </Window>

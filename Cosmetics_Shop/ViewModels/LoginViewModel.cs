@@ -38,39 +38,27 @@ namespace Cosmetics_Shop.ViewModels
         #endregion
 
         #region Fields
-        private string      wrongMessage;
-        private string      successMessage;
-        private Visibility  messageVisibility;
+        private string      message;
+        private bool        messageVisibility;
         private string      loginSignupState;
         private bool        isEnabled = true; // Logged in
         #endregion
 
         #region Properties for binding
-        // Message about login failed
-        public string WrongMessage
-        {
-            get => wrongMessage;
-            set
-            {
-                wrongMessage = value;
-                this.MessageVisibility = Visibility.Visible;
-                OnPropertyChanged(nameof(WrongMessage));
-            }
-        }
         // Message about login success
-        public string SuccessMessage
+        public string Message
         {
-            get => successMessage;
+            get => message;
             set
             {
-                successMessage = value;
-                this.MessageVisibility = Visibility.Visible;
-                OnPropertyChanged(nameof(SuccessMessage));
+                message = value;
+                this.MessageVisibility = true;
+                OnPropertyChanged(nameof(Message));
             }
         }
 
         // Show message
-        public Visibility MessageVisibility
+        public bool MessageVisibility
         {
             get => messageVisibility;
             set
@@ -130,9 +118,8 @@ namespace Cosmetics_Shop.ViewModels
             _eventAggregator    = eventAggregator;
             _serviceProvider    = serviceProvider;
 
-            WrongMessage        = "";
-            SuccessMessage      = "";
-            MessageVisibility   = Visibility.Collapsed;
+            Message             = "";
+            MessageVisibility   = false;
             LoginSignupState    = "Login";
 
             var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
@@ -143,13 +130,13 @@ namespace Cosmetics_Shop.ViewModels
             SwitchLoginCommand = new RelayCommand(() =>
             {
                 LoginSignupState    = "Login";
-                MessageVisibility   = Visibility.Collapsed;
+                MessageVisibility   = false;
             });
 
             SwitchSignupCommand = new RelayCommand(() =>
             {
                 LoginSignupState    = "Signup";
-                MessageVisibility   = Visibility.Collapsed;
+                MessageVisibility   = false;
             });
 
             LoginCommand = new RelayCommand(() =>
@@ -207,15 +194,15 @@ namespace Cosmetics_Shop.ViewModels
                     break;
 
                 case LoginStatus.InvalidUsername:
-                    WrongMessage = "Tên đăng nhập không tồn tại !";
+                    Message = "Tên đăng nhập không tồn tại!";
                     break;
 
                 case LoginStatus.InvalidPassword:
-                    WrongMessage = "Sai mật khẩu !";
+                    Message = "Sai mật khẩu!";
                     break;
 
                 case LoginStatus.ConnectServerFailed:
-                    WrongMessage = "Vui lòng kiểm tra lại kết nối của bạn !";
+                    Message = "Vui lòng kiểm tra lại kết nối của bạn!";
                     break;
 
                 default:
@@ -228,9 +215,8 @@ namespace Cosmetics_Shop.ViewModels
         /// </summary>
         public async void DoSignup()
         {
-            SuccessMessage      = "";
-            WrongMessage        = "";
-            MessageVisibility   = Visibility.Collapsed;
+            Message      = "";
+            MessageVisibility   = false;
             IsEnabled       = false;
             var loginStatus = await _dao.DoSignupAsync(UsernameSignup, PasswordSignup, ConfirmPasswordSingup, Email);
             IsEnabled = true;
@@ -238,26 +224,28 @@ namespace Cosmetics_Shop.ViewModels
             switch(loginStatus)
             {
                 case SignupStatus.Success:
-                    SuccessMessage = "Tạo tài khoản thành công !";
+                    Message = "Tạo tài khoản thành công!";
                     break;
                 case SignupStatus.UsernameAlreadyExists:
-                    WrongMessage = "Tên đăng nhập đã tồn tại !";
+                    Message = "Tên đăng nhập đã tồn tại!";
                     break;
                 case SignupStatus.EmptyUsername:
-                    WrongMessage = "Tên đăng nhập không được bỏ trống !";
+                    Message = "Tên đăng nhập không được bỏ trống!";
                     break;
                 case SignupStatus.EmptyPassword:
-                    WrongMessage = "Mật khẩu không được bỏ trống !";
+                    Message = "Mật khẩu không được bỏ trống!";
                     break;
                 case SignupStatus.ConfirmPasswordWrong:
-                    WrongMessage = "Mật khẩu không trùng khớp !";
+                    Message = "Mật khẩu không trùng khớp!";
                     break;
                 case SignupStatus.ConnectServerFailed:
-                    WrongMessage = "Vui lòng kiểm tra lại kết nối của bạn !";
+                    Message = "Vui lòng kiểm tra lại kết nối của bạn!";
+                    break;
+                case SignupStatus.InvalidEmail:
+                    Message = "Email không hợp lệ!";
                     break;
                 default:
                     break;
-                
             }
         }
 

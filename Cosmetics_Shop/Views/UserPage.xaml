@@ -31,17 +31,23 @@
         <Grid Grid.Row="1"
               Background="Black">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.5*"/>
-                <ColumnDefinition Width="0.3*"/>
-                <ColumnDefinition Width="0.3*"/>
-                <ColumnDefinition Width="2.5*"
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="6*"
                                   MinWidth="700"/>
-                <ColumnDefinition Width="1.5*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="1.5*"
+                                  MinWidth="130"/>
+                <ColumnDefinition Width="1.2*"
+                                  MinWidth="120"/>
+
             </Grid.ColumnDefinitions>
 
             <Border CornerRadius="20"
                     Height="57"
-                    Width="57">
+                    Width="57"
+                    HorizontalAlignment="Center">
                 <Image Source="/Assets/app_logo.png"
                        Stretch="Uniform"/>       
             </Border>
@@ -85,7 +91,6 @@
                              BorderThickness="2"
                              CornerRadius="5"
                              Text="{x:Bind ViewModel.Keyword, Mode=TwoWay}"
-                             TextChanged="AutoSuggestBox_TextChanged"
                              ItemsSource="{x:Bind ViewModel.Suggestions}">
                 </AutoSuggestBox>
 
@@ -100,21 +105,19 @@
                         CornerRadius="5"
                         Command="{x:Bind ViewModel.SearchButtonCommand, Mode=OneTime}"/>
             </StackPanel>
+            
+            <Button Grid.Column="4"
+                    Height="60"
+                    Width="60"
+                    HorizontalAlignment="Center"
+                    Background="Black"
+                    Command="{x:Bind ViewModel.CartButtonCommand, Mode=OneTime}"
+                    ToolTipService.ToolTip="Giỏ hàng"
+                    ToolTipService.Placement="Left">
+                <Image Source="/Assets/cart_icon_1.png"/>
+            </Button>
 
-            <StackPanel Grid.Column="4"
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Left"
-                        Orientation="Horizontal">
-                <Button Height="60"
-                        Width="60"
-                        Background="Black"
-                        Command="{x:Bind ViewModel.CartButtonCommand, Mode=OneTime}"
-                        ToolTipService.ToolTip="Giỏ hàng"
-                        ToolTipService.Placement="Left">
-                    <Image Source="/Assets/cart_icon_1.png"/>
-                </Button>
-
-                <Button Background="Black"
+                <Button Grid.Column="5" Background="Black" HorizontalAlignment="Center"
                         Command="{x:Bind ViewModel.AccountButtonCommand, Mode=OneTime}"
                         ToolTipService.ToolTip="Tài khoản"
                         ToolTipService.Placement="Left">
@@ -134,20 +137,19 @@
                     </StackPanel>
                 </Button>
 
-                <ComboBox x:Name="ChangeThemeCombobox"
-                          Width="100"
-                          HorizontalAlignment="Center"
-                          VerticalAlignment="Center"
-                          Margin="20 0 0 0"
-                          Background="{ThemeResource AppBackground}"
-                          SelectionChanged="ThemeComboBox_SelectionChanged">
-                    
-                    <ComboBoxItem Content="Light" Tag="Light" />
-                    <ComboBoxItem Content="Dark" Tag="Dark" />
-                    <ComboBoxItem Content="System" Tag="Default" />
-                </ComboBox>
 
-            </StackPanel>
+            <ComboBox Grid.Column="6" x:Name="ChangeThemeCombobox"
+                      Width="100"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      Margin="20 0 0 0"
+                      Background="{ThemeResource AppBackground}"
+                      SelectionChanged="ThemeComboBox_SelectionChanged">
+
+                <ComboBoxItem Content="Light" Tag="Light" />
+                <ComboBoxItem Content="Dark" Tag="Dark" />
+                <ComboBoxItem Content="System" Tag="Default" />
+            </ComboBox>
         </Grid>
 
         <Frame x:Name="rootFrame"
