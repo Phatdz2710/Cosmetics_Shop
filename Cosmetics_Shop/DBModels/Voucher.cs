@@ -24,24 +24,4 @@ public partial class Voucher
     public bool? IsActive { get; set; }
 
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
-
-    public Voucher(int id,
-                    string code,
-                    decimal discountAmount,
-                    decimal percentageDiscount,
-                    string description,
-                    DateTime validFrom,
-                    DateTime validTo,
-                    bool? isActive
-                    )
-    {
-        Id = id;
-        Code = code;
-        DiscountAmount = discountAmount;
-        PercentageDiscount = percentageDiscount;
-        Description = description;
-        ValidFrom = validFrom;
-        ValidTo = validTo;
-        IsActive = isActive;
-    }
 }

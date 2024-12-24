@@ -47,7 +47,7 @@ namespace Cosmetics_Shop.Views.Pages
 
         private void voucherComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (voucherComboBox.SelectedItem is DBModels.Voucher selectedVoucher)
+            if (voucherComboBox.SelectedItem is Models.Voucher selectedVoucher)
             {
                 ViewModel.ApplyVoucher(selectedVoucher);
             }

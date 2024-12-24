@@ -9,8 +9,8 @@ namespace Cosmetics_Shop.Models
 {
     public class ReviewThumbnail : Review
     {
-        public ReviewThumbnail(int id, string name, Image userImage, int starNumber)
-                : base(id, name, userImage, starNumber)
+        public ReviewThumbnail(int id, int userID, string name, string userImage, int starNumber, DateTime ratingDate)
+                : base(id, userID, name, userImage, starNumber, ratingDate)
         { }
     }
 

@@ -11,6 +11,7 @@
 
     <UserControl.Resources>
         <converter:VNDCurrencyConverter x:Key="VNDCurrencyConverter"/>
+        <converter:StringToImageSourceConverter x:Key="StringToImageSourceConverter"/>
     </UserControl.Resources>
 
     <Grid Background="White"
@@ -30,9 +31,9 @@
                 <ColumnDefinition Width="0.3*"/>
             </Grid.ColumnDefinitions>
             <Ellipse Grid.Column="0" 
-                     Fill="Gray"
                      Width="30"
                      Height="30"
+                     Resources="{x:Bind ViewModel.PaymentProductThumbnail.ProductImage, Mode=OneWay, Converter={StaticResource StringToImageSourceConverter}}"
             />
 
             <TextBlock x:Name="productNameTextBlock"

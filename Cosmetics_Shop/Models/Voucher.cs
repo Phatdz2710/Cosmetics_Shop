@@ -7,28 +7,50 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.Models
 {
-    public class Voucher : INotifyPropertyChanged
+    public class Voucher
     {
-        public int Id { get; set; } // Unique identifier for the voucher
-        public string Code { get; set; } // The code for the voucher
-        public int Discount { get; set; } // The discount amount or percentage
-        public DateTime ExpiryDate { get; set; } // The expiry date of the voucher
+        public int Id { get; set; }
+
+        public string Code { get; set; }
+
+        public decimal DiscountAmount { get; set; }
+
+        public decimal PercentageDiscount { get; set; }
+
         public string Description { get; set; }
 
-        public Voucher(int id, string code, int discount, DateTime expiryDate, string description)
+        public DateTime ValidFrom { get; set; }
+
+        public DateTime ValidTo { get; set; }
+
+        public bool? IsActive { get; set; }
+
+        public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+
+        public Voucher(int id,
+                        string code,
+                        decimal discountAmount,
+                        decimal percentageDiscount,
+                        string description,
+                        DateTime validFrom,
+                        DateTime validTo,
+                        bool? isActive
+                        )
         {
             Id = id;
             Code = code;
-            Discount = discount;
-            ExpiryDate = expiryDate;
+            DiscountAmount = discountAmount;
+            PercentageDiscount = percentageDiscount;
             Description = description;
+            ValidFrom = validFrom;
+            ValidTo = validTo;
+            IsActive = isActive;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged(string propertyName)
+        public Voucher()
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            Id = 1;
+            Description = "Default Voucher";
         }
     }
 

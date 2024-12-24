@@ -27,13 +27,13 @@ namespace Cosmetics_Shop.Views.Pages
     {
         public ProductDetailViewModel ViewModel { get; }
 
-        public int proId = 1;
+        // public int proId = 1;
         public ProductDetailPage()
         {
             this.InitializeComponent();
             ViewModel = App.ServiceProvider.GetService(typeof(ProductDetailViewModel)) as ProductDetailViewModel;
 
-            ViewModel.LoadInitialReviews(1);
+            //ViewModel.LoadReviews();
 
             // Moved the async code to Loaded event
             this.Loaded += ProductDetailPage_Loaded;
@@ -43,6 +43,7 @@ namespace Cosmetics_Shop.Views.Pages
         {
             // Now you can safely call async code here
             deliveryComboBox.ItemsSource = await ViewModel.GetShippingMethodsAsync();
+            
         }
 
         #region Navigation
@@ -51,6 +52,7 @@ namespace Cosmetics_Shop.Views.Pages
             if (e.Parameter is int productId)
             {
                 await ViewModel.LoadProductDetailAsync(productId);
+                await ViewModel.LoadInitialReviews(productId);
 
                 // Remove currency symbol and commas, and trim whitespace
                 string priceText = priceTextBlock.Text.Replace(" đ", "").Replace(",", "").Trim();
@@ -106,6 +108,30 @@ namespace Cosmetics_Shop.Views.Pages
                     ViewModel.FilterReviewsByStarNumber(starNumber);
                 }
             }
+        }
+
+        private async void themvaogiohangButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Lấy productId từ ViewModel
+            int productId = ViewModel.ProductDetail.Id; // Giả sử bạn có thuộc tính Id trong ProductDetail
+            int quantity = ViewModel.Amount; // Lấy số lượng từ ViewModel
+
+            // Gọi phương thức AddToCartAsync
+            bool result = await ViewModel.AddToCartAsync(productId, quantity);
+
+            // Tạo ContentDialog
+            var dialog = new ContentDialog
+            {
+                Title = result ? "Thành công" : "Lỗi",
+                Content = result ? "Sản phẩm đã được thêm vào giỏ hàng." : "Không thể thêm sản phẩm vào giỏ hàng.",
+                CloseButtonText = "OK"
+            };
+
+            // Hiển thị ContentDialog
+            dialog.XamlRoot = this.XamlRoot; // Sử dụng XamlRoot của trang hiện tại
+
+            // Hiển thị ContentDialog
+            await dialog.ShowAsync();
         }
         #endregion
 

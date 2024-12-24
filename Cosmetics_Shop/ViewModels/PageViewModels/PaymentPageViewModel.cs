@@ -15,6 +15,10 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Cosmetics_Shop.DataAccessObject.Interfaces;
 using Cosmetics_Shop.DBModels;
+using System.Windows;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml;
+using Windows.UI.Popups;
 
 namespace Cosmetics_Shop.ViewModels.PageViewModels
 {
@@ -25,20 +29,25 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
     {
         // Data access object
         private readonly UserSession _userSession;
+        private readonly INavigationService _navigationService;
+        private readonly IServiceProvider _serviceProvider;
         private IDao _dao = null;
+        public event Action<string> ShowDialogRequested;
+
+        public CartPageViewModel Carts { get; set; }
+
         //Command
         public ICommand GoBackCommand {  get; set; }
-        // Navigation service
-        private readonly INavigationService _navigationService;
-        // Service provider
-        private readonly IServiceProvider _serviceProvider;
+        public ICommand OrderCommand { get; set; }
+
 
         #region Fields
         private int _voucherFee;
         private int _shippingFee;
         private int _finalFee;
-        private DBModels.Voucher _currentVoucher;
-        private DBModels.ShippingMethod _currentShippingMethod;
+        private Models.Voucher _currentVoucher;
+        private Models.ShippingMethod _currentShippingMethod;
+        private Models.PaymentMethod _selectedPaymentMethod;
 
         private string _name;
         private string _nameDisplay;
@@ -132,10 +141,21 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
         }
 
+        public Models.PaymentMethod SelectedPaymentMethod
+        {
+            get => _selectedPaymentMethod;
+            set
+            {
+                _selectedPaymentMethod = value;
+                OnPropertyChanged(); // Thông báo thay đổi nếu cần
+            }
+        }
+
         #endregion
 
         // Observable Collection
         public ObservableCollection<PaymentProductThumbnailViewModel> PaymentProduct { get; set; }
+        public ObservableCollection<Models.PaymentMethod> PaymentMethods { get; set; }
         public PaymentPageViewModel(INavigationService      navigationService, 
                                     IDao                    dao, 
                                     IServiceProvider        serviceProvider,
@@ -146,9 +166,15 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             _dao                = dao;
             _serviceProvider    = serviceProvider;
             _userSession        = userSession;
-            loadUserInformation();
+            _navigationService = navigationService;
+
+            Carts = new CartPageViewModel(_navigationService, _dao);
 
             PaymentProduct = new ObservableCollection<PaymentProductThumbnailViewModel>();
+            PaymentMethods = new ObservableCollection<Models.PaymentMethod>();
+
+            loadUserInformation();
+            LoadPaymentMethods();
 
             // Iterate through the list of products and add them to the ObservableCollection
             if (products != null)
@@ -162,15 +188,17 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
 
             recalculateFinalFee();
-            _navigationService = navigationService;
             GoBackCommand = new RelayCommand(() =>
             {
                 _navigationService.GoBack();
             });
+
+            // Initialize the OrderCommand
+            OrderCommand = new RelayCommand(async () => await ExecuteOrderCommand());
         }
 
         #region Voucher
-        public async Task<List<DBModels.Voucher>> GetAllVouchersAsync()
+        public async Task<List<Models.Voucher>> GetAllVouchersAsync()
         {
             return await _dao.GetAllVouchersAsync();
         }
@@ -199,7 +227,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
             recalculateFinalFee();
         }
-        public void ApplyVoucher(DBModels.Voucher selectedVoucher)
+        public void ApplyVoucher(Models.Voucher selectedVoucher)
         {
             // Remove the previous voucher's effect if a new one is being applied
             if (selectedVoucher != _currentVoucher)
@@ -212,12 +240,12 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         #endregion
 
         #region Shipping
-        public async Task<List<DBModels.ShippingMethod>> GetShippingMethodsAsync()
+        public async Task<List<Models.ShippingMethod>> GetShippingMethodsAsync()
         {
             return await _dao.GetShippingMethodsAsync(); 
         }
 
-        public void ApplyShipping(DBModels.ShippingMethod selectedShippingMethod)
+        public void ApplyShipping(Models.ShippingMethod selectedShippingMethod)
         {
             // Remove the previous voucher's effect if a new one is being applied
             if (selectedShippingMethod != _currentShippingMethod)
@@ -248,6 +276,84 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         }
         #endregion
 
+        #region Payment Method
+        public async Task<List<Models.PaymentMethod>> GetPaymentMethodsAsync()
+        {
+            return await _dao.GetPaymentMethodsAsync();
+        }
+        private async void LoadPaymentMethods()
+        {
+            var methods = await GetPaymentMethodsAsync();
+            foreach (var method in methods)
+            {
+                PaymentMethods.Add(method);
+            }
+        }
+
+        #endregion
+
+        #region Order
+        private async Task ExecuteOrderCommand()
+        {
+            // Validate user input
+            if (string.IsNullOrWhiteSpace(Name) || string.IsNullOrWhiteSpace(Phone) || string.IsNullOrWhiteSpace(Address))
+            {
+                return; 
+            }
+
+            // Validate that a payment method is selected
+            if (SelectedPaymentMethod == null)
+            {
+                SelectedPaymentMethod = new Models.PaymentMethod();
+            }
+
+            // Validate that a shipping method is selected
+            if (_currentShippingMethod == null)
+            {
+                _currentShippingMethod = new Models.ShippingMethod();
+            }
+
+            // Validate that a shipping method is selected
+            if (_currentVoucher == null)
+            {
+                _currentVoucher = new Models.Voucher();
+            }
+
+            // Gather necessary information for the order
+            var products = PaymentProduct.Select(p => p.PaymentProductThumbnail).ToList();
+            var paymentMethod = SelectedPaymentMethod?.Id; // Assuming SelectedPaymentMethod has an Id property
+            var shippingMethod = _currentShippingMethod?.Id; // Assuming _currentShippingMethod has an Id property
+            var voucherId = _currentVoucher?.Id; // Assuming _currentVoucher has an Id property
+
+            // Call the method to add the order
+            var order = await _dao.AddToOrderAsync(products, (int)paymentMethod, (int)shippingMethod, (int)voucherId);
+
+            foreach (var product in PaymentProduct)
+            {
+                bool isDeleted = await Carts.DeleteFromCartByProductIDAsync(product.PaymentProductThumbnail.Id);
+                if (isDeleted)
+                {
+                    //
+                }
+                else
+                {
+                    //
+                }
+            }
+            await Carts.LoadCartProductsAsync();
+
+            if (order != null)
+            {
+                ShowDialogRequested?.Invoke("Cảm ơn bạn đã đặt hàng !");
+                _navigationService.NavigateTo<DashboardPage>(); // Assuming you have a ConfirmationPage
+            }
+            else
+            {
+            }
+        }
+        #endregion
+
+        // Method to show messages to the user
 
         public event PropertyChangedEventHandler PropertyChanged;
 

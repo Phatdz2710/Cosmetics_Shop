@@ -30,7 +30,7 @@
                 <RowDefinition Height="10"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="20"/>
-                <RowDefinition Height="250"/>
+                <RowDefinition Height="*"/>
                 <RowDefinition Height="20"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
@@ -244,7 +244,8 @@
                                         Height="50"
                                         Foreground="Red"
                                         BorderBrush="Red"
-                                        BorderThickness="1.5">
+                                        BorderThickness="1.5"
+                                        Click="themvaogiohangButton_Click">
                                     <StackPanel Orientation="Horizontal">
                                         <FontIcon Glyph="&#xE7BF;" />
                                         <TextBlock Text="Thêm vào giỏ hàng"

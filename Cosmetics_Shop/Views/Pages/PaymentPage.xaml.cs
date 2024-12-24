@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -33,9 +33,6 @@ namespace Cosmetics_Shop.Views.Pages
         public PaymentPage()
         {
             this.InitializeComponent();
-            //ViewModel = App.ServiceProvider.GetService(typeof(PaymentPageViewModel)) as PaymentPageViewModel;
-            //voucherComboBox.ItemsSource = ViewModel.GetAllVouchers();
-            //deliveryComboBox.ItemsSource = ViewModel.GetShippingMethods();
         }
 
         #region Navigation
@@ -54,14 +51,31 @@ namespace Cosmetics_Shop.Views.Pages
 
                 voucherComboBox.ItemsSource = await ViewModel.GetAllVouchersAsync();
                 deliveryComboBox.ItemsSource = await ViewModel.GetShippingMethodsAsync();
+
+                ViewModel.ShowDialogRequested += ShowDialog;
+
             }
         }
         #endregion
 
+        private async void ShowDialog(string message)
+        {
+            ContentDialog dialog = new ContentDialog
+            {
+                Title = "Thông báo",
+                Content = message,
+                CloseButtonText = "OK"
+            };
+
+            dialog.XamlRoot = this.XamlRoot;
+
+            await dialog.ShowAsync(); // Hiển thị hộp thoại
+        }
+
         #region Combobox
         private void voucherComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (voucherComboBox.SelectedItem is DBModels.Voucher selectedVoucher)
+            if (voucherComboBox.SelectedItem is Models.Voucher selectedVoucher)
             {
                 ViewModel.ApplyVoucher(selectedVoucher);
             }
@@ -69,9 +83,18 @@ namespace Cosmetics_Shop.Views.Pages
 
         private void deliveryComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (deliveryComboBox.SelectedItem is DBModels.ShippingMethod selectedShippingMethod)
+            if (deliveryComboBox.SelectedItem is Models.ShippingMethod selectedShippingMethod)
             {
                 ViewModel.ApplyShipping(selectedShippingMethod);
+            }
+        }
+
+        private void PaymentMethod_Checked(object sender, RoutedEventArgs e)
+        {
+            if (sender is RadioButton radioButton && radioButton.Tag is Models.PaymentMethod selectedMethod)
+            {
+                // Update SelectedPaymentMethod in ViewModel
+                ViewModel.SelectedPaymentMethod = selectedMethod; // Assign the selected PaymentMethod object
             }
         }
         #endregion
