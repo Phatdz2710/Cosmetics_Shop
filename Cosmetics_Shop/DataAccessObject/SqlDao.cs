@@ -22,6 +22,7 @@ using Windows.ApplicationModel.Appointments;
 using Windows.ApplicationModel.Background;
 using Windows.Networking.NetworkOperators;
 using Windows.Security.Authentication.Web.Provider;
+using Windows.System;
 
 namespace Cosmetics_Shop.DataAccessObject
 {
@@ -974,51 +975,233 @@ namespace Cosmetics_Shop.DataAccessObject
             throw new NotImplementedException();
         }
 
-        public List<CartThumbnail> GetListCartProduct()
+        #region Cart
+        public async Task<List<CartThumbnail>> GetListCartProductAsync()
         {
-            var db = new List<CartThumbnail>()
+            using (var scope = _serviceProvider.CreateScope())
             {
-                new CartThumbnail(1, null, "Tẩy trang loreal", 150000, 2, 300000),
-                new CartThumbnail(3, null, "Tẩy trang Bioderma", 150000, 1, 150000),
-                new CartThumbnail(5, null, "Tẩy trang Ganier", 130000, 1, 130000),
-                new CartThumbnail(6, null, "Kem chống nắng skinaqua", 125000, 1, 125000)
-            };
-
-            return db;
-        }
-
-        public List<ReviewThumbnail> GetListReviewThumbnail()
-        {
-            var db = new List<ReviewThumbnail>()
-            {
-                new ReviewThumbnail(1, "Thnhcng", null, 5),
-                new ReviewThumbnail(2, "Thnhcng", null, 4),
-                new ReviewThumbnail(3, "Thnhcng", null, 5),
-                new ReviewThumbnail(1, "Ngocphat", null, 3),
-                new ReviewThumbnail(2, "Ngocphat", null, 4),
-                new ReviewThumbnail(3, "Ngocphat", null, 5),
-                new ReviewThumbnail(1, "Ciel", null, 4),
-                new ReviewThumbnail(2, "Ciel", null, 4),
-                new ReviewThumbnail(3, "Ciel", null, 3)
-            };
-            return db;
-        }
-
-        public List<ReviewThumbnail> GetListReviewThumbnailByIDProduct(int idProduct)
-        {
-            var db = GetListReviewThumbnail();
-            var result = new List<ReviewThumbnail>();
-            for (int i = 0; i < db.Count; i++)
-            {
-                if (idProduct == db[i].Id)
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                var userSession = _serviceProvider.GetService(typeof(UserSession)) as UserSession;
+                try
                 {
-                    result.Add(db[i]);
+                    var query = _databaseContext.Carts.AsQueryable();
+                    var cartItems = await query
+                        .Where(c => c.UserId == userSession.GetId())
+                        .Select(c => new CartThumbnail(
+                            c.Id,
+                            c.Product.ImagePath,       // Assuming 'Image' is the field in Product
+                            c.Product.Name,        // Assuming 'Name' is the field in Product
+                            c.Product.Price,       // Assuming 'Price' is the field in Product
+                            c.Quantity,            // Quantity as Amount
+                            c.Quantity * c.Product.Price // TotalPrice calculation
+                        ))
+                        .ToListAsync();
+
+                    return cartItems;
+                }
+                catch (Exception)
+                {
+                    return new List<CartThumbnail>(); // Return empty list on failure
                 }
             }
-            return result;
-
         }
 
+        private DBModels.Cart ConvertToDbCart(Models.CartThumbnail modelCart)
+        {
+            return new DBModels.Cart
+            {
+                UserId = modelCart.UserId,
+                ProductId = modelCart.ProductId,
+                Quantity = modelCart.Amount // Sử dụng Amount từ CartThumbnail
+            };
+        }
+
+        public async Task<bool> AddToCartAsync(int productId, int quantity)
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                var userSession = _serviceProvider.GetService(typeof(UserSession)) as UserSession;
+                try
+                {
+                    // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
+                    var existingCartItem = await _databaseContext.Carts
+                        .FirstOrDefaultAsync(c => c.UserId == userSession.GetId() && c.ProductId == productId);
+
+                    if (existingCartItem != null)
+                    {
+                        // Nếu sản phẩm đã có trong giỏ hàng, cập nhật số lượng
+                        existingCartItem.Quantity += quantity;
+                        _databaseContext.Carts.Update(existingCartItem);
+                    }
+                    else
+                    {
+                        // Nếu sản phẩm chưa có trong giỏ hàng, thêm mới
+                        var newCartItem = new Models.CartThumbnail
+                        (
+                            userSession.GetId(),
+                            productId,
+                            quantity
+                        );
+                        //await _databaseContext.Carts.AddAsync(newCartItem);
+                        // Chuyển đổi sang DBModels.Cart
+                        var dbCartItem = ConvertToDbCart(newCartItem);
+                        await _databaseContext.Carts.AddAsync(dbCartItem);
+                    }
+
+                    // Lưu thay đổi vào cơ sở dữ liệu
+                    await _databaseContext.SaveChangesAsync();
+                    return true; // Thêm thành công
+                }
+                catch (Exception ex)
+                {
+                    // Xử lý lỗi (có thể ghi log hoặc thông báo cho người dùng)
+                    return false; // Thêm không thành công
+                }
+            }
+        }
+
+        public async Task<bool> DeleteFromCartAsync(int cartId)
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                var userSession = _serviceProvider.GetService(typeof(UserSession)) as UserSession;
+                try
+                {
+                    // Tìm kiếm sản phẩm trong giỏ hàng theo cartId và userId
+                    var cartItem = await _databaseContext.Carts
+                        .FirstOrDefaultAsync(c => c.Id == cartId && c.UserId == userSession.GetId());
+
+                    if (cartItem != null)
+                    {
+                        // Xóa sản phẩm khỏi giỏ hàng
+                        _databaseContext.Carts.Remove(cartItem);
+
+                        // Lưu thay đổi vào cơ sở dữ liệu
+                        await _databaseContext.SaveChangesAsync();
+                        return true; // Xóa thành công
+                    }
+                    else
+                    {
+                        // Nếu không tìm thấy sản phẩm trong giỏ hàng
+                        return false; // Xóa không thành công
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Xử lý lỗi (có thể ghi log hoặc thông báo cho người dùng)
+                    return false; // Xóa không thành công
+                }
+            }
+        }
+
+        public async Task<bool> DeleteFromCartByProductIDAsync(int productId)
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                var userSession = _serviceProvider.GetService(typeof(UserSession)) as UserSession;
+                try
+                {
+                    // Tìm kiếm sản phẩm trong giỏ hàng theo cartId và userId
+                    var cartItem = await _databaseContext.Carts
+                        .FirstOrDefaultAsync(c => c.ProductId == productId && c.UserId == userSession.GetId());
+
+                    if (cartItem != null)
+                    {
+                        // Xóa sản phẩm khỏi giỏ hàng
+                        _databaseContext.Carts.Remove(cartItem);
+
+                        // Lưu thay đổi vào cơ sở dữ liệu
+                        await _databaseContext.SaveChangesAsync();
+                        return true; // Xóa thành công
+                    }
+                    else
+                    {
+                        // Nếu không tìm thấy sản phẩm trong giỏ hàng
+                        return false; // Xóa không thành công
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Xử lý lỗi (có thể ghi log hoặc thông báo cho người dùng)
+                    return false; // Xóa không thành công
+                }
+            }
+        }
+
+        public async Task<bool> UpdateCartAsync(int cartId, int quantity)
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                try
+                {
+                    // Tìm kiếm sản phẩm trong giỏ hàng theo cartId
+                    var cartItem = await _databaseContext.Carts
+                        .FirstOrDefaultAsync(c => c.Id == cartId);
+
+                    if (cartItem != null)
+                    {
+                        // Cập nhật số lượng
+                        cartItem.Quantity = quantity;
+
+                        // Cập nhật trạng thái của cartItem
+                        _databaseContext.Carts.Update(cartItem);
+
+                        // Lưu thay đổi vào cơ sở dữ liệu
+                        await _databaseContext.SaveChangesAsync();
+                        return true; // Cập nhật thành công
+                    }
+                    else
+                    {
+                        // Nếu không tìm thấy sản phẩm trong giỏ hàng
+                        return false; // Cập nhật không thành công
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Xử lý lỗi (có thể ghi log hoặc thông báo cho người dùng)
+                    return false; // Cập nhật không thành công
+                }
+            }
+        }
+
+        #endregion
+
+        #region Rating - Review
+
+        public async Task<List<ReviewThumbnail>> GetListReviewThumbnailByIDProductAsync(int idProduct)
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                var userSession = _serviceProvider.GetService(typeof(UserSession)) as UserSession;
+                try
+                {
+                    // Tìm kiếm sản phẩm trong giỏ hàng theo cartId và userId
+                    var reviews = await _databaseContext.ProductRatings
+                        .Where(r => r.ProductId == idProduct && r.UserId == userSession.GetId())
+                        .Select(r => new ReviewThumbnail(
+                            r.ProductId,
+                            r.UserId,
+                            r.User.Name,
+                            r.User.AvatarPath,
+                            r.Rating,
+                            r.RatingDate
+                        ))
+                        .ToListAsync();
+                    return reviews;
+                }
+                catch (Exception ex)
+                {
+                    return new List<ReviewThumbnail>();
+                }
+            }
+
+        }
+        #endregion
         public async Task<List<string>> GetSuggestionsAsync(string keyword)
         {
             return await Task.Run(async () =>
@@ -1040,17 +1223,32 @@ namespace Cosmetics_Shop.DataAccessObject
             });
         }
 
-        public List<Models.Voucher> GetAllVouchers()
+        public async Task<List<Models.Voucher>> GetAllVouchersAsync()
         {
-            var db = new List<Models.Voucher>
+            using (var scope = _serviceProvider.CreateScope())
             {
-            new Models.Voucher (1,"SAVE10",10,DateTime.Now.AddDays(30), "Giảm 10%"),
-            new Models.Voucher (2,"SAVE20",20,DateTime.Now.AddDays(60), "Giảm 20%"),
-            new Models.Voucher (3, "SAVE30", 30, DateTime.Now.AddDays(10), "Giảm 30%"),
-            new Models.Voucher (4, "WELCOME", 50, DateTime.Now.AddDays(15), "Giảm 50% - Lần đầu mua hàng")
-            };
-
-            return db;
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                try
+                {
+                    var db = await _databaseContext.Vouchers
+                        .Select(p => new Models.Voucher(
+                            p.Id,
+                            p.Code,
+                            p.DiscountAmount,
+                            p.PercentageDiscount,
+                            p.Description,
+                            p.ValidFrom,
+                            p.ValidTo,
+                            p.IsActive
+                            ))
+                        .ToListAsync();
+                    return db;
+                }
+                catch (Exception)
+                {
+                    return new List<Models.Voucher>();
+                }
+            }
         }
 
         public List<PaymentProductThumbnail> GetAllPaymentProducts()
@@ -1065,15 +1263,140 @@ namespace Cosmetics_Shop.DataAccessObject
             return db;
         }
 
-        public List<Models.ShippingMethod> GetShippingMethods()
+        #region Shipping Method
+        public async Task<List<Models.ShippingMethod>> GetShippingMethodsAsync()
         {
-            var db = new List<Models.ShippingMethod>
+            using (var scope = _serviceProvider.CreateScope())
             {
-                new Models.ShippingMethod(1, "Vận chuyển nhanh", 20000),
-                new Models.ShippingMethod(2, "Vận chuyển hỏa tốc", 54000),
-                new Models.ShippingMethod(3, "Vận chuyển tiết kiệm", 16500)
-            };
-            return db;
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                try
+                {
+                    var db = await _databaseContext.ShippingMethods
+                        .Select(p => new Models.ShippingMethod(
+                            p.Id,
+                            p.MethodName,
+                            p.ShippingCost))
+                        .ToListAsync();
+                    return db;
+                }
+                catch (Exception)
+                {
+                    return new List<Models.ShippingMethod>();
+                }
+            }
         }
+        #endregion
+
+        #region Payment Method
+        public async Task<List<Models.PaymentMethod>> GetPaymentMethodsAsync()
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                try
+                {
+                    var db = await _databaseContext.PaymentMethods
+                        .Select(p => new Models.PaymentMethod(
+                            p.Id,
+                            p.MethodName))
+                        .ToListAsync();
+                    return db;
+                }
+                catch (Exception)
+                {
+                    return new List<Models.PaymentMethod>();
+                }
+            }
+        }
+        #endregion
+
+
+        #region Order
+
+        private DBModels.Order ConvertToDbOrder(Models.Order modelOrder)
+        {
+            return new DBModels.Order
+            {
+                UserId = modelOrder.UserId,
+                OrderStatus = modelOrder.OrderStatus,
+                OrderDate = modelOrder.OrderDate,
+                PaymentMethod = modelOrder.PaymentMethod,
+                ShippingMethod = modelOrder.ShippingMethod,
+                VoucherId = modelOrder.VoucherId,
+            };
+        }
+
+        private DBModels.OrderItem ConvertToDbOrderItem(Models.OrderItem modelOrder)
+        {
+            return new DBModels.OrderItem
+            {
+                ProductId = modelOrder.ProductId,
+                OrderId = modelOrder.OrderId,
+                Quantity = modelOrder.Quantity
+            };
+        }
+        
+        public async Task<Models.Order> AddToOrderAsync(List<PaymentProductThumbnail> listCartProduct, int paymentMethod, int shippingMethod, int voucher)
+        {
+            // Create a new scope for dependency injection
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                // Retrieve the database context from the service provider
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                var userSession = _serviceProvider.GetService(typeof(UserSession)) as UserSession;
+
+                // Create a new order instance
+                var order = new Models.Order
+                {
+                    UserId = userSession.GetId(),
+                    OrderStatus = 0,
+                    OrderDate = DateTime.Now,
+                    PaymentMethod = paymentMethod,
+                    ShippingMethod = shippingMethod,
+                    VoucherId = voucher
+                };
+
+                try
+                {
+                    // Add the order to the context
+                    var dbOrder = ConvertToDbOrder(order);
+                    await _databaseContext.Orders.AddAsync(dbOrder);
+
+                    // Save changes to the database to generate the OrderId
+                    await _databaseContext.SaveChangesAsync();
+
+                    // Now that the order is saved, set the OrderId for each OrderItem
+                    foreach (var product in listCartProduct)
+                    {
+                        var orderItem = new Models.OrderItem
+                        {
+                            OrderId = dbOrder.Id, // Use the generated OrderId
+                            ProductId = product.Id,
+                            Quantity = product.Amount
+                        };
+
+                        // Convert to DB model and add to the context
+                        var dbOrderItem = ConvertToDbOrderItem(orderItem);                      
+                        await _databaseContext.OrderItems.AddAsync(dbOrderItem);
+                        await DeleteFromCartByProductIDAsync(product.Id);
+                    }
+
+                    // Save changes again to persist the OrderItems
+                    await _databaseContext.SaveChangesAsync();
+
+                    // Return the created order
+                    return order;
+                }
+                catch (Exception ex)
+                {
+                    throw; // Rethrow the exception for further handling
+                }
+            }
+        }
+
+
+        #endregion
+
+
     }
 }

@@ -15,5 +15,9 @@ namespace Cosmetics_Shop.Models
             : base(id, productImage, productName, price, amount, totalPrice)
         { }
 
+        public CartThumbnail(int userId, int productId, int quantity)
+            : base(userId, productId, quantity)
+        { }
+
     }
 }

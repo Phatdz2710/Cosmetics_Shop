@@ -321,6 +321,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             if (_nameRestore == Name && _emailRestore == Email && _phoneRestore == Phone && _addressRestore == Address)
             {
                 changeInfoModeCommand();
+                ChangeInfoMessage = "";
                 return;
             }
 

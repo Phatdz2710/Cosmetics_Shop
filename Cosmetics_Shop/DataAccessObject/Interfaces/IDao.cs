@@ -209,14 +209,58 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
 
         #region For Cart And Order
 
-        //Task<bool> AddToCartAsync(int userId, int productId, int quantity);
-        //Task<bool> AddToOrderAsync(int userId, List<CartProduct> listCartProduct);
-        //Task<bool> DeleteFromCartAsync(int userId, int cartId);
-        //Task<bool> UpdateCartAsync(int userId, int cartId, int quantity);
+        /// <summary>
+        /// Add a product to the cart.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="List{T}"/> of <see cref="bool"/> objects representing the products in the cart.
+        /// </returns>
+        Task<bool> AddToCartAsync(int productId, int quantity);
+
+        /// <summary>
+        /// Create an order
+        /// </summary>
+        /// <returns>
+        /// A <see cref="List{T}"/> of <see cref="PaymentProductThumbnail"/> objects representing the products in the cart.
+        /// </returns>
+        Task<Models.Order> AddToOrderAsync(List<PaymentProductThumbnail> listCartProduct, int paymentMethod, int shippingMethod, int voucher);
+
+        /// <summary>
+        /// Delete a product to the cart by Card ID.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="List{T}"/> of <see cref="bool"/> objects representing the products in the cart.
+        /// </returns>
+        Task<bool> DeleteFromCartAsync(int cartId);
+
+        /// <summary>
+        /// Delete a product to the cart by Product ID.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="List{T}"/> of <see cref="bool"/> objects representing the products in the cart.
+        /// </returns>
+        Task<bool> DeleteFromCartByProductIDAsync(int productId);
+
+        /// <summary>
+        /// Update cart.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="List{T}"/> of <see cref="bool"/> objects representing the products in the cart.
+        /// </returns>
+        Task<bool> UpdateCartAsync(int cartId, int quantity);
+
+
         //Task<bool> CancelOrderAsync(int orderId);
         //Task<List<Order>> GetListOrderAsync(int userId);
         //Task<List<OrderItem>> GetListOrderItemAsync(int orderId);
-        //Task<List<CartProduct>> GetListCartProductAsync(int userId);
+
+        /// <summary>
+        /// Retrieves a list of products in the cart.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="List{T}"/> of <see cref="CartThumbnail"/> objects representing the products in the cart.
+        /// </returns>
+        Task<List<CartThumbnail>> GetListCartProductAsync();
 
 
         #endregion
@@ -327,20 +371,12 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
 
 
         /// <summary>
-        /// Retrieves a list of products in the cart.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="List{T}"/> of <see cref="CartThumbnail"/> objects representing the products in the cart.
-        /// </returns>
-        List<CartThumbnail> GetListCartProduct();
-
-        /// <summary>
         /// Retrieves a list of review thumbnails.
         /// </summary>
         /// <returns>
         /// A <see cref="List{T}"/> of <see cref="ReviewThumbnail"/> objects representing the review thumbnails.
         /// </returns>
-        List<ReviewThumbnail> GetListReviewThumbnail();
+        //List<ReviewThumbnail> GetListReviewThumbnail();
 
         /// <summary>
         /// Retrieves a list of review thumbnails for a specific product.
@@ -349,7 +385,7 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// <returns>
         /// A <see cref="List{T}"/> of <see cref="ReviewThumbnail"/> objects associated with the specified product.
         /// </returns>
-        List<ReviewThumbnail> GetListReviewThumbnailByIDProduct(int idProduct);
+        Task<List<ReviewThumbnail>> GetListReviewThumbnailByIDProductAsync(int idProduct);
 
         /// <summary>
         /// Retrieves a list of all available vouchers.
@@ -357,7 +393,7 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// <returns>
         /// A <see cref="List{T}"/> of <see cref="Voucher"/> objects representing the available vouchers.
         /// </returns>
-        List<Models.Voucher> GetAllVouchers();
+        Task<List<Models.Voucher>> GetAllVouchersAsync();
 
         /// <summary>
         /// Retrieves a list of all products available for payment.
@@ -373,7 +409,15 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// <returns>
         /// A <see cref="List{T}"/> of <see cref="ShippingMethod"/> objects representing the available shipping methods.
         /// </returns>
-        List<Models.ShippingMethod> GetShippingMethods();
+        Task<List<Models.ShippingMethod>> GetShippingMethodsAsync();
+
+        /// <summary>
+        /// Retrieves a list of available payment methods.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="List{T}"/> of <see cref="PaymentMethod"/> objects representing the available shipping methods.
+        /// </returns>
+        Task<List<Models.PaymentMethod>> GetPaymentMethodsAsync();
 
     }
 }

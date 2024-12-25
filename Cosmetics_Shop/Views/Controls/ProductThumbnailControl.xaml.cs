@@ -29,14 +29,17 @@ namespace Cosmetics_Shop.Views.Controls
     {
         public ProductThumbnailViewModel ViewModel
         {
-            get { return (ProductThumbnailViewModel)GetValue(ViewModelProperty); }
-            set { SetValue(ViewModelProperty, value);
+            get 
+            {
+                return (ProductThumbnailViewModel)GetValue(ViewModelProperty);
+            }
+            set 
+            { 
+                SetValue(ViewModelProperty, value);
                 DataContext = value;
             }
         }
 
-        private Storyboard _mouseEnter;
-        private Storyboard _mouseLeave;
 
         // Sử dụng DependencyProperty để hỗ trợ binding
         public static readonly DependencyProperty ViewModelProperty =
@@ -46,6 +49,8 @@ namespace Cosmetics_Shop.Views.Controls
                                         new PropertyMetadata(null));
 
 
+        private Storyboard _mouseEnter;
+        private Storyboard _mouseLeave;
         public ProductThumbnailControl()
         {
             this.InitializeComponent();

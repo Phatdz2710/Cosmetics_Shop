@@ -13,6 +13,7 @@
         <converter:VNDCurrencyConverter x:Key="VNDCurrencyConverter"/>
         <converter:NameProductOnThumbnail x:Key="NameProductOnThumbnailConverter"/>
         <converter:AmountThousandToKConvert x:Key="AmountThousandToKConvert"/>
+        <converter:StringToImageSourceConverter x:Key="StringToImageSourceConverter"/>
     </UserControl.Resources>
 
     <Grid Background="White"
@@ -34,10 +35,10 @@
                       IsChecked="{x:Bind ViewModel.IsChecked, Mode=TwoWay}"/>
 
             <Ellipse Grid.Column="1"
-                     Fill="Gray" 
                      Width="80"
                      Height="80"
                      Margin="10 10 0 10"
+                     Resources="{x:Bind ViewModel.CartThumbnail.ProductImage, Mode=OneWay, Converter={StaticResource StringToImageSourceConverter}}"
                      />
             <TextBlock Grid.Column="2"
                        Grid.ColumnSpan="2"
@@ -83,8 +84,8 @@
                     x:Name="deleteButton"
                     Margin="30 0 0 0"
                     Content="Xóa"
-                    BorderBrush="White">
-                <!--Command="{Binding DeleteCommand}"-->
+                    BorderBrush="White"
+                    Command="{Binding DeleteCommand}">
             </Button>
 
         </Grid>
