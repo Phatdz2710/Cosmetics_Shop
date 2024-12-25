@@ -65,9 +65,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>                
                 <ColumnDefinition Width="0.5*"/>
             </Grid.ColumnDefinitions>
 
@@ -82,37 +80,27 @@
                        VerticalAlignment="Center"
                        FontSize="17"/>
 
-            <TextBlock Grid.Column="2" Text="Total-Product"
+            <TextBlock Grid.Column="2" Text="Tổng đơn"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        FontSize="17"/>
 
-            <TextBlock Grid.Column="3" Text="Price-Product"
+            <TextBlock Grid.Column="3" Text="Total-Price"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"
                        FontSize="17"/>
 
-            <TextBlock Grid.Column="4" Text="Price-Shipping"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Center"
-                       FontSize="17"/>
-
-            <TextBlock Grid.Column="5" Text="Total-Price"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Center"
-                       FontSize="17"/>
-
-            <TextBlock Grid.Column="6" Text="Địa chỉ"
+            <TextBlock Grid.Column="4" Text="Ngày đặt hàng"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
                         FontSize="17"/>
 
-            <TextBlock Grid.Column="7" Text="Duyệt đơn"
+            <TextBlock Grid.Column="5" Text="Duyệt đơn"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"
                        FontSize="17"/>
 
-            <TextBlock Grid.Column="8" Text="Xóa"
+            <TextBlock Grid.Column="6" Text="Xóa"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"
                        FontSize="17"/>

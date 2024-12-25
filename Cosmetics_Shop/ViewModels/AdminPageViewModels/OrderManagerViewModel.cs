@@ -36,11 +36,7 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
         
         #endregion
 
-
-
-        #region Properties for Binding
-        //
-        #endregion
+                     
 
         public OrderManagerViewModel(IDao dao,
                                      INavigationService navigationService,
