@@ -34,27 +34,26 @@
                       Margin="20 0 0 0"
                       IsChecked="{x:Bind ViewModel.IsChecked, Mode=TwoWay}"/>
 
-            <Ellipse Grid.Column="1"
-                     Width="80"
-                     Height="80"
-                     Margin="10 10 0 10"
-                     Resources="{x:Bind ViewModel.CartThumbnail.ProductImage, Mode=OneWay, Converter={StaticResource StringToImageSourceConverter}}"
-                     />
+            <Border Grid.Column="1"
+                     Width="60"
+                     Height="60"
+                     Margin="10 10 0 10">
+                <Image Source="{x:Bind ViewModel.CartThumbnail.ProductImage, Mode=OneWay, Converter={StaticResource StringToImageSourceConverter}}"/>
+            </Border>
             <TextBlock Grid.Column="2"
                        Grid.ColumnSpan="2"
+                       VerticalAlignment="Center"
                        x:Name="productNameTextBlock"
-                       Margin="10 40 0 0"
+                       Margin="10 0 0 0"
                        Text="{x:Bind ViewModel.CartThumbnail.ProductName, Mode=OneWay}"
                        TextWrapping="Wrap"/>
 
             <TextBlock Grid.Column="4" 
-                       x:Name="price"
-                       Margin="30 40 0 0"
+                       Margin="30 0 0 0"
                        Text="{x:Bind ViewModel.CartThumbnail.Price, 
                                      Mode=OneWay,
                                      Converter={StaticResource VNDCurrencyConverter}}"
->
-            </TextBlock>
+                       VerticalAlignment="Center"/>
 
             <StackPanel Grid.Column="5"
                                     Orientation="Horizontal"
@@ -73,7 +72,7 @@
 
             <TextBlock Grid.Column="6" 
                                    x:Name="toltalPriceTextBlock"
-                                   Margin="30 40 0 0"
+                       VerticalAlignment="Center"
                                    Text="{x:Bind ViewModel.CartThumbnail.TotalPrice, 
                                             Mode=OneWay,
                                             Converter={StaticResource VNDCurrencyConverter}}"
