@@ -114,6 +114,7 @@ namespace Cosmetics_Shop.DataAccessObject
 
         }
 
+
         
         public async Task<List<ProductDetail>> GetProductDetailsAsync()
         {

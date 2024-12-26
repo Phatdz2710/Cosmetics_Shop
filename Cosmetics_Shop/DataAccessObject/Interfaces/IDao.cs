@@ -140,10 +140,10 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         //Task<bool> DeleteFromCartAsync(int userId, int cartId);
         //Task<bool> UpdateCartAsync(int userId, int cartId, int quantity);
         //Task<bool> CancelOrderAsync(int orderId);
-        //Task<List<Order>> GetListOrderAsync(int userId);
-        //Task<List<OrderItem>> GetListOrderItemAsync(int orderId);
+        Task<List<Order>> GetListOrderAsync(int userId);
+        Task<List<OrderItem>> GetListOrderItemAsync(int orderId);
         //Task<List<CartProduct>> GetListCartProductAsync(int userId);
-
+        
 
         #endregion
 
@@ -290,5 +290,6 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// </returns>
         List<Models.ShippingMethod> GetShippingMethods();
 
+        
     }
 }

@@ -299,6 +299,65 @@ namespace Cosmetics_Shop.DataAccessObject
                 }
             }
         }
+       
+        public async Task<List<Order>> GetListOrderAsync(int userId)
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                try
+                {
+                    var orders = await _databaseContext.Orders
+                        .Select(p => new Order
+                        (
+                            p.Id,
+                            p.UserId,
+                            p.OrderStatus,
+                            p.OrderDate,
+                            p.PaymentMethod,
+                            p.ShippingMethod,
+                            p.VoucherId,
+                            p.User,
+                            p.Voucher ))
+                        .ToListAsync();
+
+                    return orders;
+                }
+                catch (Exception)
+                {
+                    return new List<Order>();
+                }
+            }
+        }
+
+        public async Task<List<OrderItem>> GetListOrderItemAsync(int orderId)
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                try
+                {
+                    var orderItems = await _databaseContext.OrderItems
+                        .Select(p => new OrderItem
+                        (
+                            p.Id,
+                            p.OrderId,
+                            p.ProductId,
+                            p.Quantity,
+                            p.Order,
+                            p.Product))
+                        .ToListAsync();
+
+                    return orderItems;
+                }
+                catch (Exception)
+                {
+                    return new List<OrderItem>();
+                }
+            }
+        }
+
+
 
         #endregion
 

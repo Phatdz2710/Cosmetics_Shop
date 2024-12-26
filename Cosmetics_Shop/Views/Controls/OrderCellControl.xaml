@@ -48,12 +48,12 @@
 
         
         
-        <Button Grid.Column="4" Content="Duyệt" Command="{x:Bind ViewModel.EditCommand, Mode=OneWay}"
+        <Button Grid.Column="4" Content="Duyệt" Command="{x:Bind ViewModel.ApproveCommand, Mode=OneWay}"
             Background="#4AFFA2"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"/>
 
-        <Button Grid.Column="4" Content="Xóa" Command="{x:Bind ViewModel.EditCommand, Mode=OneWay}"
+        <Button Grid.Column="4" Content="Xóa" Command="{x:Bind ViewModel.DeleteCommand, Mode=OneWay}"
             Background="#4AFFA2"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"/>
