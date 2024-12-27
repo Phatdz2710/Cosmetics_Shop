@@ -38,16 +38,17 @@ public partial class Order
         VoucherId = 0;
         User = null;
         Voucher = null;
+
     }
 
-    public Order(int id, int userId, int orderStatus, DateTime orderDate, int paymentMethod, int shippingMethod, int? voucherId, User user, Voucher voucher)
+    public Order(int id, int userId, int orderStatus, DateTime orderDate, int paymentMethod, int shippingmethod,  int? voucherId, User user, Voucher voucher )
     {
         Id = id;
         UserId = userId;
         OrderStatus = orderStatus;
         OrderDate = orderDate;
         PaymentMethod = paymentMethod;
-        ShippingMethod = shippingMethod;
+        ShippingMethod = shippingmethod;
         VoucherId = voucherId;
         User = user;
         Voucher = voucher;

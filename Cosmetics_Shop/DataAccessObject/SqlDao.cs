@@ -318,7 +318,8 @@ namespace Cosmetics_Shop.DataAccessObject
                             p.ShippingMethod,
                             p.VoucherId,
                             p.User,
-                            p.Voucher ))
+                            p.Voucher  
+                            ))
                         .ToListAsync();
 
                     return orders;

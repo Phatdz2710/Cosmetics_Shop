@@ -1,5 +1,6 @@
 ﻿using Cosmetics_Shop.DataAccessObject.Data;
 using Cosmetics_Shop.DataAccessObject.Interfaces;
+using Cosmetics_Shop.DBModels;
 using Cosmetics_Shop.Enums;
 using Cosmetics_Shop.Models;
 using Cosmetics_Shop.Models.Enums;
@@ -21,6 +22,16 @@ namespace Cosmetics_Shop.DataAccessObject
     /// </summary>
     public class MockDao : IDao
     {
+        public async Task<List<Order>> GetListOrderAsync(int userId)
+        {
+            throw new NotImplementedException();    
+        }
+
+        public async Task<List<OrderItem>> GetListOrderItemAsync(int orderId)
+        {
+            throw new NotImplementedException();    
+        }
+
         public async Task<SearchResult> GetListProductThumbnailAsync(
             string keyword = "",
             int pageIndex = 1,
@@ -266,14 +277,14 @@ namespace Cosmetics_Shop.DataAccessObject
         }
 
         //// Method to get all vouchers
-        public List<Voucher> GetAllVouchers()
+        public List<Models.Voucher> GetAllVouchers()
         {
-            var db = new List<Voucher>
+            var db = new List<Models.Voucher>
             {
-            new Voucher (1,"SAVE10",10,DateTime.Now.AddDays(30), "Giảm 10%"),
-            new Voucher (2,"SAVE20",20,DateTime.Now.AddDays(60), "Giảm 20%"),
-            new Voucher (3, "SAVE30", 30, DateTime.Now.AddDays(10), "Giảm 30%"),
-            new Voucher (4, "WELCOME", 50, DateTime.Now.AddDays(15), "Giảm 50% - Lần đầu mua hàng")
+            new Models.Voucher (1,"SAVE10",10,DateTime.Now.AddDays(30), "Giảm 10%"),
+            new Models.Voucher (2,"SAVE20",20,DateTime.Now.AddDays(60), "Giảm 20%"),
+            new Models.Voucher (3, "SAVE30", 30, DateTime.Now.AddDays(10), "Giảm 30%"),
+            new Models.Voucher (4, "WELCOME", 50, DateTime.Now.AddDays(15), "Giảm 50% - Lần đầu mua hàng")
             };
 
             return db;
@@ -291,13 +302,13 @@ namespace Cosmetics_Shop.DataAccessObject
             return db;
         }
 
-        public List<ShippingMethod> GetShippingMethods()
+        public List<Models.ShippingMethod> GetShippingMethods()
         {
-            var db = new List<ShippingMethod>
+            var db = new List<Models.ShippingMethod>
             {
-                new ShippingMethod(1, "Vận chuyển nhanh", 20000),
-                new ShippingMethod(2, "Vận chuyển hỏa tốc", 54000),
-                new ShippingMethod(3, "Vận chuyển tiết kiệm", 16500)
+                new Models.ShippingMethod(1, "Vận chuyển nhanh", 20000),
+                new Models.ShippingMethod(2, "Vận chuyển hỏa tốc", 54000),
+                new Models.ShippingMethod(3, "Vận chuyển tiết kiệm", 16500)
             };
             return db;
         }

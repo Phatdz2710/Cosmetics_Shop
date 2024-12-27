@@ -36,6 +36,8 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
         private int _currentPage = 1;
         private int _totalPage = 1;
         private bool _showForm = false;
+        private string _formTitle = "";
+        
 
         private Order _selectedOrder;
         #endregion
@@ -101,6 +103,15 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
             }
         }
 
+        public string FormTitle
+        {
+            get { return _formTitle; }
+            set
+            {
+                _formTitle = value;
+                OnPropertyChanged(nameof(FormTitle));
+            }
+        }
 
         public Order SelectedOrder
         {
@@ -135,7 +146,7 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
 
             ListOrders = new ObservableCollection<Order>();
 
-            LoadOrdersCommand = new AsyncRelayCommand(LoadData);
+            //LoadOrdersCommand = new AsyncRelayCommand(LoadData);
             //EditOrderCommand = new RelayCommand(EditOrder);
 
             // Load orders when the ViewModel is created
@@ -187,28 +198,22 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
             LoadData();
         }
 
-        private async Task LoadData()
-        {
-            try
+        private async void LoadData()
+        {            
+            var result = await _dao.GetListOrderAsync(_userSession.GetId());
+
+            //TotalPage = result.TotalPages;
+
+            // Show or hide button next/previous page
+            VisiNext = CurrentPage != _totalPage;
+            VisiPrevious = CurrentPage != 1;
+
+            ListOrders.Clear();
+            foreach (var order in result)
             {
-                var result = await _dao.GetListOrderAsync(_userSession.GetId());
-
-                //TotalPage = result.TotalPages;
-
-                // Show or hide button next/previous page
-                VisiNext = CurrentPage != _totalPage;
-                VisiPrevious = CurrentPage != 1;
-
-                ListOrders.Clear();
-                foreach (var order in result)
-                {
-                    ListOrders.Add(order);
-                }
+                ListOrders.Add(order);
             }
-            catch (Exception ex)
-            {
-                // Handle exceptions (e.g., log the error, show a message to the user)
-            }
+           
         }
 
         

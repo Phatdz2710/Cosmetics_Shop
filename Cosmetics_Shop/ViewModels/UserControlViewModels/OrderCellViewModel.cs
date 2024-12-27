@@ -18,7 +18,7 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
         private DateTime _orderDate;
         private decimal _totalAmount;
         private decimal _totalPrice;
-        private string _status;
+        //private string _status;
 
         public int OrderId
         {
@@ -77,7 +77,7 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
         //    }
         //}
 
-        public ICommand ApproveCommand { get; set; }
+        public ICommand DetailCommand { get; set; }
 
         public ICommand DeleteCommand { get; set; }
 
@@ -88,7 +88,7 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
                                   DateTime orderDate,
                                   decimal totalAmount,
                                   decimal totalPrice,
-                                  ICommand approveCommand,
+                                  ICommand detailCommand,
                                   ICommand deleteCommand)
         {
             OrderId = orderId;
@@ -97,7 +97,7 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
             TotalAmount = totalAmount;
             TotalPrice = totalPrice;
             //Status = status;
-            ApproveCommand = approveCommand;    
+            DetailCommand = detailCommand;    
             DeleteCommand = deleteCommand;
         }
 
