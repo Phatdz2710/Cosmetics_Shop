@@ -6,18 +6,21 @@
     xmlns:local="using:Cosmetics_Shop.Views.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    DataContext="{Binding OrderCellViewModel}">
 
     <Grid Background="White"
       CornerRadius="5"
       BorderThickness="1"
       BorderBrush="LightGray">
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.5*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.5*"/>
         </Grid.ColumnDefinitions>
 
         <TextBlock Grid.Column="0" Text="{x:Bind ViewModel.OrderId, Mode=OneWay}"
@@ -41,19 +44,19 @@
            HorizontalAlignment="Left"
            FontSize="17"/>
 
-        <TextBlock Grid.Column="3" Text="{x:Bind ViewModel.OrderDate, Mode=OneWay}"
+        <TextBlock Grid.Column="4" Text="{x:Bind ViewModel.OrderDate, Mode=OneWay}"
            HorizontalAlignment="Left"
            VerticalAlignment="Center"
            FontSize="17"/>
 
         
         
-        <Button Grid.Column="4" Content="Chi tiết" Command="{x:Bind ViewModel.DetailCommand, Mode=OneWay}"
+        <Button Grid.Column="5" Content="Chi tiết" Command="{x:Bind ViewModel.DetailCommand, Mode=OneWay}"
             Background="#4AFFA2"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"/>
 
-        <Button Grid.Column="5" Content="Xóa" Command="{x:Bind ViewModel.DeleteCommand, Mode=OneWay}"
+        <Button Grid.Column="6" Content="Xóa" Command="{x:Bind ViewModel.DeleteCommand, Mode=OneWay}"
             Background="#4AFFA2"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"/>

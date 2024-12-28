@@ -1,3 +1,4 @@
+using Cosmetics_Shop.DBModels;
 using Cosmetics_Shop.ViewModels.UserControlViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -34,12 +35,24 @@ namespace Cosmetics_Shop.Views.Controls
             }
         }
 
+        public OrderCellViewModel ConvertOrderToViewModel(Order order)
+        {
+            return new OrderCellViewModel
+            {
+                OrderId = order.Id,
+                //CustomerName = order.OrderID,
+                OrderDate = order.OrderDate,
+                //TotalAmount = order.TotalAmount,
+                //TotalPrice = order.TotalPrice
+            };
+        }
+
         public static readonly DependencyProperty ViewModelProperty =
             DependencyProperty.Register("ViewModel",
                                         typeof(OrderCellViewModel),
                                         typeof(OrderCellControl),
                                         new PropertyMetadata(null));
-        
+
         public OrderCellControl()
         {
             this.InitializeComponent();

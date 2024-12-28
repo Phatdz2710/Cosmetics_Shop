@@ -97,7 +97,7 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
             TotalAmount = totalAmount;
             TotalPrice = totalPrice;
             //Status = status;
-            DetailCommand = detailCommand;    
+            DetailCommand = detailCommand;
             DeleteCommand = deleteCommand;
         }
 
@@ -107,5 +107,6 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
     }
 }
