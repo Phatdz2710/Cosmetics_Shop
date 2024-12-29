@@ -136,14 +136,31 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         #region For Cart And Order
 
         //Task<bool> AddToCartAsync(int userId, int productId, int quantity);
-        //Task<bool> AddToOrderAsync(int userId, List<CartProduct> listCartProduct);
+
+        /// <summary>
+        /// Create an order
+        /// </summary>
+        /// <returns>
+        /// A <see cref="List{T}"/> of <see cref="PaymentProductThumbnail"/> objects representing the products in the cart.
+        /// </returns>
+        Task<Models.Order> AddToOrderAsync(List<PaymentProductThumbnail> listCartProduct, int paymentMethod, int shippingMethod, int voucher);
+
         //Task<bool> DeleteFromCartAsync(int userId, int cartId);
+
+        /// <summary>
+        /// Delete a product to the cart by Product ID.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="List{T}"/> of <see cref="bool"/> objects representing the products in the cart.
+        /// </returns>
+        Task<bool> DeleteFromCartByProductIDAsync(int productId);
+
         //Task<bool> UpdateCartAsync(int userId, int cartId, int quantity);
         //Task<bool> CancelOrderAsync(int orderId);
-        Task<List<Order>> GetListOrderAsync(int userId);
-        Task<List<OrderItem>> GetListOrderItemAsync(int orderId);
+        Task<List<Models.Order>> GetListOrderAsync(int userId);
+        Task<List<Models.OrderItem>> GetListOrderItemAsync(int orderId);
         //Task<List<CartProduct>> GetListCartProductAsync(int userId);
-        
+
 
         #endregion
 
@@ -226,6 +243,7 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// </returns>
         Task<bool> CreateProductAsync(string name, string brand, string category, int price, int sold, int inventory, string imagePath);
 
+        Task<GetOrderResult> GetListAllOrdersAsync(int page, int orderPerPage);
         #endregion
 
 

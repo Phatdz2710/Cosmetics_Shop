@@ -7,8 +7,6 @@ namespace Cosmetics_Shop.DBModels;
 
 public partial class OrderItem
 {
-    
-
     public int Id { get; set; }
 
     public int OrderId { get; set; }
@@ -20,26 +18,6 @@ public partial class OrderItem
     public virtual Order Order { get; set; }
 
     public virtual Product Product { get; set; }
-
-    public OrderItem()
-    {
-        Id = 0;
-        OrderId = 0;
-        ProductId = 0;
-        Quantity = 0;
-        Order = null;
-        Product = null;
-    }
-
-    public OrderItem(int id, int orderId, int productId, int quantity, Order order, Product product)
-    {
-        Id = id;
-        OrderId = orderId;
-        ProductId = productId;
-        Quantity = quantity;
-        Order = order;
-        Product = product;
-    }
-
+    
    
 }

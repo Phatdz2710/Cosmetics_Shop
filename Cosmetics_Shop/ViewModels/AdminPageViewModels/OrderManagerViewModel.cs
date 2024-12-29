@@ -29,30 +29,20 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
         #endregion
 
         #region Fields
-        private ObservableCollection<Order> _listorders= new ObservableCollection<Order>();
-
         private bool _visiPrevious = true;
         private bool _visiNext = true;
         private int _currentPage = 1;
         private int _totalPage = 1;
+        private int _totalOrders = 0;
         private bool _showForm = false;
         private string _formTitle = "";
-        
 
-        private Order _selectedOrder;
+        private Models.Order _selectedOrder;
         #endregion
 
         #region Properties for binding
-        public ObservableCollection<Order> ListOrders
-        {
-            get{ return _listorders; }
-            set
-            {
-                _listorders = value;
-                OnPropertyChanged(nameof(ListOrders));
-            }
-        }
-
+        public ObservableCollection<OrderCellViewModel> ListOrders { get; set; }    
+       
         public bool VisiPrevious
         {
             get { return _visiPrevious; }
@@ -93,6 +83,16 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
             }
         }
 
+        public int TotalOrders
+        {
+            get { return _totalOrders; }
+            set
+            {
+                _totalOrders = value;
+                OnPropertyChanged(nameof(TotalOrders));
+            }
+        }
+
         public bool ShowForm
         {
             get { return _showForm; }
@@ -112,25 +112,13 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(FormTitle));
             }
         }
-
-        public Order SelectedOrder
-        {
-            get => _selectedOrder;
-            set
-            {
-                _selectedOrder = value;
-                OnPropertyChanged(nameof(SelectedOrder));
-            }
-        }
+                
         #endregion
 
         #region Commands
-        public ICommand LoadOrdersCommand { get; }
-        public ICommand EditOrderCommand { get; }
-
-        public ICommand CancelFormCommand { get; set; }
         public ICommand NextPageCommand { get; }
         public ICommand PreviousPageCommand { get; }
+        public ICommand ReloadCommand => new RelayCommand(reloadCommand);
 
         #endregion
 
@@ -144,42 +132,17 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
             _eventAggregator = eventAggregator;
             _userSession = userSession;
 
-            ListOrders = new ObservableCollection<Order>();
+            ListOrders = new ObservableCollection<OrderCellViewModel>();
 
-            //LoadOrdersCommand = new AsyncRelayCommand(LoadData);
-            //EditOrderCommand = new RelayCommand(EditOrder);
-
-            // Load orders when the ViewModel is created
+           
             LoadData();
 
-            CancelFormCommand = new RelayCommand(cancelFormCommand);
-            //SelectImagePathCommand = new RelayCommand(executeSelectImagePathAsyncCommand);
+            
             NextPageCommand = new RelayCommand(nextPageCommand);
             PreviousPageCommand = new RelayCommand(previousPageCommand);
-        }
+        }     
 
-        /// <summary>
-        /// Cancels the form by hiding it.
-        /// </summary>
-        private void cancelFormCommand()
-        {
-            ShowForm = false;
-        }
-
-        /// <summary>
-        /// Allows the user to select an image file path and updates the product image path.
-        /// </summary>
-        //private async void executeSelectImagePathAsyncCommand()
-        //{
-        //    var path = await _filePickerService.PickFileAsync(new List<string>
-        //    {
-        //        ".jpg", ".jpeg", ".png"
-        //    });
-
-        //    if (path == null) return;
-        //    ProductImagePath = path;
-        //}
-
+        
         /// <summary>
         /// Command for go to next page
         /// </summary>
@@ -198,22 +161,38 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
             LoadData();
         }
 
-        private async void LoadData()
-        {            
-            var result = await _dao.GetListOrderAsync(_userSession.GetId());
+        private void reloadCommand()
+        {
+            CurrentPage = 1;
+            LoadData();
+        }
 
-            //TotalPage = result.TotalPages;
+        private async void LoadData()
+        {
+            var result = await _dao.GetListAllOrdersAsync(CurrentPage, 10);
+            TotalPage = result.TotalPages;
+            TotalOrders = result.TotalOrders;
+
 
             // Show or hide button next/previous page
-            VisiNext = CurrentPage != _totalPage;
+            VisiNext = CurrentPage != TotalPage;
             VisiPrevious = CurrentPage != 1;
 
             ListOrders.Clear();
-            foreach (var order in result)
+            foreach (var order in result.ListOrders)
             {
-                ListOrders.Add(order);
+                ListOrders.Add(new OrderCellViewModel(
+                        order.Id,
+                        order.UserId,
+                        order.OrderDate,
+                        order.ShippingAddress,
+                        order.OrderStatus,
+                        new RelayCommand(() =>
+                        {
+                            ShowForm = true;
+                        })));
             }
-           
+
         }
 
         

@@ -22,14 +22,28 @@ namespace Cosmetics_Shop.DataAccessObject
     /// </summary>
     public class MockDao : IDao
     {
-        public async Task<List<Order>> GetListOrderAsync(int userId)
+        public async Task<List<Models.Order>> GetListOrderAsync(int userId)
         {
-            throw new NotImplementedException();    
+            throw new NotImplementedException();
         }
 
-        public async Task<List<OrderItem>> GetListOrderItemAsync(int orderId)
+        public async Task<List<Models.OrderItem>> GetListOrderItemAsync(int orderId)
         {
-            throw new NotImplementedException();    
+            throw new NotImplementedException();
+        }       
+
+        public async Task<Models.Order> AddToOrderAsync(List<PaymentProductThumbnail> listCartProduct, int paymentMethod, int shippingMethod, int voucher)
+        {
+            var db = new Models.Order()
+            {
+
+            };
+            return db;
+        }
+
+        public async Task<bool> DeleteFromCartByProductIDAsync(int productId)
+        {
+            return true;
         }
 
         public async Task<SearchResult> GetListProductThumbnailAsync(
@@ -369,6 +383,21 @@ namespace Cosmetics_Shop.DataAccessObject
         }
 
         public Task<bool> CreateProductAsync(string name, string brand, string category, int price, int inventory, int sold, string imagePath)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<List<Models.Order>> IDao.GetListOrderAsync(int userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<List<Models.OrderItem>> IDao.GetListOrderItemAsync(int orderId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<GetOrderResult> GetListAllOrdersAsync(int page, int orderPerPage)
         {
             throw new NotImplementedException();
         }

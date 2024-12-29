@@ -299,8 +299,8 @@ namespace Cosmetics_Shop.DataAccessObject
                 }
             }
         }
-       
-        public async Task<List<Order>> GetListOrderAsync(int userId)
+
+        public async Task<List<Models.Order>> GetListOrderAsync(int userId)
         {
             using (var scope = _serviceProvider.CreateScope())
             {
@@ -308,30 +308,30 @@ namespace Cosmetics_Shop.DataAccessObject
                 try
                 {
                     var orders = await _databaseContext.Orders
-                        .Select(p => new Order
-                        (
-                            p.Id,
-                            p.UserId,
-                            p.OrderStatus,
-                            p.OrderDate,
-                            p.PaymentMethod,
-                            p.ShippingMethod,
-                            p.VoucherId,
-                            p.User,
-                            p.Voucher  
-                            ))
+                        .Where(p => p.UserId == userId)
+                        .Select(p => new Models.Order
+                        {
+                            Id = p.Id,
+                            UserId = p.UserId,
+                            OrderStatus = p.OrderStatus,
+                            OrderDate = p.OrderDate,
+                            ShippingMethod = p.ShippingMethod,
+                            PaymentMethod = p.PaymentMethod,
+                            VoucherId = p.VoucherId,
+                            ShippingAddress = p.ShippingAddress
+                        })
                         .ToListAsync();
 
                     return orders;
                 }
                 catch (Exception)
                 {
-                    return new List<Order>();
+                    return new List<Models.Order>();
                 }
             }
         }
 
-        public async Task<List<OrderItem>> GetListOrderItemAsync(int orderId)
+        public async Task<List<Models.OrderItem>> GetListOrderItemAsync(int orderId)
         {
             using (var scope = _serviceProvider.CreateScope())
             {
@@ -339,27 +339,24 @@ namespace Cosmetics_Shop.DataAccessObject
                 try
                 {
                     var orderItems = await _databaseContext.OrderItems
-                        .Select(p => new OrderItem
-                        (
-                            p.Id,
-                            p.OrderId,
-                            p.ProductId,
-                            p.Quantity,
-                            p.Order,
-                            p.Product))
+                        .Select(p => new Models.OrderItem
+                        {
+                            Id = p.Id,
+                            OrderId = p.OrderId,
+                            ProductId = p.ProductId,
+                            Quantity = p.Quantity
+                        })
                         .ToListAsync();
 
                     return orderItems;
                 }
                 catch (Exception)
                 {
-                    return new List<OrderItem>();
+                    return new List<Models.OrderItem>();
                 }
             }
         }
-
-
-
+        
         #endregion
 
         #region Login, Signup
@@ -940,7 +937,58 @@ namespace Cosmetics_Shop.DataAccessObject
                 return false;
             }
         }
+
+        public async Task<GetOrderResult> GetListAllOrdersAsync(int page, int orderPerPage)
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+
+                try
+                {
+                    var query = _databaseContext.Orders.AsQueryable();
+
+                    var totalOrders = await query.CountAsync();
+                    var numPages = (int)Math.Ceiling((double)totalOrders / orderPerPage);
+
+                    var db = await query.Skip((page - 1) * orderPerPage)
+                        .Take(orderPerPage)
+                        .Select(p => new Models.Order
+                        {
+                            Id = p.Id,
+                            UserId = p.UserId,
+                            OrderStatus = p.OrderStatus,
+                            OrderDate = p.OrderDate,
+                            ShippingMethod = p.ShippingMethod,
+                            PaymentMethod = p.PaymentMethod,
+                            VoucherId = p.VoucherId,
+                            ShippingAddress = p.ShippingAddress
+                        })
+                        .ToListAsync();
+
+                    return new GetOrderResult
+                    {
+                        ListOrders = db,
+                        TotalPages = numPages == 0 ? 1 : numPages,
+                        TotalOrders = totalOrders
+                    };
+
+                }
+                catch (Exception)
+                {
+                    return new GetOrderResult
+                    {
+                        ListOrders = new List<Models.Order>(),
+                        TotalPages = 1,
+                        TotalOrders = 0
+                    };
+                }
+            }
+        }
+
         #endregion
+
+
 
         public void InsertProduct(ProductThumbnail product)
         {
@@ -1048,5 +1096,126 @@ namespace Cosmetics_Shop.DataAccessObject
             };
             return db;
         }
+
+        public async Task<bool> DeleteFromCartByProductIDAsync(int productId)
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                var userSession = _serviceProvider.GetService(typeof(UserSession)) as UserSession;
+                try
+                {
+                    // Tìm kiếm sản phẩm trong giỏ hàng theo cartId và userId
+                    var cartItem = await _databaseContext.Carts
+                        .FirstOrDefaultAsync(c => c.ProductId == productId && c.UserId == userSession.GetId());
+
+                    if (cartItem != null)
+                    {
+                        // Xóa sản phẩm khỏi giỏ hàng
+                        _databaseContext.Carts.Remove(cartItem);
+
+                        // Lưu thay đổi vào cơ sở dữ liệu
+                        await _databaseContext.SaveChangesAsync();
+                        return true; // Xóa thành công
+                    }
+                    else
+                    {
+                        // Nếu không tìm thấy sản phẩm trong giỏ hàng
+                        return false; // Xóa không thành công
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Xử lý lỗi (có thể ghi log hoặc thông báo cho người dùng)
+                    return false; // Xóa không thành công
+                }
+            }
+        }
+
+        #region Order
+
+        private DBModels.Order ConvertToDbOrder(Models.Order modelOrder)
+        {
+            return new DBModels.Order
+            {
+                UserId = modelOrder.UserId,
+                OrderStatus = modelOrder.OrderStatus,
+                OrderDate = modelOrder.OrderDate,
+                PaymentMethod = modelOrder.PaymentMethod,
+                ShippingMethod = modelOrder.ShippingMethod,
+                VoucherId = modelOrder.VoucherId,
+            };
+        }
+
+        private DBModels.OrderItem ConvertToDbOrderItem(Models.OrderItem modelOrder)
+        {
+            return new DBModels.OrderItem
+            {
+                ProductId = modelOrder.ProductId,
+                OrderId = modelOrder.OrderId,
+                Quantity = modelOrder.Quantity
+            };
+        }
+
+        public async Task<Models.Order> AddToOrderAsync(List<PaymentProductThumbnail> listCartProduct, int paymentMethod, int shippingMethod, int voucher)
+        {
+            // Create a new scope for dependency injection
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                // Retrieve the database context from the service provider
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                var userSession = _serviceProvider.GetService(typeof(UserSession)) as UserSession;
+
+                // Create a new order instance
+                var order = new Models.Order
+                {
+                    UserId = userSession.GetId(),
+                    OrderStatus = 0,
+                    OrderDate = DateTime.Now,
+                    PaymentMethod = paymentMethod,
+                    ShippingMethod = shippingMethod,
+                    VoucherId = voucher
+                };
+
+                try
+                {
+                    // Add the order to the context
+                    var dbOrder = ConvertToDbOrder(order);
+                    await _databaseContext.Orders.AddAsync(dbOrder);
+
+                    // Save changes to the database to generate the OrderId
+                    await _databaseContext.SaveChangesAsync();
+
+                    // Now that the order is saved, set the OrderId for each OrderItem
+                    foreach (var product in listCartProduct)
+                    {
+                        var orderItem = new Models.OrderItem
+                        {
+                            OrderId = dbOrder.Id, // Use the generated OrderId
+                            ProductId = product.Id,
+                            Quantity = product.Amount
+                        };
+
+                        // Convert to DB model and add to the context
+                        var dbOrderItem = ConvertToDbOrderItem(orderItem);
+                        await _databaseContext.OrderItems.AddAsync(dbOrderItem);
+                        await DeleteFromCartByProductIDAsync(product.Id);
+                    }
+
+                    // Save changes again to persist the OrderItems
+                    await _databaseContext.SaveChangesAsync();
+
+                    // Return the created order
+                    return order;
+                }
+                catch (Exception ex)
+                {
+                    throw; // Rethrow the exception for further handling
+                }
+            }
+        }
+
+
+        #endregion
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cosmetics_Shop.DBModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -14,11 +15,11 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
     public class OrderCellViewModel : INotifyPropertyChanged
     {
         private int _orderId;
-        private string _customerName;
+        private int _userId;
         private DateTime _orderDate;
-        private decimal _totalAmount;
-        private decimal _totalPrice;
-        //private string _status;
+        private int _orderShippingMethod;
+        private string _orderAddress;
+        private int _orderStatus;
 
         public int OrderId
         {
@@ -29,13 +30,13 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
                 OnPropertyChanged(nameof(OrderId));
             }
         }
-        public string CustomerName
+        public int UserId
         {
-            get { return _customerName; }
+            get { return _userId; }
             set
             {
-                _customerName = value;
-                OnPropertyChanged(nameof(CustomerName));
+                _userId = value;
+                OnPropertyChanged(nameof(UserId));
             }
         }
         public DateTime OrderDate
@@ -47,58 +48,40 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
                 OnPropertyChanged(nameof(OrderDate));
             }
         }
-        public decimal TotalAmount
+
+        public string OrderAddress
         {
-            get { return _totalAmount; }
+            get { return _orderAddress; }
             set
             {
-                _totalAmount = value;
-                OnPropertyChanged(nameof(TotalAmount));
+                _orderAddress = value;
+                OnPropertyChanged(nameof(OrderAddress));
             }
         }
 
-        public decimal TotalPrice
+
+        public int OrderStatus
         {
-            get { return _totalPrice; }
+            get { return _orderStatus; }
             set
             {
-                _totalPrice = value;
-                OnPropertyChanged(nameof(TotalPrice));
+                _orderStatus = value;
+                OnPropertyChanged(nameof(OrderStatus));
             }
         }
 
-        //public string Status
-        //{
-        //    get { return _status; }
-        //    set
-        //    {
-        //        _status = value;
-        //        OnPropertyChanged(nameof(Status));
-        //    }
-        //}
-
-        public ICommand DetailCommand { get; set; }
-
-        public ICommand DeleteCommand { get; set; }
+        public ICommand ActionCommand { get; set; }
 
         public OrderCellViewModel() { }
 
-        public OrderCellViewModel(int orderId,
-                                  string customerName,
-                                  DateTime orderDate,
-                                  decimal totalAmount,
-                                  decimal totalPrice,
-                                  ICommand detailCommand,
-                                  ICommand deleteCommand)
+        public OrderCellViewModel(int orderId, int userId, DateTime orderDate, string orderAddress, int orderStatus, ICommand actionCommand)
         {
             OrderId = orderId;
-            CustomerName = customerName;
+            UserId = userId;
             OrderDate = orderDate;
-            TotalAmount = totalAmount;
-            TotalPrice = totalPrice;
-            //Status = status;
-            DetailCommand = detailCommand;
-            DeleteCommand = deleteCommand;
+            OrderAddress = orderAddress;
+            OrderStatus = orderStatus;
+            ActionCommand = actionCommand;
         }
 
         // For INotifyPropertyChanged

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace Cosmetics_Shop.DBModels;
 
 public partial class Order
-{         
+{
     public int Id { get; set; }
 
     public int UserId { get; set; }
@@ -14,6 +14,8 @@ public partial class Order
     public int OrderStatus { get; set; }
 
     public DateTime OrderDate { get; set; }
+
+    public string ShippingAddress { get; set; }
 
     public int PaymentMethod { get; set; }
 
@@ -26,33 +28,5 @@ public partial class Order
     public virtual User User { get; set; }
 
     public virtual Voucher Voucher { get; set; }
-
-    public Order()
-    {
-        Id = 0;
-        UserId = 0;
-        OrderStatus = 0;
-        OrderDate = DateTime.Now;
-        PaymentMethod = 0;
-        ShippingMethod = 0;
-        VoucherId = 0;
-        User = null;
-        Voucher = null;
-
-    }
-
-    public Order(int id, int userId, int orderStatus, DateTime orderDate, int paymentMethod, int shippingmethod,  int? voucherId, User user, Voucher voucher )
-    {
-        Id = id;
-        UserId = userId;
-        OrderStatus = orderStatus;
-        OrderDate = orderDate;
-        PaymentMethod = paymentMethod;
-        ShippingMethod = shippingmethod;
-        VoucherId = voucherId;
-        User = user;
-        Voucher = voucher;
-    }
-
 
 }
