@@ -114,15 +114,6 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
             }
         }
 
-        //public Models.Order SelectedOrder
-        //{
-        //    get => _selectedOrder;
-        //    set
-        //    {
-        //        _selectedOrder = value;
-        //        OnPropertyChanged(nameof(SelectedOrder));
-        //    }
-        //}
         #endregion
 
         #region Commands
@@ -198,7 +189,6 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                             ShowForm = true;
                         })));
             }
-           
         }
 
         

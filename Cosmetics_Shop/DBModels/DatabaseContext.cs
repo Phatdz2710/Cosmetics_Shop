@@ -37,7 +37,7 @@ public partial class DatabaseContext : DbContext
     {
         modelBuilder.Entity<Account>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__accounts__3213E83F1046EBB3");
+            entity.HasKey(e => e.Id).HasName("PK__accounts__3213E83F52766F29");
 
             entity.ToTable("accounts");
 
@@ -69,7 +69,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<Cart>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__carts__3213E83F82DBF1BE");
+            entity.HasKey(e => e.Id).HasName("PK__carts__3213E83FB1C46DE6");
 
             entity.ToTable("carts");
 
@@ -91,7 +91,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<Order>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__orders__3213E83F807A08AB");
+            entity.HasKey(e => e.Id).HasName("PK__orders__3213E83F5A87B023");
 
             entity.ToTable("orders");
 
@@ -106,6 +106,9 @@ public partial class DatabaseContext : DbContext
                 .HasMaxLength(100)
                 .HasColumnName("shipping_address");
             entity.Property(e => e.ShippingMethod).HasColumnName("shipping_method");
+            entity.Property(e => e.TotalPrice)
+                .HasDefaultValueSql("('0')")
+                .HasColumnName("total_price");
             entity.Property(e => e.UserId).HasColumnName("user_id");
             entity.Property(e => e.VoucherId).HasColumnName("voucher_id");
 
@@ -121,7 +124,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<OrderItem>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__order_it__3213E83FDA1C00BB");
+            entity.HasKey(e => e.Id).HasName("PK__order_it__3213E83F6BA9FE85");
 
             entity.ToTable("order_items");
 
@@ -143,7 +146,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<PaymentMethod>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__payment___3213E83F6533436E");
+            entity.HasKey(e => e.Id).HasName("PK__payment___3213E83F269A6B0A");
 
             entity.ToTable("payment_methods");
 
@@ -156,7 +159,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<Product>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__products__3213E83F61401F15");
+            entity.HasKey(e => e.Id).HasName("PK__products__3213E83F4199B9A4");
 
             entity.ToTable("products");
 
@@ -198,7 +201,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<ProductRating>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__product___3213E83F2DDBEFDE");
+            entity.HasKey(e => e.Id).HasName("PK__product___3213E83F42D6B791");
 
             entity.ToTable("product_ratings");
 
@@ -223,7 +226,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<ShippingMethod>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__shipping__3213E83F07F22CEF");
+            entity.HasKey(e => e.Id).HasName("PK__shipping__3213E83F92D6787C");
 
             entity.ToTable("shipping_methods");
 
@@ -239,7 +242,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__users__3213E83F7D1F20A1");
+            entity.HasKey(e => e.Id).HasName("PK__users__3213E83F76EA4C9E");
 
             entity.ToTable("users");
 
@@ -265,7 +268,7 @@ public partial class DatabaseContext : DbContext
 
         modelBuilder.Entity<Voucher>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__vouchers__3213E83F760642F7");
+            entity.HasKey(e => e.Id).HasName("PK__vouchers__3213E83FA7DB3974");
 
             entity.ToTable("vouchers");
 

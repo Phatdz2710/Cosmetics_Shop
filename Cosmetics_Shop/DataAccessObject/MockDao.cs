@@ -405,7 +405,7 @@ namespace Cosmetics_Shop.DataAccessObject
             throw new NotImplementedException();
         }
 
-        Task<List<Models.Order>> IDao.GetListOrderAsync(int userId)
+        Task<List<Models.Order>> IDao.GetListOrderAsync(int userId, OrderStatus status)
         {
             throw new NotImplementedException();
         }
@@ -416,6 +416,26 @@ namespace Cosmetics_Shop.DataAccessObject
         }
 
         public Task<GetOrderResult> GetListAllOrdersAsync(int page, int orderPerPage)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Models.Order>> GetListOrderAsync(int userId, int type)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Models.Order>> GetListOrderAsync(int userId, OrderStatus type)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> GetTotalPriceOfOrder(int orderId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> GetTotalPriceOfOrderAsync(int orderId)
         {
             throw new NotImplementedException();
         }

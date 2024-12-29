@@ -87,6 +87,8 @@ namespace Cosmetics_Shop
             services.AddTransient<ProductDetailViewModel>();
             services.AddTransient<AccountViewModel>();
             services.AddTransient<CartPageViewModel>();
+            services.AddTransient<OrderPageViewModel>();
+            services.AddTransient<UserOrderCellViewModel>();
             services.AddTransient<CartThumbnailViewModel>();
             services.AddTransient<ReviewThumbnailViewModel>();
             services.AddTransient<PaymentProductThumbnailViewModel>();

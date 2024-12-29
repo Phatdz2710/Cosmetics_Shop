@@ -37,6 +37,7 @@
                 <ColumnDefinition Width="6*"
                                   MinWidth="700"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="1.5*"
                                   MinWidth="130"/>
                 <ColumnDefinition Width="1.2*"
@@ -117,7 +118,15 @@
                 <Image Source="/Assets/cart_icon_1.png"/>
             </Button>
 
-                <Button Grid.Column="5" Background="Black" HorizontalAlignment="Center"
+            <Button Grid.Column="5"
+                    Height="60" Width="60" HorizontalAlignment="Center" Background="Black"
+                    Command="{x:Bind ViewModel.OrderButtonCommand, Mode=OneTime}"
+                    ToolTipService.ToolTip="Theo dõi đơn hàng"
+                    ToolTipService.Placement="Left">
+                <Image Source="/Assets/order_icon.png"/>
+            </Button>
+
+            <Button Grid.Column="6" Background="Black" HorizontalAlignment="Center"
                         Command="{x:Bind ViewModel.AccountButtonCommand, Mode=OneTime}"
                         ToolTipService.ToolTip="Tài khoản"
                         ToolTipService.Placement="Left">
@@ -138,7 +147,7 @@
                 </Button>
 
 
-            <ComboBox Grid.Column="6" x:Name="ChangeThemeCombobox"
+            <ComboBox Grid.Column="7" x:Name="ChangeThemeCombobox"
                       Width="100"
                       HorizontalAlignment="Center"
                       VerticalAlignment="Center"

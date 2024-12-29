@@ -23,6 +23,8 @@ public partial class Order
 
     public int? VoucherId { get; set; }
 
+    public int TotalPrice { get; set; }
+
     public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 
     public virtual User User { get; set; }

@@ -301,15 +301,17 @@ namespace Cosmetics_Shop.DataAccessObject
             }
         }
        
-        public async Task<List<Models.Order>> GetListOrderAsync(int userId)
+        public async Task<List<Models.Order>> GetListOrderAsync(int userId, OrderStatus orderStatus)
         {
             using (var scope = _serviceProvider.CreateScope())
             {
                 var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
                 try
-                {
-                    var orders = await _databaseContext.Orders
-                        .Where(p => p.UserId == userId)
+                { 
+                    if (orderStatus == OrderStatus.InProcess)
+                    {
+                        var orders = await _databaseContext.Orders
+                        .Where(p => p.UserId == userId && (p.OrderStatus == 0 || p.OrderStatus == 1))
                         .Select(p => new Models.Order
                         {
                             Id = p.Id,
@@ -319,11 +321,35 @@ namespace Cosmetics_Shop.DataAccessObject
                             ShippingMethod = p.ShippingMethod,
                             PaymentMethod = p.PaymentMethod,
                             VoucherId = p.VoucherId,
-                            ShippingAddress = p.ShippingAddress
+                            ShippingAddress = p.ShippingAddress,
+                            TotalPrice = p.TotalPrice
                         })
                         .ToListAsync();
 
-                    return orders;
+                        return orders;
+                    }
+                    else
+                    {
+                        var orders = await _databaseContext.Orders
+                            .Where(p => p.UserId == userId && p.OrderStatus == (int)orderStatus)
+                            .Select(p => new Models.Order
+                            {
+                                Id = p.Id,
+                                UserId = p.UserId,
+                                OrderStatus = p.OrderStatus,
+                                OrderDate = p.OrderDate,
+                                ShippingMethod = p.ShippingMethod,
+                                PaymentMethod = p.PaymentMethod,
+                                VoucherId = p.VoucherId,
+                                ShippingAddress = p.ShippingAddress,
+                                TotalPrice = p.TotalPrice
+                            })
+                            .ToListAsync();
+
+                        return orders;
+                    }
+
+                    
                 }
                 catch (Exception)
                 {
@@ -340,12 +366,13 @@ namespace Cosmetics_Shop.DataAccessObject
                 try
                 {
                     var orderItems = await _databaseContext.OrderItems
+                        .Where(p => p.OrderId == orderId)
                         .Select(p => new Models.OrderItem
                         {
                             Id = p.Id,
                             OrderId = p.OrderId,
                             ProductId = p.ProductId,
-                            Quantity = p.Quantity
+                            Quantity = p.Quantity,
                         })
                         .ToListAsync();
 
@@ -357,7 +384,6 @@ namespace Cosmetics_Shop.DataAccessObject
                 }
             }
         }
-
 
 
         public async Task<string> GetProductDescriptionAsync(int productId)
@@ -916,7 +942,7 @@ namespace Cosmetics_Shop.DataAccessObject
             }
         }
 
-        public async Task<bool> ChangeProductInfoAsync(int id, string newName, string newBrand, string newCategory, int newPrice, int newSold, int newInventory, string newImagePath, string newDescription)
+        public async Task<bool> ChangeProductInfoAsync(int id, string newName, string newBrand, string newCategory, int newPrice, int newInventory, int newSold, string newImagePath, string newDescription)
         {
             using (var scope = _serviceProvider.CreateScope())
             {

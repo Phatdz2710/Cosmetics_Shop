@@ -18,6 +18,7 @@ namespace Cosmetics_Shop.Views.Converters.OrderStatus
                     0 => "Đang chờ duyệt",       // Trạng thái 0
                     1 => "Đã duyệt",             // Trạng thái 1
                     2 => "Hoàn tất", // Trạng thái 2
+                    3 => "Đã hủy",               // Trạng thái 3
                     _ => "Không xác định"        // Trạng thái mặc định
                 };
             }

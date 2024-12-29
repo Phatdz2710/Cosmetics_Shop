@@ -249,8 +249,19 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// </returns>
         Task<bool> UpdateCartAsync(int cartId, int quantity);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        Task<List<Models.Order>> GetListOrderAsync(int userId, OrderStatus type);
 
-        Task<List<Models.Order>> GetListOrderAsync(int userId);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
         Task<List<Models.OrderItem>> GetListOrderItemAsync(int orderId);
 
         /// <summary>

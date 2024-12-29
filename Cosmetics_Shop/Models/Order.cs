@@ -20,6 +20,7 @@ namespace Cosmetics_Shop.Models
         public int PaymentMethod { get; set; }
         public int? VoucherId { get; set; }
         public string ShippingAddress { get; set; }
+        public int TotalPrice { get; set; }
         #endregion
 
         // Constructor
@@ -29,7 +30,7 @@ namespace Cosmetics_Shop.Models
         }
 
         // Parameterized constructor
-        public Order(int id, int userId, int orderStatus, DateTime orderDate, int shippingMethod, int paymentMethod, int voucherId, string shippingAddress)
+        public Order(int id, int userId, int orderStatus, DateTime orderDate, int shippingMethod, int paymentMethod, int voucherId, string shippingAddress, int totalPrice)
         {
             Id = id;
             UserId = userId;
@@ -39,6 +40,7 @@ namespace Cosmetics_Shop.Models
             PaymentMethod = paymentMethod;
             VoucherId = voucherId;
             ShippingAddress = shippingAddress;
+            TotalPrice = totalPrice;
         }
     }
 }
