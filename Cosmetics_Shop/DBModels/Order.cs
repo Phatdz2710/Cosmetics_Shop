@@ -15,6 +15,8 @@ public partial class Order
 
     public DateTime OrderDate { get; set; }
 
+    public string ShippingAddress { get; set; }
+
     public int PaymentMethod { get; set; }
 
     public int ShippingMethod { get; set; }

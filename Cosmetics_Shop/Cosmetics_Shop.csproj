@@ -29,6 +29,7 @@
     <None Remove="Views\AdminPages\OrderManagerPage.xaml" />
     <None Remove="Views\AdminPages\ProductManagerPage.xaml" />
     <None Remove="Views\Controls\AccountCellControl.xaml" />
+    <None Remove="Views\Controls\OrderCellControl.xaml" />
     <None Remove="Views\Controls\PaymentProductThumbnailControl.xaml" />
     <None Remove="Views\Controls\PaymentProductThumbnailViewModel.xaml" />
     <None Remove="Views\Controls\ProductCellControl.xaml" />
@@ -195,6 +196,9 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Page Update="Views\Controls\OrderCellControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="Views\Controls\ProductCellControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>

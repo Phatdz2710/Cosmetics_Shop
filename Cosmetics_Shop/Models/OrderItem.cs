@@ -6,18 +6,31 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.Models
 {
+    /// <summary>
+    /// Represents an order in the system
+    /// </summary>
     public class OrderItem
     {
+        #region Properties
         public int Id { get; set; }
-
         public int OrderId { get; set; }
-
         public int ProductId { get; set; }
-
         public int Quantity { get; set; }
+        #endregion
 
-        public virtual Order Order { get; set; }
+        // Constructor
+        public OrderItem()
+        {
 
-        public virtual PaymentProductThumbnail Product { get; set; }
+        }
+
+        // Parameterized constructor
+        public OrderItem(int id, int orderId, int productId, int quantity)
+        {
+            Id = id;
+            OrderId = orderId;
+            ProductId = productId;
+            Quantity = quantity;
+        }
     }
 }

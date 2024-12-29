@@ -1,5 +1,5 @@
 ﻿{
-   "CodeGenerationMode": 4,
+   "CodeGenerationMode": 5,
    "ContextClassName": "DatabaseContext",
    "ContextNamespace": null,
    "FilterSchemas": false,

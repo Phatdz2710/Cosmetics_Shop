@@ -250,9 +250,8 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         Task<bool> UpdateCartAsync(int cartId, int quantity);
 
 
-        //Task<bool> CancelOrderAsync(int orderId);
-        //Task<List<Order>> GetListOrderAsync(int userId);
-        //Task<List<OrderItem>> GetListOrderItemAsync(int orderId);
+        Task<List<Models.Order>> GetListOrderAsync(int userId);
+        Task<List<Models.OrderItem>> GetListOrderItemAsync(int orderId);
 
         /// <summary>
         /// Retrieves a list of products in the cart.
@@ -355,6 +354,8 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// </returns>
         Task<string> GetUserLevelAsync(int userId);
 
+        Task<GetOrderResult> GetListAllOrdersAsync(int page, int orderPerPage);
+
         #endregion
 
 
@@ -419,5 +420,6 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// </returns>
         Task<List<Models.PaymentMethod>> GetPaymentMethodsAsync();
 
+        
     }
 }

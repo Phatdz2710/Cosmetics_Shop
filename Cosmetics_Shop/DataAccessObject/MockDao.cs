@@ -1,5 +1,6 @@
 ﻿using Cosmetics_Shop.DataAccessObject.Data;
 using Cosmetics_Shop.DataAccessObject.Interfaces;
+using Cosmetics_Shop.DBModels;
 using Cosmetics_Shop.Enums;
 using Cosmetics_Shop.Models;
 using Cosmetics_Shop.Models.Enums;
@@ -21,6 +22,16 @@ namespace Cosmetics_Shop.DataAccessObject
     /// </summary>
     public class MockDao : IDao
     {
+        public async Task<List<Models.Order>> GetListOrderAsync(int userId)
+        {
+            throw new NotImplementedException();    
+        }
+
+        public async Task<List<Models.OrderItem>> GetListOrderItemAsync(int orderId)
+        {
+            throw new NotImplementedException();    
+        }
+
         public async Task<SearchResult> GetListProductThumbnailAsync(
             string keyword = "",
             int pageIndex = 1,
@@ -113,6 +124,7 @@ namespace Cosmetics_Shop.DataAccessObject
             });
 
         }
+
 
         
         public async Task<List<ProductDetail>> GetProductDetailsAsync()
@@ -263,22 +275,6 @@ namespace Cosmetics_Shop.DataAccessObject
             return db;
         }
 
-        //public List<ReviewThumbnail> GetListReviewThumbnail()
-        //{
-        //    var db = new List<ReviewThumbnail>()
-        //    {
-        //        new ReviewThumbnail(1, "Thnhcng", null, 5),
-        //        new ReviewThumbnail(2, "Thnhcng", null, 4),
-        //        new ReviewThumbnail(3, "Thnhcng", null, 5),
-        //        new ReviewThumbnail(1, "Ngocphat", null, 3),
-        //        new ReviewThumbnail(2, "Ngocphat", null, 4),
-        //        new ReviewThumbnail(3, "Ngocphat", null, 5),
-        //        new ReviewThumbnail(1, "Ciel", null, 4),
-        //        new ReviewThumbnail(2, "Ciel", null, 4),
-        //        new ReviewThumbnail(3, "Ciel", null, 3)
-        //    };
-        //    return db;
-        //}
 
         public async Task<List<ReviewThumbnail>> GetListReviewThumbnailByIDProductAsync(int idProduct)
         {
@@ -301,18 +297,9 @@ namespace Cosmetics_Shop.DataAccessObject
             return filtered;
         }
 
-        //// Method to get all vouchers
         public async Task<List<Models.Voucher>> GetAllVouchersAsync()
         {
-            var db = new List<Models.Voucher>
-            {
-            //new Voucher (1,"SAVE10",10,DateTime.Now.AddDays(30), "Giảm 10%"),
-            //new Voucher (2,"SAVE20",20,DateTime.Now.AddDays(60), "Giảm 20%"),
-            //new Voucher (3, "SAVE30", 30, DateTime.Now.AddDays(10), "Giảm 30%"),
-            //new Voucher (4, "WELCOME", 50, DateTime.Now.AddDays(15), "Giảm 50% - Lần đầu mua hàng")
-            };
-
-            return db;
+            throw new NotImplementedException();
         }
 
         public List<PaymentProductThumbnail> GetAllPaymentProducts()
@@ -340,11 +327,7 @@ namespace Cosmetics_Shop.DataAccessObject
 
         public async Task<List<Models.PaymentMethod>> GetPaymentMethodsAsync()
         {
-            var db = new List<Models.PaymentMethod>
-            {
-
-            };
-            return db;
+            throw new NotImplementedException();
         }
 
         public Task<SignupStatus> DoSignupAsync(string username, string password, string confirmPassword, string email)
@@ -418,6 +401,21 @@ namespace Cosmetics_Shop.DataAccessObject
         }
 
         public Task<bool> ChangeProductInfoAsync(int id, string newName, string newBrand, string newCategory, int newPrice, int newInventory, int newSold, string newImagePath, string newDescription)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<List<Models.Order>> IDao.GetListOrderAsync(int userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<List<Models.OrderItem>> IDao.GetListOrderItemAsync(int orderId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<GetOrderResult> GetListAllOrdersAsync(int page, int orderPerPage)
         {
             throw new NotImplementedException();
         }

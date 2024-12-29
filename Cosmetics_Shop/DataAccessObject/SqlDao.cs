@@ -300,6 +300,65 @@ namespace Cosmetics_Shop.DataAccessObject
                 }
             }
         }
+       
+        public async Task<List<Models.Order>> GetListOrderAsync(int userId)
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                try
+                {
+                    var orders = await _databaseContext.Orders
+                        .Where(p => p.UserId == userId)
+                        .Select(p => new Models.Order
+                        {
+                            Id = p.Id,
+                            UserId = p.UserId,
+                            OrderStatus = p.OrderStatus,
+                            OrderDate = p.OrderDate,
+                            ShippingMethod = p.ShippingMethod,
+                            PaymentMethod = p.PaymentMethod,
+                            VoucherId = p.VoucherId,
+                            ShippingAddress = p.ShippingAddress
+                        })
+                        .ToListAsync();
+
+                    return orders;
+                }
+                catch (Exception)
+                {
+                    return new List<Models.Order>();
+                }
+            }
+        }
+
+        public async Task<List<Models.OrderItem>> GetListOrderItemAsync(int orderId)
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                try
+                {
+                    var orderItems = await _databaseContext.OrderItems
+                        .Select(p => new Models.OrderItem
+                        {
+                            Id = p.Id,
+                            OrderId = p.OrderId,
+                            ProductId = p.ProductId,
+                            Quantity = p.Quantity
+                        })
+                        .ToListAsync();
+
+                    return orderItems;
+                }
+                catch (Exception)
+                {
+                    return new List<Models.OrderItem>();
+                }
+            }
+        }
+
+
 
         public async Task<string> GetProductDescriptionAsync(int productId)
         {
@@ -967,13 +1026,55 @@ namespace Cosmetics_Shop.DataAccessObject
                 }
             }
         }
+
+        public async Task<GetOrderResult> GetListAllOrdersAsync(int page, int orderPerPage)
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+
+                try
+                {
+                    var query = _databaseContext.Orders.AsQueryable();
+
+                    var totalOrders = await query.CountAsync();
+                    var numPages = (int)Math.Ceiling((double)totalOrders / orderPerPage);
+
+                    var db = await query.Skip((page - 1) * orderPerPage)
+                        .Take(orderPerPage)
+                        .Select(p => new Models.Order
+                        {
+                            Id = p.Id,
+                            UserId = p.UserId,
+                            OrderStatus = p.OrderStatus,
+                            OrderDate = p.OrderDate,
+                            ShippingMethod = p.ShippingMethod,
+                            PaymentMethod = p.PaymentMethod,
+                            VoucherId = p.VoucherId,
+                            ShippingAddress = p.ShippingAddress
+                        })
+                        .ToListAsync();
+
+                    return new GetOrderResult
+                    {
+                        ListOrders = db,
+                        TotalPages = numPages == 0 ? 1 : numPages,
+                        TotalOrders = totalOrders
+                    };
+
+                }
+                catch (Exception)
+                {
+                    return new GetOrderResult
+                    {
+                        ListOrders = new List<Models.Order>(),
+                        TotalPages = 1,
+                        TotalOrders = 0
+                    };
+                }
+            }}
         
         #endregion
-
-        public void InsertProduct(ProductThumbnail product)
-        {
-            throw new NotImplementedException();
-        }
 
         #region Cart
         public async Task<List<CartThumbnail>> GetListCartProductAsync()
@@ -1393,6 +1494,7 @@ namespace Cosmetics_Shop.DataAccessObject
                 }
             }
         }
+
 
 
         #endregion
