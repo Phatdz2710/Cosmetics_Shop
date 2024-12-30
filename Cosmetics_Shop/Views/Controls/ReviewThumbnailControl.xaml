@@ -13,20 +13,23 @@
         <converter:StringToImageSourceConverter x:Key="StringToImageSourceConverter"/>
     </UserControl.Resources>
 
-    <StackPanel Orientation="Horizontal"
-                Background="#E9FFF0">
-        <Ellipse 
-                 Width="30"
-                 Height="30"
-                 Margin="10 10 0 10"
-                Resources="{x:Bind ViewModel.ReviewThumbnail.UserImage, Mode=OneWay, Converter={StaticResource StringToImageSourceConverter}}"
-                />
+    <StackPanel Orientation="Horizontal">
+
+        <Border Height="50" Width="50" CornerRadius="50"
+                Margin="10">
+            <Image Source="{x:Bind ViewModel.ReviewThumbnail.UserImage, Mode=OneWay, Converter={StaticResource StringToImageSourceConverter}}"
+        Stretch="UniformToFill"/>
+        </Border>
+        
+
         <TextBlock Text="{x:Bind ViewModel.ReviewThumbnail.Name, Mode=OneWay}"
                    FontSize="15"
-                   Margin="10 10 0 0"/>
+                   Margin="10 0 0 0"
+                   VerticalAlignment="Center"/>
         
         <ItemsControl ItemsSource="{x:Bind ViewModel.StarList, Mode=OneWay}"
-                      Margin="10 0 0 10">
+                      Margin="10 0 0 0"
+                      VerticalAlignment="Center">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <FontIcon Glyph="&#xF0EA;" Foreground="Gold" FontSize="15" />

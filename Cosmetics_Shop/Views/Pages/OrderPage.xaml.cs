@@ -21,7 +21,7 @@ using System.Windows.Input;
 namespace Cosmetics_Shop.Views.Pages
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// Order page for user
     /// </summary>
     public sealed partial class OrderPage : Page
     {

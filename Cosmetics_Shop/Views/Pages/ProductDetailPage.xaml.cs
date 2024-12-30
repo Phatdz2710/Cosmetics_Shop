@@ -21,7 +21,7 @@ using Cosmetics_Shop.Models;
 namespace Cosmetics_Shop.Views.Pages
 {
     /// <summary>
-    /// Product detail page
+    /// Product detail page for user
     /// </summary>
     public sealed partial class ProductDetailPage : Page
     {

@@ -32,6 +32,8 @@ using System.Text.Json.Nodes;
 using Cosmetics_Shop.ViewModels.AdminPageViewModels;
 using Cosmetics_Shop.DataAccessObject;
 using Cosmetics_Shop.DataAccessObject.Interfaces;
+using Microsoft.UI.Windowing;
+using Windows.Graphics;
 
 namespace Cosmetics_Shop
 {
@@ -117,5 +119,23 @@ namespace Cosmetics_Shop
         }
 
         private Window m_window;
+
+
+        /// <summary>
+        /// Center window on the screen
+        /// </summary>
+        /// <param name="appWindow"></param>
+        public static void CenterWindow(AppWindow appWindow)
+        {
+            // Lấy kích thước màn hình chính
+            var displayArea = DisplayArea.GetFromWindowId(appWindow.Id, DisplayAreaFallback.Primary);
+            var centerPosition = new PointInt32(
+                (displayArea.WorkArea.Width - appWindow.Size.Width) / 2,
+                (displayArea.WorkArea.Height - appWindow.Size.Height) / 2
+            );
+
+            // Di chuyển cửa sổ đến vị trí trung tâm
+            appWindow.Move(centerPosition);
+        }
     }
 }

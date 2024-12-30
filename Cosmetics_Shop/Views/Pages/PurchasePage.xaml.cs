@@ -22,7 +22,7 @@ using Cosmetics_Shop.Services.EventAggregatorMessages;
 namespace Cosmetics_Shop.Views.Pages
 {
     /// <summary>
-    /// Purchase page
+    /// Purchase page for user
     /// </summary>
     public sealed partial class PurchasePage : Page
     {

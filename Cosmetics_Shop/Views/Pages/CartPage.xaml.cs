@@ -23,7 +23,7 @@ using Cosmetics_Shop.Models; // Adjust the namespace as necessary
 namespace Cosmetics_Shop.Views.Pages
 {
     /// <summary>
-    /// Cart page
+    /// Cart page for user
     /// </summary>
     public sealed partial class CartPage : Page
     {

@@ -15,6 +15,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Graphics;
 using Windows.UI.ViewManagement;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -23,14 +24,17 @@ using Windows.UI.ViewManagement;
 namespace Cosmetics_Shop
 {
     /// <summary>
-    /// Login window
+    /// Login window constains login and signup page
     /// </summary>
     public sealed partial class LoginWindow : Window
     {
         public LoginWindow()
         {
             this. InitializeComponent();
-            this.AppWindow.Resize(new Windows.Graphics.SizeInt32(1200, 750));
+            // Setup window size and position
+            this.AppWindow.Resize(new SizeInt32(1200, 800));
+            App.CenterWindow(this.AppWindow);
+
             this.LoginSignupFrame.Navigate(typeof(Views.Pages.LoginSignupPage));
 
             var eventAggregator = App.ServiceProvider.GetService(typeof(IEventAggregator)) as IEventAggregator;

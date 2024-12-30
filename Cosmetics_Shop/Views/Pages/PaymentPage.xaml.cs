@@ -24,7 +24,7 @@ using Cosmetics_Shop.Services;
 namespace Cosmetics_Shop.Views.Pages
 {
     /// <summary>
-    /// Payment page
+    /// Payment page for user
     /// </summary>
     public sealed partial class PaymentPage : Page
     {

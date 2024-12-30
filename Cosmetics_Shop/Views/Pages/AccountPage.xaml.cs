@@ -21,7 +21,7 @@ using Cosmetics_Shop.Services.Interfaces;
 namespace Cosmetics_Shop.Views.Pages
 {
     /// <summary>
-    /// Account page
+    /// Account page for user
     /// </summary>
     public sealed partial class AccountPage : Page
     {

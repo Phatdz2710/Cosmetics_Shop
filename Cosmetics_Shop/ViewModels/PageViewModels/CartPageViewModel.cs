@@ -29,6 +29,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         private bool _isAllChecked;
         private int _totalPay;
         private Models.Voucher _currentVoucher;
+        private bool _isZeroCart = false;
         #endregion
 
         // Observable Collection
@@ -87,6 +88,19 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 TotalPay = 0;
             }
         }
+
+        public bool IsZeroCart
+        {
+            get => _isZeroCart;
+            set
+            {
+                if (_isZeroCart != value)
+                {
+                    _isZeroCart = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         #endregion
 
         public CartPageViewModel(INavigationService navigationService, IDao dao)
@@ -132,6 +146,13 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             {
                 var cartProduct = await _dao.GetListCartProductAsync();
 
+                if (cartProduct.Count == 0)
+                {
+                    IsZeroCart = true;
+                    return;
+                }
+                else IsZeroCart = false;
+
                 foreach (var product in cartProduct)
                 {
                     var cartThumbnailViewModel = new CartThumbnailViewModel(_navigationService, this);
@@ -169,6 +190,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 {
                     Cart.Remove(itemToRemove);
                 }
+                if (Cart.Count == 0) IsZeroCart = true;
                 return true; // Deletion successful
             }
             else
