@@ -36,6 +36,13 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
         private int _totalOrders = 0;
         private bool _showForm = false;
         private string _formTitle = "";
+        private int _id = 0;
+        private int _orderId = 0;
+        private int _productId = 0;
+        private int _quantity = 0;
+        private int _price = 0;
+        private int _totalPrice = 0;
+
 
         private Models.Order _selectedOrder;
         #endregion
