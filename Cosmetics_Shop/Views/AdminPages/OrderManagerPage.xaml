@@ -148,10 +148,10 @@
         </Grid>
 
         <Grid Grid.Row="0"
-            Grid.RowSpan="5"
-            Background="Transparent"
-            CornerRadius="5"
-            Visibility="{x:Bind ViewModel.ShowForm, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+              Grid.RowSpan="5"
+              Background="Transparent"
+              CornerRadius="5"
+              Visibility="{x:Bind ViewModel.ShowForm, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Rectangle Fill="Black" Opacity="0.7"/>
 
             <Grid Background="White"
@@ -161,21 +161,41 @@
                   Padding="20">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="2*"/>
-                    <RowDefinition Height="2*"/>
-                    <RowDefinition Height="2*"/>
-                    <RowDefinition Height="2*"/>
-                    <RowDefinition Height="2*"/>                    
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
                     <RowDefinition Height="2*"/>
                 </Grid.RowDefinitions>
 
                 <TextBlock Text="{x:Bind ViewModel.FormTitle, Mode=OneWay}"
-                           VerticalAlignment="Top"
-                           HorizontalAlignment="Center"
-                           FontSize="25"
-                           FontWeight="SemiBold"/>
-
+                       VerticalAlignment="Top"
+                       HorizontalAlignment="Center"
+                       FontSize="25"
+                       FontWeight="SemiBold"/>
+                <!--
                 <StackPanel Grid.Row="1">
+                    <TextBlock Text="ID"                       
+                               FontSize="17"
+                               FontWeight="SemiBold"
+                               Margin="10"/>
+                    <TextBox PlaceholderText="ID" IsEnabled="False"
+                        Text="{x:Bind ViewModel.Id, Mode=TwoWay}"/>
+                </StackPanel>
+                
+                <StackPanel Grid.Row="2">
+                    <TextBlock Text="OrderId"                       
+                               FontSize="17"
+                               FontWeight="SemiBold"
+                               Margin="10"/>
+                    <TextBox PlaceholderText="OrderId" IsEnabled="False"
+                        Text="{x:Bind ViewModel.OrderId, Mode=TwoWay}"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="3">
                     <TextBlock Text="Mã Sản phẩm"                       
                                FontSize="17"
                                FontWeight="SemiBold"
@@ -184,18 +204,7 @@
                         Text="{x:Bind ViewModel.ProductId, Mode=TwoWay}"/>
                 </StackPanel>
 
-
-
-                <StackPanel Grid.Row="2">
-                    <TextBlock Text="Tên Sản phẩm"                       
-                               FontSize="17"
-                               FontWeight="SemiBold"
-                               Margin="10"/>
-                    <TextBox PlaceholderText="ProductName" IsEnabled="False"
-                        Text="{x:Bind ViewModel.ProductName, Mode=TwoWay}"/>
-                </StackPanel>
-
-                <StackPanel Grid.Row="3">
+                <StackPanel Grid.Row="4">
                     <TextBlock Text="Số Lượng"                       
                                FontSize="17"
                                FontWeight="SemiBold"
@@ -204,7 +213,7 @@
                         Text="{x:Bind ViewModel.Quantity, Mode=TwoWay}"/>
                 </StackPanel>
 
-                <StackPanel Grid.Row="4">
+                <StackPanel Grid.Row="5">
                     <TextBlock Text="Giá"                       
                                FontSize="17"
                                FontWeight="SemiBold"
@@ -213,7 +222,7 @@
                         Text="{x:Bind ViewModel.Price, Mode=TwoWay}"/>
                 </StackPanel>
 
-                <StackPanel Grid.Row="5">
+                <StackPanel Grid.Row="7">
                     <TextBlock Text="Tổng hóa đơn"                       
                                FontSize="17"
                                FontWeight="SemiBold"
@@ -222,7 +231,7 @@
                         Text="{x:Bind ViewModel.TotalPrice, Mode=TwoWay}"/>
                 </StackPanel>
 
-                <StackPanel Grid.Row="6"
+                <StackPanel Grid.Row="8"
                             Orientation="Horizontal"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Center">
@@ -237,7 +246,7 @@
                             Foreground="White"
                             Command="{x:Bind ViewModel.CancelFormCommand, Mode=OneWay}"/>
                 </StackPanel>
-
+                -->
             </Grid>
         </Grid>
 

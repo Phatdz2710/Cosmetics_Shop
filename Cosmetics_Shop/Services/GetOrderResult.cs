@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.Services
 {
-    public struct GetOrderResult
+    internal class GetOrderResult
     {
         public List<Models.Order> ListOrders { get; set; }
         public int TotalPages { get; set; }

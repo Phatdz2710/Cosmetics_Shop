@@ -22,7 +22,6 @@ using Windows.ApplicationModel.Appointments;
 using Windows.ApplicationModel.Background;
 using Windows.Networking.NetworkOperators;
 using Windows.Security.Authentication.Web.Provider;
-using Windows.System;
 
 namespace Cosmetics_Shop.DataAccessObject
 {
@@ -94,8 +93,8 @@ namespace Cosmetics_Shop.DataAccessObject
                                         p.Brand,
                                         p.Category,
                                         p.AverageRating,
-                                        p.Stock,
-                                        p.Sold))
+                                        p.Sold,
+                                        p.Stock))
                                   .ToListAsync();
 
                     var resBrands = await _databaseContext.Products
@@ -152,8 +151,8 @@ namespace Cosmetics_Shop.DataAccessObject
                                 p.Brand,
                                 p.Category,
                                 p.AverageRating,
-                                p.Stock,
-                                p.Sold))
+                                p.Sold,
+                                p.Stock))
                         .ToListAsync();
 
                     return db;
@@ -174,7 +173,7 @@ namespace Cosmetics_Shop.DataAccessObject
                 {
                     var db = await _databaseContext.Products
                         .OrderByDescending(p => p.Sold)
-                        .Take(5)
+                        .Take(6)
                         .Select(p => new ProductThumbnail(p.Id,
                                 p.Name,
                                 p.ImagePath,
@@ -182,8 +181,8 @@ namespace Cosmetics_Shop.DataAccessObject
                                 p.Brand,
                                 p.Category,
                                 p.AverageRating,
-                                p.Stock,
-                                p.Sold))
+                                p.Sold,
+                                p.Stock))
                         .ToListAsync();
 
                     return db;
@@ -218,8 +217,8 @@ namespace Cosmetics_Shop.DataAccessObject
                                 p.Brand,
                                 p.Category,
                                 p.AverageRating,
-                                p.Stock,
-                                p.Sold))
+                                p.Sold,
+                                p.Stock))
                         .ToListAsync();
 
                     return db;
@@ -301,19 +300,15 @@ namespace Cosmetics_Shop.DataAccessObject
             }
         }
 
-        
-
-        public async Task<List<Models.Order>> GetListOrderAsync(int userId, OrderStatus orderStatus)
+        public async Task<List<Models.Order>> GetListOrderAsync(int userId)
         {
             using (var scope = _serviceProvider.CreateScope())
             {
                 var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
                 try
-                { 
-                    if (orderStatus == OrderStatus.InProcess)
-                    {
-                        var orders = await _databaseContext.Orders
-                        .Where(p => p.UserId == userId && (p.OrderStatus == 0 || p.OrderStatus == 1))
+                {
+                    var orders = await _databaseContext.Orders
+                        .Where(p => p.UserId == userId)
                         .Select(p => new Models.Order
                         {
                             Id = p.Id,
@@ -323,35 +318,11 @@ namespace Cosmetics_Shop.DataAccessObject
                             ShippingMethod = p.ShippingMethod,
                             PaymentMethod = p.PaymentMethod,
                             VoucherId = p.VoucherId,
-                            ShippingAddress = p.ShippingAddress,
-                            TotalPrice = p.TotalPrice
+                            ShippingAddress = p.ShippingAddress
                         })
                         .ToListAsync();
 
-                        return orders;
-                    }
-                    else
-                    {
-                        var orders = await _databaseContext.Orders
-                            .Where(p => p.UserId == userId && p.OrderStatus == (int)orderStatus)
-                            .Select(p => new Models.Order
-                            {
-                                Id = p.Id,
-                                UserId = p.UserId,
-                                OrderStatus = p.OrderStatus,
-                                OrderDate = p.OrderDate,
-                                ShippingMethod = p.ShippingMethod,
-                                PaymentMethod = p.PaymentMethod,
-                                VoucherId = p.VoucherId,
-                                ShippingAddress = p.ShippingAddress,
-                                TotalPrice = p.TotalPrice
-                            })
-                            .ToListAsync();
-
-                        return orders;
-                    }
-
-                    
+                    return orders;
                 }
                 catch (Exception)
                 {
@@ -368,13 +339,12 @@ namespace Cosmetics_Shop.DataAccessObject
                 try
                 {
                     var orderItems = await _databaseContext.OrderItems
-                        .Where(p => p.OrderId == orderId)
                         .Select(p => new Models.OrderItem
                         {
                             Id = p.Id,
                             OrderId = p.OrderId,
                             ProductId = p.ProductId,
-                            Quantity = p.Quantity,
+                            Quantity = p.Quantity
                         })
                         .ToListAsync();
 
@@ -386,29 +356,7 @@ namespace Cosmetics_Shop.DataAccessObject
                 }
             }
         }
-
-
-        public async Task<string> GetProductDescriptionAsync(int productId)
-        {
-            using (var scope = _serviceProvider.CreateScope())
-            {
-                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-                try
-                {
-                    var description = await _databaseContext.Products
-                        .Where(p => p.Id == productId)
-                        .Select(p => p.Description)
-                        .FirstOrDefaultAsync();
-
-                    return description;
-                }
-                catch (Exception)
-                {
-                    return "";
-                }
-            }
-        }
-
+        
         #endregion
 
         #region Login, Signup
@@ -476,18 +424,12 @@ namespace Cosmetics_Shop.DataAccessObject
 
                     if (user != null) return SignupStatus.UsernameAlreadyExists;
 
-                    if (email != string.Empty && !email.IsValidEmail())
-                    {
-                        return SignupStatus.InvalidEmail;
-                    }
-
                     var newUser = new DBModels.User()
                     {
                         Name    = username,
                         Email   = email,
                         Address = null,
                         Phone   = null,
-                        CreateTime = DateTime.Now
                     };
                     await _databaseContext.Users.AddAsync(newUser);
                     await _databaseContext.SaveChangesAsync();
@@ -542,11 +484,6 @@ namespace Cosmetics_Shop.DataAccessObject
                         .SelectMany(p => p.OrderItems)
                         .SumAsync(p => p.Quantity * p.Product.Price);
 
-                    var createTime = await _databaseContext.Users
-                        .Where(p => p.Id == userId)
-                        .Select(p => p.CreateTime)
-                        .FirstOrDefaultAsync();
-
                     if (user == null)
                     {
                         return new UserDetail
@@ -558,8 +495,7 @@ namespace Cosmetics_Shop.DataAccessObject
                             AvatarPath  = null,
                             TotalMoneySpent = 0,
                             TotalBills      = 0,
-                            TotalProducts   = 0,
-                            CreateTime      = createTime
+                            TotalProducts   = 0
                         };
                     }
 
@@ -572,23 +508,21 @@ namespace Cosmetics_Shop.DataAccessObject
                         AvatarPath  = user.AvatarPath,
                         TotalMoneySpent = totalMoneySpent,
                         TotalBills      = totalBills,
-                        TotalProducts   = totalProducts,
-                        CreateTime      = createTime
+                        TotalProducts   = totalProducts
                     };
                 }
                 catch (Exception)
                 {
                     return new UserDetail
                     {
-                        Name = "",
-                        Email = "",
-                        Phone = "",
-                        Address = "",
-                        AvatarPath = null,
+                        Name        = "",
+                        Email       = "",
+                        Phone       = "",
+                        Address     = "",
+                        AvatarPath  = null,
                         TotalMoneySpent = 0,
-                        TotalBills = 0,
-                        TotalProducts = 0,
-                        CreateTime = DateTime.MinValue
+                        TotalBills      = 0,
+                        TotalProducts   = 0
                     };
                 }
             }
@@ -804,7 +738,7 @@ namespace Cosmetics_Shop.DataAccessObject
                     var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
 
                     var db = await _databaseContext.Accounts
-                        .Select(p => new Models.Account(p.UserId, p.Username, p.Password, p.Role, p.UserId))
+                        .Select(p => new Models.Account(p.UserId, p.Username, p.Password, p.Role))
                         .ToListAsync();
 
                     return new AccountSearchResult
@@ -900,11 +834,6 @@ namespace Cosmetics_Shop.DataAccessObject
                 {
                     var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
 
-                    if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
-                    {
-                        return false;
-                    }
-
                     var user = await _databaseContext.Accounts.FirstOrDefaultAsync(p => p.Username == username);
 
                     if (user != null)
@@ -918,7 +847,6 @@ namespace Cosmetics_Shop.DataAccessObject
                         Email = null,
                         Address = null,
                         Phone = null,
-                        CreateTime = DateTime.Now
                     };
                     await _databaseContext.Users.AddAsync(newUser);
                     await _databaseContext.SaveChangesAsync();
@@ -944,16 +872,11 @@ namespace Cosmetics_Shop.DataAccessObject
             }
         }
 
-        public async Task<bool> ChangeProductInfoAsync(int id, string newName, string newBrand, string newCategory, int newPrice, int newInventory, int newSold, string newImagePath, string newDescription)
+        public async Task<bool> ChangeProductInfoAsync(int id, string newName, string newBrand, string newCategory, int newPrice, int newSold, int newInventory, string newImagePath)
         {
             using (var scope = _serviceProvider.CreateScope())
             {
                 var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-
-                if (string.IsNullOrEmpty(newName) || string.IsNullOrEmpty(newBrand) || string.IsNullOrEmpty(newCategory) || newPrice < 0 || newInventory < 0)
-                {
-                    return false;
-                }
 
                 try
                 {
@@ -964,14 +887,13 @@ namespace Cosmetics_Shop.DataAccessObject
                         return false;
                     }
 
-                    product.Name    = newName;
-                    product.Brand   = newBrand;
+                    product.Name = newName;
+                    product.Brand = newBrand;
                     product.Category = newCategory;
-                    product.Price   = newPrice;
-                    product.Stock   = newInventory;
-                    product.Sold    = newSold;
+                    product.Price = newPrice;
+                    product.Stock = newInventory;
+                    product.Sold = newSold;
                     product.ImagePath = newImagePath;
-                    product.Description = newDescription;
 
                     await _databaseContext.SaveChangesAsync();
                     return true;
@@ -983,18 +905,13 @@ namespace Cosmetics_Shop.DataAccessObject
             }
         }
 
-        public async Task<bool> CreateProductAsync(string name, string brand, string category, int price, int inventory, int sold, string imagePath)
+        public async Task<bool> CreateProductAsync(string name, string brand, string category, int price, int sold, int inventory, string imagePath)
         {
             try
             {
                 using (var scope = _serviceProvider.CreateScope())
                 {
                     var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-
-                    if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(brand) || string.IsNullOrEmpty(category) || price < 0 || inventory < 0)
-                    {
-                        return false;
-                    }
 
                     var newProduct = new DBModels.Product()
                     {
@@ -1018,40 +935,6 @@ namespace Cosmetics_Shop.DataAccessObject
             catch (Exception)
             {
                 return false;
-            }
-        }
-
-        public async Task<string> GetUserLevelAsync(int userId)
-        {
-            using (var scope = _serviceProvider.CreateScope())
-            {
-                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-
-                try
-                {
-                    var totalMoneySpent = await _databaseContext.Orders
-                        .Where(p => p.UserId == userId)
-                        .SelectMany(p => p.OrderItems)
-                        .SumAsync(p => p.Quantity * p.Product.Price);
-
-                    if (totalMoneySpent >= 20000000)
-                    {
-                        return "ULTRA";
-                    }
-                    else if (totalMoneySpent >= 10000000)
-                    {
-                        return "VIP";
-                    }
-                    else
-                    {
-                        return "NORMAL";
-                    }
-
-                }
-                catch (Exception)
-                {
-                    return "NORMAL";
-                }
             }
         }
 
@@ -1100,156 +983,118 @@ namespace Cosmetics_Shop.DataAccessObject
                         TotalOrders = 0
                     };
                 }
-            }}
-
-        public async Task<bool> ChangeOrderStatusAsync()
-        {
-            using (var scope = _serviceProvider.CreateScope())
-            {
-                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-
-                try
-                {
-                    var order = await _databaseContext.Orders.FirstOrDefaultAsync(p => p.Id == 1);
-
-                    if (order == null)
-                    {
-                        return false;
-                    }
-
-                    order.OrderStatus = 1;
-
-                    await _databaseContext.SaveChangesAsync();
-                    return true;
-                }
-                catch (Exception)
-                {
-                    return false;
-                }
-               
             }
         }
+
         #endregion
 
-        #region Cart
-        public async Task<List<CartThumbnail>> GetListCartProductAsync()
-        {
-            using (var scope = _serviceProvider.CreateScope())
-            {
-                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-                var userSession = _serviceProvider.GetService(typeof(UserSession)) as UserSession;
-                try
-                {
-                    var query = _databaseContext.Carts.AsQueryable();
-                    var cartItems = await query
-                        .Where(c => c.UserId == userSession.GetId())
-                        .Select(c => new CartThumbnail(
-                            c.Id,
-                            c.Product.ImagePath,       // Assuming 'Image' is the field in Product
-                            c.Product.Name,        // Assuming 'Name' is the field in Product
-                            c.Product.Price,       // Assuming 'Price' is the field in Product
-                            c.Quantity,            // Quantity as Amount
-                            c.Quantity * c.Product.Price // TotalPrice calculation
-                        ))
-                        .ToListAsync();
 
-                    return cartItems;
-                }
-                catch (Exception)
-                {
-                    return new List<CartThumbnail>(); // Return empty list on failure
-                }
-            }
+
+        public void InsertProduct(ProductThumbnail product)
+        {
+            throw new NotImplementedException();
         }
 
-        private DBModels.Cart ConvertToDbCart(Models.CartThumbnail modelCart)
+        public List<CartThumbnail> GetListCartProduct()
         {
-            return new DBModels.Cart
+            var db = new List<CartThumbnail>()
             {
-                UserId = modelCart.UserId,
-                ProductId = modelCart.ProductId,
-                Quantity = modelCart.Amount // Sử dụng Amount từ CartThumbnail
+                new CartThumbnail(1, null, "Tẩy trang loreal", 150000, 2, 300000),
+                new CartThumbnail(3, null, "Tẩy trang Bioderma", 150000, 1, 150000),
+                new CartThumbnail(5, null, "Tẩy trang Ganier", 130000, 1, 130000),
+                new CartThumbnail(6, null, "Kem chống nắng skinaqua", 125000, 1, 125000)
             };
+
+            return db;
         }
 
-        public async Task<bool> AddToCartAsync(int productId, int quantity)
+        public List<ReviewThumbnail> GetListReviewThumbnail()
         {
-            using (var scope = _serviceProvider.CreateScope())
+            var db = new List<ReviewThumbnail>()
             {
-                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-                var userSession = _serviceProvider.GetService(typeof(UserSession)) as UserSession;
-                try
-                {
-                    // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
-                    var existingCartItem = await _databaseContext.Carts
-                        .FirstOrDefaultAsync(c => c.UserId == userSession.GetId() && c.ProductId == productId);
-
-                    if (existingCartItem != null)
-                    {
-                        // Nếu sản phẩm đã có trong giỏ hàng, cập nhật số lượng
-                        existingCartItem.Quantity += quantity;
-                        _databaseContext.Carts.Update(existingCartItem);
-                    }
-                    else
-                    {
-                        // Nếu sản phẩm chưa có trong giỏ hàng, thêm mới
-                        var newCartItem = new Models.CartThumbnail
-                        (
-                            userSession.GetId(),
-                            productId,
-                            quantity
-                        );
-                        //await _databaseContext.Carts.AddAsync(newCartItem);
-                        // Chuyển đổi sang DBModels.Cart
-                        var dbCartItem = ConvertToDbCart(newCartItem);
-                        await _databaseContext.Carts.AddAsync(dbCartItem);
-                    }
-
-                    // Lưu thay đổi vào cơ sở dữ liệu
-                    await _databaseContext.SaveChangesAsync();
-                    return true; // Thêm thành công
-                }
-                catch (Exception ex)
-                {
-                    // Xử lý lỗi (có thể ghi log hoặc thông báo cho người dùng)
-                    return false; // Thêm không thành công
-                }
-            }
+                new ReviewThumbnail(1, "Thnhcng", null, 5),
+                new ReviewThumbnail(2, "Thnhcng", null, 4),
+                new ReviewThumbnail(3, "Thnhcng", null, 5),
+                new ReviewThumbnail(1, "Ngocphat", null, 3),
+                new ReviewThumbnail(2, "Ngocphat", null, 4),
+                new ReviewThumbnail(3, "Ngocphat", null, 5),
+                new ReviewThumbnail(1, "Ciel", null, 4),
+                new ReviewThumbnail(2, "Ciel", null, 4),
+                new ReviewThumbnail(3, "Ciel", null, 3)
+            };
+            return db;
         }
 
-        public async Task<bool> DeleteFromCartAsync(int cartId)
+        public List<ReviewThumbnail> GetListReviewThumbnailByIDProduct(int idProduct)
         {
-            using (var scope = _serviceProvider.CreateScope())
+            var db = GetListReviewThumbnail();
+            var result = new List<ReviewThumbnail>();
+            for (int i = 0; i < db.Count; i++)
             {
-                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-                var userSession = _serviceProvider.GetService(typeof(UserSession)) as UserSession;
-                try
+                if (idProduct == db[i].Id)
                 {
-                    // Tìm kiếm sản phẩm trong giỏ hàng theo cartId và userId
-                    var cartItem = await _databaseContext.Carts
-                        .FirstOrDefaultAsync(c => c.Id == cartId && c.UserId == userSession.GetId());
-
-                    if (cartItem != null)
-                    {
-                        // Xóa sản phẩm khỏi giỏ hàng
-                        _databaseContext.Carts.Remove(cartItem);
-
-                        // Lưu thay đổi vào cơ sở dữ liệu
-                        await _databaseContext.SaveChangesAsync();
-                        return true; // Xóa thành công
-                    }
-                    else
-                    {
-                        // Nếu không tìm thấy sản phẩm trong giỏ hàng
-                        return false; // Xóa không thành công
-                    }
-                }
-                catch (Exception ex)
-                {
-                    // Xử lý lỗi (có thể ghi log hoặc thông báo cho người dùng)
-                    return false; // Xóa không thành công
+                    result.Add(db[i]);
                 }
             }
+            return result;
+
+        }
+
+        public async Task<List<string>> GetSuggestionsAsync(string keyword)
+        {
+            return await Task.Run(async () =>
+            {
+                using (var scope = _serviceProvider.CreateScope())
+                {
+                    var context = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                    var query = context.Products.AsQueryable();
+
+                    if (!string.IsNullOrEmpty(keyword))
+                    {
+                        query = query.Where(p => p.Name.Contains(keyword));
+                    }
+
+                    var suggestions = await query.Select(p => p.Name).Distinct().ToListAsync();
+                    return suggestions;
+                }
+
+            });
+        }
+
+        public List<Models.Voucher> GetAllVouchers()
+        {
+            var db = new List<Models.Voucher>
+            {
+            new Models.Voucher (1,"SAVE10",10,DateTime.Now.AddDays(30), "Giảm 10%"),
+            new Models.Voucher (2,"SAVE20",20,DateTime.Now.AddDays(60), "Giảm 20%"),
+            new Models.Voucher (3, "SAVE30", 30, DateTime.Now.AddDays(10), "Giảm 30%"),
+            new Models.Voucher (4, "WELCOME", 50, DateTime.Now.AddDays(15), "Giảm 50% - Lần đầu mua hàng")
+            };
+
+            return db;
+        }
+
+        public List<PaymentProductThumbnail> GetAllPaymentProducts()
+        {
+            var db = new List<PaymentProductThumbnail>
+            {
+                new PaymentProductThumbnail(1, null, "Tẩy trang loreal", 150000, 2),
+                new PaymentProductThumbnail(2, null, "Tẩy trang loreal", 150000, 2),
+                new PaymentProductThumbnail(3, null, "Tẩy trang Bioderma", 150000, 1)
+            };
+
+            return db;
+        }
+
+        public List<Models.ShippingMethod> GetShippingMethods()
+        {
+            var db = new List<Models.ShippingMethod>
+            {
+                new Models.ShippingMethod(1, "Vận chuyển nhanh", 20000),
+                new Models.ShippingMethod(2, "Vận chuyển hỏa tốc", 54000),
+                new Models.ShippingMethod(3, "Vận chuyển tiết kiệm", 16500)
+            };
+            return db;
         }
 
         public async Task<bool> DeleteFromCartByProductIDAsync(int productId)
@@ -1287,186 +1132,6 @@ namespace Cosmetics_Shop.DataAccessObject
             }
         }
 
-        public async Task<bool> UpdateCartAsync(int cartId, int quantity)
-        {
-            using (var scope = _serviceProvider.CreateScope())
-            {
-                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-                try
-                {
-                    // Tìm kiếm sản phẩm trong giỏ hàng theo cartId
-                    var cartItem = await _databaseContext.Carts
-                        .FirstOrDefaultAsync(c => c.Id == cartId);
-
-                    if (cartItem != null)
-                    {
-                        // Cập nhật số lượng
-                        cartItem.Quantity = quantity;
-
-                        // Cập nhật trạng thái của cartItem
-                        _databaseContext.Carts.Update(cartItem);
-
-                        // Lưu thay đổi vào cơ sở dữ liệu
-                        await _databaseContext.SaveChangesAsync();
-                        return true; // Cập nhật thành công
-                    }
-                    else
-                    {
-                        // Nếu không tìm thấy sản phẩm trong giỏ hàng
-                        return false; // Cập nhật không thành công
-                    }
-                }
-                catch (Exception ex)
-                {
-                    // Xử lý lỗi (có thể ghi log hoặc thông báo cho người dùng)
-                    return false; // Cập nhật không thành công
-                }
-            }
-        }
-
-        #endregion
-
-        #region Rating - Review
-
-        public async Task<List<ReviewThumbnail>> GetListReviewThumbnailByIDProductAsync(int idProduct)
-        {
-            using (var scope = _serviceProvider.CreateScope())
-            {
-                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-                var userSession = _serviceProvider.GetService(typeof(UserSession)) as UserSession;
-                try
-                {
-                    // Tìm kiếm sản phẩm trong giỏ hàng theo cartId và userId
-                    var reviews = await _databaseContext.ProductRatings
-                        .Where(r => r.ProductId == idProduct && r.UserId == userSession.GetId())
-                        .Select(r => new ReviewThumbnail(
-                            r.ProductId,
-                            r.UserId,
-                            r.User.Name,
-                            r.User.AvatarPath,
-                            r.Rating,
-                            r.RatingDate
-                        ))
-                        .ToListAsync();
-                    return reviews;
-                }
-                catch (Exception ex)
-                {
-                    return new List<ReviewThumbnail>();
-                }
-            }
-
-        }
-        #endregion
-        public async Task<List<string>> GetSuggestionsAsync(string keyword)
-        {
-            return await Task.Run(async () =>
-            {
-                using (var scope = _serviceProvider.CreateScope())
-                {
-                    var context = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-                    var query = context.Products.AsQueryable();
-
-                    if (!string.IsNullOrEmpty(keyword))
-                    {
-                        query = query.Where(p => p.Name.Contains(keyword));
-                    }
-
-                    var suggestions = await query.Select(p => p.Name).Distinct().ToListAsync();
-                    return suggestions;
-                }
-
-            });
-        }
-
-        public async Task<List<Models.Voucher>> GetAllVouchersAsync()
-        {
-            using (var scope = _serviceProvider.CreateScope())
-            {
-                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-                try
-                {
-                    var db = await _databaseContext.Vouchers
-                        .Select(p => new Models.Voucher(
-                            p.Id,
-                            p.Code,
-                            p.DiscountAmount,
-                            p.PercentageDiscount,
-                            p.Description,
-                            p.ValidFrom,
-                            p.ValidTo,
-                            p.IsActive
-                            ))
-                        .ToListAsync();
-                    return db;
-                }
-                catch (Exception)
-                {
-                    return new List<Models.Voucher>();
-                }
-            }
-        }
-
-        public List<PaymentProductThumbnail> GetAllPaymentProducts()
-        {
-            var db = new List<PaymentProductThumbnail>
-            {
-                new PaymentProductThumbnail(1, null, "Tẩy trang loreal", 150000, 2),
-                new PaymentProductThumbnail(2, null, "Tẩy trang loreal", 150000, 2),
-                new PaymentProductThumbnail(3, null, "Tẩy trang Bioderma", 150000, 1)
-            };
-
-            return db;
-        }
-
-        #region Shipping Method
-        public async Task<List<Models.ShippingMethod>> GetShippingMethodsAsync()
-        {
-            using (var scope = _serviceProvider.CreateScope())
-            {
-                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-                try
-                {
-                    var db = await _databaseContext.ShippingMethods
-                        .Select(p => new Models.ShippingMethod(
-                            p.Id,
-                            p.MethodName,
-                            p.ShippingCost))
-                        .ToListAsync();
-                    return db;
-                }
-                catch (Exception)
-                {
-                    return new List<Models.ShippingMethod>();
-                }
-            }
-        }
-        #endregion
-
-        #region Payment Method
-        public async Task<List<Models.PaymentMethod>> GetPaymentMethodsAsync()
-        {
-            using (var scope = _serviceProvider.CreateScope())
-            {
-                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-                try
-                {
-                    var db = await _databaseContext.PaymentMethods
-                        .Select(p => new Models.PaymentMethod(
-                            p.Id,
-                            p.MethodName))
-                        .ToListAsync();
-                    return db;
-                }
-                catch (Exception)
-                {
-                    return new List<Models.PaymentMethod>();
-                }
-            }
-        }
-        #endregion
-
-
         #region Order
 
         private DBModels.Order ConvertToDbOrder(Models.Order modelOrder)
@@ -1491,7 +1156,7 @@ namespace Cosmetics_Shop.DataAccessObject
                 Quantity = modelOrder.Quantity
             };
         }
-        
+
         public async Task<Models.Order> AddToOrderAsync(List<PaymentProductThumbnail> listCartProduct, int paymentMethod, int shippingMethod, int voucher)
         {
             // Create a new scope for dependency injection
@@ -1532,7 +1197,7 @@ namespace Cosmetics_Shop.DataAccessObject
                         };
 
                         // Convert to DB model and add to the context
-                        var dbOrderItem = ConvertToDbOrderItem(orderItem);                      
+                        var dbOrderItem = ConvertToDbOrderItem(orderItem);
                         await _databaseContext.OrderItems.AddAsync(dbOrderItem);
                         await DeleteFromCartByProductIDAsync(product.Id);
                     }
@@ -1550,39 +1215,7 @@ namespace Cosmetics_Shop.DataAccessObject
             }
         }
 
-        public async Task<OrderItemDisplay> GetOrderItemDisplayAsync(int productid)
-        {
-            using (var scope = _serviceProvider.CreateScope())
-            {
-                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-                try
-                {
-                    var product = await _databaseContext.Products
-                        .Where(p => p.Id == productid)
-                        .Select(p => new OrderItemDisplay(
-                            p.Id,
-                            p.Name,
-                            1,
-                            p.ImagePath,
-                            p.Price,
-                            p.Price
-                        ))
-                        .FirstOrDefaultAsync();
-
-                    return product;
-                }
-                catch (Exception ex)
-                {
-                    // Log the exception or handle it as needed
-                    return null;
-                }
-            }
-        }
-
-
 
         #endregion
-
-
     }
 }

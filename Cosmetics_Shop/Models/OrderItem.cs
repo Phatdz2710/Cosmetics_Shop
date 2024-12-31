@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Cosmetics_Shop.Models
+﻿namespace Cosmetics_Shop.Models
 {
-    /// <summary>
-    /// Represents an order in the system
-    /// </summary>
     public class OrderItem
     {
         #region Properties
@@ -16,8 +7,8 @@ namespace Cosmetics_Shop.Models
         public int OrderId { get; set; }
         public int ProductId { get; set; }
         public int Quantity { get; set; }
-
-      
+        public int Price { get; set; }
+        public int TotalPrice { get; set; } = 0;
         #endregion
 
         // Constructor
@@ -27,12 +18,14 @@ namespace Cosmetics_Shop.Models
         }
 
         // Parameterized constructor
-        public OrderItem(int id, int orderId, int productId, int quantity)
+        public OrderItem(int id, int orderId, int productId, int quantity, int price, int totalprice)
         {
             Id = id;
             OrderId = orderId;
             ProductId = productId;
             Quantity = quantity;
+            Price = price;
+            TotalPrice = totalprice;    
         }
     }
 }
