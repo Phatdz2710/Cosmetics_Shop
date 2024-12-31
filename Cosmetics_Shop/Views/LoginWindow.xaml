@@ -4,10 +4,10 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Cosmetics_Shop"
-    xmlns:objects="using:Cosmetics_Shop.Views.Objects"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    Title="Cosmetic Shop">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -15,15 +15,48 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="1" 
-              x:Name="image">
-            <Image Source="/Assets/login_background.jpg"
+        <Grid Grid.Column="1" x:Name="LoginBackground">
+            <!-- Nền gradient xanh lá -->
+
+            <Image Source="/Assets/background_login.jpeg"
                    Stretch="Fill"/>
+            <Rectangle Fill="Black"
+                       Opacity="0.5"/>
+
+
+            <!-- Nội dung -->
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
+                <!-- Tiêu đề chính -->
+                <Grid>
+                    <TextBlock Text="COSMETIC SHOP" 
+                               Margin="0 3 3 0"
+                               HorizontalAlignment="Center" 
+                               Foreground="LightGreen" 
+                               FontSize="50" 
+                               FontWeight="Bold" 
+                               TextAlignment="Center" />
+                    <TextBlock Text="COSMETIC SHOP" 
+                               HorizontalAlignment="Center" 
+                               Foreground="White" 
+                               FontSize="50" 
+                               FontWeight="Bold" 
+                               TextAlignment="Center" />
+                    
+                </Grid>
+                
+
+                <!-- Phụ đề hoặc slogan -->
+                <TextBlock Text="Enhancing Natural Beauty" 
+                   HorizontalAlignment="Center" 
+                   Foreground="#E8F5E9" 
+                   FontSize="20" 
+                   TextAlignment="Center" />
+            </StackPanel>
         </Grid>
+
+
 
         <Frame x:Name="LoginSignupFrame"
                Grid.Column="0"/>
-
-
     </Grid>
 </Window>

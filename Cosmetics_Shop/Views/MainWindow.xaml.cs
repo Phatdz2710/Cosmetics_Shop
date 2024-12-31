@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -18,6 +18,9 @@ using Cosmetics_Shop.Views.Pages;
 using Cosmetics_Shop.Services;
 using Cosmetics_Shop.Services.Interfaces;
 using Cosmetics_Shop.Services.EventAggregatorMessages;
+using Microsoft.UI;
+using Microsoft.UI.Windowing;
+using Windows.Graphics;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -25,7 +28,7 @@ using Cosmetics_Shop.Services.EventAggregatorMessages;
 namespace Cosmetics_Shop.Views
 {
     /// <summary>
-    /// Main window
+    /// Main window for the application
     /// </summary>
     public sealed partial class MainWindow : Window
     {
@@ -34,24 +37,39 @@ namespace Cosmetics_Shop.Views
         public MainWindow()
         {
             this.InitializeComponent();
-            this.AppWindow.Resize(new Windows.Graphics.SizeInt32(1700, 900));
+
+            // Setup window size and position
+            this.AppWindow.Resize(new SizeInt32(1700, 900));
+            App.CenterWindow(this.AppWindow);
+            
             
             var navigationService = App.ServiceProvider.GetService(typeof(INavigationService)) as INavigationService;
             navigationService.Initialize(MainPageFrame);
 
             ViewModel = App.ServiceProvider.GetService(typeof(MainViewModel)) as MainViewModel;
 
-            IEventAggregator eventAggregator = App.ServiceProvider.GetService(typeof(IEventAggregator)) as IEventAggregator;
+            var eventAggregator = App.ServiceProvider.GetService(typeof(IEventAggregator)) as IEventAggregator;
+
             // Close window
             eventAggregator.Subscribe<LogoutMessage>(WindowClose);
 
-            IFilePickerService filePickerService = App.ServiceProvider.GetService(typeof(IFilePickerService)) as IFilePickerService;
+            var filePickerService = App.ServiceProvider.GetService(typeof(IFilePickerService)) as IFilePickerService;
             filePickerService.SetWindowFocus(this);
         }
 
+
+
+        /// <summary>
+        /// Close main window when log out (viewmodel sends a log out message
+        /// </summary>
+        /// <param name="message"></param>
         private void WindowClose(LogoutMessage message)
         {
             this.Close();
         }
+
+
+
+        
     }
 }

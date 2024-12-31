@@ -11,17 +11,23 @@ public partial class Order
 
     public int UserId { get; set; }
 
-    public bool? IsApproved { get; set; }
-
-    public string OrderStatus { get; set; }
+    public int OrderStatus { get; set; }
 
     public DateTime OrderDate { get; set; }
+
+    public string ShippingAddress { get; set; }
 
     public int PaymentMethod { get; set; }
 
     public int ShippingMethod { get; set; }
 
+    public int? VoucherId { get; set; }
+
+    public int TotalPrice { get; set; }
+
     public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 
     public virtual User User { get; set; }
+
+    public virtual Voucher Voucher { get; set; }
 }

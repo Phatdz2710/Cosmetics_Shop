@@ -1,3 +1,4 @@
+using Cosmetics_Shop.ViewModels.AdminPageViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -23,9 +24,12 @@ namespace Cosmetics_Shop.Views.AdminPages
     /// </summary>
     public sealed partial class OrderManagerPage : Page
     {
+        public OrderManagerViewModel ViewModel { get; set; }
         public OrderManagerPage()
         {
             this.InitializeComponent();
+            var viewModel = App.ServiceProvider.GetService(typeof(OrderManagerViewModel)) as OrderManagerViewModel;
+            this.ViewModel = viewModel;
         }
     }
 }

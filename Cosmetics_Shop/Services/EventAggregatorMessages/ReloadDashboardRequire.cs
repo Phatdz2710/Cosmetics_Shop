@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Cosmetics_Shop.Services.EventAggregatorMessages
 {
     /// <summary>
-    /// Reload Dashboard Require
+    /// Ping message to reload the dashboard.
     /// </summary>
     public class ReloadDashboardRequire
     {

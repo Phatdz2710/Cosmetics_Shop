@@ -9,17 +9,18 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource AppBackground}">
 
     <UserControl.Resources>
         <converter:VNDCurrencyConverter x:Key="VNDCurrencyConverter"/>
         <converter:AmountThousandToKConvert x:Key="AmountThousandToKConvert"/>
         <converter:StringToImageSourceConverter x:Key="StringToImageSourceConverter"/>
         <converter:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+        <converter:BackgroundColorByRatingConverter x:Key="BackgroundColorByRatingConverter"/>
     </UserControl.Resources>
 
     <ScrollView x:Name="scrollView">
-        <Grid>
+        <Grid >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.1*"/>
                 <ColumnDefinition Width="0.9*"/>
@@ -30,24 +31,24 @@
                 <RowDefinition Height="10"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="20"/>
-                <RowDefinition Height="250"/>
+                <RowDefinition Height="*"/>
                 <RowDefinition Height="20"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
             <Grid Grid.Column="0"
                   Grid.RowSpan="6"
-                  Background="#317256">
+                  Background="{ThemeResource AppBackground}">
             </Grid>
 
             <Grid Grid.Column="2"
                   Grid.RowSpan="6"
-                  Background="#317256">
+                  Background="{ThemeResource AppBackground}">
             </Grid>
 
             <StackPanel Grid.Row="0"
                         Grid.ColumnSpan="4"
-                        Background="#317256">
+                        Background="{ThemeResource AppBackground}">
                 <!--do a breadcrumbar control-->
             </StackPanel>
 
@@ -67,25 +68,33 @@
             
             <!--Khu vuc hien thi anh, ten, gia san pham-->
             <StackPanel Grid.Column="1" Grid.Row="1"
-                        Background="White">
+                        Background="{ThemeResource OrderCellBackground}"
+                        Padding="5" CornerRadius="20">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="0.4*"/>
                         <ColumnDefinition Width="0.5*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Image Grid.Column="0"
-                           x:Name="productImage"
-                           HorizontalAlignment="Center"
-                           Source="{x:Bind ViewModel.ProductDetail.ThumbnailImage, 
-                                     Mode=OneWay, 
-                                     Converter={StaticResource StringToImageSourceConverter}}"
-                           Width="250"
-                           Height="400"
-                        />
+                    <Border Grid.Column="0" CornerRadius="20"  Width="250"
+Height="250">
+                        <Border.Background>
+                            <ImageBrush 
+   x:Name="productImage"
+                        Stretch="Fill"
+   ImageSource="{x:Bind ViewModel.ProductDetail.ThumbnailImage, 
+             Mode=OneWay, 
+             Converter={StaticResource StringToImageSourceConverter}}"
+   
+   
+/>
+                        </Border.Background>
+                        
+                    </Border>
+                    
 
                     <StackPanel Grid.Column="1"
-                                Background="White"
+                                Background="{ThemeResource OrderCellBackground}"
                                 Orientation="Vertical">
                         <TextBlock FontSize="25"
                                    x:Name="productDetailName"
@@ -96,13 +105,12 @@
                         <StackPanel Orientation="Horizontal" 
                                     VerticalAlignment="Center">
                             <Button x:Name="reviewButton"
-                                    Background="White"
-                                    BorderBrush ="White"                  
+                                    Background="{x:Bind ViewModel.ProductDetail.review, Mode=OneWay, Converter={StaticResource BackgroundColorByRatingConverter}}"
+                                                   
                                     FontSize="15"
                                     >
-                                <TextBlock>
+                                <TextBlock Foreground="White">
                                     <Run Text="{x:Bind ViewModel.ProductDetail.review, Mode=OneWay}" />
-                                    <Run Text=" Đánh giá" />
                                 </TextBlock>
                                 
                             </Button>
@@ -118,7 +126,7 @@
 
                         <TextBlock x:Name="priceTextBlock"
                                    FontSize="35"
-                                   Foreground="Red"                      
+                                   Foreground="{ThemeResource AccountPageTotalBillsForeground}"                      
                                    Margin="0 6 0 0"
                                    >
                             <Run Text="{x:Bind ViewModel.ProductDetail.Price, Mode=OneWay,
@@ -165,8 +173,8 @@
                                 <ComboBox x:Name="deliveryComboBox"
                                             Grid.Column="2"
                                             Margin="0,15,0,0"
-                                            Foreground="DarkBlue"
-                                            Background="White"
+                                            Foreground="{ThemeResource AccountPageTotalPriceForeground}"
+                                            Background="{ThemeResource AccountPageBackground}"
                                             FontSize="15"
                                             PlaceholderText="Chọn hình thức vận chuyển"
                                             Width="260"
@@ -175,9 +183,10 @@
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
                                             <TextBlock>
-                                                <Run Text="{Binding Name}"/> - 
-                                                <Run Text="{Binding Price, 
-                                                    Converter={StaticResource VNDCurrencyConverter}}"/> đ
+                                                <Run Text="{Binding MethodName}"/> 
+                                                <!--- 
+                                                <Run Text="{Binding ShippingCost
+                                                    }"/> đ-->
                                             </TextBlock> 
                                         </DataTemplate>
                                     </ComboBox.ItemTemplate>
@@ -241,9 +250,10 @@
                                         Grid.Column="0"
                                         Margin="0 10 0 0"
                                         Height="50"
-                                        Foreground="Red"
-                                        BorderBrush="Red"
-                                        BorderThickness="1.5">
+                                        Foreground="{ThemeResource PurchasePageFilterButtonBackground}"
+                                        BorderBrush="{ThemeResource PurchasePageFilterButtonBackground}"
+                                        BorderThickness="1.5"
+                                        Click="themvaogiohangButton_Click">
                                     <StackPanel Orientation="Horizontal">
                                         <FontIcon Glyph="&#xE7BF;" />
                                         <TextBlock Text="Thêm vào giỏ hàng"
@@ -258,17 +268,12 @@
                                         Height="50"
                                         Width="150"
                                         Foreground="White"
-                                        Background="Red"
+                                        Background="{ThemeResource PurchasePageFilterButtonBackground}"
                                         Command="{x:Bind ViewModel.PaidButtonCommand,
                                                     Mode=OneWay}"
                                         IsEnabled="{x:Bind ViewModel.IsNavigating, 
-                                                    Converter={StaticResource InverseBooleanConverter}}">
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="Mua ngay"
-                                           Margin="10 0 0 0"
-                                   />
-                                    </StackPanel>
-                                </Button>
+                                                    Converter={StaticResource InverseBooleanConverter}}"
+                                        Content="Mua ngay"/>
                             </Grid>
                         </StackPanel>
                     </StackPanel>
@@ -277,20 +282,20 @@
 
             <Grid Grid.Row="2"
                   Grid.ColumnSpan="4"
-                  Background="#317256">
+                  Background="{ThemeResource AppBackground}">
             </Grid>
 
             <Grid Grid.Row="4"
                   Grid.ColumnSpan="4"
-                  Background="#317256">
+                  Background="{ThemeResource AppBackground}">
             </Grid>
 
             <!--Khu vuc danh gia-->
             <Grid x:Name="reviewGrid" 
                   Grid.Column="1"
                   Grid.Row="3"
-                  Background="White"
-                >
+                  Background="{ThemeResource OrderCellBackground}"
+                CornerRadius="20">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="2*"/>
                     <RowDefinition Height="7*"/>
@@ -339,29 +344,26 @@
 
 
                 <ScrollView Grid.Row="1">
-                    <GridView ItemsSource="{x:Bind ViewModel.reviewThumbnail}"
-                              Background="Transparent"
-                              Margin="30 0 20 20">
-                        <GridView.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <ItemsWrapGrid Orientation="Vertical"/>
-                            </ItemsPanelTemplate>
-                        </GridView.ItemsPanel>
+                    <ListView ItemsSource="{x:Bind ViewModel.reviewThumbnail}"
+                              Margin="30 0 20 20"
+                              SelectionMode="None">
 
-                        <GridView.ItemTemplate>
+                        <ListView.ItemTemplate>
                             <DataTemplate>
                                 <controls:ReviewThumbnailControl ViewModel="{Binding}"
                                                             MinWidth="1280"/>
 
                             </DataTemplate>
-                        </GridView.ItemTemplate>
-                    </GridView>
+                        </ListView.ItemTemplate>
+                    </ListView>
                 </ScrollView>
             </Grid>
 
             <StackPanel Grid.Row="5"
                     Grid.Column="1"
-                    Background="White">
+                    Background="{ThemeResource OrderCellBackground}"
+                        CornerRadius="20"
+                        Margin="0 0 0 10">
                 <TextBlock Text="CHI TIẾT SẢN PHẨM"
                            Margin="50 20 0 0"
                            FontSize="20">
@@ -428,8 +430,7 @@
                            TextWrapping="Wrap"
                            Text="{x:Bind ViewModel.ProductDetail.moTa, Mode=OneWay}"
                            Padding="10"
-                           Opacity="0.8"
-                           >
+                           Opacity="0.8">
 
                 </TextBlock>
 

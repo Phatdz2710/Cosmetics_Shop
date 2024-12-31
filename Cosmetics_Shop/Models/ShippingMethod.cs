@@ -8,17 +8,24 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.Models
 {
-    public class ShippingMethod 
+    public class ShippingMethod
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public int Price { get; set; }
 
-        public ShippingMethod(int id, string name, int price)
+        public string MethodName { get; set; }
+
+        public decimal ShippingCost { get; set; }
+        public ShippingMethod(int id, string name, decimal price)
         {
             Id = id;
-            Name = name;
-            Price = price;
+            MethodName = name;
+            ShippingCost = price;
+        }
+
+        public ShippingMethod()
+        {
+            Id = 2;
+            MethodName = "Default Shipping Method";
         }
     }
 }

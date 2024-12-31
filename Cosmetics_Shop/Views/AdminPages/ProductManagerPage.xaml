@@ -15,6 +15,8 @@
     <Page.Resources>
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converter:StringToImageSourceConverter x:Key="StringToImageSourceConverter"/>
+        <converter:IsImageAvailableConverter x:Key="IsImageAvailableConverter"/>
+        <converter:MessageForegroundConverter x:Key="MessageForegroundConverter"/>
     </Page.Resources>
 
     <Grid Background="White"
@@ -43,6 +45,12 @@
                 HorizontalAlignment="Right"
                 Background="#6BE38F"
                 Command="{x:Bind ViewModel.CreateProductCommand, Mode=OneTime}"/>
+
+        <TextBlock Grid.Row="1"
+                Text="{x:Bind ViewModel.Message, Mode=OneWay}"
+                Foreground="{x:Bind ViewModel.Message, Mode=OneWay, Converter={StaticResource MessageForegroundConverter}}"
+                Height="35"
+                HorizontalAlignment="Left"/>
 
         <Grid Grid.Row="2"
               Background="#E0FFF1"
@@ -82,9 +90,9 @@
                    FontSize="17"/>
 
             <TextBlock Grid.Column="4" Text="Category"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Left"
-                   FontSize="17"/>
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Left"
+                       FontSize="17"/>
 
             <TextBlock Grid.Column="5" Text="Inventory"
                    VerticalAlignment="Center"
@@ -156,24 +164,25 @@
             <Rectangle Fill="Black" Opacity="0.7"/>
 
             <Grid Background="White"
-                  Margin="350 100 350 100"
                   CornerRadius="10"
-                  Padding="10">
+                  Height="500"
+                  Width="500"
+                  Padding="20">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="0.5*"/>
-                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="7*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
                 <TextBlock Text="{x:Bind ViewModel.FormTitle, Mode=OneWay}"
-                       VerticalAlignment="Center"
+                       VerticalAlignment="Top"
                        HorizontalAlignment="Center"
                        FontSize="25"
                        FontWeight="SemiBold"/>
 
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="1.5*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
@@ -182,52 +191,81 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
+                    <StackPanel Grid.Column="0"
+                                Grid.Row="0"
+                                Grid.RowSpan="2">
+                        <TextBlock Text="Hình ảnh"
+                                   FontWeight="SemiBold"/>
+                        <Button CornerRadius="10"
+                                Width="250"
+                                Height="120"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Left"
+                                Command="{x:Bind ViewModel.SelectImagePathCommand, Mode=OneTime}">
+                            <Grid>
+                                <!-- Hiển thị hình ảnh nếu có -->
+                                <Image Source="{x:Bind ViewModel.ProductImagePath, Mode=OneWay, Converter={StaticResource StringToImageSourceConverter}}"
+                                       Stretch="Uniform"/>
 
-                    <Button Grid.Column="0"
-                            Grid.Row="0"
-                            Grid.ColumnSpan="2"
-                            Grid.RowSpan="2"
-                            CornerRadius="20"
-                            Height="170"
-                            Width="170"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Left"
-                            Command="{x:Bind ViewModel.SelectImagePathCommand, Mode=OneTime}">
-                        <Image Source="{x:Bind ViewModel.ProductImagePath, Mode=OneWay, Converter={StaticResource StringToImageSourceConverter}}"/>
-                    </Button>
+                                <!-- Hiển thị text nếu không có hình ảnh -->
+                                <TextBlock Text="Nhấn vào để thêm ảnh"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Visibility="{x:Bind ViewModel.ProductImagePath, Mode=OneWay, Converter={StaticResource IsImageAvailableConverter}}" />
+                            </Grid>
+                        </Button>
+                    </StackPanel>
+
+                    
 
                     <StackPanel Grid.Column="1" Grid.Row="0">
-                        <TextBlock Text="Tên"/>
+                        <TextBlock Text="Tên" FontWeight="SemiBold"/>
                         <TextBox PlaceholderText="Tên"
                                  Text="{x:Bind ViewModel.ProductName, Mode=TwoWay}"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="1" Grid.Row="1">
-                        <TextBlock Text="Giá"/>
+                        <TextBlock Text="Giá" FontWeight="SemiBold"/>
                         <TextBox PlaceholderText="Giá"
                                  Text="{x:Bind ViewModel.ProductPrice, Mode=TwoWay}"/>
                     </StackPanel>
 
-                    <StackPanel Grid.Column="0" Grid.Row="2" Margin="0 5 0 0">
-                        <TextBlock Text="Thương hiệu"/>
+                    <StackPanel Grid.Column="1" Grid.Row="2">
+                        <TextBlock Text="Thương hiệu" FontWeight="SemiBold"/>
                         <TextBox PlaceholderText="Thương hiệu"
                                  Text="{x:Bind ViewModel.ProductBrand, Mode=TwoWay}"/>
                     </StackPanel>
 
-                    <StackPanel Grid.Column="1" Grid.Row="2" Margin="5 5 0 0">
-                        <TextBlock Text="Loại sản phẩm"/>
+                    <StackPanel Grid.Column="1" Grid.Row="3">
+                        <TextBlock Text="Loại sản phẩm" FontWeight="SemiBold"/>
                         <TextBox PlaceholderText="Loại sản phẩm"
                                  Text="{x:Bind ViewModel.ProductCategory, Mode=TwoWay}"/>
                     </StackPanel>
 
-                    <StackPanel Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" Grid.ColumnSpan="2" Margin="5 5 0 0">
-                        <TextBlock Text="Tồn kho"/>
+                    <StackPanel Grid.Column="1" Grid.Row="4">
+                        <TextBlock Text="Tồn kho" FontWeight="SemiBold"/>
                         <TextBox PlaceholderText="Tồn kho"
                                  Text="{x:Bind ViewModel.ProductInventory, Mode=TwoWay}"
-                                 Width="200"
                                  HorizontalAlignment="Left"/>
                     </StackPanel>
+
+                    <StackPanel Grid.Column="0" Grid.Row="2"
+                                Grid.RowSpan="3">
+                        <TextBlock Text="Mô tả" FontWeight="SemiBold"/>
+                        <TextBox    Width="250"
+                                    Height="177"
+                                    TextWrapping="Wrap"
+                                    PlaceholderText="Mô tả sản phẩm"
+                                    Text="{x:Bind ViewModel.ProductDescription, Mode=TwoWay}"
+                                    ScrollViewer.VerticalScrollMode="Enabled"
+                                    ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                    HorizontalAlignment="Left"
+                                    FontSize="13" />
+                    </StackPanel>
+
+
                 </Grid>
 
                 <StackPanel Grid.Row="2"

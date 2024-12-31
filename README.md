@@ -20,6 +20,8 @@
 #### Host: localhost,1433
 #### Database name: COSMETIC_SHOP
 
+### Video demo: [Click here](https://youtu.be/L31Z-UMT6LQ)
+
 ### Vào ứng dụng
 
 1. **Đăng ký tài khoản**:

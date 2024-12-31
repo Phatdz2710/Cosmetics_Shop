@@ -1,4 +1,5 @@
 ﻿using Cosmetics_Shop.DataAccessObject.Data;
+using Cosmetics_Shop.DBModels;
 using Cosmetics_Shop.Enums;
 using Cosmetics_Shop.Models;
 using Cosmetics_Shop.Models.Enums;
@@ -11,6 +12,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.System.UserProfile;
+
 
 namespace Cosmetics_Shop.DataAccessObject.Interfaces
 {
@@ -48,14 +50,15 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
             int maxPrice = int.MaxValue);
 
         /// <summary>
-        /// Retrieves the details of a specific product by its ID.
+        /// Asynchronously retrieves a list of new products.
         /// </summary>
-        /// <param name="idProduct">The ID of the product to retrieve.</param>
         /// <returns>
-        /// A <see cref="ProductDetail"/> object containing detailed information about the product.
+        /// A <see cref="ProductThumbnail"/> representing the new products.
         /// </returns>
-
         Task<List<ProductThumbnail>> GetListNewProductAsync();
+
+
+
 
         /// <summary>
         /// Asynchronously retrieves a list of the best-selling products.
@@ -66,6 +69,9 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// </returns>
         Task<List<ProductThumbnail>> GetListBestSellerAsync();
 
+
+
+
         /// <summary>
         /// Asynchronously retrieves a list of recently viewed products for the current user.
         /// </summary>
@@ -75,15 +81,37 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// </returns>
         Task<List<ProductThumbnail>> GetListRecentlyViewAsync();
 
-        Task<List<ProductDetail>> GetProductDetailsAsync();
-        Task<ProductDetail> GetProductDetailAsync(int idProduct);
+
+
+
         /// <summary>
-        /// Asynchronously retrieves a list of the newest products.
+        /// Asynchronously retrieves a detailed information of all product.
         /// </summary>
         /// <returns>
         /// A <see cref="Task"/> representing the asynchronous operation, 
-        /// which returns a list of <see cref="ProductDetail"/> for the newest products.
+        /// which returns a list of <see cref="ProductDetail"/> for all product details.
         /// </returns>
+        Task<List<ProductDetail>> GetProductDetailsAsync();
+
+        /// <summary>
+        /// Asynchronously retrieves a detailed information of a specific product.
+        /// </summary>
+        /// <param name="idProduct"></param>
+        /// <returns>
+        /// A <see cref="Task"/> representing the asynchronous operation
+        /// which returns a <see cref="ProductDetail"/> for product details.
+        /// </returns>
+        Task<ProductDetail> GetProductDetailAsync(int idProduct);
+
+
+        /// <summary>
+        /// Asynchronously retrieves the description of a specific product.
+        /// </summary>
+        /// <param name="productId"></param>
+        /// A <see cref="Task"/> representing the asynchronous operation
+        /// which returns a <see cref="string"/> for product's description.
+        /// <returns></returns>
+        Task<string> GetProductDescriptionAsync(int productId);
 
         #endregion
 
@@ -117,17 +145,139 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
 
         #region Get User Information
 
-        // Get all user information
+        /// <summary>
+        /// Asynchronously retrieves the user all information for a specific user.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns>
+        /// A <see cref="Task"/> representing the asynchronous operation, 
+        /// which returns a <see cref="UserDetail"/> for user's detail.
+        /// </returns>
         Task<UserDetail> GetUserDetailAsync(int userId);
 
-        // Get only one field of user information
+        /// <summary>
+        /// Asynchronously retrieves the user information for a specific user.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="infoType"></param>
+        /// <returns>
+        /// A <see cref="Task"/> representing the asynchronous operation, 
+        /// which returns a <see cref="object"/> for user's information.
+        /// </returns>
         Task<object> GetInformationAsync(int userId, UserInformationType infoType);
 
+
+        /// <summary>
+        /// Asynchronously retrieves the user information for a specific user.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="infoType"></param>
+        /// <param name="newValue"></param>
+        /// <returns>
+        /// A <see cref="Task"/> representing the asynchronous operation,
+        /// which returns a <see cref="bool"/> for result of change information.
+        /// </returns>
         public Task<bool> ChangeUserInformationAsync(int userId, UserInformationType infoType, string newValue);
         
+
+        /// <summary>
+        /// Asynchronously retrieves the user information for a specific user.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="userDetail"></param>
+        /// <returns>
+        /// A <see cref="Task"/> representing the asynchronous operation,
+        /// which returns a <see cref="bool"/> for result of change all information.
+        /// </returns>
         public Task<bool> ChangeAllUserInformationAsync(int userId, UserDetail userDetail);
 
+
+        /// <summary>
+        /// Asynchronously retrieves the user information for a specific user.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="oldPassword"></param>
+        /// <param name="newPassword"></param>
+        /// <returns>
+        /// A <see cref="Task"/> representing the asynchronous operation,
+        /// which returns a <see cref="bool"/> for result of change password.
+        /// </returns>
         public Task<bool> ChangePasswordAsync(int userId, string oldPassword, string newPassword);
+
+
+        #endregion
+
+        #region For Cart And Order
+
+        /// <summary>
+        /// Add a product to the cart.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="List{T}"/> of <see cref="bool"/> objects representing the products in the cart.
+        /// </returns>
+        Task<bool> AddToCartAsync(int productId, int quantity);
+
+        /// <summary>
+        /// Create an order
+        /// </summary>
+        /// <returns>
+        /// A <see cref="List{T}"/> of <see cref="PaymentProductThumbnail"/> objects representing the products in the cart.
+        /// </returns>
+        Task<Models.Order> AddToOrderAsync(List<PaymentProductThumbnail> listCartProduct, int paymentMethod, int shippingMethod, int voucher);
+
+        /// <summary>
+        /// Delete a product to the cart by Card ID.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="List{T}"/> of <see cref="bool"/> objects representing the products in the cart.
+        /// </returns>
+        Task<bool> DeleteFromCartAsync(int cartId);
+
+        /// <summary>
+        /// Delete a product to the cart by Product ID.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="List{T}"/> of <see cref="bool"/> objects representing the products in the cart.
+        /// </returns>
+        Task<bool> DeleteFromCartByProductIDAsync(int productId);
+
+        /// <summary>
+        /// Update cart.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="List{T}"/> of <see cref="bool"/> objects representing the products in the cart.
+        /// </returns>
+        Task<bool> UpdateCartAsync(int cartId, int quantity);
+
+        /// <summary>
+        /// Get the information of a product in the cart.
+        /// </summary>
+        /// <param name="productid"></param>
+        /// <returns></returns>
+        Task<OrderItemDisplay> GetOrderItemDisplayAsync(int productid);
+
+        /// <summary>
+        /// Get the status of products in the cart.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        Task<List<Models.Order>> GetListOrderAsync(int userId, OrderStatus type);
+
+        /// <summary>
+        /// Get the informaton list of products in the cart.
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        Task<List<Models.OrderItem>> GetListOrderItemAsync(int orderId);
+
+        /// <summary>
+        /// Retrieves a list of products in the cart.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="List{T}"/> of <see cref="CartThumbnail"/> objects representing the products in the cart.
+        /// </returns>
+        Task<List<CartThumbnail>> GetListCartProductAsync();
 
 
         #endregion
@@ -193,7 +343,7 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// A <see cref="Task"/> representing the asynchronous operation, 
         /// which returns a boolean indicating whether the update was successful.
         /// </returns>
-        Task<bool> ChangeProductInfoAsync(int id, string newName, string newBrand, string newCategory, int newPrice, int newInventory, int newSold, string newImagePath);
+        Task<bool> ChangeProductInfoAsync(int id, string newName, string newBrand, string newCategory, int newPrice, int newInventory, int newSold, string newImagePath, string newDescription);
 
         /// <summary>
         /// Asynchronously creates a new product.
@@ -211,6 +361,20 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// </returns>
         Task<bool> CreateProductAsync(string name, string brand, string category, int price, int sold, int inventory, string imagePath);
 
+
+        /// <summary>
+        /// Asynchronously retrieves the user's level of a specific user.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns>
+        /// A <see cref="Task"/> representing the asynchronous operation,
+        /// which returns a <see cref="string"/> for user's level.
+        /// </returns>
+        Task<string> GetUserLevelAsync(int userId);
+
+        Task<GetOrderResult> GetListAllOrdersAsync(int page, int orderPerPage);
+        Task<bool>ChangeOrderStatusAsync();
+
         #endregion
 
 
@@ -227,20 +391,12 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
 
 
         /// <summary>
-        /// Retrieves a list of products in the cart.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="List{T}"/> of <see cref="CartThumbnail"/> objects representing the products in the cart.
-        /// </returns>
-        List<CartThumbnail> GetListCartProduct();
-
-        /// <summary>
         /// Retrieves a list of review thumbnails.
         /// </summary>
         /// <returns>
         /// A <see cref="List{T}"/> of <see cref="ReviewThumbnail"/> objects representing the review thumbnails.
         /// </returns>
-        List<ReviewThumbnail> GetListReviewThumbnail();
+        //List<ReviewThumbnail> GetListReviewThumbnail();
 
         /// <summary>
         /// Retrieves a list of review thumbnails for a specific product.
@@ -249,7 +405,7 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// <returns>
         /// A <see cref="List{T}"/> of <see cref="ReviewThumbnail"/> objects associated with the specified product.
         /// </returns>
-        List<ReviewThumbnail> GetListReviewThumbnailByIDProduct(int idProduct);
+        Task<List<ReviewThumbnail>> GetListReviewThumbnailByIDProductAsync(int idProduct);
 
         /// <summary>
         /// Retrieves a list of all available vouchers.
@@ -257,7 +413,7 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// <returns>
         /// A <see cref="List{T}"/> of <see cref="Voucher"/> objects representing the available vouchers.
         /// </returns>
-        List<Voucher> GetAllVouchers();
+        Task<List<Models.Voucher>> GetAllVouchersAsync();
 
         /// <summary>
         /// Retrieves a list of all products available for payment.
@@ -273,7 +429,15 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// <returns>
         /// A <see cref="List{T}"/> of <see cref="ShippingMethod"/> objects representing the available shipping methods.
         /// </returns>
-        List<ShippingMethod> GetShippingMethods();
+        Task<List<Models.ShippingMethod>> GetShippingMethodsAsync();
 
+        /// <summary>
+        /// Retrieves a list of available payment methods.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="List{T}"/> of <see cref="PaymentMethod"/> objects representing the available shipping methods.
+        /// </returns>
+        Task<List<Models.PaymentMethod>> GetPaymentMethodsAsync();
+        
     }
 }

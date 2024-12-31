@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+            <!-- Product Thumbnail -->
+            <SolidColorBrush x:Key="ProductThumbnailBackground" Color="#FFFFFF"/>
+            <SolidColorBrush x:Key="ProductThumbnailForeground" Color="Black"/>
+            <SolidColorBrush x:Key="ProductThumbnailPriceForeground" Color="#52bf90"/>
+            <SolidColorBrush x:Key="ProductThumbnailBrandForeground" Color="#49ab81"/>
+            
+            <!-- Main Background -->
+            <SolidColorBrush x:Key="AppBackground" Color="#E5E5E5"/>
+            
+            <!-- Dashboard -->
+            <SolidColorBrush x:Key="DashboardForeground" Color="#46825E"/>
+            <SolidColorBrush x:Key="DashboardGridViewBackground" Color="#317256"/>
+            
+            <!-- Purchase Page -->
+            <SolidColorBrush x:Key="PurchasePageFilterBackground" Color="White"/>
+            <SolidColorBrush x:Key="PurchasePageFilterForeground" Color="Black"/>
+            <SolidColorBrush x:Key="PurchasePageFilterPriceBoxBackground" Color="White"/>
+            <SolidColorBrush x:Key="PurchasePageFilterButtonBackground" Color="#33B588"/>
+            <SolidColorBrush x:Key="PurchasePageFilterButtonForeground" Color="White"/>
+            <SolidColorBrush x:Key="PurchasePageGridViewForeground" Color="White"/>
+            <SolidColorBrush x:Key="PurchasePageGridViewTotalPriceForeground" Color="LightGreen"/>
+            <SolidColorBrush x:Key="PurchasePageGridViewButtonBackground" Color="#EEFFF5"/>
+            <SolidColorBrush x:Key="PurchasePageGridViewButtonForeground" Color="Black"/>
+            
+            <!-- Account Page -->
+            <SolidColorBrush x:Key="AccountPageBackground" Color="#FDFDFD"/>
+            <SolidColorBrush x:Key="AccountPageChildBackground" Color="#FDFDFD"/>
+            <SolidColorBrush x:Key="AccountPageForeground" Color="Black"/>
+            <SolidColorBrush x:Key="AccountPageSaveButtonForeground" Color="White"/>
+            <SolidColorBrush x:Key="AccountPageButtonNormalBackground" Color="White"/>
+
+            <SolidColorBrush x:Key="AccountPageTotalPriceBackground" Color="#eff6ff"/>
+            <SolidColorBrush x:Key="AccountPageTotalPriceForeground" Color="#2563eb"/>
+            <SolidColorBrush x:Key="AccountPageTotalBillsBackground" Color="#f0fdf4"/>
+            <SolidColorBrush x:Key="AccountPageTotalBillsForeground" Color="#16a34a"/>
+            <SolidColorBrush x:Key="AccountPageTotalProductsBackground" Color="#faf5ff"/>
+            <SolidColorBrush x:Key="AccountPageTotalProductsForeground" Color="#9333ea"/>
+            
+            <!-- Tool Bar -->
+            
+            <!-- Order Page -->
+            <SolidColorBrush x:Key="OrderCellBackground" Color="#FAFAFA"/>
+            
+        </ResourceDictionary>
+
+        <ResourceDictionary x:Key="Dark">
+            <!-- Product Thumbnail -->
+            <SolidColorBrush x:Key="ProductThumbnailBackground" Color="#3A3B3A"/>
+            <SolidColorBrush x:Key="ProductThumbnailForeground" Color="White"/>
+            <SolidColorBrush x:Key="ProductThumbnailPriceForeground" Color="#6EFFBB"/>
+            <SolidColorBrush x:Key="ProductThumbnailBrandForeground" Color="#5BD49C"/>
+
+            <!-- Main Background -->
+            <SolidColorBrush x:Key="AppBackground" Color="#212120"/>
+
+            <!-- Dashboard -->
+            <SolidColorBrush x:Key="DashboardForeground" Color="#51EDBE"/>
+            <SolidColorBrush x:Key="DashboardGridViewBackground" Color="#182622"/>
+
+            <!-- Purchase Page -->
+            <SolidColorBrush x:Key="PurchasePageFilterBackground" Color="#333332"/>
+            <SolidColorBrush x:Key="PurchasePageFilterForeground" Color="White"/>
+            <SolidColorBrush x:Key="PurchasePageFilterPriceBoxBackground" Color="#5C5C5A"/>
+            <SolidColorBrush x:Key="PurchasePageFilterButtonBackground" Color="#33B588"/>
+            <SolidColorBrush x:Key="PurchasePageFilterButtonForeground" Color="White"/>
+            <SolidColorBrush x:Key="PurchasePageGridViewForeground" Color="White"/>
+            <SolidColorBrush x:Key="PurchasePageGridViewTotalPriceForeground" Color="LightGreen"/>
+            <SolidColorBrush x:Key="PurchasePageGridViewButtonBackground" Color="#307052"/>
+            <SolidColorBrush x:Key="PurchasePageGridViewButtonForeground" Color="Black"/>
+
+            <!-- Account Page -->
+            <SolidColorBrush x:Key="AccountPageBackground" Color="#1F1E1E"/>
+            <SolidColorBrush x:Key="AccountPageChildBackground" Color="#333333"/>
+            <SolidColorBrush x:Key="AccountPageForeground" Color="White"/>
+            <SolidColorBrush x:Key="AccountPageSaveButtonForeground" Color="White"/>
+            <SolidColorBrush x:Key="AccountPageButtonNormalBackground" Color="#575656"/>
+            <SolidColorBrush x:Key="AccountPageTotalPriceBackground" Color="#172554"/>
+            <SolidColorBrush x:Key="AccountPageTotalPriceForeground" Color="#60a5fa"/>
+            <SolidColorBrush x:Key="AccountPageTotalBillsBackground" Color="#14532d"/>
+            <SolidColorBrush x:Key="AccountPageTotalBillsForeground" Color="#4ade80"/>
+            <SolidColorBrush x:Key="AccountPageTotalProductsBackground" Color="#581c87"/>
+            <SolidColorBrush x:Key="AccountPageTotalProductsForeground" Color="#c084fc"/>
+
+
+            <SolidColorBrush x:Key="OrderCellBackground" Color="#292929"/>
+
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
+
+</ResourceDictionary>

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Cosmetics_Shop.Services.EventAggregatorMessages
 {
     /// <summary>
-    /// Invalid Price Min Max Message Box
+    /// Request to show a message box with an invalid price range.
     /// </summary>
     public class InvalidPriceMinMaxMessageBox
     {

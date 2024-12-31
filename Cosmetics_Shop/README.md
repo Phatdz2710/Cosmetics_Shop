@@ -8,17 +8,38 @@
 
 ## **Đánh giá chung công việc**
 
+### Milestone 1
 | Thành viên            | Số giờ làm | Đánh giá |
 |-----------------------|------------|----------|
 | **Hồ Nguyễn Ngọc Duy**| 2 giờ      | 8/10     |
-| **Vũ Thành Công**      | 5 giờ      | 9/10     |
-| **Châu Ngọc Phát**     | 8 giờ     | 10/10    |
+| **Vũ Thành Công**      | 3 giờ      | 9/10     |
+| **Châu Ngọc Phát**     | 5 giờ     | 10/10    |
+
+### Milestone 2
+| Thành viên            | Số giờ làm | Đánh giá |
+|-----------------------|------------|----------|
+| **Hồ Nguyễn Ngọc Duy**| 2 giờ      | 8/10     |
+| **Vũ Thành Công**      | 4 giờ      | 9/10    |
+| **Châu Ngọc Phát**     | 5 giờ     | 10/10    |
+
+## **Phân Công Công Việc**
+
+| Thành viên            | Công việc chính                                                                                                     |
+|-----------------------|---------------------------------------------------------------------------------------------------------------------|
+| **Châu Ngọc Phát**     | - Xây dựng cửa sổ và trang: Đăng nhập, Đăng ký, Dashboard, Tìm kiếm sản phẩm, Tài khoản, và Trang Admin.  <br>- Xây dựng lớp **Dao** (MockDao, SqlDao).  <br>- Triển khai: **MVVM Pattern**, **Dependency Injection**, **Event Aggregator**, và **Entity Framework Core**, xử lý logic bất đồng bộ bằng **Async/Await**, tối ưu với **SemaphoreSlim**.  <br>- Cài đặt **Unit Test**.|
+| **Vũ Thành Công**      | - Xây dựng và hoàn thiện các trang: Giỏ hàng, Chi tiết sản phẩm, Thanh toán.  <br>- Tích hợp các tính năng như: Tăng số lượng sản phẩm trong giỏ hàng, tính tổng tiền theo số lượng và voucher giảm giá. <br>- Xây dựng lớp **Dao** (MockDao, SqlDao). <br>- Áp dụng các triển khai ở trên, xử lý logic bất đồng bộ bằng **Async/Await**.|
+| **Hồ Nguyễn Ngọc Duy** | - Phát triển và cải thiện giao diện Trang Admin, Trang tài khoản.|
+
+### **Minh chứng Teamwork:** [Click here](https://docs.google.com/spreadsheets/d/17md4-uG1S-eth66OMy1M5-doLW-ViATCUC3QJ-IMxs0/edit?usp=sharing)
+
+### **Video demo**: [Click here](https://youtu.be/L31Z-UMT6LQ)
 
 ## **Hướng dẫn sử dụng**
 ### Tạo database bằng migration.
 #### Container: cosmetic_sql
 #### Host: localhost,1433
 #### Database name: COSMETIC_SHOP
+
 
 ### Vào ứng dụng
 
@@ -30,6 +51,10 @@
    
    **Tài khoản dành cho Admin**:
     - Username: admin
+    - Password: 123
+
+   **Tài khoản dành cho User**:
+    - Username: ngocphat
     - Password: 123
 
 # **Chức Năng Ứng Dụng**
@@ -127,14 +152,6 @@
 - Kiểm thử chức năng tìm kiếm sản phẩm.
 - Kiểm thử chức năng thay đổi mật khẩu.
 - Kiểm thử chức năng thêm, xóa tài khoản.
-
-## **Phân Công Công Việc**
-
-| Thành viên            | Công việc chính                                                                                                     |
-|-----------------------|---------------------------------------------------------------------------------------------------------------------|
-| **Châu Ngọc Phát**     | - Xây dựng cửa sổ và trang: Đăng nhập, Đăng ký, Dashboard, Tìm kiếm sản phẩm, Tài khoản, và Trang Admin.  <br>- Xây dựng lớp **Dao** (MockDao, SqlDao).  <br>- Triển khai: **MVVM Pattern**, **Dependency Injection**, **Event Aggregator**, và **Entity Framework Core**, xử lý logic bất đồng bộ bằng **Async/Await**, tối ưu với **SemaphoreSlim**.  <br>- Cài đặt **Unit Test**.|
-| **Vũ Thành Công**      | - Xây dựng và hoàn thiện các trang: Giỏ hàng, Chi tiết sản phẩm, Thanh toán.  <br>- Tích hợp các tính năng như: Tăng số lượng sản phẩm trong giỏ hàng, tính tổng tiền theo số lượng và voucher giảm giá. <br>- Xây dựng lớp **Dao** (MockDao, SqlDao). <br>- Áp dụng các triển khai ở trên, xử lý logic bất đồng bộ bằng **Async/Await**.|
-| **Hồ Nguyễn Ngọc Duy** | - Phát triển và cải thiện giao diện Trang Admin, Trang tài khoản.|
 
 ## **Công Nghệ và Kỹ Thuật Đã Sử Dụng**
 - **Dependency Injection**: Quản lý và tối ưu hóa việc sử dụng các dịch vụ.

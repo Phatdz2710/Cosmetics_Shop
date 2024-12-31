@@ -404,6 +404,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                     productThumbnailViewModel.GetType()
                         .GetProperty("ProductThumbnail")
                         .SetValue(productThumbnailViewModel, productQueryResult.Products[i]);
+
                     ProductThumbnails.Add(productThumbnailViewModel as ProductThumbnailViewModel);
                 }
 

@@ -15,6 +15,7 @@ namespace Cosmetics_Shop.Models
         public string   Username    { get; set; }
         public string   Password    { get; set; }
         public string   Role        { get; set; }
+        public int      UserID      { get; set; }
 
         public Account()
         {
@@ -24,12 +25,13 @@ namespace Cosmetics_Shop.Models
             Role = "";
         }
 
-        public Account(int id, string username, string password, string role)
+        public Account(int id, string username, string password, string role, int userID)
         {
             ID = id;
             Username = username;
             Password = password;
             Role = role;
+            UserID = userID;
         }
     }
 }

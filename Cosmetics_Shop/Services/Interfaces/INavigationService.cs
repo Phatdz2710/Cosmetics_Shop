@@ -31,11 +31,15 @@ namespace Cosmetics_Shop.Services
         void NavigateTo<TPage>();
 
         /// <summary>
+        /// Navigates to the specified page type with the specified parameter.
+        /// </summary>
+        /// <typeparam name="TPage"></typeparam>
+        /// <param name="parameter"></param>
+        void NavigateTo<TPage>(object parameter);
+
+        /// <summary>
         /// Navigates back to the previous page in the navigation stack, if one exists.
         /// </summary>
-        /// 
-
-        void NavigateTo<TPage>(object parameter);
         void GoBack();
     }
 

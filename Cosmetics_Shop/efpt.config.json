@@ -1,5 +1,5 @@
 ﻿{
-   "CodeGenerationMode": 4,
+   "CodeGenerationMode": 5,
    "ContextClassName": "DatabaseContext",
    "ContextNamespace": null,
    "FilterSchemas": false,
@@ -19,6 +19,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[carts]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[order_items]",
          "ObjectType": 0
       },
@@ -27,11 +31,27 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[payment_methods]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[product_ratings]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[products]",
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[shipping_methods]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[users]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[vouchers]",
          "ObjectType": 0
       }
    ],
@@ -40,6 +60,7 @@
    "UseAsyncStoredProcedureCalls": true,
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": false,
+   "UseDatabaseNamesForRoutines": true,
    "UseDateOnlyTimeOnly": true,
    "UseDbContextSplitting": false,
    "UseDecimalDataAnnotationForSprocResult": true,

@@ -1,14 +1,21 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using Cosmetics_Shop.DataAccessObject.Interfaces;
+using Cosmetics_Shop.Models;
+using Cosmetics_Shop.Services.Interfaces;    
 using Cosmetics_Shop.ViewModels.UserControlViewModels;
+using Cosmetics_Shop.Views.Pages;
+using Microsoft.EntityFrameworkCore.Storage.Json;
+using Microsoft.UI.Xaml;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.UI.Input;
 
 namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
 {
@@ -29,9 +36,16 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
         private int     _totalPages;
         private int     _accountsPerPage = 10;
         private int     _totalAccounts;
-        private bool    _showForm = false;
+        private bool    _showFormAddAccount = false;
+        private bool    _showFormShowMore = false;
         private string  _username = "";
         private string  _password = "";
+        private string  _name = "";
+        private string  _numberPhone = "";
+        private string  _address = "";
+        private string  _email = "";
+        private string  _message = "";
+
         private int     _role = 0;
         private int     _id = 0;
         private string  _formTitle = "";
@@ -57,6 +71,18 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(CurrentPage));
             }
         }
+
+        public string Message
+        {
+            get => _message;
+            set
+            {
+                _message = value;
+                OnPropertyChanged(nameof(Message));
+            }
+        }
+
+
         public int TotalPages
         {
             get { return _totalPages; }
@@ -75,15 +101,25 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(TotalAccounts));
             }
         }
-        public bool ShowForm
+        public bool ShowFormAddAccount
         {
-            get { return _showForm; }
+            get { return _showFormAddAccount; }
             set
             {
-                _showForm = value;
-                OnPropertyChanged(nameof(ShowForm));
+                _showFormAddAccount = value;
+                OnPropertyChanged(nameof(ShowFormAddAccount));
             }
         }
+        public bool ShowFormShowMore
+        {
+            get { return _showFormShowMore; }
+            set
+            {
+                _showFormShowMore = value;
+                OnPropertyChanged(nameof(ShowFormShowMore));
+            }
+        }
+
         public string Username
         {
             get { return _username; }
@@ -102,6 +138,43 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(Password));
             }
         }
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                _name = value;
+                OnPropertyChanged(nameof(Name));
+            }
+        }
+        public string NumberPhone
+        {
+            get { return _numberPhone; }
+            set
+            {
+                _numberPhone = value;
+                OnPropertyChanged(nameof(NumberPhone));
+            }
+        }
+        public string Address
+        {
+            get { return _address; }
+            set
+            {
+                _address = value;
+                OnPropertyChanged(nameof(Address));
+            }
+        }
+        public string Email
+        {
+            get { return _email; }
+            set
+            {
+                _email = value;
+                OnPropertyChanged(nameof(Email));
+            }
+        }
+
         public int Role
         {
             get { return _role; }
@@ -154,7 +227,7 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
         }
 
         /// <summary>
-        /// Reload data
+        /// Reload data command
         /// </summary>
         private void reloadCommand()
         {
@@ -162,12 +235,12 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
         }
 
         /// <summary>
-        /// Command to create account
+        /// Show form to create account command
         /// </summary>
         private void createAccountCommand()
         {
             AcceptFormCommand = new RelayCommand(acceptCreateAccountCommand);
-            ShowForm = true;
+            ShowFormAddAccount = true;
             FormTitle = "Tạo tài khoản";
             Username = "";
             Password = "";
@@ -188,64 +261,75 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
 
             foreach (var account in accountSearchResult.ListAccounts)
             {
-                ListAccounts.Add(new AccountCellViewModel(account.ID, account.Username, account.Password, account.Role,
+                var userLevel = await _dao.GetUserLevelAsync(account.UserID);
+
+                ListAccounts.Add(new AccountCellViewModel(account.ID, account.Username, account.Role, userLevel, account.UserID,
 
                     // Edit command for each cell
-                    editCommand: new RelayCommand(() =>
-                    {
-                        AcceptFormCommand = new RelayCommand(acceptChangeAccountInformationCommand);
-                        ShowForm = true;
-                        FormTitle = "Chỉnh sửa tài khoản";
-                        Username = account.Username;
-                        Password = account.Password;
-                        Role = account.Role == "User" ? 0 : 1;
-                        _id = account.ID;
-                    }),
+                    showMoreCommand: new RelayCommand<int>(ShowMoreCommand),
 
                     // Delete command for each cell
                     deleteCommand: new RelayCommand(async () =>
                     {
                         await _dao.DeleteAccount(account.ID);
+                        Message = "Xóa tài khoản thành công!";
                         LoadData();
                     })));
             }
         }
 
         /// <summary>
-        /// Command to accept change account information
+        /// Show form to show more information command
         /// </summary>
-        private async void acceptChangeAccountInformationCommand()
+        /// <param name="userId"></param>
+        private async void ShowMoreCommand(int userId)
         {
-            ShowForm = false;
-            var result = await _dao.ChangeAccountInfoAsync(_id, Username, Password, Role == 0 ? "User" : "Admin");
-
-            if (result)
-            {
-                LoadData();
-            }
+            var userInfo = await _dao.GetUserDetailAsync(userId);
+            AcceptFormCommand = new RelayCommand(CloseShowMoreForm);
+            ShowFormShowMore = true;
+            FormTitle = "Xem thêm thông tin";
+            Name = userInfo.Name;
+            Email = userInfo.Email;
+            NumberPhone = userInfo.Phone;
+            Address = userInfo.Address;
         }
 
         /// <summary>
-        /// Command to accept create account
+        /// Close show more form command
+        /// </summary>
+        private void CloseShowMoreForm()
+        {
+            ShowFormShowMore = false;
+        }
+
+        /// <summary>
+        /// Accept create account command
         /// </summary>
         private async void acceptCreateAccountCommand()
         {
-            ShowForm = false;
+            ShowFormAddAccount = false;
             var result = await _dao.CreateAccountAsync(Username, Password, Role == 0 ? "User" : "Admin");
 
             if (result)
             {
+                Message = "Thêm tài khoản thành công!";
                 LoadData();
+            }
+            else
+            {
+                Message = "Thêm tài khoản thất bại!";
             }
         }
 
         /// <summary>
-        /// Command to cancel form
+        /// Cancel form command
         /// </summary>
         private void cancelFormCommand()
         {
-            ShowForm = false;
+            ShowFormAddAccount = false;
         }
+
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 

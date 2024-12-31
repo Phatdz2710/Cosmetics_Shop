@@ -17,9 +17,15 @@ public partial class User
 
     public string Address { get; set; }
 
+    public DateTime CreateTime { get; set; }
+
     public string AvatarPath { get; set; }
 
     public virtual ICollection<Account> Accounts { get; set; } = new List<Account>();
 
+    public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
+
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+
+    public virtual ICollection<ProductRating> ProductRatings { get; set; } = new List<ProductRating>();
 }

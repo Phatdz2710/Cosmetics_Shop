@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Cosmetics_Shop.Services
 {
     /// <summary>
-    /// Login Result
+    /// Result of a login attempt.
     /// </summary>
     public struct LoginResult
     {

@@ -23,7 +23,7 @@ using Cosmetics_Shop.Models; // Adjust the namespace as necessary
 namespace Cosmetics_Shop.Views.Pages
 {
     /// <summary>
-    /// Cart page
+    /// Cart page for user
     /// </summary>
     public sealed partial class CartPage : Page
     {
@@ -34,13 +34,20 @@ namespace Cosmetics_Shop.Views.Pages
         {
             this.InitializeComponent();
             ViewModel = App.ServiceProvider.GetService(typeof(CartPageViewModel)) as CartPageViewModel;
-            voucherComboBox.ItemsSource = ViewModel.GetAllVouchers();
+
+            // Moved the async code to Loaded event
+            this.Loaded += CartPage_Loaded;
         }
 
+        private async void CartPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Now you can safely call async code here
+            voucherComboBox.ItemsSource = await ViewModel.GetAllVouchersAsync();
+        }
 
         private void voucherComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (voucherComboBox.SelectedItem is Voucher selectedVoucher)
+            if (voucherComboBox.SelectedItem is Models.Voucher selectedVoucher)
             {
                 ViewModel.ApplyVoucher(selectedVoucher);
             }

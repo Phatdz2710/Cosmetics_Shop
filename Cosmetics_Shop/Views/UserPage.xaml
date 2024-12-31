@@ -14,6 +14,7 @@
     <Page.Resources>
         <converter:StringToImageSourceConverter x:Key="StringToImageSourceConverter"/>
     </Page.Resources>
+   
 
 
     <Grid>
@@ -30,20 +31,28 @@
         <Grid Grid.Row="1"
               Background="Black">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.5*"/>
-                <ColumnDefinition Width="0.3*"/>
-                <ColumnDefinition Width="0.3*"/>
-                <ColumnDefinition Width="2.5*"
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="6*"
                                   MinWidth="700"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="1.5*"
+                                  MinWidth="130"/>
+                <ColumnDefinition Width="1.2*"
+                                  MinWidth="120"/>
+
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0"
-                       Text="LOGO"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       Foreground="White"
-                       FontSize="30"/>
+            <Border CornerRadius="20"
+                    Height="57"
+                    Width="57"
+                    HorizontalAlignment="Center">
+                <Image Source="/Assets/app_logo.png"
+                       Stretch="Uniform"/>       
+            </Border>
+            
 
             <Button Grid.Column="1"
                     HorizontalAlignment="Center"
@@ -75,15 +84,14 @@
                         HorizontalAlignment="Center"
                         Orientation="Horizontal">
                 <AutoSuggestBox Grid.Column="0"
-                             Background="White"
                              PlaceholderText="Tìm kiếm"
                              Margin="10 10 0 10"
+                             Background="{ThemeResource AppBackground}"
                              Width="600"
                              VerticalAlignment="Center"
                              BorderThickness="2"
                              CornerRadius="5"
                              Text="{x:Bind ViewModel.Keyword, Mode=TwoWay}"
-                             TextChanged="AutoSuggestBox_TextChanged"
                              ItemsSource="{x:Bind ViewModel.Suggestions}">
                 </AutoSuggestBox>
 
@@ -98,21 +106,27 @@
                         CornerRadius="5"
                         Command="{x:Bind ViewModel.SearchButtonCommand, Mode=OneTime}"/>
             </StackPanel>
+            
+            <Button Grid.Column="4"
+                    Height="60"
+                    Width="60"
+                    HorizontalAlignment="Center"
+                    Background="Black"
+                    Command="{x:Bind ViewModel.CartButtonCommand, Mode=OneTime}"
+                    ToolTipService.ToolTip="Giỏ hàng"
+                    ToolTipService.Placement="Left">
+                <Image Source="/Assets/cart_icon_1.png"/>
+            </Button>
 
-            <StackPanel Grid.Column="4"
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Left"
-                        Orientation="Horizontal">
-                <Button Height="60"
-                        Width="60"
-                        Background="Black"
-                        Command="{x:Bind ViewModel.CartButtonCommand, Mode=OneTime}"
-                        ToolTipService.ToolTip="Giỏ hàng"
-                        ToolTipService.Placement="Left">
-                    <Image Source="/Assets/cart_icon_1.png"/>
-                </Button>
+            <Button Grid.Column="5"
+                    Height="60" Width="60" HorizontalAlignment="Center" Background="Black"
+                    Command="{x:Bind ViewModel.OrderButtonCommand, Mode=OneTime}"
+                    ToolTipService.ToolTip="Theo dõi đơn hàng"
+                    ToolTipService.Placement="Left">
+                <Image Source="/Assets/order_icon.png"/>
+            </Button>
 
-                <Button Background="Black"
+            <Button Grid.Column="6" Background="Black" HorizontalAlignment="Center"
                         Command="{x:Bind ViewModel.AccountButtonCommand, Mode=OneTime}"
                         ToolTipService.ToolTip="Tài khoản"
                         ToolTipService.Placement="Left">
@@ -124,14 +138,27 @@
                             <Image Source="{x:Bind ViewModel.AvatarPath, Mode=OneWay, Converter={StaticResource StringToImageSourceConverter}}"
                                    Stretch="UniformToFill"/>
                         </Border>
-                            
+
                         <TextBlock Text="{x:Bind ViewModel.Username, Mode=OneWay}"
                                    VerticalAlignment="Center"
                                    Margin="10 0 0 0"
                                    Foreground="White"/>
                     </StackPanel>
                 </Button>
-            </StackPanel>
+
+
+            <ComboBox Grid.Column="7" x:Name="ChangeThemeCombobox"
+                      Width="100"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      Margin="20 0 0 0"
+                      Background="{ThemeResource AppBackground}"
+                      SelectionChanged="ThemeComboBox_SelectionChanged">
+
+                <ComboBoxItem Content="Light" Tag="Light" />
+                <ComboBoxItem Content="Dark" Tag="Dark" />
+                <ComboBoxItem Content="System" Tag="Default" />
+            </ComboBox>
         </Grid>
 
         <Frame x:Name="rootFrame"

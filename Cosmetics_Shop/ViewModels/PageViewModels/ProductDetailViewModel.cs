@@ -28,8 +28,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         #region Fields
         private ProductDetail _productDetail;
         private int _shippingFee;
-        private ShippingMethod _currentShippingMethod;
-        //private PaymentProductThumbnail _productToPayment;
+        private Models.ShippingMethod _currentShippingMethod;
         private List<PaymentProductThumbnail> _productsToPayment;
         private bool _isNavigating;
         private int _amount = 1;
@@ -71,18 +70,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 }
             }
         }
-        //public PaymentProductThumbnail ProductToPayment
-        //{
-        //    get => _productToPayment;
-        //    set
-        //    {
-        //        if (_productToPayment != value)
-        //        {
-        //            _productToPayment = value;
-        //            OnPropertyChanged(); // Notify UI of change
-        //        }
-        //    }
-        //}
+
         public List<PaymentProductThumbnail> ProductsToPayment // Changed to List
         {
             get => _productsToPayment;
@@ -139,10 +127,10 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         }
 
         #region Reviews
-        public void LoadInitialReviews(int idProduct)
+        public async Task LoadInitialReviews(int productID)
         {
             reviewThumbnail = new ObservableCollection<ReviewThumbnailViewModel>();
-            var review = _dao.GetListReviewThumbnailByIDProduct(idProduct);
+            var review = await _dao.GetListReviewThumbnailByIDProductAsync(productID);
             foreach (var item in review)
             {
                 var reviewThumbnailViewModel = _serviceProvider.GetService(typeof(ReviewThumbnailViewModel)) as ReviewThumbnailViewModel;
@@ -151,11 +139,10 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
         }
 
-        public void ShowAllReviews()
+        public async void ShowAllReviews()
         {
             // Fetch all reviews for the product
-            //var allReviews = _dao.GetListReviewThumbnailByIDProduct(ProductDetail.Id);
-            var allReviews = _dao.GetListReviewThumbnailByIDProduct(1);
+            var allReviews = await _dao.GetListReviewThumbnailByIDProductAsync(_productDetail.Id);
 
             // Update the reviewThumbnail collection and notify the change
             reviewThumbnail.Clear(); // Clear existing reviews
@@ -168,11 +155,10 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             OnPropertyChanged(nameof(reviewThumbnail)); // Notify that the reviewThumbnail has changed
         }
 
-        public void FilterReviewsByStarNumber(int starNumber)
+        public async void FilterReviewsByStarNumber(int starNumber)
         {
             // Fetch all reviews for the product
-            //var allReviews = _dao.GetListReviewThumbnailByIDProduct(ProductDetail.Id);
-            var allReviews = _dao.GetListReviewThumbnailByIDProduct(1);
+            var allReviews = await _dao.GetListReviewThumbnailByIDProductAsync(_productDetail.Id);
 
             // Filter reviews based on the selected star number
             var filteredReviews = allReviews
@@ -209,9 +195,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         #endregion
 
         #region Shipping
-        public List<ShippingMethod> GetShippingMethods()
+        public async Task<List<Models.ShippingMethod>> GetShippingMethodsAsync()
         {
-            return _dao.GetShippingMethods(); // Assuming _dao is initialized correctly in the constructor
+            return await _dao.GetShippingMethodsAsync(); 
         }
         #endregion
 
@@ -249,25 +235,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         #endregion
 
         #region Cart
-        public void LoadListCart()
+        public async Task<bool> AddToCartAsync(int productId, int quantity)
         {
-            Cart = new ObservableCollection<CartThumbnailViewModel>();
-
-            var cartProduct = _dao.GetListCartProduct();
-
-            for (int i = 0; i < cartProduct.Count; i++)
-            {
-                var cartThumbnailViewModel = _serviceProvider.GetService(typeof(CartThumbnailViewModel));
-                cartThumbnailViewModel.GetType().GetProperty("CartThumbnail").SetValue(cartThumbnailViewModel, cartProduct[i]);
-                Cart.Add(cartThumbnailViewModel as CartThumbnailViewModel);
-            }
-        }
-
-        public void AddNewProductToCart(CartThumbnail cart)
-        {
-            var cartThumbnailViewModel = _serviceProvider.GetService(typeof(CartThumbnailViewModel));
-            cartThumbnailViewModel.GetType().GetProperty("CartThumbnail").SetValue(cartThumbnailViewModel, cart);
-            Cart.Add(cartThumbnailViewModel as CartThumbnailViewModel);
+            // Gọi phương thức AddToCartAsync để thêm sản phẩm vào giỏ hàng
+            bool result = await _dao.AddToCartAsync(productId, quantity);
+            return result;
         }
         #endregion
 

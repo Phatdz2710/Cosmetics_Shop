@@ -9,7 +9,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     NavigationCacheMode="Enabled"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource AppBackground}">
 
     <ScrollView>
         <Grid>
@@ -29,17 +29,18 @@
                        Text="Sản phẩm mới nhất"
                        FontSize="20"
                            HorizontalAlignment="Center"
-                       Foreground="#317256"
+                       Foreground="{ThemeResource DashboardForeground}"
                        FontWeight="Bold"/>
 
                 <GridView Grid.Row="1"
                           CornerRadius="10"
                           ItemsSource="{x:Bind ViewModel.NewProducts}"
-                          Background="	#317256"
+                          Background="{ThemeResource DashboardGridViewBackground}"
                           Padding="10"
                           HorizontalContentAlignment="Center"
                           HorizontalAlignment="Center"
-                          MaxHeight="510">
+                          MaxHeight="510"
+                          SelectionMode="None">
 
                     <GridView.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -69,17 +70,18 @@
                            Text="Sản phẩm bán chạy nhất"
                            FontSize="20"
                            HorizontalAlignment="Center"
-                           Foreground="#317256"
+                           Foreground="{ThemeResource DashboardForeground}"
                            FontWeight="Bold"/>
 
                 <GridView Grid.Row="1"
                           CornerRadius="10"
                           ItemsSource="{x:Bind ViewModel.BestSeller}"
-                          Background="	#317256"
+                          Background="{ThemeResource DashboardGridViewBackground}"
                           Padding="10"
                           HorizontalContentAlignment="Center"
                           HorizontalAlignment="Center"
-                          MaxHeight="510">
+                          MaxHeight="510"
+                          SelectionMode="None">
 
                     <GridView.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -109,17 +111,18 @@
                            Text="Sản phẩm bạn đã mua gần đây"
                            FontSize="20"
                            HorizontalAlignment="Center"
-                           Foreground="#317256"
+                           Foreground="{ThemeResource DashboardForeground}"
                            FontWeight="Bold"/>
 
                 <GridView Grid.Row="1"
                           CornerRadius="10"
                           ItemsSource="{x:Bind ViewModel.RecentlyView}"
-                          Background="	#317256"
+                          Background="{ThemeResource DashboardGridViewBackground}"
                           Padding="10"
                           HorizontalContentAlignment="Center"
                           HorizontalAlignment="Center"
-                          MaxHeight="510">
+                          MaxHeight="510"
+                          SelectionMode="None">
 
                     <GridView.ItemsPanel>
                         <ItemsPanelTemplate>
