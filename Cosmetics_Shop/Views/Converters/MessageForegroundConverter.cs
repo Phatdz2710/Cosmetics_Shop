@@ -19,10 +19,10 @@ namespace Cosmetics_Shop.Views.Converters
         {
             if (value is string message)
             {
-                if (message == "Tạo tài khoản thành công!" || 
-                    message == "Thêm sản phẩm thành công!" || 
+                if (message == "Tạo tài khoản thành công!" ||
+                    message == "Thêm sản phẩm thành công!" ||
                     message == "Thêm tài khoản thành công!" ||
-                    message == "Đổi mật khẩu thành công!" || 
+                    message == "Đổi mật khẩu thành công!" ||
                     message == "Xóa sản phẩm thành công!" ||
                     message == "Xóa tài khoản thành công!" ||
                     message == "Sửa sản phẩm thành công!" ||
@@ -41,3 +41,4 @@ namespace Cosmetics_Shop.Views.Converters
         }
     }
 }
+
