@@ -13,10 +13,11 @@
         <converter:VNDCurrencyConverter x:Key="VNDCurrencyConverter"/>
         <converter:NameProductOnThumbnail x:Key="NameProductOnThumbnailConverter"/>
         <converter:AmountThousandToKConvert x:Key="AmountThousandToKConvert"/>
+        <converter:StringToImageSourceConverter x:Key="StringToImageSourceConverter"/>
     </UserControl.Resources>
 
-    <Grid Background="White"
-          Margin="5 0 0 0">
+    <Grid Margin="5 0 0 0"
+          CornerRadius="5">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.1*"/>
@@ -33,32 +34,37 @@
                       Margin="20 0 0 0"
                       IsChecked="{x:Bind ViewModel.IsChecked, Mode=TwoWay}"/>
 
-            <Ellipse Grid.Column="1"
-                     Fill="Gray" 
-                     Width="80"
-                     Height="80"
-                     Margin="10 10 0 10"
-                     />
+            <Border Grid.Column="1"
+                     Width="60"
+                     Height="60"
+                     Margin="10 10 0 10">
+                <Image Source="{x:Bind ViewModel.CartThumbnail.ProductImage, Mode=OneWay, Converter={StaticResource StringToImageSourceConverter}}"/>
+            </Border>
             <TextBlock Grid.Column="2"
                        Grid.ColumnSpan="2"
+                       VerticalAlignment="Center"
                        x:Name="productNameTextBlock"
-                       Margin="10 40 0 0"
+                       Margin="10 0 0 0"
                        Text="{x:Bind ViewModel.CartThumbnail.ProductName, Mode=OneWay}"
-                       TextWrapping="Wrap"/>
+                       TextWrapping="Wrap"
+                       Foreground="{ThemeResource AccountPageForeground}"/>
 
             <TextBlock Grid.Column="4" 
-                       x:Name="price"
-                       Margin="30 40 0 0"
-                       Text="{x:Bind ViewModel.CartThumbnail.Price, 
-                                     Mode=OneWay,
-                                     Converter={StaticResource VNDCurrencyConverter}}"
->
+                       Margin="0 0 30 0"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Center"
+                       Foreground="{ThemeResource AccountPageForeground}">
+                <Run Text="{x:Bind ViewModel.CartThumbnail.Price, 
+                      Mode=OneWay,
+                      Converter={StaticResource VNDCurrencyConverter}}"/>
+                <Run Text="đ"/>
             </TextBlock>
 
             <StackPanel Grid.Column="5"
                                     Orientation="Horizontal"
                                     VerticalAlignment="Center">
-                <Button Name="minusButton" Width="35" Height="35" Content="-" Click="minusButton_Click"/>
+                <Button Name="minusButton" Width="35" Height="35" Content="-" Click="minusButton_Click"
+                        Foreground="{ThemeResource AccountPageForeground}"/>
                 <TextBox x:Name="amountTextBox" 
                          Height="35" 
                          Width="5" 
@@ -66,25 +72,30 @@
                                        Mode=TwoWay, 
                                        UpdateSourceTrigger=PropertyChanged}"
                          TextAlignment="Center"
-                         />
-                <Button Name="plusButton" Width="35" Height="35" Content="+" Click="plusButton_Click"/>
+                         Foreground="{ThemeResource AccountPageForeground}"/>
+                <Button Name="plusButton" Width="35" Height="35" Content="+" Click="plusButton_Click"
+                        Foreground="{ThemeResource AccountPageForeground}"/>
             </StackPanel>
 
             <TextBlock Grid.Column="6" 
                                    x:Name="toltalPriceTextBlock"
-                                   Margin="30 40 0 0"
-                                   Text="{x:Bind ViewModel.CartThumbnail.TotalPrice, 
-                                            Mode=OneWay,
-                                            Converter={StaticResource VNDCurrencyConverter}}"
+                       VerticalAlignment="Center" HorizontalAlignment="Right"
+                       Foreground="{ThemeResource AccountPageForeground}"
+                                   
 >
+                <Run Text="{x:Bind ViewModel.CartThumbnail.TotalPrice, 
+         Mode=OneWay,
+         Converter={StaticResource VNDCurrencyConverter}}"/>
+<Run Text="đ"/>
             </TextBlock>
 
             <Button Grid.Column="7" 
                     x:Name="deleteButton"
                     Margin="30 0 0 0"
                     Content="Xóa"
-                    BorderBrush="White">
-                <!--Command="{Binding DeleteCommand}"-->
+                    Command="{Binding DeleteCommand}"
+                    Foreground="White"
+                    Background="Tomato">
             </Button>
 
         </Grid>

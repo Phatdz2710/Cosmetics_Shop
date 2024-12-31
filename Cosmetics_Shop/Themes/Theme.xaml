@@ -45,6 +45,9 @@
             
             <!-- Tool Bar -->
             
+            <!-- Order Page -->
+            <SolidColorBrush x:Key="OrderCellBackground" Color="#FAFAFA"/>
+            
         </ResourceDictionary>
 
         <ResourceDictionary x:Key="Dark">
@@ -80,12 +83,13 @@
             <SolidColorBrush x:Key="AccountPageButtonNormalBackground" Color="#575656"/>
             <SolidColorBrush x:Key="AccountPageTotalPriceBackground" Color="#172554"/>
             <SolidColorBrush x:Key="AccountPageTotalPriceForeground" Color="#60a5fa"/>
-
             <SolidColorBrush x:Key="AccountPageTotalBillsBackground" Color="#14532d"/>
             <SolidColorBrush x:Key="AccountPageTotalBillsForeground" Color="#4ade80"/>
-
             <SolidColorBrush x:Key="AccountPageTotalProductsBackground" Color="#581c87"/>
             <SolidColorBrush x:Key="AccountPageTotalProductsForeground" Color="#c084fc"/>
+
+
+            <SolidColorBrush x:Key="OrderCellBackground" Color="#292929"/>
 
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>

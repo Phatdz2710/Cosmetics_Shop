@@ -21,7 +21,9 @@ namespace Cosmetics_Shop.Models
         /// <summary>
         /// Get Token of User
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// a <see cref="string"/> that represents the token of the user."/>
+        /// </returns>
         public string GetToken()
         {
             return UserInfo.GetToken();
@@ -30,7 +32,9 @@ namespace Cosmetics_Shop.Models
         /// <summary>
         /// Get Role of User
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// a <see cref="string"/> that represents the role of the user."/>
+        /// </returns>
         public string GetRole()
         {
             return UserInfo.GetRole();
@@ -39,7 +43,9 @@ namespace Cosmetics_Shop.Models
         /// <summary>
         /// Get Id of User
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// a <see cref="int"/> that represents the id of the user."/>
+        /// </returns>
         public int GetId()
         {
             return UserInfo.GetId();

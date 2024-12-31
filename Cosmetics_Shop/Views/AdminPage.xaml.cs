@@ -21,7 +21,7 @@ using Cosmetics_Shop.Services;
 namespace Cosmetics_Shop.Views.Pages
 {
     /// <summary>
-    /// Admin page
+    /// Admin page for admin
     /// </summary>
     public sealed partial class AdminPage : Page
     {

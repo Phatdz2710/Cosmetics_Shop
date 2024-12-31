@@ -41,6 +41,8 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
         private int     _productPrice = 0;
         private int     _productInventory = 0;
         private int     _productSold = 0;
+        private string _productDescription = "";
+        private string  _message = "";
         #endregion
 
         #region Properties for binding
@@ -157,6 +159,16 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(ProductSold));
             }
         }
+
+        public string ProductDescription
+        {
+            get { return _productDescription; }
+            set
+            {
+                _productDescription = value;
+                OnPropertyChanged(nameof(ProductDescription));
+            }
+        }
         public string FormTitle
         {
             get { return _formTitle; }
@@ -173,6 +185,16 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
             {
                 _productImagePath = value;
                 OnPropertyChanged(nameof(ProductImagePath));
+            }
+        }
+
+        public string Message
+        {
+            get { return _message; }
+            set
+            {
+                _message = value;
+                OnPropertyChanged(nameof(Message));
             }
         }
 
@@ -216,6 +238,7 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 ProductPrice = 0;
                 ProductInventory = 0;
                 ProductSold = 0;
+                ProductDescription = "";
 
                 AcceptFormCommand = new RelayCommand(async () =>
                 {
@@ -224,7 +247,12 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
 
                     if (result)
                     {
+                        Message = "Thêm sản phẩm thành công!";
                         LoadData();
+                    }
+                    else
+                    {
+                        Message = "Thêm sản phẩm thất bại!";
                     }
                 });
             });
@@ -236,7 +264,7 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
         }
 
         /// <summary>
-        /// Cancels the form by hiding it.
+        /// Cancels the form by hiding it command.
         /// </summary>
         private void cancelFormCommand()
         {
@@ -244,7 +272,7 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
         }
 
         /// <summary>
-        /// Allows the user to select an image file path and updates the product image path.
+        /// Select image path command
         /// </summary>
         private async void executeSelectImagePathAsyncCommand()
         {
@@ -258,7 +286,7 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
         }
 
         /// <summary>
-        /// Command for go to next page
+        /// Go to next page command
         /// </summary>
         private void nextPageCommand()
         {
@@ -267,7 +295,7 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
         }
 
         /// <summary>
-        /// Command for go to previous page
+        /// Go to previous page command
         /// </summary>
         private void previousPageCommand()
         {
@@ -302,19 +330,25 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                     Sold = item.Sold,
 
                     // Edit command for each cell to show edit form
-                    EditCommand = new RelayCommand(() =>
+                    EditCommand = new RelayCommand(async () =>
                     {
                         FormTitle = "Chỉnh sửa sản phẩm";
                         ShowForm = true;
                         AcceptFormCommand = new RelayCommand(async () =>
                         {
                             ShowForm = false;
-                            var result = await _dao.ChangeProductInfoAsync(item.Id, ProductName, ProductBrand, ProductCategory, ProductPrice, ProductInventory, ProductSold, ProductImagePath);
+                            var result = await _dao.ChangeProductInfoAsync(item.Id, ProductName, ProductBrand, ProductCategory, ProductPrice, ProductInventory, ProductSold, ProductImagePath, ProductDescription);
 
                             if (result)
                             {
+                                Message = "Sửa sản phẩm thành công!";
                                 LoadData();
                             }
+                            else
+                            {
+                                Message = "Sửa sản phẩm thất bại!";
+                            }
+
                         });
 
                         ProductImagePath = item.ImagePath;
@@ -324,6 +358,7 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                         ProductPrice = item.Price;
                         ProductInventory = item.Stock;
                         ProductSold = item.Sold;
+                        ProductDescription = await _dao.GetProductDescriptionAsync(item.Id);
                     })
 
                 });

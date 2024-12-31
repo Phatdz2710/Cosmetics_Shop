@@ -31,6 +31,8 @@ public partial class Product
 
     public double AverageRating { get; set; }
 
+    public int NumReview { get; set; }
+
     public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
 
     public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();

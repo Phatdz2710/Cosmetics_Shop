@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.Input;
+using Cosmetics_Shop.DataAccessObject.Interfaces;
 using Cosmetics_Shop.Models;
 using Cosmetics_Shop.Services;
 using Cosmetics_Shop.ViewModels.PageViewModels;
@@ -20,12 +21,11 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
     {
         // Navigation service
         private readonly INavigationService _navigationService;
-        private readonly CartPageViewModel _cartPageViewModel;
+        public readonly CartPageViewModel _cartPageViewModel;
 
         // Main properties
         public CartThumbnail CartThumbnail { get; set; }
-        public ICommand PayButtonCommand { get; set; }
-        //public ICommand DeleteCommand { get; }
+        public ICommand DeleteCommand { get; }
 
         private bool _isChecked;
 
@@ -49,21 +49,25 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
         {
             _navigationService = navigationService;
             _cartPageViewModel = cartPageViewModel; // Pass the parent ViewModel
-            PayButtonCommand = new RelayCommand(() =>
-            {
-                //chuyen sang page thanh toan
-                //_navigationService.NavigateTo<>();
-            });
 
-            //DeleteCommand = new RelayCommand(DeleteItem);
+            DeleteCommand = new RelayCommand(async () => await DeleteItem());
         }
 
-        //private void DeleteItem()
-        //{
-        //    // Logic to delete this item from the cart
-        //    // You might need to access the parent ViewModel to remove this item from the collection
-        //    _parentViewModel.Cart.Remove(this);
-        //}
+        private async Task DeleteItem()
+        {
+            // Call the DeleteFromCartAsync method in the parent ViewModel
+            bool result = await _cartPageViewModel.DeleteFromCartAsync(CartThumbnail.Id);
+
+            if (result)
+            {
+                
+            }
+            else
+            {
+                
+            }
+        }
+
 
         // For INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;

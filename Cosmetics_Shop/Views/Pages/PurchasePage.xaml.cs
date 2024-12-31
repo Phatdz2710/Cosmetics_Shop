@@ -22,7 +22,7 @@ using Cosmetics_Shop.Services.EventAggregatorMessages;
 namespace Cosmetics_Shop.Views.Pages
 {
     /// <summary>
-    /// Purchase page
+    /// Purchase page for user
     /// </summary>
     public sealed partial class PurchasePage : Page
     {
@@ -39,6 +39,10 @@ namespace Cosmetics_Shop.Views.Pages
             });
         }
 
+        /// <summary>
+        /// Show content dialog when viewmodel sends a message
+        /// </summary>
+        /// <param name="message"></param>
         private async void ShowContentDialog(string message)
         {
             var dialog = new ContentDialog

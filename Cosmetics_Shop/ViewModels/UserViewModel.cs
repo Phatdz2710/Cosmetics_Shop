@@ -99,6 +99,7 @@ namespace Cosmetics_Shop.ViewModels
         public ICommand AdminButtonCommand { get; }
         public ICommand AccountButtonCommand { get; }
         public ICommand DashboardButtonCommand { get; }
+        public ICommand OrderButtonCommand { get; }
         public ICommand ChangeThemeButtonCommand { get; }
 
         // Search button command
@@ -138,6 +139,9 @@ namespace Cosmetics_Shop.ViewModels
 
             // Search button click event
             SearchButtonCommand     = new RelayCommand(ExecuteSearchButtonCommand);
+
+            // Order button click event
+            OrderButtonCommand      = new RelayCommand(ExecuteOrderButtonCommand);
 
             // Change theme button click event
             // ChangeThemeButtonCommand = new RelayCommand(ChangeThemeButton);
@@ -181,6 +185,14 @@ namespace Cosmetics_Shop.ViewModels
         private void ExecuteAccountButtonCommand()
         {
             _navigationService.NavigateTo<AccountPage>();
+        }
+
+        /// <summary>
+        /// Logic for the Order button command.
+        /// </summary>
+        private void ExecuteOrderButtonCommand()
+        {
+            _navigationService.NavigateTo<OrderPage>();
         }
 
         /// <summary>

@@ -20,7 +20,7 @@ using Cosmetics_Shop.ViewModels;
 namespace Cosmetics_Shop.Views.Pages
 {
     /// <summary>
-    /// Login and Signup Page
+    /// Login and Signup Page for user
     /// </summary>
     public sealed partial class LoginSignupPage : Page
     {

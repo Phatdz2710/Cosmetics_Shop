@@ -6,9 +6,11 @@ using Cosmetics_Shop.Models;
 using Cosmetics_Shop.Services;
 using Cosmetics_Shop.Services.EventAggregatorMessages;
 using Cosmetics_Shop.Services.Interfaces;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -42,12 +44,16 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         private string _changeModeContent = "Thay đổi thông tin";
         private bool _showDialogChangePassword = false;
         private string _changePasswordMessage = "";
+        private string _changeInfoMessage = "";
         private string _passwordCurrent = "";
         private string _passwordNew = "";
+        private string _confirmPasswordNew = "";
         private string _nameRestore;
         private string _emailRestore;
         private string _phoneRestore;
         private string _addressRestore;
+        private string _userLevel = "";
+        private string _createTime;
         #endregion
 
         #region Properties Binding
@@ -133,6 +139,16 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(AvatarPath));
             }
         }
+
+        public string CreateTime
+        {
+            get => _createTime;
+            set
+            {
+                _createTime = value;
+                OnPropertyChanged(nameof(CreateTime));
+            }
+        }
         public bool ChangeInforMode
         {
             get => _changeInforMode;
@@ -142,6 +158,8 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(ChangeInforMode));
             }
         }
+
+        
         public bool ShowDialogChangePassword
         {
             get => _showDialogChangePassword;
@@ -169,6 +187,16 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(PasswordNew));
             }
         }
+
+        public string ConfirmPasswordNew
+        {
+            get => _confirmPasswordNew;
+            set
+            {
+                _confirmPasswordNew = value;
+                OnPropertyChanged(nameof(ConfirmPasswordNew));
+            }
+        }
         public string ChangePasswordMessage
         {
             get => _changePasswordMessage;
@@ -178,6 +206,17 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(ChangePasswordMessage));
             }
         }
+        
+        public string ChangeInfoMessage
+        {
+            get => _changeInfoMessage;
+            set
+            {
+                _changeInfoMessage = value;
+                OnPropertyChanged(nameof(ChangeInfoMessage));
+            }
+        }
+
         public string ChangeModeContent
         {
             get => _changeModeContent;
@@ -185,6 +224,19 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             {
                 _changeModeContent = value;
                 OnPropertyChanged(nameof(ChangeModeContent));
+            }
+        }
+
+        public string UserLevel
+        {
+            get
+            {
+                return _userLevel;
+            }
+            set
+            {
+                _userLevel = value;
+                OnPropertyChanged(nameof(UserLevel));
             }
         }
         #endregion
@@ -233,12 +285,13 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             ChangePasswordMessage = string.Empty;
             PasswordCurrent = string.Empty;
             PasswordNew = string.Empty;
+            ConfirmPasswordNew = string.Empty;
             ShowDialogChangePassword = true;
         }
 
         
         /// <summary>
-        /// Command for press Logout
+        /// Command for press log out
         /// </summary>
         private void logoutCommand()
         {
@@ -254,7 +307,25 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         /// </summary>
         private async void saveInfoCommand()
         {
-            await _dao.ChangeAllUserInformationAsync(_userSession.GetId(), new UserDetail()
+            if (!Email.IsValidEmail() || !Phone.IsValidPhoneNumber())
+            {
+                Name = _nameRestore;
+                Email = _emailRestore;
+                Phone = _phoneRestore;
+                Address = _addressRestore;
+                changeInfoModeCommand();
+                ChangeInfoMessage = "Thông tin không hợp lệ!";
+                return;
+            }
+
+            if (_nameRestore == Name && _emailRestore == Email && _phoneRestore == Phone && _addressRestore == Address)
+            {
+                changeInfoModeCommand();
+                ChangeInfoMessage = "";
+                return;
+            }
+
+                await _dao.ChangeAllUserInformationAsync(_userSession.GetId(), new UserDetail()
             {
                 Name    = Name,
                 Email   = Email,
@@ -263,6 +334,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 AvatarPath = AvatarPath
             });
 
+            
             _nameRestore    = Name;
             _emailRestore   = Email;
             _phoneRestore   = Phone;
@@ -270,6 +342,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             NameDisplay     = Name;
 
             changeInfoModeCommand();
+            ChangeInfoMessage = "Thay đổi thông tin thành công!";
 
             _eventAggregator.Publish(new ChangeUsernameOrAvatarMessage()
             {
@@ -342,6 +415,8 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             TotalProducts   = userDetail.TotalProducts;
             TotalBills      = userDetail.TotalBills;
             TotalMoneySpent = userDetail.TotalMoneySpent;
+            UserLevel       = await _dao.GetUserLevelAsync(_userSession.GetId());
+            CreateTime      = userDetail.CreateTime.ToShortDateString();
 
             if (AvatarPath == null)
             {
@@ -360,6 +435,12 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         /// </summary>
         private async void acceptChangePasswordCommand()
         {
+            if (PasswordNew != ConfirmPasswordNew)
+            {
+                ChangePasswordMessage = "Mật khẩu mới không khớp !";
+                return;
+            }
+
             var result = await _dao.ChangePasswordAsync(_userSession.GetId(), PasswordCurrent, PasswordNew);
             if (result)
             {
@@ -378,7 +459,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         private void cancelChangePasswordCommand()
         {
             ShowDialogChangePassword = false;
-        }
+        } 
 
 
 

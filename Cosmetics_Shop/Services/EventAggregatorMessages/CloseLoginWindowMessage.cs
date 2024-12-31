@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Cosmetics_Shop.Services.EventAggregatorMessages
 {
     /// <summary>
-    /// Close Login Window Message
+    /// Ping message to close the login window.
     /// </summary>
     public class CloseLoginWindowMessage
     {

@@ -20,7 +20,7 @@ using Windows.Foundation.Collections;
 namespace Cosmetics_Shop.Views.Pages
 {
     /// <summary>
-    /// Dashboard page
+    /// Dashboard page for user
     /// </summary>
     public sealed partial class DashboardPage : Page
     {

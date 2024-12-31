@@ -15,6 +15,7 @@ namespace Cosmetics_Shop.DataAccessObject.Data
         public string   Email   { get; set; }
         public string   Phone   { get; set; }
         public string   Address { get; set; }
+        public DateTime CreateTime { get; set; }
         public string   AvatarPath      { get; set; }
         public int      TotalMoneySpent { get; set; } = 0;
         public int      TotalBills      { get; set; } = 0;

@@ -11,11 +11,10 @@
 
     <UserControl.Resources>
         <converter:VNDCurrencyConverter x:Key="VNDCurrencyConverter"/>
+        <converter:StringToImageSourceConverter x:Key="StringToImageSourceConverter"/>
     </UserControl.Resources>
 
-    <Grid Background="White"
-          Height="50"
-          Width="1100">
+    <Grid >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.4*"/>
             <ColumnDefinition Width="0.2*"/>
@@ -23,17 +22,18 @@
             <ColumnDefinition Width="0.2*"/>
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0">
+        <Grid Grid.Column="0"
+              HorizontalAlignment="Left">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.2*"/>
                 <ColumnDefinition Width="0.6*"/>
                 <ColumnDefinition Width="0.3*"/>
             </Grid.ColumnDefinitions>
-            <Ellipse Grid.Column="0" 
-                     Fill="Gray"
-                     Width="30"
-                     Height="30"
-            />
+            
+            <Border Grid.Column="0" Height="50" Width="50" CornerRadius="10">
+                <Image Source="{x:Bind ViewModel.PaymentProductThumbnail.ProductImage, Mode=OneWay, Converter={StaticResource StringToImageSourceConverter}}"
+                       Stretch="Fill"/>
+            </Border>
 
             <TextBlock x:Name="productNameTextBlock"
                        Grid.Column="1"
@@ -58,7 +58,7 @@
         <TextBlock x:Name="thanhTienTextBlock"
                    Grid.Column="3"
                    HorizontalAlignment="Right"
-                   Margin="0 10 25 0">
+                   Margin="0 10 15 0">
             <Run Text="{x:Bind ViewModel.TotalPrice, Mode=OneWay, 
                 Converter={StaticResource VNDCurrencyConverter}}"/>
                     đ

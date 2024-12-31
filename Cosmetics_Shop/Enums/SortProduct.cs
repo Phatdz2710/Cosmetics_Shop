@@ -7,7 +7,12 @@ using System.Threading.Tasks;
 namespace Cosmetics_Shop.Models.Enums
 {
     /// <summary>
-    /// Sort Product Mode
+    /// Enum representing the sorting options for products.
+    /// DateAscending: Sort by date in ascending order.
+    /// PriceDescending: Sort by price in descending order.
+    /// PriceAscending: Sort by price in ascending order.
+    /// NameAscending: Sort by name in ascending order.
+    /// NameDescending: Sort by name in descending order.
     /// </summary>
     public enum SortProduct
     {

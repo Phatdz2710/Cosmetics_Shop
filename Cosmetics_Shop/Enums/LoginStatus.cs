@@ -8,7 +8,11 @@ namespace Cosmetics_Shop.Models.Enums
 {
  
     /// <summary>
-    /// Login Status
+    /// Enum representing the status of a login attempt.
+    /// Success: The login was successful.
+    /// InvalidUsername: The username is invalid.
+    /// InvalidPassword: The password is invalid.
+    /// ConnectServerFailed: The connection to the server failed.
     /// </summary>
     public enum LoginStatus
     {

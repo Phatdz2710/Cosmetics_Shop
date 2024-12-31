@@ -11,6 +11,8 @@ namespace Cosmetics_Shop.Models
     public class Cart : INotifyPropertyChanged
     {
         public int      Id              { get; set; }
+        public int      UserId          { get; set; }
+        public int      ProductId       { get; set; }
         public string   ProductImage    { get; set; }
         public string   ProductName     { get; set; }
         public int      Price   { get; set; }
@@ -50,12 +52,21 @@ namespace Cosmetics_Shop.Models
                     int     amount, 
                     int     totalPrice)
         {
-            Id              = id;
+            Id = id;
             ProductImage    = productImage;
             ProductName     = productName;
             Price           = price;
             Amount          = amount;
             TotalPrice      = totalPrice;
+        }
+
+        public Cart(int userId, 
+                    int productId, 
+                    int quantity)
+        {
+            UserId      = userId;
+            ProductId   = productId;
+            Amount      = quantity;
         }
 
     }

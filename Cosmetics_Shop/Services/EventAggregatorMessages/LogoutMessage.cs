@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Cosmetics_Shop.Services.EventAggregatorMessages
 {
     /// <summary>
-    /// Logout Message
+    /// Ping message to logout.
     /// </summary>
     public class LogoutMessage
     { 

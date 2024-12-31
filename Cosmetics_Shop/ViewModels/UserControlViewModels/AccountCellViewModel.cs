@@ -15,9 +15,10 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
     public class AccountCellViewModel : INotifyPropertyChanged
     {
         private string _username;
-        private string _password;
         private string _role;
+        private string _userLevel;
         private int _id;
+        private int _userId;
 
         public int ID
         {
@@ -26,6 +27,16 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
             {
                 _id = value;
                 OnPropertyChanged(nameof(ID));
+            }
+        }
+
+        public int UserID
+        {
+            get => _userId;
+            set
+            {
+                _userId = value;
+                OnPropertyChanged(nameof(UserID));
             }
         }
 
@@ -38,15 +49,6 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
                 OnPropertyChanged(nameof(Username));
             }
         }
-        public string Password
-        {
-            get => _password;
-            set
-            {
-                _password = value;
-                OnPropertyChanged(nameof(Password));
-            }
-        }
         public string Role
         {
             get => _role;
@@ -57,22 +59,34 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
             }
         }
 
-        public ICommand EditCommand     { get; set; }
+        public string UserLevel
+        {
+            get => _userLevel;
+            set
+            {
+                _userLevel = value;
+                OnPropertyChanged(nameof(UserLevel));
+            }
+        }
+
+        public ICommand ShowMoreCommand     { get; set; }
         public ICommand DeleteCommand   { get; set; }
 
 
         public AccountCellViewModel(int id, 
-                                    string username, 
-                                    string password, 
+                                    string username,
                                     string role, 
-                                    ICommand editCommand, 
+                                    string userLevel,
+                                    int userId,
+                                    ICommand showMoreCommand, 
                                     ICommand deleteCommand)
         {
             _id             = id;
+            _userId         = userId;
             _username       = username;
-            _password       = password;
             _role           = role;
-            EditCommand     = editCommand;
+            _userLevel      = userLevel;
+            ShowMoreCommand = showMoreCommand;
             DeleteCommand   = deleteCommand;
         }
 

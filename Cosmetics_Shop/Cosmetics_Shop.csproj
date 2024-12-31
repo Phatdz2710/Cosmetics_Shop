@@ -34,6 +34,7 @@
     <None Remove="Views\Controls\PaymentProductThumbnailViewModel.xaml" />
     <None Remove="Views\Controls\ProductCellControl.xaml" />
     <None Remove="Views\Controls\ReviewThumbnailControl.xaml" />
+    <None Remove="Views\Controls\UserOrderCellControl.xaml" />
     <None Remove="Views\MainWindow.xaml" />
     <None Remove="Views\Controls\ProductThumbnailControl.xaml" />
     <None Remove="Views\Pages\AccountPage.xaml" />
@@ -42,6 +43,7 @@
     <None Remove="Views\Pages\DashboardPage.xaml" />
     <None Remove="Views\Pages\LoginSignupControl.xaml" />
     <None Remove="Views\Pages\LoginSignupPage.xaml" />
+    <None Remove="Views\Pages\OrderPage.xaml" />
     <None Remove="Views\Pages\PaymentPage.xaml" />
     <None Remove="Views\Pages\PurchasePage.xaml" />
     <None Remove="Views\UserPage.xaml" />
@@ -111,6 +113,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="Assets\avatar_temp.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Assets\background_login.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Assets\order_icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="Assets\stock_icon.png">
@@ -193,6 +201,12 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Page Update="Views\Controls\UserOrderCellControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Views\Pages\OrderPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="Views\Controls\OrderCellControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>

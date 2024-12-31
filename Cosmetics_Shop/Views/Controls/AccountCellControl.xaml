@@ -31,18 +31,18 @@
                    HorizontalAlignment="Left"
                    VerticalAlignment="Center"
                    FontSize="17"/>
-        
-        <TextBlock Grid.Column="2" Text="{x:Bind ViewModel.Password, Mode=OneWay}"
-                   HorizontalAlignment="Left"
-                   VerticalAlignment="Center"
-                   FontSize="17"/>
-        
-        <TextBlock Grid.Column="3" Text="{x:Bind ViewModel.Role, Mode=OneWay}"
+
+        <TextBlock Grid.Column="2" Text="{x:Bind ViewModel.Role, Mode=OneWay}"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Left"
                    FontSize="17"/>
 
-        <Button Grid.Column="4" Content="Chỉnh sửa" Command="{x:Bind ViewModel.EditCommand, Mode=OneWay}"
+        <TextBlock Grid.Column="3" Text="{x:Bind ViewModel.UserLevel, Mode=OneWay}"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Left"
+                   FontSize="17"/>
+
+        <Button Grid.Column="4" Content="Xem thêm" Command="{x:Bind ViewModel.ShowMoreCommand, Mode=OneWay}" CommandParameter="{x:Bind ViewModel.UserID, Mode=OneWay}"
                 Background="#4AFFA2"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"/>

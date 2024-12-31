@@ -12,6 +12,8 @@
 
     <Page.Resources>
         <converter:LoginSignupStateConverter x:Key="LoginSignupStateConverter"/>
+        <converter:MessageForegroundConverter x:Key="MessageForegroundConverter"/>
+        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Page.Resources>
 
     <Grid>
@@ -56,9 +58,9 @@
                          Password="{x:Bind ViewModel.Password, Mode=TwoWay}"
                          IsEnabled="{x:Bind ViewModel.IsEnabled, Mode=OneWay}"/>
 
-            <TextBlock Text="{x:Bind ViewModel.WrongMessage, Mode=OneWay}"
-                       Foreground="Red"
-                       Visibility="{x:Bind ViewModel.MessageVisibility, Mode=OneWay}"
+            <TextBlock Text="{x:Bind ViewModel.Message, Mode=OneWay}"
+                       Foreground="{x:Bind ViewModel.Message, Mode=OneWay, Converter={StaticResource MessageForegroundConverter}}"
+                       Visibility="{x:Bind ViewModel.MessageVisibility, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                        FontSize="15"/>
 
             <CheckBox x:Name="cbxRememeber" 
@@ -151,20 +153,17 @@ Foreground="{ThemeResource AccountPageForeground}"
                      Padding="10"
                      CornerRadius="8"
                      Background="{ThemeResource PurchasePageFilterPriceBoxBackground}"
-Foreground="{ThemeResource AccountPageForeground}"
+                    Foreground="{ThemeResource AccountPageForeground}"
                      BorderBrush="LightGray"
                      BorderThickness="1"
                      Margin="0,0,0,5"
                      IsEnabled="{x:Bind ViewModel.IsEnabled, Mode=OneWay}"
                      Text="{x:Bind ViewModel.Email, Mode=TwoWay}"/>
 
-            <TextBlock Foreground="Red"
+            <TextBlock Text="{x:Bind ViewModel.Message, Mode=OneWay}"
+                       Foreground="{x:Bind ViewModel.Message, Mode=OneWay, Converter={StaticResource MessageForegroundConverter}}"
                        FontSize="15"
-                       Visibility="{x:Bind ViewModel.MessageVisibility, Mode=OneWay}">
-                <Run Text="{x:Bind ViewModel.WrongMessage, Mode=OneWay}"
-                     Foreground="Red"/>
-                <Run Text="{x:Bind ViewModel.SuccessMessage, Mode=OneWay}"
-                     Foreground="Green"/>
+                       Visibility="{x:Bind ViewModel.MessageVisibility, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
             </TextBlock>
 
             <Button Content="Sign Up"

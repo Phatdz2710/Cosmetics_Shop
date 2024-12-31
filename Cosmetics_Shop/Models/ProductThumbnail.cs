@@ -2,6 +2,7 @@
 using Microsoft.UI.Xaml.Media.Imaging;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -45,7 +46,7 @@ namespace Cosmetics_Shop.Models
             Sold        = sold;
         }
 
-        public ProductThumbnail() 
+        public ProductThumbnail()
         { }
     }
 }
