@@ -39,7 +39,8 @@
                           Padding="10"
                           HorizontalContentAlignment="Center"
                           HorizontalAlignment="Center"
-                          MaxHeight="510">
+                          MaxHeight="510"
+                          SelectionMode="None">
 
                     <GridView.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -79,7 +80,8 @@
                           Padding="10"
                           HorizontalContentAlignment="Center"
                           HorizontalAlignment="Center"
-                          MaxHeight="510">
+                          MaxHeight="510"
+                          SelectionMode="None">
 
                     <GridView.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -119,7 +121,8 @@
                           Padding="10"
                           HorizontalContentAlignment="Center"
                           HorizontalAlignment="Center"
-                          MaxHeight="510">
+                          MaxHeight="510"
+                          SelectionMode="None">
 
                     <GridView.ItemsPanel>
                         <ItemsPanelTemplate>

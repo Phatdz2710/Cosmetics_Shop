@@ -476,7 +476,7 @@ namespace Cosmetics_Shop.DataAccessObject
 
                     if (user != null) return SignupStatus.UsernameAlreadyExists;
 
-                    if (email != string.Empty && !email.IsValidEmail())
+                    if (!email.IsNullOrEmpty() && !email.IsValidEmail())
                     {
                         return SignupStatus.InvalidEmail;
                     }

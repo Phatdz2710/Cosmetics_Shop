@@ -171,7 +171,8 @@
             <GridView Grid.Row="1"
                       CornerRadius="10"
                       Margin="10"
-                      ItemsSource="{x:Bind ViewModel.ProductThumbnails}">
+                      ItemsSource="{x:Bind ViewModel.ProductThumbnails}"
+                      SelectionMode="None">
                 <GridView.ItemTemplate>
                     <DataTemplate>
                         <objects:ProductThumbnailControl Height="250"

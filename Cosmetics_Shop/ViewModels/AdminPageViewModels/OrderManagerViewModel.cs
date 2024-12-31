@@ -320,8 +320,6 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 );
 
             }
-            
-            
         }
 
         
@@ -342,8 +340,6 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
             Quantity = orderInfo.Quantity;
             Price = orderInfo.Price;
             TotalPrice = orderInfo.TotalPrice;
-            
-
         }
 
         /// <summary>
