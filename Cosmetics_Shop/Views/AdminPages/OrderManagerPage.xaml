@@ -148,10 +148,10 @@
         </Grid>
 
         <Grid Grid.Row="0"
-              Grid.RowSpan="5"
-              Background="Transparent"
-              CornerRadius="5"
-              Visibility="{x:Bind ViewModel.ShowForm, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+            Grid.RowSpan="5"
+            Background="Transparent"
+            CornerRadius="5"
+            Visibility="{x:Bind ViewModel.ShowForm, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Rectangle Fill="Black" Opacity="0.7"/>
 
             <Grid Background="White"
@@ -161,23 +161,83 @@
                   Padding="20">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="7*"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="2*"/>                    
+                    <RowDefinition Height="2*"/>
                 </Grid.RowDefinitions>
 
                 <TextBlock Text="{x:Bind ViewModel.FormTitle, Mode=OneWay}"
-                       VerticalAlignment="Top"
-                       HorizontalAlignment="Center"
-                       FontSize="25"
-                       FontWeight="SemiBold"/>
+                           VerticalAlignment="Top"
+                           HorizontalAlignment="Center"
+                           FontSize="25"
+                           FontWeight="SemiBold"/>
 
-                <Grid Grid.Row="1">
-                    
+                <StackPanel Grid.Row="1">
+                    <TextBlock Text="Mã Sản phẩm"                       
+                               FontSize="17"
+                               FontWeight="SemiBold"
+                               Margin="10"/>
+                    <TextBox PlaceholderText="ProductID" IsEnabled="False"
+                        Text="{x:Bind ViewModel.ProductId, Mode=TwoWay}"/>
+                </StackPanel>
 
 
-                </Grid>
 
-                
+                <StackPanel Grid.Row="2">
+                    <TextBlock Text="Tên Sản phẩm"                       
+                               FontSize="17"
+                               FontWeight="SemiBold"
+                               Margin="10"/>
+                    <TextBox PlaceholderText="ProductName" IsEnabled="False"
+                        Text="{x:Bind ViewModel.ProductName, Mode=TwoWay}"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="3">
+                    <TextBlock Text="Số Lượng"                       
+                               FontSize="17"
+                               FontWeight="SemiBold"
+                               Margin="10"/>
+                    <TextBox PlaceholderText="Quantity" IsEnabled="False"
+                        Text="{x:Bind ViewModel.Quantity, Mode=TwoWay}"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="4">
+                    <TextBlock Text="Giá"                       
+                               FontSize="17"
+                               FontWeight="SemiBold"
+                               Margin="10"/>
+                    <TextBox PlaceholderText="Price" IsEnabled="False"
+                        Text="{x:Bind ViewModel.Price, Mode=TwoWay}"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="5">
+                    <TextBlock Text="Tổng hóa đơn"                       
+                               FontSize="17"
+                               FontWeight="SemiBold"
+                               Margin="10"/>
+                    <TextBox PlaceholderText="Total Price" IsEnabled="False"
+                        Text="{x:Bind ViewModel.TotalPrice, Mode=TwoWay}"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="6"
+                            Orientation="Horizontal"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center">
+                    <Button Width="100" Margin="10" 
+                            Content="Duyệt"
+                            Background="#6BE38F"
+                            Command="{x:Bind ViewModel.AcceptFormCommand, Mode=OneWay}"/>
+
+                    <Button Width="100" Margin="10"
+                            Content="Hủy"
+                            Background="Tomato"
+                            Foreground="White"
+                            Command="{x:Bind ViewModel.CancelFormCommand, Mode=OneWay}"/>
+                </StackPanel>
+
             </Grid>
         </Grid>
 

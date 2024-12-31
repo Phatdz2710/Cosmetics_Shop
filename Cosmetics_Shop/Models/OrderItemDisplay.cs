@@ -17,16 +17,18 @@ namespace Cosmetics_Shop.Models
         public int Quantity { get; set; }
         public string ImageSource { get; set; }
         public int Price { get; set; }
+        public int TotalPrice { get; set; }
 
         public ICommand OpenProductDetailCommand { get; set; }
 
-        public OrderItemDisplay(int productId, string productName, int quantity, string imageSource, int price)
+        public OrderItemDisplay(int productId, string productName, int quantity, string imageSource, int price,int totalPrice)
         {
             ProductId = productId;
             ProductName = productName;
             Quantity = quantity;
             ImageSource = imageSource;
             Price = price;
+            TotalPrice = Quantity*Price;
 
             OpenProductDetailCommand = new RelayCommand(OpenProductDetail);
         }

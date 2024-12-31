@@ -300,7 +300,9 @@ namespace Cosmetics_Shop.DataAccessObject
                 }
             }
         }
-       
+
+        
+
         public async Task<List<Models.Order>> GetListOrderAsync(int userId, OrderStatus orderStatus)
         {
             using (var scope = _serviceProvider.CreateScope())
@@ -1099,7 +1101,34 @@ namespace Cosmetics_Shop.DataAccessObject
                     };
                 }
             }}
-        
+
+        public async Task<bool> ChangeOrderStatusAsync()
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+
+                try
+                {
+                    var order = await _databaseContext.Orders.FirstOrDefaultAsync(p => p.Id == 1);
+
+                    if (order == null)
+                    {
+                        return false;
+                    }
+
+                    order.OrderStatus = 1;
+
+                    await _databaseContext.SaveChangesAsync();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+               
+            }
+        }
         #endregion
 
         #region Cart
@@ -1517,6 +1546,35 @@ namespace Cosmetics_Shop.DataAccessObject
                 catch (Exception ex)
                 {
                     throw; // Rethrow the exception for further handling
+                }
+            }
+        }
+
+        public async Task<OrderItemDisplay> GetOrderItemDisplayAsync(int productid)
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                try
+                {
+                    var product = await _databaseContext.Products
+                        .Where(p => p.Id == productid)
+                        .Select(p => new OrderItemDisplay(
+                            p.Id,
+                            p.Name,
+                            1,
+                            p.ImagePath,
+                            p.Price,
+                            p.Price
+                        ))
+                        .FirstOrDefaultAsync();
+
+                    return product;
+                }
+                catch (Exception ex)
+                {
+                    // Log the exception or handle it as needed
+                    return null;
                 }
             }
         }

@@ -250,7 +250,14 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         Task<bool> UpdateCartAsync(int cartId, int quantity);
 
         /// <summary>
-        /// 
+        /// Get the information of a product in the cart.
+        /// </summary>
+        /// <param name="productid"></param>
+        /// <returns></returns>
+        Task<OrderItemDisplay> GetOrderItemDisplayAsync(int productid);
+
+        /// <summary>
+        /// Get the status of products in the cart.
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="type"></param>
@@ -258,7 +265,7 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         Task<List<Models.Order>> GetListOrderAsync(int userId, OrderStatus type);
 
         /// <summary>
-        /// 
+        /// Get the informaton list of products in the cart.
         /// </summary>
         /// <param name="orderId"></param>
         /// <returns></returns>
@@ -366,6 +373,7 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         Task<string> GetUserLevelAsync(int userId);
 
         Task<GetOrderResult> GetListAllOrdersAsync(int page, int orderPerPage);
+        Task<bool>ChangeOrderStatusAsync();
 
         #endregion
 
@@ -430,7 +438,6 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// A <see cref="List{T}"/> of <see cref="PaymentMethod"/> objects representing the available shipping methods.
         /// </returns>
         Task<List<Models.PaymentMethod>> GetPaymentMethodsAsync();
-
         
     }
 }

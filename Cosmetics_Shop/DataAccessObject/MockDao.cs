@@ -439,5 +439,15 @@ namespace Cosmetics_Shop.DataAccessObject
         {
             throw new NotImplementedException();
         }
+
+        public Task<OrderItemDisplay> GetOrderItemDisplayAsync(int productid)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> ChangeOrderStatusAsync()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
