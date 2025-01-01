@@ -218,13 +218,13 @@
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0"
                                FontSize="20"
-                               HorizontalAlignment="Center">
+                               HorizontalAlignment="Left">
                         <Run Text="Tổng hóa đơn: "
                              Foreground="#27A866"/>
                         
                     </TextBlock>
                     
-                    <TextBlock Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center">
+                    <TextBlock Grid.Column="1" Grid.Row="0" HorizontalAlignment="Right">
                         <Run Text="{x:Bind ViewModel.TotalPrice, Mode=OneWay, Converter={StaticResource VNDCurrencyConverter}}"
                              FontSize="20" FontWeight="SemiBold" Foreground="{ThemeResource AccountPageTotalBillsForeground}"/>
                         <Run Text="đ" FontSize="15"/>   
@@ -246,70 +246,6 @@
                             Foreground="White"
                             Command="{x:Bind ViewModel.CancelFormCommand, Mode=OneWay}"/>
                 </StackPanel>
-                <!--
-                <StackPanel Grid.Row="1">
-                    <TextBlock Text="Mã Sản phẩm"                       
-                               FontSize="17"
-                               FontWeight="SemiBold"
-                               Margin="10"/>
-                    <TextBox PlaceholderText="ProductID" IsEnabled="False"
-                        Text="{x:Bind ViewModel.ProductId, Mode=TwoWay}"/>
-                </StackPanel>
-
-
-
-                <StackPanel Grid.Row="2">
-                    <TextBlock Text="Tên Sản phẩm"                       
-                               FontSize="17"
-                               FontWeight="SemiBold"
-                               Margin="10"/>
-                    <TextBox PlaceholderText="ProductName" IsEnabled="False"
-                        Text="{x:Bind ViewModel.ProductName, Mode=TwoWay}"/>
-                </StackPanel>
-
-                <StackPanel Grid.Row="3">
-                    <TextBlock Text="Số Lượng"                       
-                               FontSize="17"
-                               FontWeight="SemiBold"
-                               Margin="10"/>
-                    <TextBox PlaceholderText="Quantity" IsEnabled="False"
-                        Text="{x:Bind ViewModel.Quantity, Mode=TwoWay}"/>
-                </StackPanel>
-
-                <StackPanel Grid.Row="4">
-                    <TextBlock Text="Giá"                       
-                               FontSize="17"
-                               FontWeight="SemiBold"
-                               Margin="10"/>
-                    <TextBox PlaceholderText="Price" IsEnabled="False"
-                        Text="{x:Bind ViewModel.Price, Mode=TwoWay}"/>
-                </StackPanel>
-
-                <StackPanel Grid.Row="5">
-                    <TextBlock Text="Tổng hóa đơn"                       
-                               FontSize="17"
-                               FontWeight="SemiBold"
-                               Margin="10"/>
-                    <TextBox PlaceholderText="Total Price" IsEnabled="False"
-                        Text="{x:Bind ViewModel.TotalPrice, Mode=TwoWay}"/>
-                </StackPanel>
-
-                <StackPanel Grid.Row="6"
-                            Orientation="Horizontal"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Center">
-                    <Button Width="100" Margin="10" 
-                            Content="Duyệt"
-                            Background="#6BE38F"
-                            Command="{x:Bind ViewModel.AcceptFormCommand, Mode=OneWay}"/>
-
-                    <Button Width="100" Margin="10"
-                            Content="Hủy"
-                            Background="Tomato"
-                            Foreground="White"
-                            Command="{x:Bind ViewModel.CancelFormCommand, Mode=OneWay}"/>
-                </StackPanel>
-                -->
             </Grid>
         </Grid>
 

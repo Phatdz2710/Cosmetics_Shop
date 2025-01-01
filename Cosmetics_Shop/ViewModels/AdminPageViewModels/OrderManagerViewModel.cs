@@ -219,7 +219,8 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
 
             CancelFormCommand = new RelayCommand(cancelFormCommand);
             // Load orders when the ViewModel is created
-            LoadData();                  
+            LoadData();
+            
         }
 
 
@@ -279,7 +280,7 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
 
 
                             //});
-                            
+
                             ListView.Clear();
                             var orderItems = await _dao.GetListOrderItemAsync(order.UserId);
 
@@ -289,35 +290,38 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                                 var totalPrice = orderItem.Quantity * product.Price;
                                 var orderItemDisplay = new OrderItemDisplay(orderItem.ProductId, product.Name, orderItem.Quantity, product.ThumbnailImage, product.Price, totalPrice);
 
-                                
+
                                 sum += totalPrice;
 
                                 ListView.Add(orderItemDisplay);
+                                AcceptFormCommand = new RelayCommand(async () =>
                                 {
-                                    //ShowForm = true;
-                                    AcceptFormCommand = new RelayCommand(async () =>
-                                    {
-                                        ShowForm = false;
-                                        var result = await _dao.ChangeOrderStatusAsync();
+                                    ShowForm = false;
+                                    var result = await _dao.ChangeOrderStatusAsync();
 
-                                        if (result)
-                                        {
-                                            Message = "Đơn hàng đã được duyệt!";
-                                            OrderStatus = 2;
-                                            LoadData();
-                                        }
-                                        else
-                                        {
-                                            Message = "Đơn hàng đang chờ duyệt!";
-                                            OrderStatus = 0;
-                                        }
-                                    });
-                                }
-                                
+                                    if (result)
+                                    {
+                                        Message = "Đơn hàng đã được duyệt!";
+                                        order.OrderStatus = 1;
+                                        ListView.Add(orderItemDisplay);
+                                        LoadData();
+                                    }
+                                    else
+                                    {
+                                        Message = "Đơn hàng đang chờ duyệt!";
+                                        cancelFormCommand();
+                                    }
+                                });
                             }
                             TotalPrice = sum;
                             sum = 0;
+
+                            
+
                         }))
+                            
+                            
+                        
                 );
 
             }
