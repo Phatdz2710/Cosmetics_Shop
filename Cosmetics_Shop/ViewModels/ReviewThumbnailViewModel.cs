@@ -14,6 +14,9 @@ using System.Windows.Input;
 
 namespace Cosmetics_Shop.ViewModels
 {
+    /// <summary>
+    /// View model for review area in product detail page
+    /// </summary>
     public class ReviewThumbnailViewModel : INotifyPropertyChanged
     {
         // Navigation service

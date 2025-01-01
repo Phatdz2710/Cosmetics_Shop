@@ -53,6 +53,8 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         private string _nameDisplay;
         private string _phone;
         private string _address;
+        private string _shippingAddress;
+
         #endregion
 
         #region Properties Binding
@@ -150,6 +152,18 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(); // Thông báo thay đổi nếu cần
             }
         }
+        public string ShippingAddress
+        {
+            get => _shippingAddress;
+            set
+            {
+                if (_shippingAddress != value)
+                {
+                    _shippingAddress = value;
+                    OnPropertyChanged(); // Notify UI of change
+                }
+            }
+        }
 
         #endregion
 
@@ -198,11 +212,18 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         }
 
         #region Voucher
+        /// <summary>
+        /// Load the vouchers from database
+        /// </summary>
+        /// <returns>A list of vouchers</returns>
         public async Task<List<Models.Voucher>> GetAllVouchersAsync()
         {
             return await _dao.GetAllVouchersAsync();
         }
 
+        /// <summary>
+        /// Calculate the voucher to the total payment
+        /// </summary>
         public void calculateVoucher()
         {
             if (_currentVoucher != null)
@@ -227,6 +248,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
             recalculateFinalFee();
         }
+
+        /// <summary>
+        /// Recalculate the total payment after apply voucher fee
+        /// </summary>
+        /// <param name="selectedVoucher">Voucher was selected.</param>
         public void ApplyVoucher(Models.Voucher selectedVoucher)
         {
             // Remove the previous voucher's effect if a new one is being applied
@@ -240,11 +266,19 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         #endregion
 
         #region Shipping
+        /// <summary>
+        /// Load the shipping methods from database
+        /// </summary>
+        /// <returns>A list of shipping methods</returns>
         public async Task<List<Models.ShippingMethod>> GetShippingMethodsAsync()
         {
             return await _dao.GetShippingMethodsAsync(); 
         }
 
+        /// <summary>
+        /// Recalculate the total payment after apply shipping fee
+        /// </summary>
+        /// <param name="selectedShippingMethod">Shipping method was selected.</param>
         public void ApplyShipping(Models.ShippingMethod selectedShippingMethod)
         {
             // Remove the previous voucher's effect if a new one is being applied
@@ -255,9 +289,22 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 recalculateFinalFee();
             }
         }
+
+        /// <summary>
+        /// Update shipping address to order
+        /// </summary>
+        /// <param name="address">Address was changed.</param>
+        public void LoadShippingAddress(string address)
+        {
+            ShippingAddress = address;
+        }
+
         #endregion
 
         #region Calculation
+        /// <summary>
+        /// Calculate the final fee
+        /// </summary>
         public void recalculateFinalFee()
         {
             FinalFee = TotalPay + ShippingFee - VoucherFee;
@@ -265,6 +312,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         #endregion
 
         #region User
+        /// <summary>
+        /// Load user information
+        /// </summary>
         private async void loadUserInformation()
         {
             var userDetail = await _dao.GetUserDetailAsync(_userSession.GetId());
@@ -273,14 +323,23 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             NameDisplay = userDetail.Name;
             Phone = userDetail.Phone;
             Address = userDetail.Address;
+            ShippingAddress = Address; // initial shipping address is user address
         }
         #endregion
 
         #region Payment Method
+        /// <summary>
+        /// Load payment methods from database
+        /// </summary>
+        /// <returns>A list of payment methods</returns>
         public async Task<List<Models.PaymentMethod>> GetPaymentMethodsAsync()
         {
             return await _dao.GetPaymentMethodsAsync();
         }
+
+        /// <summary>
+        /// Load payment methods from database
+        /// </summary>
         private async void LoadPaymentMethods()
         {
             var methods = await GetPaymentMethodsAsync();
@@ -293,6 +352,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         #endregion
 
         #region Order
+        /// <summary>
+        /// Command to add a new order to database
+        /// </summary>
         private async Task ExecuteOrderCommand()
         {
             // Validate user input
@@ -326,7 +388,8 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             var voucherId = _currentVoucher?.Id; // Assuming _currentVoucher has an Id property
 
             // Call the method to add the order
-            var order = await _dao.AddToOrderAsync(products, (int)paymentMethod, (int)shippingMethod, (int)voucherId);
+            var order = await _dao.AddToOrderAsync(products, (int)paymentMethod, (int)shippingMethod, 
+                            (int)voucherId, ShippingAddress, FinalFee);
 
             foreach (var product in PaymentProduct)
             {
@@ -345,7 +408,8 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             if (order != null)
             {
                 ShowDialogRequested?.Invoke("Cảm ơn bạn đã đặt hàng !");
-                _navigationService.NavigateTo<DashboardPage>(); // Assuming you have a ConfirmationPage
+                _navigationService.NavigateTo<DashboardPage>();
+                //_navigationService.NavigateTo<ReviewPage>(products);
             }
             else
             {

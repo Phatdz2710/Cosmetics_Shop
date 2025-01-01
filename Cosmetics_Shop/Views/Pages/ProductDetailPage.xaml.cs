@@ -27,7 +27,6 @@ namespace Cosmetics_Shop.Views.Pages
     {
         public ProductDetailViewModel ViewModel { get; }
 
-        // public int proId = 1;
         public ProductDetailPage()
         {
             this.InitializeComponent();
@@ -81,6 +80,9 @@ namespace Cosmetics_Shop.Views.Pages
         #endregion
 
         #region Click button
+        /// <summary>
+        /// Click to minus the quantity
+        /// </summary>
         private void minusButton_Click(object sender, RoutedEventArgs e)
         {
             if (ViewModel.Amount > 1)
@@ -88,11 +90,21 @@ namespace Cosmetics_Shop.Views.Pages
                 ViewModel.Amount--; // Decrease the amount
             }
         }
+
+        /// <summary>
+        /// Click to plus the quantity
+        /// </summary>
         private void plusButton_Click(object sender, RoutedEventArgs e)
         {
-            ViewModel.Amount++; // Increase the amount
+            if (ViewModel.Amount < ViewModel.ProductDetail.availableAmount)
+            {
+                ViewModel.Amount++; // Increase the amount
+            }
         }
 
+        /// <summary>
+        /// Click to category the product rating 
+        /// </summary>
         private void FilterButton_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button button && button.Tag is string tag)
@@ -110,6 +122,9 @@ namespace Cosmetics_Shop.Views.Pages
             }
         }
 
+        /// <summary>
+        /// Click to add a product to cart 
+        /// </summary>
         private async void themvaogiohangButton_Click(object sender, RoutedEventArgs e)
         {
             // Lấy productId từ ViewModel

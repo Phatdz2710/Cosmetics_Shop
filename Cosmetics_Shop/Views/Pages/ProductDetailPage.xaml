@@ -248,7 +248,7 @@ Height="250">
 
                                 <Button x:Name="themvaogiohangButton" 
                                         Grid.Column="0"
-                                        Margin="0 10 0 0"
+                                        Margin="0 10 0 15"
                                         Height="50"
                                         Foreground="{ThemeResource PurchasePageFilterButtonBackground}"
                                         BorderBrush="{ThemeResource PurchasePageFilterButtonBackground}"
@@ -264,7 +264,7 @@ Height="250">
 
                                 <Button x:Name="muangayButton" 
                                         Grid.Column="1"
-                                        Margin="10 10 0 0"
+                                        Margin="10 10 0 15"
                                         Height="50"
                                         Width="150"
                                         Foreground="White"
@@ -295,10 +295,11 @@ Height="250">
                   Grid.Column="1"
                   Grid.Row="3"
                   Background="{ThemeResource OrderCellBackground}"
-                CornerRadius="20">
+                CornerRadius="20"
+                  MaxHeight="250">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="2*"/>
-                    <RowDefinition Height="7*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0"

@@ -37,6 +37,7 @@ namespace Cosmetics_Shop.Views.Pages
 
             // Moved the async code to Loaded event
             this.Loaded += CartPage_Loaded;
+            ViewModel.ShowDialogRequested += ShowDialog;
         }
 
         private async void CartPage_Loaded(object sender, RoutedEventArgs e)
@@ -50,7 +51,22 @@ namespace Cosmetics_Shop.Views.Pages
             if (voucherComboBox.SelectedItem is Models.Voucher selectedVoucher)
             {
                 ViewModel.ApplyVoucher(selectedVoucher);
+                ViewModel.RecalculateTotalPay();
             }
+        }
+
+        private async void ShowDialog(string message)
+        {
+            ContentDialog dialog = new ContentDialog
+            {
+                Title = "Thông báo",
+                Content = message,
+                CloseButtonText = "OK"
+            };
+
+            dialog.XamlRoot = this.XamlRoot;
+
+            await dialog.ShowAsync(); // Hiển thị hộp thoại
         }
     }
 

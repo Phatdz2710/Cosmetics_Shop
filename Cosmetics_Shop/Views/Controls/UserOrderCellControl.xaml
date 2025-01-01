@@ -65,7 +65,8 @@
                 Height="50"
                 BorderThickness="1"
                 BorderBrush="{ThemeResource AccountPageTotalBillsForeground}"
-                Visibility="{x:Bind ViewModel.IsApproved, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                Visibility="{x:Bind ViewModel.IsApproved, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                Command="{x:Bind ViewModel.ReviewCommand, Mode=OneWay}"/>
 
         <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" Visibility="{x:Bind ViewModel.IsShowItems, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid.RowDefinitions>

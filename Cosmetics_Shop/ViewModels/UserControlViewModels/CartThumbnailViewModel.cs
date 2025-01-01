@@ -17,6 +17,9 @@ using System.Windows.Input;
 
 namespace Cosmetics_Shop.ViewModels.UserControlViewModels
 {
+    /// <summary>
+    /// View model for cart thumbnail
+    /// </summary>
     public class CartThumbnailViewModel : INotifyPropertyChanged
     {
         // Navigation service
@@ -53,6 +56,9 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
             DeleteCommand = new RelayCommand(async () => await DeleteItem());
         }
 
+        /// <summary>
+        /// Delete an item to cart in database
+        /// </summary>
         private async Task DeleteItem()
         {
             // Call the DeleteFromCartAsync method in the parent ViewModel
