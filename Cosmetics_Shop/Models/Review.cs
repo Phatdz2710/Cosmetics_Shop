@@ -10,6 +10,7 @@ namespace Cosmetics_Shop.Models
     public class Review
     {
         public int Id { get; set; }
+        public int ProductID { get; set; }
         public int UserID { get; set; }
         public string Name { get; set; }
         public string UserImage { get; set; }
@@ -18,10 +19,19 @@ namespace Cosmetics_Shop.Models
 
         public Review(int id, int userID, string name, string userImage, int starNumber, DateTime ratingDate)
         {
-            Id = id;
+            ProductID = id;
             UserID = userID;
             Name = name;
             UserImage = userImage;
+            StarNumber = starNumber;
+            RatingDate = ratingDate;
+        }
+
+
+        public Review(int userID, int id, int starNumber, DateTime ratingDate)
+        {
+            UserID = userID;
+            ProductID = id;
             StarNumber = starNumber;
             RatingDate = ratingDate;
         }

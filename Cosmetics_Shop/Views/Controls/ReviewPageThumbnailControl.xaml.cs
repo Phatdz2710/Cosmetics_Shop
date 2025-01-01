@@ -14,6 +14,7 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Cosmetics_Shop.ViewModels.UserControlViewModels;
 using Cosmetics_Shop.ViewModels;
+using System.ComponentModel;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -21,13 +22,13 @@ using Cosmetics_Shop.ViewModels;
 namespace Cosmetics_Shop.Views.Controls
 {
     /// <summary>
-    /// Review thumbnail control in product detail page
+    /// Review page thumbnail control in review page 
     /// </summary>
-    public sealed partial class ReviewThumbnailControl : UserControl
+    public sealed partial class ReviewPageThumbnailControl : UserControl
     {
-        public ReviewThumbnailViewModel ViewModel
+        public ReviewPageThumbnailViewModel ViewModel
         {
-            get { return (ReviewThumbnailViewModel)GetValue(ViewModelProperty); }
+            get { return (ReviewPageThumbnailViewModel)GetValue(ViewModelProperty); }
             set
             {
                 SetValue(ViewModelProperty, value);
@@ -38,12 +39,25 @@ namespace Cosmetics_Shop.Views.Controls
         // Sử dụng DependencyProperty để hỗ trợ binding
         public static readonly DependencyProperty ViewModelProperty =
             DependencyProperty.Register("ViewModel",
-                                        typeof(ReviewThumbnailViewModel),
-                                        typeof(ReviewThumbnailControl),
+                                        typeof(ReviewPageThumbnailViewModel),
+                                        typeof(ReviewPageThumbnailControl),
                                         new PropertyMetadata(null));
-        public ReviewThumbnailControl()
+        public ReviewPageThumbnailControl()
         {
             this.InitializeComponent();
+        }
+
+        /// <summary>
+        /// Click to review in review page 
+        /// </summary>
+        private void StarButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.Tag is string tag && int.TryParse(tag.ToString(), out int starNumber))
+            {
+                // Gọi phương thức trong ViewModel để cập nhật StarNumber
+                ViewModel.StarNumber = starNumber;
+                ViewModel.UpdateStarStates(starNumber);
+            }
         }
     }
 }

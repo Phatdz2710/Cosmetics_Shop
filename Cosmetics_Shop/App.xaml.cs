@@ -106,6 +106,8 @@ namespace Cosmetics_Shop
             services.AddTransient<AccountManagerViewModel>();
             services.AddTransient<OrderManagerViewModel>();
             services.AddTransient<ProductManagerViewModel>();
+            services.AddTransient<ReviewPageThumbnailViewModel>();
+            services.AddTransient<ReviewPageViewModel>();
 
             var basePath = AppContext.BaseDirectory;
             var jsonFilePath = System.IO.Path.Combine(basePath, "appsettings.json");

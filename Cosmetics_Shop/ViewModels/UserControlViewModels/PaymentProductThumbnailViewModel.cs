@@ -17,6 +17,9 @@ using System.Windows.Input;
 
 namespace Cosmetics_Shop.ViewModels.UserControlViewModels
 {
+    /// <summary>
+    /// View model for payment product thumbnail
+    /// </summary>
     public class PaymentProductThumbnailViewModel : INotifyPropertyChanged
     {
         // Navigation service

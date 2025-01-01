@@ -58,6 +58,9 @@ namespace Cosmetics_Shop.Views.Pages
         }
         #endregion
 
+        /// <summary>
+        /// Show the dialog if having a successful order
+        /// </summary>
         private async void ShowDialog(string message)
         {
             ContentDialog dialog = new ContentDialog
@@ -71,6 +74,49 @@ namespace Cosmetics_Shop.Views.Pages
 
             await dialog.ShowAsync(); // Hiển thị hộp thoại
         }
+
+        #region Click
+        /// <summary>
+        /// Click to change the shipping address in the order
+        /// </summary>
+        private void ChangeAddressButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (addressTextBlock.Visibility == Visibility.Visible)
+            {
+                // Switch to editing mode
+                addressTextBlock.Visibility = Visibility.Collapsed;
+                addressTextBox.Visibility = Visibility.Visible;
+                addressTextBox.Text = ViewModel.ShippingAddress; // Pre-fill with current address
+                addressTextBox.Focus(FocusState.Programmatic);
+
+                // Change button content to "Lưu lại" (Save)
+                changeAddressButton.Content = "Lưu lại";
+            }
+            else
+            {
+                // Switch back to display mode
+                addressTextBlock.Visibility = Visibility.Visible;
+                addressTextBox.Visibility = Visibility.Collapsed;
+
+                // Update the ViewModel's ShippingAddress if it's not empty
+                if (ViewModel != null && !string.IsNullOrWhiteSpace(addressTextBox.Text))
+                {
+                    ViewModel.LoadShippingAddress(addressTextBox.Text);
+                    // Optionally update the displayed TextBlock
+                    addressTextBlock.Text = addressTextBox.Text;
+                }
+                else
+                {
+                    // Handle case when address is empty (perhaps show a validation message)
+                    addressTextBlock.Text = "No address provided"; // or handle appropriately
+                }
+
+                // Change button content back to "Thay đổi"
+                changeAddressButton.Content = "Thay đổi";
+            }
+        }
+
+        #endregion
 
         #region Combobox
         private void voucherComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

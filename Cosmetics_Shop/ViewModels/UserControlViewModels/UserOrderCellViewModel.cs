@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using Cosmetics_Shop.DataAccessObject.Interfaces;
 using Cosmetics_Shop.Models;
+using Cosmetics_Shop.Services;
+using Cosmetics_Shop.Views.Pages;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,6 +18,7 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
     {
         #region Singleton
         private readonly IDao _dao = null;
+        private readonly INavigationService _navigationService;
 
         #endregion
 
@@ -97,16 +100,24 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
 
         #region Commands
         public ICommand ShowHideItemCommand { get; set; }
+        public ICommand ReviewCommand { get; set; }
 
         #endregion
 
-        public UserOrderCellViewModel(IDao dao)
+        public UserOrderCellViewModel(IDao dao, INavigationService navigationService)
         {
             _dao = dao;
+            _navigationService = navigationService;
 
             OrderItemsDisplay = new ObservableCollection<OrderItemDisplay>();
 
             ShowHideItemCommand = new RelayCommand(ShowHideItems);
+
+            ReviewCommand = new RelayCommand(async () =>
+            {
+                await LoadOrderItems();
+                _navigationService.NavigateTo<ReviewPage>(OrderItemsDisplay);
+            });
         }
 
         public async Task LoadOrderItems()

@@ -297,7 +297,7 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                                 AcceptFormCommand = new RelayCommand(async () =>
                                 {
                                     ShowForm = false;
-                                    var result = await _dao.ChangeOrderStatusAsync();
+                                    var result = await _dao.ChangeOrderStatusAsync(order.Id);
 
                                     if (result)
                                     {

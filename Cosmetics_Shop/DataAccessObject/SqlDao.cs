@@ -1102,7 +1102,7 @@ namespace Cosmetics_Shop.DataAccessObject
                 }
             }}
 
-        public async Task<bool> ChangeOrderStatusAsync()
+        public async Task<bool> ChangeOrderStatusAsync(int orderId)
         {
             using (var scope = _serviceProvider.CreateScope())
             {
@@ -1110,7 +1110,7 @@ namespace Cosmetics_Shop.DataAccessObject
 
                 try
                 {
-                    var order = await _databaseContext.Orders.FirstOrDefaultAsync(p => p.Id == 1);
+                    var order = await _databaseContext.Orders.FirstOrDefaultAsync(p => p.Id == orderId);
 
                     if (order == null)
                     {
@@ -1357,6 +1357,92 @@ namespace Cosmetics_Shop.DataAccessObject
             }
 
         }
+
+        private DBModels.ProductRating ConvertToDbReview(Models.ReviewThumbnail db)
+        {
+            return new DBModels.ProductRating
+            {
+                UserId = db.UserID,
+                ProductId = db.ProductID,
+                Rating = db.StarNumber,
+                RatingDate = db.RatingDate
+            };
+        }
+        public async Task<bool> AddReviewAsync(int idProduct, int star)
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                // Retrieve the database context from the service provider
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                var userSession = _serviceProvider.GetService(typeof(UserSession)) as UserSession;
+
+                // Create a new review
+                var review = new ReviewThumbnail
+                (
+                    userSession.GetId(),
+                    idProduct,
+                    star,
+                    DateTime.Now
+                );
+
+                try
+                {
+                    // Add the order to the context
+                    var dbReview = ConvertToDbReview(review);
+                    await _databaseContext.ProductRatings.AddAsync(dbReview);
+
+                    // Save changes to the database to generate the OrderId
+                    await _databaseContext.SaveChangesAsync();
+
+                    // Return the created order
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
+            }
+        }
+
+        public async Task<bool> RecalculateRatingAverage(int productID, int starNumber)
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                // Retrieve the database context from the service provider
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+
+                try
+                {
+                    // Lấy sản phẩm từ cơ sở dữ liệu
+                    var product = await _databaseContext.Products
+                        .FirstOrDefaultAsync(p => p.Id == productID);
+
+                    if (product != null)
+                    {
+                        // Đếm số lượng đánh giá cho sản phẩm
+                        var reviewCount = await _databaseContext.ProductRatings
+                            .CountAsync(r => r.ProductId == productID);
+
+                        // Tính toán giá trị trung bình mới
+                        double newAverageRating = (product.AverageRating * reviewCount + starNumber) / (reviewCount + 1);
+
+                        // Cập nhật giá trị trung bình
+                        product.AverageRating = newAverageRating;
+
+                        // Cập nhật sản phẩm trong cơ sở dữ liệu
+                        _databaseContext.Products.Update(product);
+                        await _databaseContext.SaveChangesAsync();
+                    }
+
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    // Xử lý lỗi nếu cần
+                    return false;
+                }
+            }
+        }
         #endregion
         public async Task<List<string>> GetSuggestionsAsync(string keyword)
         {
@@ -1405,18 +1491,6 @@ namespace Cosmetics_Shop.DataAccessObject
                     return new List<Models.Voucher>();
                 }
             }
-        }
-
-        public List<PaymentProductThumbnail> GetAllPaymentProducts()
-        {
-            var db = new List<PaymentProductThumbnail>
-            {
-                new PaymentProductThumbnail(1, null, "Tẩy trang loreal", 150000, 2),
-                new PaymentProductThumbnail(2, null, "Tẩy trang loreal", 150000, 2),
-                new PaymentProductThumbnail(3, null, "Tẩy trang Bioderma", 150000, 1)
-            };
-
-            return db;
         }
 
         #region Shipping Method
@@ -1479,6 +1553,8 @@ namespace Cosmetics_Shop.DataAccessObject
                 PaymentMethod = modelOrder.PaymentMethod,
                 ShippingMethod = modelOrder.ShippingMethod,
                 VoucherId = modelOrder.VoucherId,
+                ShippingAddress = modelOrder.ShippingAddress,
+                TotalPrice = modelOrder.TotalPrice
             };
         }
 
@@ -1491,8 +1567,9 @@ namespace Cosmetics_Shop.DataAccessObject
                 Quantity = modelOrder.Quantity
             };
         }
-        
-        public async Task<Models.Order> AddToOrderAsync(List<PaymentProductThumbnail> listCartProduct, int paymentMethod, int shippingMethod, int voucher)
+
+        public async Task<Models.Order> AddToOrderAsync(List<PaymentProductThumbnail> listCartProduct, int paymentMethod,
+                                                        int shippingMethod, int voucher, string address, int totalprice)
         {
             // Create a new scope for dependency injection
             using (var scope = _serviceProvider.CreateScope())
@@ -1509,7 +1586,9 @@ namespace Cosmetics_Shop.DataAccessObject
                     OrderDate = DateTime.Now,
                     PaymentMethod = paymentMethod,
                     ShippingMethod = shippingMethod,
-                    VoucherId = voucher
+                    VoucherId = voucher,
+                    ShippingAddress = address,
+                    TotalPrice = totalprice
                 };
 
                 try
@@ -1532,7 +1611,7 @@ namespace Cosmetics_Shop.DataAccessObject
                         };
 
                         // Convert to DB model and add to the context
-                        var dbOrderItem = ConvertToDbOrderItem(orderItem);                      
+                        var dbOrderItem = ConvertToDbOrderItem(orderItem);
                         await _databaseContext.OrderItems.AddAsync(dbOrderItem);
                         await DeleteFromCartByProductIDAsync(product.Id);
                     }

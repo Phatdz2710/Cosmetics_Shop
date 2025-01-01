@@ -33,6 +33,7 @@
     <None Remove="Views\Controls\PaymentProductThumbnailControl.xaml" />
     <None Remove="Views\Controls\PaymentProductThumbnailViewModel.xaml" />
     <None Remove="Views\Controls\ProductCellControl.xaml" />
+    <None Remove="Views\Controls\ReviewPageThumbnailControl.xaml" />
     <None Remove="Views\Controls\ReviewThumbnailControl.xaml" />
     <None Remove="Views\Controls\UserOrderCellControl.xaml" />
     <None Remove="Views\MainWindow.xaml" />
@@ -46,6 +47,7 @@
     <None Remove="Views\Pages\OrderPage.xaml" />
     <None Remove="Views\Pages\PaymentPage.xaml" />
     <None Remove="Views\Pages\PurchasePage.xaml" />
+    <None Remove="Views\Pages\ReviewPage.xaml" />
     <None Remove="Views\UserPage.xaml" />
   </ItemGroup>
 
@@ -201,6 +203,12 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Page Update="Views\Controls\ReviewPageThumbnailControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Views\Pages\ReviewPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="Views\Controls\UserOrderCellControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -109,9 +109,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         }
         #endregion
 
-        public ProductDetailViewModel(INavigationService    navigationService, 
-                                      IDao                  dao, 
-                                      IServiceProvider      serviceProvider)
+        public ProductDetailViewModel(INavigationService navigationService,
+                                      IDao dao,
+                                      IServiceProvider serviceProvider)
         {
             _dao = dao;
             _serviceProvider = serviceProvider;
@@ -127,6 +127,10 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         }
 
         #region Reviews
+        /// <summary>
+        /// Load product ratings from database
+        /// </summary>
+        /// <param name="productID">ID of the product need to load ratings.</param>
         public async Task LoadInitialReviews(int productID)
         {
             reviewThumbnail = new ObservableCollection<ReviewThumbnailViewModel>();
@@ -139,6 +143,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
         }
 
+        /// <summary>
+        /// Show all product ratings from database
+        /// </summary>
         public async void ShowAllReviews()
         {
             // Fetch all reviews for the product
@@ -155,6 +162,10 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             OnPropertyChanged(nameof(reviewThumbnail)); // Notify that the reviewThumbnail has changed
         }
 
+        /// <summary>
+        /// Category the product ratings by star number
+        /// </summary>
+        /// <param name="starNumber">The number of star need to category.</param>
         public async void FilterReviewsByStarNumber(int starNumber)
         {
             // Fetch all reviews for the product
@@ -188,6 +199,10 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         #endregion
 
         #region Product Detail
+        /// <summary>
+        /// Load the product detail by ID of product from database
+        /// </summary>
+        /// <param name="id">ID of product need to load detail.</param>
         public async Task LoadProductDetailAsync(int id)
         {
             ProductDetail = await _dao.GetProductDetailAsync(id);
@@ -195,9 +210,13 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         #endregion
 
         #region Shipping
+        /// <summary>
+        /// Load shipping methods from database
+        /// </summary>
+        /// <returns>A list of shipping methods</returns>
         public async Task<List<Models.ShippingMethod>> GetShippingMethodsAsync()
         {
-            return await _dao.GetShippingMethodsAsync(); 
+            return await _dao.GetShippingMethodsAsync();
         }
         #endregion
 
@@ -209,6 +228,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         }
 
         #region Payment
+        /// <summary>
+        /// Command to order product
+        /// </summary>
         public void ExecutePaidButtonCommand()
         {
             if (ProductsToPayment != null && ProductsToPayment.Count > 0)
@@ -225,6 +247,10 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
         }
 
+        /// <summary>
+        /// Load the product detail and quantity to order
+        /// </summary>
+        /// <param name="p">Product was selected to order.</param>
         public void SetInfo(PaymentProductThumbnail p)
         {
             // Add the product to the list instead of setting a single product
@@ -235,6 +261,12 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         #endregion
 
         #region Cart
+        /// <summary>
+        /// Add a product to cart in database
+        /// </summary>
+        /// <param name="productId">Product was selected to add the cart.</param>
+        /// <param name="quantity">Quantity of product was added to cart.</param>
+        /// <returns>Successful adding or not</returns>
         public async Task<bool> AddToCartAsync(int productId, int quantity)
         {
             // Gọi phương thức AddToCartAsync để thêm sản phẩm vào giỏ hàng

@@ -266,7 +266,8 @@ namespace Cosmetics_Shop.DataAccessObject
             return true;
         }
 
-        public async Task<Models.Order> AddToOrderAsync(List<PaymentProductThumbnail> listCartProduct, int paymentMethod, int shippingMethod, int voucher)
+        public async Task<Models.Order> AddToOrderAsync(List<PaymentProductThumbnail> listCartProduct, int paymentMethod,
+                                                        int shippingMethod, int voucher, string address, int totalprice)
         {
             var db = new Models.Order()
             {
@@ -286,6 +287,16 @@ namespace Cosmetics_Shop.DataAccessObject
 
         }
 
+        public async Task<bool> AddReviewAsync(int idProduct, int starNumber)
+        {
+            return true;
+        }
+
+        public async Task<bool> RecalculateRatingAverage(int productID, int starNumber)
+        {
+            return true;
+        }
+
         public async Task<List<string>> GetSuggestionsAsync(string keyword)
         {
             var suggestions = new List<string> { "Apple", "Application", "Banana", "Cherry", "Date", "Grape" };
@@ -300,18 +311,6 @@ namespace Cosmetics_Shop.DataAccessObject
         public async Task<List<Models.Voucher>> GetAllVouchersAsync()
         {
             throw new NotImplementedException();
-        }
-
-        public List<PaymentProductThumbnail> GetAllPaymentProducts()
-        {
-            var db = new List<PaymentProductThumbnail>
-            {
-                new PaymentProductThumbnail(1, null, "Tẩy trang loreal", 150000, 2),
-                new PaymentProductThumbnail(2, null, "Tẩy trang loreal", 150000, 2),
-                new PaymentProductThumbnail(3, null, "Tẩy trang Bioderma", 150000, 1)
-            };
-
-            return db;
         }
 
         public async Task<List<Models.ShippingMethod>> GetShippingMethodsAsync()
@@ -445,7 +444,7 @@ namespace Cosmetics_Shop.DataAccessObject
             throw new NotImplementedException();
         }
 
-        public Task<bool> ChangeOrderStatusAsync()
+        public Task<bool> ChangeOrderStatusAsync(int orderId)
         {
             throw new NotImplementedException();
         }

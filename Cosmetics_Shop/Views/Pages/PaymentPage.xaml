@@ -108,17 +108,28 @@
                     </StackPanel>
 
                     <TextBlock Grid.Column="1"
-                           Text="{x:Bind ViewModel.Address, Mode=OneWay}"
-                           TextWrapping="Wrap"
-                           FontSize="15"
+                               x:Name="addressTextBlock"
+                               Text="{x:Bind ViewModel.Address, Mode=OneWay}"
+                               TextWrapping="Wrap"
+                               FontSize="15"
+                               Visibility="Visible"
                            />
 
+                    <!-- TextBox for editing the address -->
+                    <TextBox Grid.Column="1"
+                             x:Name="addressTextBox"
+                             Text="{x:Bind ViewModel.Address, Mode=TwoWay}"
+                             TextWrapping="Wrap"
+                             FontSize="15"
+                             Visibility="Collapsed"/>
+
                     <Button x:Name="changeAddressButton"
-                        Grid.Column="2"
-                        Content="Thay đổi"
+                            Grid.Column="2"
+                            Content="Thay đổi"
                             Background="{ThemeResource PurchasePageFilterButtonBackground}"
-                        FontSize="15"
-                        Foreground="White"
+                            FontSize="15"
+                            Foreground="White"
+                            Click="ChangeAddressButton_Click"
                         />
                 </Grid>
             </StackPanel>

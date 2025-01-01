@@ -212,6 +212,8 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// <summary>
         /// Add a product to the cart.
         /// </summary>
+        /// <param name="productId">The ID of product will be added to cart.</param>
+        /// <param name="quantity">The quantity of product will be added to cart.</param>
         /// <returns>
         /// A <see cref="List{T}"/> of <see cref="bool"/> objects representing the products in the cart.
         /// </returns>
@@ -220,14 +222,26 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// <summary>
         /// Create an order
         /// </summary>
+        /// <param name="listCartProduct">The list of product in the order.</param>
+        /// <param name="paymentMethod">The method of payment in the order.</param>
+        /// <param name="shippingMethod">The method of shipping in the order.</param>
+        /// <param name="voucher">The voucher was applied.</param>
+        /// <param name="address">The address of the order.</param>
+        /// <param name="totalprice">The total price of the order.</param>
         /// <returns>
         /// A <see cref="List{T}"/> of <see cref="PaymentProductThumbnail"/> objects representing the products in the cart.
         /// </returns>
-        Task<Models.Order> AddToOrderAsync(List<PaymentProductThumbnail> listCartProduct, int paymentMethod, int shippingMethod, int voucher);
+        Task<Models.Order> AddToOrderAsync(List<PaymentProductThumbnail> listCartProduct, 
+                                            int paymentMethod, 
+                                            int shippingMethod, 
+                                            int voucher, 
+                                            string address, 
+                                            int totalprice);
 
         /// <summary>
         /// Delete a product to the cart by Card ID.
         /// </summary>
+        /// <param name="cartId">The ID of cart product.</param>
         /// <returns>
         /// A <see cref="List{T}"/> of <see cref="bool"/> objects representing the products in the cart.
         /// </returns>
@@ -236,6 +250,7 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// <summary>
         /// Delete a product to the cart by Product ID.
         /// </summary>
+        /// <param name="productId">The ID of product in cart.</param>
         /// <returns>
         /// A <see cref="List{T}"/> of <see cref="bool"/> objects representing the products in the cart.
         /// </returns>
@@ -244,6 +259,8 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// <summary>
         /// Update cart.
         /// </summary>
+        /// <param name="cartId">The ID of cart product.</param>
+        /// <param name="quantity">The quantity of product in cart.</param>
         /// <returns>
         /// A <see cref="List{T}"/> of <see cref="bool"/> objects representing the products in the cart.
         /// </returns>
@@ -373,7 +390,7 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         Task<string> GetUserLevelAsync(int userId);
 
         Task<GetOrderResult> GetListAllOrdersAsync(int page, int orderPerPage);
-        Task<bool>ChangeOrderStatusAsync();
+        Task<bool>ChangeOrderStatusAsync(int orderId);
 
         #endregion
 
@@ -389,14 +406,7 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// </returns>
         Task<List<string>> GetSuggestionsAsync(string keyword);
 
-
-        /// <summary>
-        /// Retrieves a list of review thumbnails.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="List{T}"/> of <see cref="ReviewThumbnail"/> objects representing the review thumbnails.
-        /// </returns>
-        //List<ReviewThumbnail> GetListReviewThumbnail();
+        #region Rating, Shipping and Payment
 
         /// <summary>
         /// Retrieves a list of review thumbnails for a specific product.
@@ -408,20 +418,32 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         Task<List<ReviewThumbnail>> GetListReviewThumbnailByIDProductAsync(int idProduct);
 
         /// <summary>
+        /// Add a new rating for a specific product.
+        /// </summary>
+        /// <param name="idProduct">The ID of the product adding to the database.</param>
+        /// <param name="idProduct">The star number of the product adding to the database.</param>
+        /// <returns>
+        /// A <see cref="List{T}"/> of <see cref="bool"/> objects associated with the specified product.
+        /// </returns>
+        Task<bool> AddReviewAsync(int idProduct, int starNumber);
+
+        /// <summary>
+        /// Recalculate the average rating of a product
+        /// </summary>
+        /// <param name="productID">The ID of the product.</param>
+        /// <param name="starNumber">The star number of the product will be calculated.</param>
+        /// <returns>
+        /// A <see cref="List{T}"/> of <see cref="bool"/> objects associated with the specified product.
+        /// </returns>
+        Task<bool> RecalculateRatingAverage(int productID, int starNumber);
+
+        /// <summary>
         /// Retrieves a list of all available vouchers.
         /// </summary>
         /// <returns>
         /// A <see cref="List{T}"/> of <see cref="Voucher"/> objects representing the available vouchers.
         /// </returns>
         Task<List<Models.Voucher>> GetAllVouchersAsync();
-
-        /// <summary>
-        /// Retrieves a list of all products available for payment.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="List{T}"/> of <see cref="PaymentProductThumbnail"/> objects representing the products available for payment.
-        /// </returns>
-        List<PaymentProductThumbnail> GetAllPaymentProducts();
 
         /// <summary>
         /// Retrieves a list of available shipping methods.
@@ -438,6 +460,7 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// A <see cref="List{T}"/> of <see cref="PaymentMethod"/> objects representing the available shipping methods.
         /// </returns>
         Task<List<Models.PaymentMethod>> GetPaymentMethodsAsync();
-        
+
+        #endregion
     }
 }

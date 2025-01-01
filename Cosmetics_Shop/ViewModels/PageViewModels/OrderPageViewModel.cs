@@ -2,6 +2,7 @@
 using Cosmetics_Shop.DataAccessObject.Interfaces;
 using Cosmetics_Shop.Enums;
 using Cosmetics_Shop.Models;
+using Cosmetics_Shop.Services;
 using Cosmetics_Shop.ViewModels.UserControlViewModels;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         #region Singleton
         private readonly IDao _dao = null;
         private readonly UserSession _userSession = null;
+        private readonly INavigationService _navigationService;
         #endregion
 
         #region Fields
@@ -48,10 +50,12 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         #endregion
 
         public OrderPageViewModel(IDao dao, 
-                                  UserSession userSession)
+                                  UserSession userSession,
+                                  INavigationService navigationService)
         {
             _dao = dao;
             _userSession = userSession;
+            _navigationService = navigationService;
 
             UserOrders = new ObservableCollection<UserOrderCellViewModel>();
 
@@ -76,7 +80,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
 
             foreach (var order in orders)
             {
-                var userOrderCellViewModel = new UserOrderCellViewModel(_dao) 
+                var userOrderCellViewModel = new UserOrderCellViewModel(_dao, _navigationService) 
                 { 
                     OrderId = order.Id,
                     OrderDate = order.OrderDate,
