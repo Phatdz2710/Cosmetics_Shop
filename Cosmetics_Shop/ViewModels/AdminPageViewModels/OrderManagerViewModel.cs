@@ -253,7 +253,7 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
             var result = await _dao.GetListAllOrdersAsync(CurrentPage, 10);
             TotalPage = result.TotalPages;
             TotalOrders = result.TotalOrders;
-
+            var sum = 0;
 
             // Show or hide button next/previous page
             VisiNext = CurrentPage != TotalPage;
@@ -279,15 +279,19 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
 
 
                             //});
-
+                            
                             ListView.Clear();
-                            var orderItems = await _dao.GetListOrderItemAsync(order.Id);
+                            var orderItems = await _dao.GetListOrderItemAsync(order.UserId);
 
                             foreach (var orderItem in orderItems)
                             {
                                 var product = await _dao.GetProductDetailAsync(orderItem.ProductId);
                                 var totalPrice = orderItem.Quantity * product.Price;
                                 var orderItemDisplay = new OrderItemDisplay(orderItem.ProductId, product.Name, orderItem.Quantity, product.ThumbnailImage, product.Price, totalPrice);
+
+                                
+                                sum += totalPrice;
+
                                 ListView.Add(orderItemDisplay);
                                 {
                                     //ShowForm = true;
@@ -309,8 +313,10 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                                         }
                                     });
                                 }
+                                
                             }
-
+                            TotalPrice = sum;
+                            sum = 0;
                         }))
                 );
 
@@ -325,7 +331,7 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
         /// </summary>
         private void cancelFormCommand()
         {
-            OrderStatus = 0;
+            OrderStatus = 0;            
             ShowForm = false;
         }
 
