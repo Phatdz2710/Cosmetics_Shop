@@ -1102,7 +1102,7 @@ namespace Cosmetics_Shop.DataAccessObject
                 }
             }}
 
-        public async Task<bool> ChangeOrderStatusAsync(int orderId)
+        public async Task<bool> ChangeOrderStatusAsync(int orderId, int status)
         {
             using (var scope = _serviceProvider.CreateScope())
             {
@@ -1117,7 +1117,7 @@ namespace Cosmetics_Shop.DataAccessObject
                         return false;
                     }
 
-                    order.OrderStatus = 1;
+                    //order.OrderStatus = status;
 
                     await _databaseContext.SaveChangesAsync();
                     return true;

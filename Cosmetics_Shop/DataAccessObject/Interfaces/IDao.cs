@@ -390,7 +390,7 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         Task<string> GetUserLevelAsync(int userId);
 
         Task<GetOrderResult> GetListAllOrdersAsync(int page, int orderPerPage);
-        Task<bool>ChangeOrderStatusAsync(int orderId);
+        Task<bool>ChangeOrderStatusAsync(int orderId, int status);
 
         #endregion
 

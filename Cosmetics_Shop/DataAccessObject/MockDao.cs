@@ -444,7 +444,7 @@ namespace Cosmetics_Shop.DataAccessObject
             throw new NotImplementedException();
         }
 
-        public Task<bool> ChangeOrderStatusAsync(int orderId)
+        public Task<bool> ChangeOrderStatusAsync(int orderId, int status)
         {
             throw new NotImplementedException();
         }

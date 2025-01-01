@@ -161,10 +161,11 @@
                   Padding="20">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
                     <RowDefinition Height="4*"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
-                    
+
                 </Grid.RowDefinitions>
 
                 <TextBlock Text="Chi tiết đơn hàng" 
@@ -172,7 +173,47 @@
                            VerticalAlignment="Center" 
                            HorizontalAlignment="Center" 
                            FontSize="25" />
-                <ScrollView Grid.Row="1"
+                <Grid Grid.Row="1" 
+                      Background="#E0FFF1"
+                      CornerRadius="10 10 10 10"
+                      BorderThickness="1 1 1 0"
+                      Padding="10 10 10 10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="Hình ảnh"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               Margin="20 0 0 0"
+                               FontSize="17"/>
+
+                    <TextBlock Grid.Column="1" Text="Tên sản phẩm"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Margin="20 0 0 0"
+                                FontSize="17"/>
+
+                    <TextBlock Grid.Column="2" Text="Số lượng"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Margin="20 0 0 0"
+                                FontSize="17"/>
+
+                    <TextBlock Grid.Column="3" Text="Giá"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Margin="20 0 0 0"
+                                FontSize="17"/>
+
+                </Grid>
+                
+                
+                <ScrollView Grid.Row="2"
                             MinHeight="450"                            
                             VerticalAlignment="Top"
                             CornerRadius="0 0 10 10">
@@ -195,7 +236,7 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
-                                    <Image Grid.Column="0" Source="{Binding ImageSource, Mode=OneWay, Converter={StaticResource StringToImageSourceConverter}}"
+                                    <Image Grid.Column="0"   Source="{Binding ImageSource, Mode=OneWay, Converter={StaticResource StringToImageSourceConverter}}"
                                             Height="40" Width="40" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                     <TextBlock Grid.Column="1" Text="{Binding ProductName, Mode=OneWay}" VerticalAlignment="Center"/>
                                     <TextBlock Grid.Column="2" Text="{Binding Quantity, Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
@@ -210,7 +251,7 @@
                     </ListView>
                 </ScrollView>
                 
-                <Grid Grid.Row="2">
+                <Grid Grid.Row="3">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="2*"/>
@@ -231,7 +272,7 @@
                     </TextBlock>
                 </Grid>
                 
-                <StackPanel Grid.Row="3"
+                <StackPanel Grid.Row="4"
                             Orientation="Horizontal"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Center">
@@ -245,6 +286,12 @@
                             Background="Tomato"
                             Foreground="White"
                             Command="{x:Bind ViewModel.CancelFormCommand, Mode=OneWay}"/>
+
+                    <Button Width="100" Margin="10"
+                            Content="Quay lại"
+                            Background="Aquamarine"           
+                            Command="{x:Bind ViewModel.ReturnFormCommand, Mode=OneWay}"/>
+
                 </StackPanel>
             </Grid>
         </Grid>
