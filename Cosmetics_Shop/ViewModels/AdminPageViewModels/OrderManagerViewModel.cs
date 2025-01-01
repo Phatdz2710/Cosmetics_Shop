@@ -212,8 +212,6 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
 
             ListOrders = new ObservableCollection<OrderCellViewModel>();
 
-           
-
             ListView = new ObservableCollection<OrderItemDisplay>();                     
 
            
@@ -269,54 +267,56 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                         order.OrderDate, 
                         order.ShippingAddress,
                         order.OrderStatus,
-                        new RelayCommand(() =>
+                        new RelayCommand(async () =>
                         {
                             ShowForm = true;
                             ///<summary>
                             ///
                             /// </summary>
 
-                            ShowHideItemCommand = new RelayCommand (async() =>
+                            //ShowHideItemCommand = new RelayCommand (async() =>
+                            //{
+
+
+                            //});
+
+                            ListView.Clear();
+                            var orderItems = await _dao.GetListOrderItemAsync(order.Id);
+
+                            foreach (var orderItem in orderItems)
                             {
-                                ListView.Clear();
-                                var orderItems = await _dao.GetListOrderItemAsync(OrderId);
-
-                                foreach (var orderItem in orderItems)
+                                var product = await _dao.GetProductDetailAsync(orderItem.ProductId);
+                                var totalPrice = orderItem.Quantity * product.Price;
+                                var orderItemDisplay = new OrderItemDisplay(orderItem.ProductId, product.Name, orderItem.Quantity, product.ThumbnailImage, product.Price, totalPrice);
+                                ListView.Add(orderItemDisplay);
                                 {
-                                    var product = await _dao.GetProductDetailAsync(orderItem.ProductId);
-                                    var totalPrice = orderItem.Quantity * product.Price;
-                                    var orderItemDisplay = new OrderItemDisplay(orderItem.ProductId, product.Name, orderItem.Quantity, product.ThumbnailImage, product.Price, totalPrice);
-                                    ListView.Add(orderItemDisplay);
+                                    //ShowForm = true;
+                                    AcceptFormCommand = new RelayCommand(async () =>
                                     {
-                                        //ShowForm = true;
-                                        AcceptFormCommand = new RelayCommand(async () =>
+                                        ShowForm = false;
+                                        var result = await _dao.ChangeOrderStatusAsync();
+
+                                        if (result)
                                         {
-                                            ShowForm = false;
-                                            var result = await _dao.ChangeOrderStatusAsync();
-
-                                            if (result)
-                                            {
-                                                Message = "Đơn hàng đã được duyệt!";
-                                                OrderStatus = 2;
-                                                LoadData();
-                                            }
-                                            else
-                                            {
-                                                Message = "Đơn hàng đang chờ duyệt!";
-                                                OrderStatus = 0;
-                                            }
-                                        });
-                                    }
+                                            Message = "Đơn hàng đã được duyệt!";
+                                            OrderStatus = 2;
+                                            LoadData();
+                                        }
+                                        else
+                                        {
+                                            Message = "Đơn hàng đang chờ duyệt!";
+                                            OrderStatus = 0;
+                                        }
+                                    });
                                 }
+                            }
 
-                            });
-
-                            
                         }))
                 );
 
             }
-        }              
+        }             
+       
                
 
         

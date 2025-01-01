@@ -176,7 +176,7 @@
                             MinHeight="450"                            
                             VerticalAlignment="Top"
                             CornerRadius="0 0 10 10">
-                    <ListView  ItemsSource="{x:Bind ViewModel.ListView, Mode=OneWay}">
+                    <ListView  ItemsSource="{x:Bind ViewModel.ListView}">
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
                                 <Setter Property="Height" Value="70"/>
