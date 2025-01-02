@@ -32,6 +32,8 @@ namespace Cosmetics_Shop.DataAccessObject
     public class SqlDao : IDao
     {
         private readonly IServiceProvider _serviceProvider = null;
+
+
         #region Get Product Thumbnails
         public SqlDao(IServiceProvider serviceProvider)
         {
@@ -1127,7 +1129,7 @@ namespace Cosmetics_Shop.DataAccessObject
 
                     order.OrderStatus = status;
 
-                    if (status == 2)
+                    if (status == 1)
                     {
                         var orderItems = await _databaseContext.OrderItems
                             .Where(p => p.OrderId == orderId)
@@ -1358,17 +1360,16 @@ namespace Cosmetics_Shop.DataAccessObject
             using (var scope = _serviceProvider.CreateScope())
             {
                 var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-                var userSession = _serviceProvider.GetService(typeof(UserSession)) as UserSession;
                 try
                 {
                     // Tìm kiếm sản phẩm trong giỏ hàng theo cartId và userId
                     var reviews = await _databaseContext.ProductRatings
-                        .Where(r => r.ProductId == idProduct && r.UserId == userSession.GetId())
+                        .Where(r => r.ProductId == idProduct)
                         .Select(r => new ReviewThumbnail(
                             r.ProductId,
                             r.UserId,
                             r.User.Name,
-                            r.User.AvatarPath,
+                            r.User.AvatarPath.IsNullOrEmpty() ? "ms-appx:///Assets/avatar_temp.png" : r.User.AvatarPath,
                             r.Rating,
                             r.RatingDate
                         ))
@@ -1445,14 +1446,16 @@ namespace Cosmetics_Shop.DataAccessObject
                     if (product != null)
                     {
                         // Đếm số lượng đánh giá cho sản phẩm
-                        var reviewCount = await _databaseContext.ProductRatings
-                            .CountAsync(r => r.ProductId == productID);
+                        var reviewCount = await _databaseContext.Products.Where(p => p.Id == productID)
+                            .Select(p => p.NumReview)
+                            .CountAsync();
 
                         // Tính toán giá trị trung bình mới
                         double newAverageRating = (product.AverageRating * reviewCount + starNumber) / (reviewCount + 1);
 
                         // Cập nhật giá trị trung bình
                         product.AverageRating = newAverageRating;
+                        product.NumReview = reviewCount + 1;
 
                         // Cập nhật sản phẩm trong cơ sở dữ liệu
                         _databaseContext.Products.Update(product);

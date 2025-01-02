@@ -16,6 +16,7 @@ using Cosmetics_Shop.ViewModels.UserControlViewModels;
 using System.Runtime.CompilerServices;
 using Cosmetics_Shop.DataAccessObject;
 using Cosmetics_Shop.DataAccessObject.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 
 
 namespace Cosmetics_Shop.ViewModels.PageViewModels
@@ -118,6 +119,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             _navigationService = navigationService;
             //ProductToPayment = new PaymentProductThumbnail();
             ProductsToPayment = new List<PaymentProductThumbnail>();
+            reviewThumbnail = new ObservableCollection<ReviewThumbnailViewModel>();
 
             PaidButtonCommand = new RelayCommand(ExecutePaidButtonCommand);
             GoBackCommand = new RelayCommand(() =>
@@ -133,8 +135,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         /// <param name="productID">ID of the product need to load ratings.</param>
         public async Task LoadInitialReviews(int productID)
         {
-            reviewThumbnail = new ObservableCollection<ReviewThumbnailViewModel>();
+            reviewThumbnail.Clear();
             var review = await _dao.GetListReviewThumbnailByIDProductAsync(productID);
+   
             foreach (var item in review)
             {
                 var reviewThumbnailViewModel = _serviceProvider.GetService(typeof(ReviewThumbnailViewModel)) as ReviewThumbnailViewModel;
