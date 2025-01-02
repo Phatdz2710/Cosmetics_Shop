@@ -20,7 +20,7 @@ namespace Cosmetics_Shop.Views.Converters.OrderStatus
                     0 => new SolidColorBrush(Colors.DarkGoldenrod), // Đang chờ duyệt
                     1 => new SolidColorBrush(Colors.DarkGreen),    // Đã duyệt
                     2 => new SolidColorBrush(Colors.DarkBlue),     // Đã xác nhận nhận hàng
-                    3 => new SolidColorBrush(Colors.DarkGray),     // Đã hủy đơn hàng
+                    3 => new SolidColorBrush(Colors.DarkRed),     // Đã hủy đơn hàng
                     _ => new SolidColorBrush(Colors.Black),        // Mặc định
                 };
             }

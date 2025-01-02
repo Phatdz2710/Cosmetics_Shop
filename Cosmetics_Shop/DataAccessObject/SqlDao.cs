@@ -360,29 +360,36 @@ namespace Cosmetics_Shop.DataAccessObject
             }
         }
 
-        public async Task<List<Models.OrderItem>> GetListOrderItemAsync(int orderId)
+        public async Task<List<Models.OrderItemDisplay>> GetListOrderItemAsync(int orderId)
         {
             using (var scope = _serviceProvider.CreateScope())
             {
                 var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
                 try
                 {
-                    var orderItems = await _databaseContext.OrderItems
-                        .Where(p => p.OrderId == orderId)
-                        .Select(p => new Models.OrderItem
-                        {
-                            Id = p.Id,
-                            OrderId = p.OrderId,
-                            ProductId = p.ProductId,
-                            Quantity = p.Quantity,
-                        })
-                        .ToListAsync();
+                    var query = await _databaseContext.OrderItems.Where(p => p.OrderId == orderId)
+                        .Join(_databaseContext.Products,
+                                orderItem => orderItem.ProductId,
+                                product => product.Id,
+                                (orderItem, product) => new
+                                {
+                                    OrderItem = orderItem,
+                                    Product = product
+                                }).Select(p => new Models.OrderItemDisplay(
+                                    p.Product.Id,
+                                    p.Product.Name,
+                                    p.OrderItem.Quantity,
+                                    p.Product.ImagePath,
+                                    p.Product.Price,
+                                    p.Product.Price * p.OrderItem.Quantity
+                                )).ToListAsync();
 
-                    return orderItems;
+                    return query;
+                        
                 }
                 catch (Exception)
                 {
-                    return new List<Models.OrderItem>();
+                    return new List<Models.OrderItemDisplay>();
                 }
             }
         }
@@ -1079,7 +1086,8 @@ namespace Cosmetics_Shop.DataAccessObject
                             ShippingMethod = p.ShippingMethod,
                             PaymentMethod = p.PaymentMethod,
                             VoucherId = p.VoucherId,
-                            ShippingAddress = p.ShippingAddress
+                            ShippingAddress = p.ShippingAddress,
+                            TotalPrice = p.TotalPrice
                         })
                         .ToListAsync();
 
@@ -1117,7 +1125,7 @@ namespace Cosmetics_Shop.DataAccessObject
                         return false;
                     }
 
-                    //order.OrderStatus = status;
+                    order.OrderStatus = status;
 
                     await _databaseContext.SaveChangesAsync();
                     return true;

@@ -1,4 +1,11 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.Input;
+using Cosmetics_Shop.DataAccessObject.Interfaces;
+using Cosmetics_Shop.DBModels;
+using Cosmetics_Shop.Models;
+using Cosmetics_Shop.ViewModels.AdminPageViewModels;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -13,12 +20,16 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
     /// </summary>
     public class OrderCellViewModel : INotifyPropertyChanged
     {
+        private readonly IDao _dao = null;
+        private readonly OrderManagerViewModel _viewModel;
+
         private int _orderId;
         private int _userId;
         private DateTime _orderDate;
         private int _orderShippingMethod;
         private string _orderAddress;
         private int _orderStatus;
+        private int _orderTotalPrice;
 
         public int OrderId
         {
@@ -47,7 +58,6 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
                 OnPropertyChanged(nameof(OrderDate));
             }
         }
-
         public string OrderAddress
         {
             get { return _orderAddress; }
@@ -57,8 +67,6 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
                 OnPropertyChanged(nameof(OrderAddress));
             }
         }
-
-
         public int OrderStatus
         {
             get { return _orderStatus; }
@@ -68,19 +76,70 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
                 OnPropertyChanged(nameof(OrderStatus));
             }
         }
-
+        public int OrderTotalPrice 
+        {
+            get { return _orderTotalPrice; }
+            set
+            {
+                _orderTotalPrice = value;
+                OnPropertyChanged(nameof(OrderTotalPrice));
+            }
+        }
         public ICommand ActionCommand { get; set; }
-
         public OrderCellViewModel() { }
 
-        public OrderCellViewModel(int orderId, int userId, DateTime orderDate, string orderAddress, int orderStatus, ICommand actionCommand)
+        public OrderCellViewModel(int orderId, 
+            int userId, 
+            DateTime orderDate, 
+            string orderAddress, 
+            int orderStatus, 
+            int orderTotalPrice,
+            OrderManagerViewModel viewModel,
+            IDao dao)
         {
+            _dao = dao;
             OrderId = orderId;
             UserId = userId;
             OrderDate = orderDate;
             OrderAddress = orderAddress;
             OrderStatus = orderStatus;
-            ActionCommand = actionCommand;
+            OrderTotalPrice = orderTotalPrice;
+            _viewModel = viewModel;
+
+
+            ActionCommand = new RelayCommand(ExecuteActionCommand);
+        }
+
+        private async void ExecuteActionCommand()
+        {
+            _viewModel.ShowForm = true;
+            _viewModel.VisiActionButton = OrderStatus == 0;
+            _viewModel.TotalPrice = OrderTotalPrice;
+            _viewModel.ListView.Clear();
+
+            var orderItems = await _dao.GetListOrderItemAsync(OrderId);
+
+            foreach (var items in orderItems)
+            {
+                _viewModel.ListView.Add(items);
+            }
+
+            _viewModel.AcceptFormCommand = new RelayCommand(async () =>
+            {
+                await _dao.ChangeOrderStatusAsync(OrderId, 1);
+                _viewModel.ShowForm = false;
+                _viewModel.Message = "Duyệt đơn hàng thành công";
+                OrderStatus = 1;
+            });
+
+            _viewModel.CancelFormCommand = new RelayCommand(async () =>
+            {
+                await _dao.ChangeOrderStatusAsync(OrderId, 3);
+                _viewModel.ShowForm = false;
+                _viewModel.Message = "Hủy đơn hàng thành công";
+                OrderStatus = 3;
+            });
+
         }
 
         // For INotifyPropertyChanged

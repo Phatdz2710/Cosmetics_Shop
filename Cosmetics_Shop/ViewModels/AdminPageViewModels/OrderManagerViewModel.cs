@@ -44,6 +44,7 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
         private int _orderStatus = 0;
         private int _totalPrice = 0;        
         private string _message = "";
+        private bool _visiActionButton = false;
        
         //private Models.Order _selectedOrder;
 
@@ -157,6 +158,17 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
             }
         }
 
+        public bool VisiActionButton 
+        {
+            get { return _visiActionButton; }
+            set
+            {
+                _visiActionButton = value;
+                OnPropertyChanged(nameof(VisiActionButton));
+            }
+        }
+
+
         
         #endregion
 
@@ -177,7 +189,6 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
         }
 
         private ICommand _cancelFormCommand;
-
         public ICommand CancelFormCommand
         {
             get => _cancelFormCommand;
@@ -188,18 +199,7 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
             }
         }
 
-        private ICommand _returnFormCommand;
-
-        public ICommand ReturnFormCommand
-        {
-            get => _returnFormCommand;
-            set
-            {
-                _returnFormCommand = value;
-                OnPropertyChanged(nameof(ReturnFormCommand));
-            }
-        }
-
+        public ICommand HideFormCommand { get; set; }
        
         #endregion
 
@@ -216,12 +216,11 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
             ListOrders = new ObservableCollection<OrderCellViewModel>();
 
             ListView = new ObservableCollection<OrderItemDisplay>();                     
-
            
             ReloadCommand = new RelayCommand(reloadCommand);
 
-            //CancelFormCommand = new RelayCommand(cancelFormCommand);
-            // Load orders when the ViewModel is created
+            HideFormCommand = new RelayCommand(hideFormCommand);
+            
             LoadData();
             
         }
@@ -251,118 +250,34 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
             LoadData();
         }
 
+        private void hideFormCommand()
+        {
+            ShowForm = false;
+        }
+
 
         private async void LoadData()
         {
             var result = await _dao.GetListAllOrdersAsync(CurrentPage, 10);
             TotalPage = result.TotalPages;
             TotalOrders = result.TotalOrders;
-            var sum = 0;
-
-            // Show or hide button next/previous page
             VisiNext = CurrentPage != TotalPage;
             VisiPrevious = CurrentPage != 1;
 
             ListOrders.Clear();
             foreach (var order in result.ListOrders)
             {
-                ListOrders.Add(new OrderCellViewModel(order.Id, 
-                        order.UserId, 
-                        order.OrderDate, 
+                ListOrders.Add(new OrderCellViewModel(order.Id,
+                        order.UserId,
+                        order.OrderDate,
                         order.ShippingAddress,
                         order.OrderStatus,
-                        new RelayCommand(async () =>
-                        {
-                            if (order.OrderStatus == 1 || order.OrderStatus == 2 || order.OrderStatus == 3)
-                            {
-                                ShowForm = false;
-                                LoadData();
-                            }
-                            else
-                            {
-                                ShowForm = true;
-                                ///<summary>
-                                ///
-                                /// </summary>
-
-                                ListView.Clear();
-                                var orderItems = await _dao.GetListOrderItemAsync(order.UserId);
-
-                                foreach (var orderItem in orderItems)
-                                {
-                                    var product = await _dao.GetProductDetailAsync(orderItem.ProductId);
-                                    var totalPrice = orderItem.Quantity * product.Price;
-                                    var orderItemDisplay = new OrderItemDisplay(orderItem.ProductId, product.Name, orderItem.Quantity, product.ThumbnailImage, product.Price, totalPrice);
-                                    sum += totalPrice;
-                                    ListView.Add(orderItemDisplay);
-
-                                    AcceptFormCommand = new RelayCommand(async () =>
-                                    {
-                                        ShowForm = false;
-                                        var result = await _dao.ChangeOrderStatusAsync(order.Id, order.OrderStatus);
-
-                                        if (result)
-                                        {
-                                            Message = "Đơn hàng đã được duyệt!";
-                                            order.OrderStatus = 1;
-                                            ListOrders.Add(new OrderCellViewModel(order.Id, order.UserId, order.OrderDate, order.ShippingAddress, order.OrderStatus, null));
-                                            LoadData();
-                                        }
-                                    });
-
-                                    CancelFormCommand = new RelayCommand(async () =>
-                                    {
-                                        ShowForm = false;
-                                        var result = await _dao.ChangeOrderStatusAsync(order.Id, order.OrderStatus);
-
-                                        if (result)
-                                        {
-                                            Message = "Đơn hàng đã bị hủy!";
-                                            order.OrderStatus = 3;
-                                            
-                                            LoadData();
-                                        }
-                                    });
-
-                                    ReturnFormCommand = new RelayCommand(async () =>
-                                    {
-                                        ShowForm = false;
-                                        var result = await _dao.ChangeOrderStatusAsync(order.Id, order.OrderStatus);
-
-                                        if (result)
-                                        {
-                                            order.OrderStatus = 0;
-                                            
-                                            LoadData();
-                                        }
-                                    });
-                                }
-                                TotalPrice = sum;
-                                sum = 0;                                                               
-                                                                    
-                                }                     
-                          
-                        }))
-                            
-                            
-                        
-                );
-
+                        order.TotalPrice,
+                        this,
+                        _dao
+                ));
             }
         }
-
-
-
-
-        ///// <summary>
-        ///// Cancel form command
-        ///// </summary>
-        //private void cancelFormCommand()
-        //{
-        //    OrderStatus = 3;
-            
-        //    ShowForm = false;
-        //}
 
 
 

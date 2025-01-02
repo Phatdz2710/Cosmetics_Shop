@@ -286,7 +286,7 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// </summary>
         /// <param name="orderId"></param>
         /// <returns></returns>
-        Task<List<Models.OrderItem>> GetListOrderItemAsync(int orderId);
+        Task<List<Models.OrderItemDisplay>> GetListOrderItemAsync(int orderId);
 
         /// <summary>
         /// Retrieves a list of products in the cart.
@@ -389,7 +389,24 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// </returns>
         Task<string> GetUserLevelAsync(int userId);
 
+        /// <summary>
+        /// Asynchronously retrieves the user's level of a specific user.
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="orderPerPage"></param>
+        /// <returns>
+        /// A <see cref="Task"/> representing the asynchronous operation,
+        /// </returns>
         Task<GetOrderResult> GetListAllOrdersAsync(int page, int orderPerPage);
+
+        /// <summary>
+        /// Asynchronously retrieves the user's level of a specific user.
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <param name="status"></param>
+        /// <returns>
+        /// A <see cref="Task"/> representing the asynchronous operation,
+        /// </returns>
         Task<bool>ChangeOrderStatusAsync(int orderId, int status);
 
         #endregion

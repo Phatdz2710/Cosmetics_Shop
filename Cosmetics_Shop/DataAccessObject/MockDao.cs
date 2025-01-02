@@ -27,7 +27,7 @@ namespace Cosmetics_Shop.DataAccessObject
             throw new NotImplementedException();    
         }
 
-        public async Task<List<Models.OrderItem>> GetListOrderItemAsync(int orderId)
+        public async Task<List<Models.OrderItemDisplay>> GetListOrderItemAsync(int orderId)
         {
             throw new NotImplementedException();    
         }
@@ -409,7 +409,7 @@ namespace Cosmetics_Shop.DataAccessObject
             throw new NotImplementedException();
         }
 
-        Task<List<Models.OrderItem>> IDao.GetListOrderItemAsync(int orderId)
+        Task<List<Models.OrderItemDisplay>> IDao.GetListOrderItemAsync(int orderId)
         {
             throw new NotImplementedException();
         }

@@ -129,7 +129,7 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
             {
                 var product = await _dao.GetProductDetailAsync(orderItem.ProductId);
                 var totalPrice = orderItem.Quantity * product.Price;
-                var orderItemDisplay = new OrderItemDisplay(orderItem.ProductId, product.Name, orderItem.Quantity, product.ThumbnailImage, product.Price,totalPrice);
+                var orderItemDisplay = new OrderItemDisplay(orderItem.ProductId, product.Name, orderItem.Quantity, product.ThumbnailImage, product.Price, totalPrice);
                 OrderItemsDisplay.Add(orderItemDisplay);
             }
         }

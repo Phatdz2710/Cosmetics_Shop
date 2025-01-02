@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI;
 
 namespace Cosmetics_Shop.Views.Converters.OrderStatus
 {
@@ -20,7 +21,7 @@ namespace Cosmetics_Shop.Views.Converters.OrderStatus
                     0 => new SolidColorBrush(Colors.LightYellow), // Đang chờ duyệt
                     1 => new SolidColorBrush(Colors.LightGreen),  // Đã duyệt
                     2 => new SolidColorBrush(Colors.LightBlue),   // Đã xác nhận nhận hàng
-                    3 => new SolidColorBrush(Colors.LightGray),   // Đã hủy đơn hàng
+                    3 => new SolidColorBrush(Colors.Tomato),   // Đã hủy đơn hàng
                     _ => new SolidColorBrush(Colors.Transparent), // Mặc định
                 };
             }
