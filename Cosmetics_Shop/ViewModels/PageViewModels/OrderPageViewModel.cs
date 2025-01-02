@@ -80,7 +80,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
 
             foreach (var order in orders)
             {
-                var userOrderCellViewModel = new UserOrderCellViewModel(_dao, _navigationService) 
+                var userOrderCellViewModel = new UserOrderCellViewModel(_dao, _navigationService, this) 
                 { 
                     OrderId = order.Id,
                     OrderDate = order.OrderDate,

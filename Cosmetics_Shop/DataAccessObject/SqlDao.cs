@@ -1127,6 +1127,23 @@ namespace Cosmetics_Shop.DataAccessObject
 
                     order.OrderStatus = status;
 
+                    if (status == 2)
+                    {
+                        var orderItems = await _databaseContext.OrderItems
+                            .Where(p => p.OrderId == orderId)
+                            .ToListAsync();
+
+                        foreach (var item in orderItems)
+                        {
+                            var product = await _databaseContext.Products.FirstOrDefaultAsync(p => p.Id == item.ProductId);
+                            if (product != null)
+                            {
+                                product.Stock -= item.Quantity;
+                                product.Sold += item.Quantity;
+                            }
+                        }
+                    }
+
                     await _databaseContext.SaveChangesAsync();
                     return true;
                 }
@@ -1134,7 +1151,6 @@ namespace Cosmetics_Shop.DataAccessObject
                 {
                     return false;
                 }
-               
             }
         }
         #endregion
@@ -1153,6 +1169,7 @@ namespace Cosmetics_Shop.DataAccessObject
                         .Where(c => c.UserId == userSession.GetId())
                         .Select(c => new CartThumbnail(
                             c.Id,
+                            c.ProductId,
                             c.Product.ImagePath,       // Assuming 'Image' is the field in Product
                             c.Product.Name,        // Assuming 'Name' is the field in Product
                             c.Product.Price,       // Assuming 'Price' is the field in Product
@@ -1614,14 +1631,13 @@ namespace Cosmetics_Shop.DataAccessObject
                         var orderItem = new Models.OrderItem
                         {
                             OrderId = dbOrder.Id, // Use the generated OrderId
-                            ProductId = product.Id,
+                            ProductId = product.ProductId,
                             Quantity = product.Amount
                         };
 
                         // Convert to DB model and add to the context
                         var dbOrderItem = ConvertToDbOrderItem(orderItem);
                         await _databaseContext.OrderItems.AddAsync(dbOrderItem);
-                        await DeleteFromCartByProductIDAsync(product.Id);
                     }
 
                     // Save changes again to persist the OrderItems

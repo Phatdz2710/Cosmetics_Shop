@@ -125,8 +125,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 var selectedProducts = Cart
                 .Where(item => item.IsChecked) // Get checked items
                 .Select(item => new PaymentProductThumbnail(
-                    item.CartThumbnail.Id, 
-                    null, // image
+                    item.CartThumbnail.Id,
+                    item.CartThumbnail.ProductId,
+                    item.CartThumbnail.ProductImage,
                     item.CartThumbnail.ProductName,
                     item.CartThumbnail.Price,
                     item.CartThumbnail.Amount

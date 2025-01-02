@@ -180,9 +180,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             _dao                = dao;
             _serviceProvider    = serviceProvider;
             _userSession        = userSession;
-            _navigationService = navigationService;
-
-            Carts = new CartPageViewModel(_navigationService, _dao);
+            _navigationService  = navigationService;
 
             PaymentProduct = new ObservableCollection<PaymentProductThumbnailViewModel>();
             PaymentMethods = new ObservableCollection<Models.PaymentMethod>();
@@ -393,7 +391,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
 
             foreach (var product in PaymentProduct)
             {
-                bool isDeleted = await Carts.DeleteFromCartByProductIDAsync(product.PaymentProductThumbnail.Id);
+                bool isDeleted = await _dao.DeleteFromCartAsync(product.PaymentProductThumbnail.CartId);
                 if (isDeleted)
                 {
                     //
@@ -403,7 +401,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                     //
                 }
             }
-            await Carts.LoadCartProductsAsync();
+            // await Carts.LoadCartProductsAsync();
 
             if (order != null)
             {

@@ -12,12 +12,13 @@ namespace Cosmetics_Shop.Models
     public class PaymentProductThumbnail : PaymentProduct
     {
         public PaymentProductThumbnail(
-                int     id, 
+                int     cartId, 
+                int productId,
                 string  image, 
                 string  productName,
                 int     price, 
                 int     amount)
-            : base(id, 
+            : base(cartId, productId, 
                   image, 
                   productName, 
                   price, 
@@ -25,7 +26,7 @@ namespace Cosmetics_Shop.Models
         {
         }
         public PaymentProductThumbnail()
-            :base(-1, null, null, 0, 0)
+            :base(-1, -1, null, null, 0, 0)
         { }
 
     }

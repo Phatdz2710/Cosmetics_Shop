@@ -17,6 +17,7 @@
         <converter:StringToImageSourceConverter x:Key="StringToImageSourceConverter"/>
         <converter:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
         <converter:BackgroundColorByRatingConverter x:Key="BackgroundColorByRatingConverter"/>
+        <converter:DecimalToThreeDecimalConverter x:Key="DecimalToThreeDecimalConverter"/>
     </UserControl.Resources>
 
     <ScrollView x:Name="scrollView">
@@ -110,7 +111,7 @@ Height="250">
                                     FontSize="15"
                                     >
                                 <TextBlock Foreground="White">
-                                    <Run Text="{x:Bind ViewModel.ProductDetail.review, Mode=OneWay}" />
+                                    <Run Text="{x:Bind ViewModel.ProductDetail.review, Mode=OneWay, Converter={StaticResource DecimalToThreeDecimalConverter}}" />
                                 </TextBlock>
                                 
                             </Button>

@@ -46,6 +46,7 @@ namespace Cosmetics_Shop.Models
         }
 
         public Cart(int     id, 
+            int productId,
                     string  productImage, 
                     string  productName,
                     int     price, 
@@ -53,6 +54,7 @@ namespace Cosmetics_Shop.Models
                     int     totalPrice)
         {
             Id = id;
+            ProductId       = productId;
             ProductImage    = productImage;
             ProductName     = productName;
             Price           = price;

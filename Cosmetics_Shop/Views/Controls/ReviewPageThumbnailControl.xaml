@@ -16,7 +16,7 @@
         <converter:StringToImageSourceConverter x:Key="StringToImageSourceConverter"/>
     </UserControl.Resources>
 
-    <Grid Margin="10" Background="White" BorderBrush="Gray" BorderThickness="1" CornerRadius="5">
+    <Grid Margin="10" Background="{ThemeResource AccountPageBackground}" BorderBrush="Gray" BorderThickness="1" CornerRadius="5">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2.5*"/>
             <ColumnDefinition Width="1*"/>

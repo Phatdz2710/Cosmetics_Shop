@@ -64,14 +64,6 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
             // Call the DeleteFromCartAsync method in the parent ViewModel
             bool result = await _cartPageViewModel.DeleteFromCartAsync(CartThumbnail.Id);
 
-            if (result)
-            {
-                
-            }
-            else
-            {
-                
-            }
         }
 
 

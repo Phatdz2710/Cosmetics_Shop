@@ -13,7 +13,8 @@ namespace Cosmetics_Shop.Models
 {
     public class PaymentProduct : INotifyPropertyChanged
     {
-        public int      Id              { get; set; }
+        public int CartId { get; set; }
+        public int ProductId { get; set; }
         public string   ProductImage    { get; set; }
         public string   ProductName     { get; set; }
         public int      Price           { get; set; }
@@ -36,24 +37,19 @@ namespace Cosmetics_Shop.Models
         }
 
         public PaymentProduct(
-                    int    id, 
-                    string image, 
-                    string productName, 
-                    int    price, 
-                    int    amount)
+                    int cartId,
+                    int productId,
+                    string image,
+                    string productName,
+                    int price,
+                    int amount)
         {
-            Id              = id;
-            ProductImage    = image;
-            ProductName     = productName;
-            Price           = price;
-            Amount          = amount;
-
-            OpenProductDetailCommand = new RelayCommand(OpenProductDetail);
-        }
-        private void OpenProductDetail()
-        {
-            var navigationService = App.ServiceProvider.GetService(typeof(INavigationService)) as INavigationService;
-            navigationService.NavigateTo<ProductDetailPage>(Id);
+            CartId = cartId;
+            ProductId = productId;
+            ProductImage = image;
+            ProductName = productName;
+            Price = price;
+            Amount = amount;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

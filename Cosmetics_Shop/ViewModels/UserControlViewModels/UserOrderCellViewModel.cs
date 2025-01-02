@@ -2,6 +2,7 @@
 using Cosmetics_Shop.DataAccessObject.Interfaces;
 using Cosmetics_Shop.Models;
 using Cosmetics_Shop.Services;
+using Cosmetics_Shop.ViewModels.PageViewModels;
 using Cosmetics_Shop.Views.Pages;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -19,6 +21,7 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
         #region Singleton
         private readonly IDao _dao = null;
         private readonly INavigationService _navigationService;
+        private readonly OrderPageViewModel _viewModel;
 
         #endregion
 
@@ -29,7 +32,8 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
         private int _totalPrice = 0;
         private bool _isShowItems = false;
         private bool _alreadyLoadItems = false;
-        private bool _isApproved = false;
+        private bool _isShowButton = false;
+        private readonly SemaphoreSlim _loadItemsLock = new SemaphoreSlim(1, 1);
         #endregion
 
         #region Properties for binding
@@ -73,17 +77,26 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
                 _orderStatus = value;
                 OnPropertyChanged(nameof(OrderStatus));
 
-                IsApproved = _orderStatus == 1;
+                IsShowButton = _orderStatus == 1 || _orderStatus == 2;
+
+                if (OrderStatus == 1)
+                {
+                    ReceivedCommand = new RelayCommand(receivedCommand);
+                }
+                else
+                {
+                    ReceivedCommand = new RelayCommand(reviewCommand);
+                }
             }
         }
 
-        public bool IsApproved
+        public bool IsShowButton
         {
-            get { return _isApproved; }
+            get { return _isShowButton; }
             set
             {
-                _isApproved = value;
-                OnPropertyChanged(nameof(IsApproved));
+                _isShowButton = value;
+                OnPropertyChanged(nameof(IsShowButton));
             }
         }
 
@@ -100,48 +113,73 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
 
         #region Commands
         public ICommand ShowHideItemCommand { get; set; }
-        public ICommand ReviewCommand { get; set; }
+        public ICommand ReceivedCommand { get; set; }
 
         #endregion
 
-        public UserOrderCellViewModel(IDao dao, INavigationService navigationService)
+        public UserOrderCellViewModel(IDao dao, INavigationService navigationService, OrderPageViewModel viewModel)
         {
             _dao = dao;
             _navigationService = navigationService;
+            _viewModel = viewModel;
 
             OrderItemsDisplay = new ObservableCollection<OrderItemDisplay>();
 
             ShowHideItemCommand = new RelayCommand(ShowHideItems);
-
-            ReviewCommand = new RelayCommand(async () =>
-            {
-                await LoadOrderItems();
-                _navigationService.NavigateTo<ReviewPage>(OrderItemsDisplay);
-            });
         }
 
         public async Task LoadOrderItems()
         {
-            OrderItemsDisplay.Clear();
-            var orderItems = await _dao.GetListOrderItemAsync(OrderId);
+            await _loadItemsLock.WaitAsync(); // Đảm bảo chỉ một luồng được truy cập
 
-            foreach (var orderItem in orderItems)
+            try
             {
-                var product = await _dao.GetProductDetailAsync(orderItem.ProductId);
-                var totalPrice = orderItem.Quantity * product.Price;
-                var orderItemDisplay = new OrderItemDisplay(orderItem.ProductId, product.Name, orderItem.Quantity, product.ThumbnailImage, product.Price, totalPrice);
-                OrderItemsDisplay.Add(orderItemDisplay);
+                OrderItemsDisplay.Clear();
+                var orderItems = await _dao.GetListOrderItemAsync(OrderId);
+
+                foreach (var orderItem in orderItems)
+                {
+                    var product = await _dao.GetProductDetailAsync(orderItem.ProductId);
+                    var totalPrice = orderItem.Quantity * product.Price;
+                    var orderItemDisplay = new OrderItemDisplay(orderItem.ProductId, product.Name, orderItem.Quantity, product.ThumbnailImage, product.Price, totalPrice);
+                    OrderItemsDisplay.Add(orderItemDisplay);
+                }
+            }
+            finally
+            {
+                _loadItemsLock.Release();
             }
         }
 
+        private async void receivedCommand()
+        {
+            var result = await _dao.ChangeOrderStatusAsync(OrderId, 2);
+            if (result)
+            {
+                OrderStatus = 1;
+            }
 
-        private void ShowHideItems()
+            _viewModel.UserOrders.Remove(this);
+        }
+
+        private async void reviewCommand()
+        {
+            if (_alreadyLoadItems == false)
+            {
+                await LoadOrderItems();
+                _alreadyLoadItems = true;
+            }
+            _navigationService.NavigateTo<ReviewPage>(OrderItemsDisplay);
+        }
+
+
+        private async void ShowHideItems()
         {
             IsShowItems = !IsShowItems;
 
             if (_alreadyLoadItems == false)
             {
-                _ = LoadOrderItems();
+                await LoadOrderItems();
                 _alreadyLoadItems = true;
             }
         }

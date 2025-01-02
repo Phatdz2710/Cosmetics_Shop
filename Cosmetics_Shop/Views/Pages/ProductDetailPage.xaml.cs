@@ -73,7 +73,7 @@ namespace Cosmetics_Shop.Views.Pages
                 }
 
                 // Create the product instance
-                var product = new PaymentProductThumbnail(productId, null, productDetailName.Text, price, amount);
+                var product = new PaymentProductThumbnail(0, productId, null, productDetailName.Text, price, amount);
                 ViewModel.SetInfo(product);
             }
         }

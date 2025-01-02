@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -44,11 +44,22 @@ namespace Cosmetics_Shop.Views.Controls
 
         public void Grid_Tapped(object sender, TappedRoutedEventArgs e)
         {
+            if (e.OriginalSource is FrameworkElement element && element is Button)
+            {
+                // Nếu nguồn sự kiện là Button, không xử lý
+                return;
+            }
+
             ICommand command = ViewModel.ShowHideItemCommand;
             if (command.CanExecute(null))
             {
                 command.Execute(null);
             }
+        }
+
+        private void Button_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            e.Handled = true; // Ngăn sự kiện tiếp tục lan lên cha
         }
     }
 }

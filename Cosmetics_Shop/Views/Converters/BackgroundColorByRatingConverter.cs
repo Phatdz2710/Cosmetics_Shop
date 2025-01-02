@@ -24,7 +24,7 @@ namespace Cosmetics_Shop.Views.Converters
                 }
                 else if (rating >= 3.5)
                 {
-                    return new SolidColorBrush(Colors.Gold); // Màu bạc
+                    return new SolidColorBrush(Colors.Orange); // Màu bạc
                 }
                 else if (rating >= 2.5)
                 {

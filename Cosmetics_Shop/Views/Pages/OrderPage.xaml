@@ -18,12 +18,12 @@
     <Grid Background="{ThemeResource AccountPageBackground}"
           BorderBrush="LightGray"
           BorderThickness="2"
-          Margin="150 30 150 30"
+          Margin="150 10 150 10"
           CornerRadius="20" Padding="30 10 10 30">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="7*"/>
+            <RowDefinition Height="9*"/>
         </Grid.RowDefinitions>
 
         <TextBlock Text="Đơn hàng của bạn"
@@ -39,22 +39,23 @@
             <StackPanel Grid.Row="0" Orientation="Horizontal">
                 <Button Content="Đơn hàng đang xử lý"
                         Width="200" Height="50" CornerRadius="5 0 0 0"
-                        BorderThickness="1 1 1 0"
+                        BorderThickness="2 2 2 0"
                         Command="{x:Bind ViewModel.LoadOrdersInProcessCommand, Mode=OneTime}"/>
 
                 <Button Content="Đơn hàng hoàn tất"
                         Width="200" Height="50" CornerRadius="0"
-                        BorderThickness="1 1 1 0"
+                        BorderThickness="2 2 2 0"
                         Command="{x:Bind ViewModel.LoadOrdersSuccessCommand, Mode=OneTime}"/>
 
                 <Button Content="Đơn hàng đã bị hủy"
                         Width="200" Height="50" CornerRadius="0 5 0 0"
-                        BorderThickness="1 1 1 0"
+                        BorderThickness="2 2 2 0"
                         Command="{x:Bind ViewModel.LoadOrdersFailedCommand, Mode=OneTime}"/>
             </StackPanel>
 
-            <ScrollView Grid.Row="1">
-                <ListView ItemsSource="{x:Bind ViewModel.UserOrders, Mode=OneWay}">
+            <ScrollView Grid.Row="1" Background="{ThemeResource DashboardGridViewBackground}">
+                <ListView ItemsSource="{x:Bind ViewModel.UserOrders, Mode=OneWay}"
+                          SelectionMode="None">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="Background" Value="{ThemeResource OrderCellBackground}" />
