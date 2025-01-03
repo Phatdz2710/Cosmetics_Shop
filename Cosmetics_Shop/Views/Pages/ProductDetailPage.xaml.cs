@@ -148,6 +148,17 @@ namespace Cosmetics_Shop.Views.Pages
             // Hiển thị ContentDialog
             await dialog.ShowAsync();
         }
+
+        /// <summary>
+        /// Get the current shipping method
+        /// </summary>
+        private void DeliveryComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (deliveryComboBox.SelectedItem is Models.ShippingMethod selectedMethod)
+            {
+                ViewModel.CurrentShippingMethod = selectedMethod;
+            }
+        }
         #endregion
 
     }

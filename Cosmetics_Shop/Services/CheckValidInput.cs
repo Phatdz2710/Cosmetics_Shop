@@ -39,5 +39,20 @@ namespace Cosmetics_Shop.Services
             string pattern = @"^\d{10}$";
             return Regex.IsMatch(phoneNumber, pattern);
         }
+
+        /// <summary>
+        /// Check if the input is a valid address
+        /// </summary>
+        /// <param name="address"></param>
+        /// <returns>
+        /// True if the input is a valid address, otherwise false
+        /// </returns>
+        public static bool IsValidAddress(this string address)
+        {
+            // Pattern yêu cầu có ít nhất một chữ cái, cho phép số và dấu /
+            string pattern = @"^(?=.*[a-zA-Z])[a-zA-Z0-9/ ]+$";
+            return !string.IsNullOrEmpty(address) && Regex.IsMatch(address, pattern);
+        }
+
     }
 }

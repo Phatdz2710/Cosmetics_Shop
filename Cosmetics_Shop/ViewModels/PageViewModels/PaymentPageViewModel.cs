@@ -164,23 +164,49 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 }
             }
         }
+        public Models.Voucher CurrentVoucher
+        {
+            get => _currentVoucher;
+            set
+            {
+                if (_currentVoucher != value)
+                {
+                    _currentVoucher = value;
+                    OnPropertyChanged(nameof(CurrentVoucher)); // Notify UI of change
+                }
+            }
+        }
+        public Models.ShippingMethod CurrentShippingMethod
+        {
+            get => _currentShippingMethod;
+            set
+            {
+                if (_currentShippingMethod != value)
+                {
+                    _currentShippingMethod = value;
+                    OnPropertyChanged(nameof(CurrentShippingMethod)); // Notify UI of change
+                }
+            }
+        }
 
         #endregion
 
         // Observable Collection
         public ObservableCollection<PaymentProductThumbnailViewModel> PaymentProduct { get; set; }
         public ObservableCollection<Models.PaymentMethod> PaymentMethods { get; set; }
-        public PaymentPageViewModel(INavigationService      navigationService, 
-                                    IDao                    dao, 
-                                    IServiceProvider        serviceProvider,
-                                    UserSession             userSession,
-                                    List<PaymentProductThumbnail> products
+        public PaymentPageViewModel(INavigationService navigationService,
+                                    IDao dao,
+                                    IServiceProvider serviceProvider,
+                                    UserSession userSession,
+                                    PaymentNavigationData data
                                     )
         {
             _dao                = dao;
             _serviceProvider    = serviceProvider;
             _userSession        = userSession;
             _navigationService  = navigationService;
+            CurrentVoucher = data.CurrentVoucher;
+            CurrentShippingMethod = data.CurrentShippingMethod;
 
             PaymentProduct = new ObservableCollection<PaymentProductThumbnailViewModel>();
             PaymentMethods = new ObservableCollection<Models.PaymentMethod>();
@@ -189,9 +215,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             LoadPaymentMethods();
 
             // Iterate through the list of products and add them to the ObservableCollection
-            if (products != null)
+            if (data.Products != null)
             {
-                foreach (var product in products)
+                foreach (var product in data.Products)
                 {
                     var paymentProductThumbnailViewModel = _serviceProvider.GetService<PaymentProductThumbnailViewModel>();
                     paymentProductThumbnailViewModel.PaymentProductThumbnail = product; // Set the product
@@ -292,9 +318,15 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         /// Update shipping address to order
         /// </summary>
         /// <param name="address">Address was changed.</param>
-        public void LoadShippingAddress(string address)
+        public bool LoadShippingAddress(string address)
         {
+            if (string.IsNullOrEmpty(address) || !address.IsValidAddress())
+            {
+                ShowDialogRequested?.Invoke("Địa chỉ đặt hàng không hợp lệ !");
+                return false;
+            }
             ShippingAddress = address;
+            return true;
         }
 
         #endregion
@@ -377,6 +409,12 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             if (_currentVoucher == null)
             {
                 _currentVoucher = new Models.Voucher();
+            }
+
+            if (Address == null || !Address.IsValidAddress()) 
+            {
+                ShowDialogRequested?.Invoke("Vui lòng nhập địa chỉ nhận hàng hợp lệ !");
+                return;
             }
 
             // Gather necessary information for the order

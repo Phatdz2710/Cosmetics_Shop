@@ -33,12 +33,13 @@ namespace Cosmetics_Shop.Views.Pages
         public PaymentPage()
         {
             this.InitializeComponent();
+            DataContext = this;
         }
 
         #region Navigation
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (e.Parameter is List<PaymentProductThumbnail> products)
+            if (e.Parameter is PaymentNavigationData navigationData)
             {
                 // Create the ViewModel manually
                 var navigationService = App.ServiceProvider.GetRequiredService<INavigationService>();
@@ -47,15 +48,28 @@ namespace Cosmetics_Shop.Views.Pages
                 var userSession = App.ServiceProvider.GetRequiredService<UserSession>();
 
                 // Create the ViewModel with the product parameter
-                ViewModel = new PaymentPageViewModel(navigationService, dao, serviceProvider, userSession, products);
+                ViewModel = new PaymentPageViewModel(navigationService, dao, serviceProvider, userSession, navigationData);
 
                 voucherComboBox.ItemsSource = await ViewModel.GetAllVouchersAsync();
                 deliveryComboBox.ItemsSource = await ViewModel.GetShippingMethodsAsync();
 
-                ViewModel.ShowDialogRequested += ShowDialog;
+                // Nếu CurrentVoucher không null, chọn voucher đó
+                if (ViewModel.CurrentVoucher != null)
+                {
+                    voucherComboBox.SelectedItem = ViewModel.CurrentVoucher;
+                }
 
+                // Nếu CurrentShippingMethod không null, chọn shipping method đó
+                if (ViewModel.CurrentShippingMethod != null)
+                {
+                    deliveryComboBox.SelectedItem = ViewModel.CurrentShippingMethod;
+                }
+
+                // Enable the user to select new values if needed
+                ViewModel.ShowDialogRequested += ShowDialog;
             }
         }
+
         #endregion
 
         /// <summary>
@@ -99,20 +113,35 @@ namespace Cosmetics_Shop.Views.Pages
                 addressTextBox.Visibility = Visibility.Collapsed;
 
                 // Update the ViewModel's ShippingAddress if it's not empty
-                if (ViewModel != null && !string.IsNullOrWhiteSpace(addressTextBox.Text))
-                {
-                    ViewModel.LoadShippingAddress(addressTextBox.Text);
-                    // Optionally update the displayed TextBlock
-                    addressTextBlock.Text = addressTextBox.Text;
-                }
-                else
-                {
-                    // Handle case when address is empty (perhaps show a validation message)
-                    addressTextBlock.Text = "No address provided"; // or handle appropriately
-                }
+                //if (ViewModel != null && !string.IsNullOrWhiteSpace(addressTextBox.Text))
+                //{
+                    if (ViewModel.LoadShippingAddress(addressTextBox.Text))
+                    {
+                        // Address is valid, update TextBlock and switch to display mode
+                        addressTextBlock.Text = addressTextBox.Text;
+                        addressTextBlock.Visibility = Visibility.Visible;
+                        addressTextBox.Visibility = Visibility.Collapsed;
+
+
+                        // Change button content back to "Thay đổi"
+                        changeAddressButton.Content = "Thay đổi";
+                    }
+                    else
+                    {
+                        addressTextBlock.Visibility = Visibility.Collapsed;
+                        addressTextBox.Visibility = Visibility.Visible;
+                    }
+                //}
+                //else
+                //{
+                //    // Handle case when address is empty (perhaps show a validation message)
+                //    addressTextBlock.Text = "Chưa nhập địa chỉ !"; // or handle appropriately
+                                                                   
+                //    changeAddressButton.Content = "Thay đổi";
+                //}
 
                 // Change button content back to "Thay đổi"
-                changeAddressButton.Content = "Thay đổi";
+                // changeAddressButton.Content = "Thay đổi";
             }
         }
 

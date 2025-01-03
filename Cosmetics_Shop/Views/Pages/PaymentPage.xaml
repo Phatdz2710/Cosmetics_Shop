@@ -235,7 +235,8 @@
                             SelectionChanged="voucherComboBox_SelectionChanged"
                             PlaceholderText="Chọn mã giảm giá"
                               Width="200"
-                              Height="50">
+                              Height="50"
+                              SelectedItem="{Binding CurrentVoucher, Mode=TwoWay}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Description}" />
@@ -261,7 +262,8 @@ Background="{ThemeResource AccountPageBackground}"
                             SelectionChanged="deliveryComboBox_SelectionChanged"
                             PlaceholderText="Chọn hình thức vận chuyển"
                               Width="200"
-                              Height="50">
+                              Height="50"
+                              SelectedItem="{Binding CurrentShippingMethod, Mode=TwoWay}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding MethodName}" />

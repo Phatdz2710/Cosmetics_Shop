@@ -27,5 +27,19 @@ namespace Cosmetics_Shop.Models
             Id = 2;
             MethodName = "Default Shipping Method";
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is ShippingMethod other)
+            {
+                return this.Id == other.Id; // So sánh theo Id
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode(); // Hoặc sử dụng một thuộc tính khác
+        }
     }
 }

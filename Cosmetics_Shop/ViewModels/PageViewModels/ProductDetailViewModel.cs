@@ -30,6 +30,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         private ProductDetail _productDetail;
         private int _shippingFee;
         private Models.ShippingMethod _currentShippingMethod;
+        private Models.Voucher _currentVoucher = new Models.Voucher();
         private List<PaymentProductThumbnail> _productsToPayment;
         private bool _isNavigating;
         private int _amount = 1;
@@ -105,6 +106,18 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 {
                     _amount = value;
                     OnPropertyChanged(nameof(Amount));
+                }
+            }
+        }
+        public Models.ShippingMethod CurrentShippingMethod
+        {
+            get => _currentShippingMethod;
+            set
+            {
+                if (_currentShippingMethod != value)
+                {
+                    _currentShippingMethod = value;
+                    OnPropertyChanged(nameof(CurrentShippingMethod));
                 }
             }
         }
@@ -245,7 +258,17 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                     product.Amount = Amount; // Set the amount for each product
                 }
                 // Navigate to the PaymentPage with the list of products
-                _navigationService.NavigateTo<PaymentPage>(ProductsToPayment);
+
+                //_navigationService.NavigateTo<PaymentPage>(ProductsToPayment);
+                var navigationData = new PaymentNavigationData
+                (
+                    ProductsToPayment,
+                    CurrentShippingMethod,
+                    null
+                );
+
+                // Navigate to the PaymentPage với đối tượng chứa thông tin
+                _navigationService.NavigateTo<PaymentPage>(navigationData);
                 IsNavigating = false;
             }
         }

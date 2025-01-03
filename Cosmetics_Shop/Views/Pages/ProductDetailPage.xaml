@@ -179,7 +179,8 @@ Height="250">
                                             FontSize="15"
                                             PlaceholderText="Chọn hình thức vận chuyển"
                                             Width="260"
-                                            Height="40"              
+                                            Height="40" 
+                                          SelectionChanged="DeliveryComboBox_SelectionChanged"
                                           >
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>

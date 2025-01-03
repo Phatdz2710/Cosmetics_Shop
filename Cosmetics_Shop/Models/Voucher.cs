@@ -52,6 +52,20 @@ namespace Cosmetics_Shop.Models
             Id = 1;
             Description = "Default Voucher";
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Voucher other)
+            {
+                return this.Id == other.Id; // So sánh theo Id
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode(); // Hoặc sử dụng một thuộc tính khác
+        }
     }
 
 }

@@ -136,7 +136,16 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
 
                 if (selectedProducts.Any())
                 {
-                    _navigationService.NavigateTo<PaymentPage>(selectedProducts); // Pass the list of selected products
+                    //_navigationService.NavigateTo<PaymentPage>(selectedProducts); // Pass the list of selected products
+                    var navigationData = new PaymentNavigationData
+                    (
+                        selectedProducts,
+                        null,
+                        _currentVoucher
+                    );
+
+                    // Navigate to the PaymentPage với đối tượng chứa thông tin
+                    _navigationService.NavigateTo<PaymentPage>(navigationData);
                 }
                 else
                 {
