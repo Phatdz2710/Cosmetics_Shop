@@ -46,11 +46,11 @@
                         Command="{x:Bind ViewModel.AccountManagerCommand, Mode=OneTime}">
                     <StackPanel Orientation="Horizontal">
                         <FontIcon Glyph="&#xE7EE;" 
-                                  Foreground="White"
+                                  Foreground="Black"
                                   Margin="0 0 7 0"/>
                         <TextBlock 
                             Text="Quản lý tài khoản"
-                            Foreground="White"
+                            Foreground="Black"
                             FontSize="15"/>
                     </StackPanel>
                 </Button>
@@ -63,10 +63,10 @@
                         Command="{x:Bind ViewModel.OrderManagerCommand, Mode=OneTime}">
                     <StackPanel Orientation="Horizontal">
                         <FontIcon Glyph="&#xE7BF;" 
-                                  Foreground="White"
+                                  Foreground="Black"
                                   Margin="0 0 7 0"/>
                         <TextBlock Text="Quản lý đơn hàng"
-                                    Foreground="White"
+                                    Foreground="Black"
                                     FontSize="15"/>
                     </StackPanel>
                 </Button>
@@ -79,10 +79,10 @@
                         Command="{x:Bind ViewModel.ProductManagerComamnd, Mode=OneTime}">
                     <StackPanel Orientation="Horizontal">
                         <FontIcon Glyph="&#xE74C;" 
-                                  Foreground="White"
+                                  Foreground="Black"
                                   Margin="0 0 7 0"/>
                         <TextBlock Text="Quản lý sản phẩm"
-                                    Foreground="White"
+                                    Foreground="Black"
                                     FontSize="15"/>
                     </StackPanel>
                 </Button>
@@ -98,10 +98,10 @@
                     Command="{x:Bind ViewModel.LogoutCommand, Mode=OneTime}">
                 <StackPanel Orientation="Horizontal">
                     <FontIcon Glyph="&#xE8CF;" 
-                  Foreground="White"
+                  Foreground="Black"
                   Margin="0 0 7 0"/>
                     <TextBlock Text="Đăng xuất"
-                    Foreground="White"
+                    Foreground="Black"
                     FontSize="15"/>
                 </StackPanel>
             </Button>
