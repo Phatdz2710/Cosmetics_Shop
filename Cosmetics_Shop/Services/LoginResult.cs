@@ -13,7 +13,14 @@ namespace Cosmetics_Shop.Services
     /// </summary>
     public struct LoginResult
     {
-        public LoginStatus  LoginStatus { get; set; }
-        public User         UserInfo    { get; set; }
+        /// <summary>
+        /// Gets or sets the status of the login attempt.
+        /// </summary>
+        public LoginStatus LoginStatus { get; set; }
+
+        /// <summary>
+        /// Gets or sets the user information if the login was successful.
+        /// </summary>
+        public User UserInfo { get; set; }
     }
 }

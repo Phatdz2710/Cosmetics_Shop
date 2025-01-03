@@ -69,6 +69,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             NewProducts.Clear();
             RecentlyView.Clear();
 
+            // Add data to observable collection
             for (int i = 0; i < bestSeller.Count; i++)
             {
                 var productThumbnailViewModel = _serviceProvider.GetService(typeof(ProductThumbnailViewModel));
@@ -76,6 +77,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 BestSeller.Add(productThumbnailViewModel as ProductThumbnailViewModel);
             }
 
+            // Add data to observable collection
             for (int i = 0; i < newProducts.Count; i++)
             {
                 var productThumbnailViewModel = _serviceProvider.GetService(typeof(ProductThumbnailViewModel));
@@ -83,6 +85,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 NewProducts.Add(productThumbnailViewModel as ProductThumbnailViewModel);
             }
 
+            // Add data to observable collection
             for (int i = 0; i < recentlyView.Count; i++)
             {
                 var productThumbnailViewModel = _serviceProvider.GetService(typeof(ProductThumbnailViewModel));

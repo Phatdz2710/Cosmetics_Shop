@@ -10,6 +10,6 @@ namespace Cosmetics_Shop.Services.EventAggregatorMessages
     /// Ping message to logout.
     /// </summary>
     public class LogoutMessage
-    { 
+    {
     }
 }

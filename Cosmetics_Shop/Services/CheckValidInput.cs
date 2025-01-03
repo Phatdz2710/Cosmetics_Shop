@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 namespace Cosmetics_Shop.Services
 {
     /// <summary>
-    /// Check if the input is valid
+    /// Provides methods to check if the input is valid.
     /// </summary>
     public static class CheckValidInput
     {
         /// <summary>
-        /// Check if the input is a valid email
+        /// Checks if the input is a valid email.
         /// </summary>
-        /// <param name="email"></param>
+        /// <param name="email">The email address to validate.</param>
         /// <returns>
-        /// True if the input is a valid email, otherwise false
+        /// True if the input is a valid email, otherwise false.
         /// </returns>
         public static bool IsValidEmail(this string email)
         {
@@ -28,11 +28,11 @@ namespace Cosmetics_Shop.Services
         }
 
         /// <summary>
-        /// Check if the input is a valid phone number
+        /// Checks if the input is a valid phone number.
         /// </summary>
-        /// <param name="phoneNumber"></param>
+        /// <param name="phoneNumber">The phone number to validate.</param>
         /// <returns>
-        /// True if the input is a valid phone number, otherwise false
+        /// True if the input is a valid phone number, otherwise false.
         /// </returns>
         public static bool IsValidPhoneNumber(this string phoneNumber)
         {
@@ -42,18 +42,17 @@ namespace Cosmetics_Shop.Services
         }
 
         /// <summary>
-        /// Check if the input is a valid address
+        /// Checks if the input is a valid address.
         /// </summary>
-        /// <param name="address"></param>
+        /// <param name="address">The address to validate.</param>
         /// <returns>
-        /// True if the input is a valid address, otherwise false
+        /// True if the input is a valid address, otherwise false.
         /// </returns>
         public static bool IsValidAddress(this string address)
         {
-            // Pattern yêu cầu có ít nhất một chữ cái, cho phép số và dấu /
+            // Pattern requires at least one letter, allows numbers and slashes
             string pattern = @"^(?=.*[a-zA-Z])[a-zA-Z0-9/ ]+$";
             return !string.IsNullOrEmpty(address) && Regex.IsMatch(address, pattern);
         }
-
     }
 }

@@ -12,13 +12,28 @@ using Windows.UI.Popups;
 namespace Cosmetics_Shop.Models
 {
     /// <summary>
-    /// Filter Checkbox
+    /// Represents a filter checkbox with an index, name, command, and checked state.
     /// </summary>
     public struct FilterCheckbox
-    { 
-        public int      Index           { get; set; }
-        public string   Name            { get; set; }
-        public ICommand CheckedCommand  { get; set; }
-        public bool     IsChecked       { get; set; }
+    {
+        /// <summary>
+        /// Gets or sets the index of the filter checkbox.
+        /// </summary>
+        public int Index { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the filter checkbox.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the command to execute when the checkbox is checked.
+        /// </summary>
+        public ICommand CheckedCommand { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the checkbox is checked.
+        /// </summary>
+        public bool IsChecked { get; set; }
     }
 }

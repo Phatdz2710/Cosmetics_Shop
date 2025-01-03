@@ -33,8 +33,14 @@ namespace Cosmetics_Shop.Services
         /// <summary>
         /// Navigates to the specified page type with the specified parameter.
         /// </summary>
-        /// <typeparam name="TPage"></typeparam>
-        /// <param name="parameter"></param>
+        /// <typeparam name="TPage">
+        /// The type of the page to navigate to.
+        /// This type must derive from <see cref="Page"/>.
+        /// </typeparam>
+        /// <param name="parameter">
+        /// The parameter to pass to the target page.
+        /// This parameter can be used to pass data to the target page.
+        /// </param>
         void NavigateTo<TPage>(object parameter);
 
         /// <summary>
@@ -42,5 +48,4 @@ namespace Cosmetics_Shop.Services
         /// </summary>
         void GoBack();
     }
-
 }

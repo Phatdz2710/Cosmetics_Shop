@@ -14,9 +14,9 @@ namespace Cosmetics_Shop.Models
     /// </summary>
     public class User
     {
-        private int     id      { get; set; }
-        private string  role    { get; set; }
-        private string  token   { get; set; }
+        private int     id      { get; set; } // Id of user
+        private string  role    { get; set; } // Role of user
+        private string  token   { get; set; } // Token of user
 
         // Constructor
         public User(int id, string token, string role)

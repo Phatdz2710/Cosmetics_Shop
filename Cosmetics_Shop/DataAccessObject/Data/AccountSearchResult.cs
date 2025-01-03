@@ -12,8 +12,13 @@ namespace Cosmetics_Shop.DataAccessObject.Data
     /// </summary>
     public class AccountSearchResult
     {
+        // List of accounts
         public List<Account> ListAccounts { get; set; }
+
+        // Total pages of accounts
         public int TotalPages { get; set; }
+
+        // Total accounts
         public int TotalAccounts { get; set; }
     }
 }

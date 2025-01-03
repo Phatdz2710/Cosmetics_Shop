@@ -13,10 +13,10 @@ namespace Cosmetics_Shop.DataAccessObject.Data
     /// </summary>
     public struct SearchResult
     {
-        public List<ProductThumbnail>   Products        { get; set; }
-        public int                      TotalPages      { get; set; }
-        public int                      TotalProducts   { get; set; }
-        public List<string>             Brands          { get; set; }
-        public List<string>             Categories      { get; set; }
+        public List<ProductThumbnail>   Products        { get; set; } // List of products
+        public int                      TotalPages      { get; set; } // Total pages of products
+        public int                      TotalProducts   { get; set; } // Total products
+        public List<string>             Brands          { get; set; } // List of brands
+        public List<string>             Categories      { get; set; } // List of categories
     }
 }

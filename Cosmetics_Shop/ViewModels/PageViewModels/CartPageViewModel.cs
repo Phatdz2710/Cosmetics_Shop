@@ -23,8 +23,17 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
     /// </summary>
     public class CartPageViewModel : INotifyPropertyChanged
     {
-        // Data access object
+        #region Singletons
+        /// <summary>
+        /// Data access object
+        /// </summary>
         private IDao _dao = null;
+
+        /// <summary>
+        /// Navigation service
+        /// </summary>
+        private readonly INavigationService _navigationService;
+        #endregion
 
         #region Fields
         private bool _isAllChecked;
@@ -34,17 +43,10 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         public event Action<string> ShowDialogRequested;
         #endregion
 
+        #region Properties Binding
+
         // Observable Collection
         public ObservableCollection<CartThumbnailViewModel> Cart { get; set; }
-
-        //Command
-        public ICommand PaidButtonCommand { get; set; }
-        public ICommand GoBackCommand { get; set; }
-
-        // Navigation service
-        private readonly INavigationService _navigationService;
-
-        #region Properties Binding
         public bool IsAllChecked
         {
             get => _isAllChecked;
@@ -109,6 +111,16 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
         }
         #endregion
+
+        #region Commands
+
+
+        //Command
+        public ICommand PaidButtonCommand { get; set; }
+        public ICommand GoBackCommand { get; set; }
+
+        #endregion
+
 
         public CartPageViewModel(INavigationService navigationService, IDao dao)
         {

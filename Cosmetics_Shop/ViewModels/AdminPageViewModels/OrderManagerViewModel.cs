@@ -244,18 +244,26 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
             LoadData();
         }
 
+        /// <summary>
+        /// Reload data command
+        /// </summary>
         private void reloadCommand()
         {
             CurrentPage = 1;
             LoadData();
         }
 
+        /// <summary>
+        /// Hide form command
+        /// </summary>
         private void hideFormCommand()
         {
             ShowForm = false;
         }
 
-
+        /// <summary>
+        /// Load data
+        /// </summary>
         private async void LoadData()
         {
             var result = await _dao.GetListAllOrdersAsync(CurrentPage, 10);
@@ -281,6 +289,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
 
 
 
+        /// <summary>
+        /// Property changed event
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
         {

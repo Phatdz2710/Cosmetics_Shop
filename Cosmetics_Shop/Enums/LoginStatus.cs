@@ -16,9 +16,9 @@ namespace Cosmetics_Shop.Models.Enums
     /// </summary>
     public enum LoginStatus
     {
-        Success         = 0,
-        InvalidUsername = 1,
-        InvalidPassword = 2,
-        ConnectServerFailed = 3
+        Success         = 0, // The login was successful.
+        InvalidUsername = 1, // The username is invalid.
+        InvalidPassword = 2, // The password is invalid.
+        ConnectServerFailed = 3 // The connection to the server failed.
     }
 }

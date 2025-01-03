@@ -12,6 +12,9 @@ namespace Cosmetics_Shop.Services.EventAggregatorMessages
     /// </summary>
     public class InvalidPriceMinMaxMessageBox
     {
+        /// <summary>
+        /// Gets or sets the message to be displayed in the message box.
+        /// </summary>
         public string Message { get; set; }
     }
 }

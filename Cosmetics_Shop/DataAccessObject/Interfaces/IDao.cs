@@ -411,8 +411,7 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
 
         #endregion
 
-
-
+        #region Others
         /// <summary>
         /// Asynchronously retrieves a list of product suggestions based on a keyword.
         /// </summary>
@@ -422,6 +421,7 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// which returns a list of strings containing product suggestions.
         /// </returns>
         Task<List<string>> GetSuggestionsAsync(string keyword);
+        #endregion
 
         #region Rating, Shipping and Payment
 
