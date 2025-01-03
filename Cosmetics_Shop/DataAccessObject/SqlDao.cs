@@ -953,7 +953,7 @@ namespace Cosmetics_Shop.DataAccessObject
             }
         }
 
-        public async Task<bool> ChangeProductInfoAsync(int id, string newName, string newBrand, string newCategory, int newPrice, int newInventory, int newSold, string newImagePath, string newDescription)
+        public async Task<bool> ChangeProductInfoAsync(int id, string newName, string newBrand, string newCategory, int newPrice, int newInventory, string newImagePath, string newDescription)
         {
             using (var scope = _serviceProvider.CreateScope())
             {
@@ -978,7 +978,6 @@ namespace Cosmetics_Shop.DataAccessObject
                     product.Category = newCategory;
                     product.Price   = newPrice;
                     product.Stock   = newInventory;
-                    product.Sold    = newSold;
                     product.ImagePath = newImagePath;
                     product.Description = newDescription;
 
@@ -992,7 +991,7 @@ namespace Cosmetics_Shop.DataAccessObject
             }
         }
 
-        public async Task<bool> CreateProductAsync(string name, string brand, string category, int price, int inventory, int sold, string imagePath)
+        public async Task<bool> CreateProductAsync(string name, string brand, string category, int price, int inventory, int sold, string imagePath, string description)
         {
             try
             {
@@ -1015,7 +1014,8 @@ namespace Cosmetics_Shop.DataAccessObject
                         Sold = sold,
                         ImagePath = imagePath,
                         AverageRating = 0,
-                        CreatedAt = DateTime.Now
+                        CreatedAt = DateTime.Now,
+                        Description = description
                     };
 
                     await _databaseContext.Products.AddAsync(newProduct);
@@ -1446,9 +1446,10 @@ namespace Cosmetics_Shop.DataAccessObject
                     if (product != null)
                     {
                         // Đếm số lượng đánh giá cho sản phẩm
-                        var reviewCount = await _databaseContext.Products.Where(p => p.Id == productID)
-                            .Select(p => p.NumReview)
-                            .CountAsync();
+                        var reviewCount = await _databaseContext.Products
+                                        .Where(p => p.Id == productID)
+                                        .Select(p => p.NumReview)
+                                        .FirstOrDefaultAsync();
 
                         // Tính toán giá trị trung bình mới
                         double newAverageRating = (product.AverageRating * reviewCount + starNumber) / (reviewCount + 1);

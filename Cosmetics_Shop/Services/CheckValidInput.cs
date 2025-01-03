@@ -36,6 +36,7 @@ namespace Cosmetics_Shop.Services
         /// </returns>
         public static bool IsValidPhoneNumber(this string phoneNumber)
         {
+            if (phoneNumber.IsNullOrEmpty()) return false;
             string pattern = @"^\d{10}$";
             return Regex.IsMatch(phoneNumber, pattern);
         }

@@ -14,6 +14,7 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Cosmetics_Shop.ViewModels.PageViewModels;
 using Cosmetics_Shop.Models;
+using System.Threading.Tasks;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -53,18 +54,7 @@ namespace Cosmetics_Shop.Views.Pages
                 await ViewModel.LoadProductDetailAsync(productId);
                 await ViewModel.LoadInitialReviews(productId);
 
-                // Remove currency symbol and commas, and trim whitespace
-                string priceText = priceTextBlock.Text.Replace(" đ", "").Replace(",", "").Trim();
-
-                // Initialize variables for price and amount
-                int price = 0;
                 int amount = 0;
-
-                // Try to parse the price
-                if (!int.TryParse(priceText, out price))
-                {
-                    price = 0; // Default value
-                }
 
                 // Try to parse the amount
                 if (!int.TryParse(amountTextBox.Text, out amount))
@@ -72,8 +62,10 @@ namespace Cosmetics_Shop.Views.Pages
                     amount = 1; // Default value
                 }
 
+                
+
                 // Create the product instance
-                var product = new PaymentProductThumbnail(0, productId, null, productDetailName.Text, price, amount);
+                var product = new PaymentProductThumbnail(0, productId, ViewModel.ProductDetail.ThumbnailImage, ViewModel.ProductDetail.Name, ViewModel.ProductDetail.Price, amount);
                 ViewModel.SetInfo(product);
             }
         }

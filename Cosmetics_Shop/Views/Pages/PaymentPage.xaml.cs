@@ -17,6 +17,7 @@ using Cosmetics_Shop.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Cosmetics_Shop.DataAccessObject.Interfaces;
 using Cosmetics_Shop.Services;
+using System.Threading.Tasks;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -52,6 +53,8 @@ namespace Cosmetics_Shop.Views.Pages
 
                 voucherComboBox.ItemsSource = await ViewModel.GetAllVouchersAsync();
                 deliveryComboBox.ItemsSource = await ViewModel.GetShippingMethodsAsync();
+
+                await Task.Delay(10);
 
                 // Nếu CurrentVoucher không null, chọn voucher đó
                 if (ViewModel.CurrentVoucher != null)

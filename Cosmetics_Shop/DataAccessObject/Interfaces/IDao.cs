@@ -360,7 +360,7 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// A <see cref="Task"/> representing the asynchronous operation, 
         /// which returns a boolean indicating whether the update was successful.
         /// </returns>
-        Task<bool> ChangeProductInfoAsync(int id, string newName, string newBrand, string newCategory, int newPrice, int newInventory, int newSold, string newImagePath, string newDescription);
+        Task<bool> ChangeProductInfoAsync(int id, string newName, string newBrand, string newCategory, int newPrice, int newInventory, string newImagePath, string newDescription);
 
         /// <summary>
         /// Asynchronously creates a new product.
@@ -376,7 +376,7 @@ namespace Cosmetics_Shop.DataAccessObject.Interfaces
         /// A <see cref="Task"/> representing the asynchronous operation, 
         /// which returns a boolean indicating whether the product creation was successful.
         /// </returns>
-        Task<bool> CreateProductAsync(string name, string brand, string category, int price, int sold, int inventory, string imagePath);
+        Task<bool> CreateProductAsync(string name, string brand, string category, int price, int sold, int inventory, string imagePath, string description);
 
 
         /// <summary>

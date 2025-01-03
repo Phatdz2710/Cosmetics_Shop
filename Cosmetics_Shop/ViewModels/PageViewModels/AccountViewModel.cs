@@ -7,6 +7,7 @@ using Cosmetics_Shop.Services;
 using Cosmetics_Shop.Services.EventAggregatorMessages;
 using Cosmetics_Shop.Services.Interfaces;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         private readonly IDao               _dao;
         private readonly IEventAggregator   _eventAggregator;
         private readonly IFilePickerService _filePickerService;
+        private readonly INavigationService _navigationService;
         #endregion
 
         #region Fields
@@ -249,6 +251,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         public ICommand LogoutCommand { get; set; }
         public ICommand AcceptChangePasswordCommand { get; set; }
         public ICommand RefuseChangePasswordCommand { get; set; }
+        public ICommand GoBackCommand { get; set; }
         #endregion
 
 
@@ -256,12 +259,14 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         public AccountViewModel(IDao                dao, 
                                 IEventAggregator    eventAggregator, 
                                 IFilePickerService  filePickerService,
+                                INavigationService  navigationService,
                                 UserSession         userSession)
         {
             this._userSession       = userSession;
             this._eventAggregator   = eventAggregator;
             this._filePickerService = filePickerService;
             this._dao               = dao;
+            this._navigationService = navigationService;
 
             loadUserInformation();
             ChangeInforMode = false;
@@ -275,6 +280,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             RefuseChangePasswordCommand = new RelayCommand(cancelChangePasswordCommand);
 
             ChangePasswordCommand = new RelayCommand(changePasswordCommand);
+
+            GoBackCommand = new RelayCommand(() =>
+            {
+                _navigationService.GoBack();
+            });
         }
 
         /// <summary>
@@ -307,14 +317,25 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         /// </summary>
         private async void saveInfoCommand()
         {
-            if (!Email.IsValidEmail() || !Phone.IsValidPhoneNumber())
+            if (!Email.IsValidEmail() && !Email.IsNullOrEmpty())
             {
                 Name = _nameRestore;
                 Email = _emailRestore;
                 Phone = _phoneRestore;
                 Address = _addressRestore;
                 changeInfoModeCommand();
-                ChangeInfoMessage = "Thông tin không hợp lệ!";
+                ChangeInfoMessage = "Email không đúng định dạng! Vui lòng nhập đúng định dạng example@mail.com!";
+                return;
+            }
+
+            if (!Phone.IsValidPhoneNumber() && !Phone.IsNullOrEmpty())
+            {
+                Name = _nameRestore;
+                Email = _emailRestore;
+                Phone = _phoneRestore;
+                Address = _addressRestore;
+                changeInfoModeCommand();
+                ChangeInfoMessage = "Số điện thoại không đúng định dạng! Yêu cầu có đúng 10 chữ số!";
                 return;
             }
 
@@ -325,7 +346,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 return;
             }
 
-                await _dao.ChangeAllUserInformationAsync(_userSession.GetId(), new UserDetail()
+            await _dao.ChangeAllUserInformationAsync(_userSession.GetId(), new UserDetail()
             {
                 Name    = Name,
                 Email   = Email,

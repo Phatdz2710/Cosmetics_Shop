@@ -47,6 +47,7 @@
                     Command="{x:Bind ViewModel.ReloadCommand, Mode=OneTime}"/>
             
             <Button Content="Thêm tài khoản"
+                    Width="150"
                     Height="35"
                     Background="#6BE38F"
                     Command="{x:Bind ViewModel.CreateAccountCommand, Mode=OneTime}"/>

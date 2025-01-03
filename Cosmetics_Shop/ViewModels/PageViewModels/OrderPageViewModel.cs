@@ -46,6 +46,8 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         public ICommand LoadOrdersInProcessCommand { get; set; }
         public ICommand LoadOrdersSuccessCommand { get; set; }
         public ICommand LoadOrdersFailedCommand { get; set; }
+        public ICommand GoBackCommand { get; set; }
+
 
         #endregion
 
@@ -62,6 +64,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             LoadOrdersInProcessCommand = new RelayCommand(loadOrdersInProcess);
             LoadOrdersSuccessCommand = new RelayCommand(loadOrdersSuccess);
             LoadOrdersFailedCommand = new RelayCommand(loadOrdersFailed);
+
+            GoBackCommand = new RelayCommand(() =>
+            {
+                _navigationService.GoBack();
+            });
 
             _ = LoadListOrder(OrderStatus.InProcess);
         }

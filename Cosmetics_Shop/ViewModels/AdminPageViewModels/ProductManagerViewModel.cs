@@ -216,6 +216,7 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
         public  ICommand SelectImagePathCommand { get; set; }
         public  ICommand NextPageCommand        { get; }
         public  ICommand PreviousPageCommand    { get; }
+        public  ICommand ReloadCommand         { get; }
 
         #endregion
 
@@ -243,7 +244,7 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 AcceptFormCommand = new RelayCommand(async () =>
                 {
                     ShowForm = false;
-                    var result = await _dao.CreateProductAsync(ProductName, ProductBrand, ProductCategory, ProductPrice, ProductInventory, ProductSold, ProductImagePath);
+                    var result = await _dao.CreateProductAsync(ProductName, ProductBrand, ProductCategory, ProductPrice, ProductInventory, ProductSold, ProductImagePath, ProductDescription);
 
                     if (result)
                     {
@@ -261,6 +262,7 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
             SelectImagePathCommand  = new RelayCommand(executeSelectImagePathAsyncCommand);
             NextPageCommand         = new RelayCommand(nextPageCommand);
             PreviousPageCommand     = new RelayCommand(previousPageCommand);
+            ReloadCommand           = new RelayCommand(LoadData);
         }
 
         /// <summary>
@@ -332,12 +334,13 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                     // Edit command for each cell to show edit form
                     EditCommand = new RelayCommand(async () =>
                     {
+                        LoadData();
                         FormTitle = "Chỉnh sửa sản phẩm";
                         ShowForm = true;
                         AcceptFormCommand = new RelayCommand(async () =>
                         {
                             ShowForm = false;
-                            var result = await _dao.ChangeProductInfoAsync(item.Id, ProductName, ProductBrand, ProductCategory, ProductPrice, ProductInventory, ProductSold, ProductImagePath, ProductDescription);
+                            var result = await _dao.ChangeProductInfoAsync(item.Id, ProductName, ProductBrand, ProductCategory, ProductPrice, ProductInventory, ProductImagePath, ProductDescription);
 
                             if (result)
                             {

@@ -15,7 +15,20 @@
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Page.Resources>
 
-    <Grid Background="{ThemeResource AccountPageBackground}"
+    <Grid Background="{ThemeResource AppBackground}">
+        <Button x:Name="returnButton"
+        Background="#317256"
+        Grid.Row="0" Grid.RowSpan="2"
+        VerticalAlignment="Top"
+        HorizontalAlignment="Left"
+        BorderBrush="#317256"
+        Margin="10 10 0 0"
+        Foreground="White"
+        Command="{x:Bind ViewModel.GoBackCommand, Mode=OneTime}">
+            <FontIcon Glyph="&#xE830;" />
+        </Button>
+
+        <Grid Background="{ThemeResource AccountPageBackground}"
           BorderBrush="LightGray"
           BorderThickness="2"
           Margin="150 10 150 10"
@@ -25,6 +38,8 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="9*"/>
         </Grid.RowDefinitions>
+
+        
 
         <TextBlock Text="Đơn hàng của bạn"
                    FontSize="25" FontWeight="SemiBold"
@@ -82,5 +97,6 @@
                        Visibility="{x:Bind ViewModel.IsZeroOrder, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         </Grid>
 
+    </Grid>
     </Grid>
 </Page>

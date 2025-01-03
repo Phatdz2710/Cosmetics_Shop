@@ -384,7 +384,7 @@ namespace Cosmetics_Shop.DataAccessObject
             throw new NotImplementedException();
         }
 
-        public Task<bool> CreateProductAsync(string name, string brand, string category, int price, int inventory, int sold, string imagePath)
+        public Task<bool> CreateProductAsync(string name, string brand, string category, int price, int inventory, int sold, string imagePath, string description)
         {
             throw new NotImplementedException();
         }
@@ -399,7 +399,7 @@ namespace Cosmetics_Shop.DataAccessObject
             throw new NotImplementedException();
         }
 
-        public Task<bool> ChangeProductInfoAsync(int id, string newName, string newBrand, string newCategory, int newPrice, int newInventory, int newSold, string newImagePath, string newDescription)
+        public Task<bool> ChangeProductInfoAsync(int id, string newName, string newBrand, string newCategory, int newPrice, int newInventory, string newImagePath, string newDescription)
         {
             throw new NotImplementedException();
         }
