@@ -10,6 +10,16 @@ using Windows.UI;
 
 namespace Cosmetics_Shop.Views.Converters.OrderStatus
 {
+    /// <summary>
+    /// Converts order status to a corresponding background color.
+    /// </summary>
+    /// <remarks>
+    /// - 0: LightYellow (Pending Approval)
+    /// - 1: LightGreen (Approved)
+    /// - 2: LightBlue (Order Received)
+    /// - 3: Tomato (Order Canceled)
+    /// - Default: Transparent (Invalid or undefined status)
+    /// </remarks>
     public class OrderStatusToBackgroundConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)

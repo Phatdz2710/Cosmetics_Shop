@@ -36,7 +36,10 @@ namespace Cosmetics_Shop.Views.Pages
             //ViewModel = App.ServiceProvider.GetService(typeof(ReviewPageViewModel)) as ReviewPageViewModel;
         }
 
-
+        /// <summary>
+        /// Handles navigation to the ReviewPage and initializes the ViewModel with data and required services.
+        /// </summary>
+        /// <param name="e">Navigation event arguments containing parameters passed to the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             if (e.Parameter is ObservableCollection<OrderItemDisplay> products)

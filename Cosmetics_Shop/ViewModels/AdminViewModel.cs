@@ -29,11 +29,27 @@ namespace Cosmetics_Shop.ViewModels
         #endregion
 
         #region Commands
-        public ICommand AccountManagerCommand   { get; set; }
-        public ICommand OrderManagerCommand     { get; set; }
-        public ICommand ProductManagerComamnd   { get; set; }
-        public ICommand LogoutCommand           { get; set; }
+        /// <summary>
+        /// Command to navigate to the account management section.
+        /// </summary>
+        public ICommand AccountManagerCommand { get; set; }
+
+        /// <summary>
+        /// Command to navigate to the order management section.
+        /// </summary>
+        public ICommand OrderManagerCommand { get; set; }
+
+        /// <summary>
+        /// Command to navigate to the product management section.
+        /// </summary>
+        public ICommand ProductManagerCommand { get; set; }
+
+        /// <summary>
+        /// Command to log out of the system.
+        /// </summary>
+        public ICommand LogoutCommand { get; set; }
         #endregion
+
 
         public AdminViewModel(INavigationService navigationService,
                               IEventAggregator   eventAggregator,
@@ -55,7 +71,7 @@ namespace Cosmetics_Shop.ViewModels
                 _navigationService.NavigateTo<OrderManagerPage>();
             });
 
-            ProductManagerComamnd = new RelayCommand(() =>
+            ProductManagerCommand = new RelayCommand(() =>
             {
                 _navigationService.NavigateTo<ProductManagerPage>();
             });

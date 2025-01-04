@@ -48,8 +48,14 @@ namespace Cosmetics_Shop.Views.Controls
         }
 
         /// <summary>
-        /// Click to review in review page 
+        /// Handles the click event for a star rating button.
+        /// Updates the `StarNumber` in the ViewModel and triggers an update of star states based on the selected rating.
         /// </summary>
+        /// <remarks>
+        /// - The method checks if the sender is a `Button` and if the `Tag` property is a valid string representing a star number.
+        /// - It then parses the tag to an integer (`starNumber`) and updates the `StarNumber` property in the ViewModel.
+        /// - Calls the `UpdateStarStates` method in the ViewModel to visually update the stars based on the rating.
+        /// </remarks>
         private void StarButton_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button button && button.Tag is string tag && int.TryParse(tag.ToString(), out int starNumber))

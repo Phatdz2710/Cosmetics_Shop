@@ -36,7 +36,14 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         private int _amount = 1;
         #endregion
 
+        /// <summary>
+        /// Gets or sets the collection of review thumbnails for the product.
+        /// </summary>
         public ObservableCollection<ReviewThumbnailViewModel> reviewThumbnail { get; set; }
+
+        /// <summary>
+        /// Gets or sets the collection of cart thumbnails for the cart items.
+        /// </summary>
         public ObservableCollection<CartThumbnailViewModel> Cart { get; set; }
 
         #region Singleton
@@ -46,11 +53,23 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         #endregion
 
         #region Command
+        /// <summary>
+        /// Command for handling the paid button action.
+        /// </summary>
         public ICommand PaidButtonCommand { get; set; }
+
+        /// <summary>
+        /// Command to navigate back to the previous page.
+        /// </summary>
         public ICommand GoBackCommand { get; set; }
         #endregion
 
         #region Properties Binding
+
+        /// <summary>
+        /// Gets or sets the product details.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public ProductDetail ProductDetail
         {
             get => _productDetail;
@@ -60,6 +79,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(ProductDetail));
             }
         }
+
+        /// <summary>
+        /// Gets or sets the shipping fee.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public int ShippingFee
         {
             get => _shippingFee;
@@ -73,6 +97,10 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets the list of products to be paid.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public List<PaymentProductThumbnail> ProductsToPayment // Changed to List
         {
             get => _productsToPayment;
@@ -85,6 +113,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 }
             }
         }
+
+        /// <summary>
+        /// Gets or sets the navigation state.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public bool IsNavigating
         {
             get => _isNavigating;
@@ -97,6 +130,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 }
             }
         }
+
+        /// <summary>
+        /// Gets or sets the amount.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public int Amount
         {
             get => _amount;
@@ -109,6 +147,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 }
             }
         }
+
+        /// <summary>
+        /// Gets or sets the current shipping method.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public Models.ShippingMethod CurrentShippingMethod
         {
             get => _currentShippingMethod;
@@ -121,8 +164,10 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 }
             }
         }
+
         #endregion
 
+        // Constructor
         public ProductDetailViewModel(INavigationService navigationService,
                                       IDao dao,
                                       IServiceProvider serviceProvider)

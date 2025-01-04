@@ -7,6 +7,16 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.Views.Converters.OrderStatus
 {
+    /// <summary>
+    /// Converts order status to a corresponding descriptive string.
+    /// </summary>
+    /// <remarks>
+    /// - 0: "Đang chờ duyệt" (Pending Approval)
+    /// - 1: "Đã duyệt" (Approved)
+    /// - 2: "Hoàn tất" (Completed)
+    /// - 3: "Đã hủy" (Canceled)
+    /// - Default: "Không xác định" (Undefined or invalid status)
+    /// </remarks>
     public class OrderStatusToStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)

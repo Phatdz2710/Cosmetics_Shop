@@ -25,11 +25,15 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
         private readonly INavigationService _navigationService = null;
         #endregion
 
-        // Main properties
+        /// <summary>
+        /// Represents the product thumbnail for display.
+        /// </summary>
         public ProductThumbnail ProductThumbnail { get; set; }
 
-        // Buy button command
-        public ICommand         BuyButtonCommand { get; set; }
+        /// <summary>
+        /// Command to handle the "Buy" button action.
+        /// </summary>
+        public ICommand BuyButtonCommand { get; set; }
 
         // Constructor
         public ProductThumbnailViewModel(INavigationService navigationService)

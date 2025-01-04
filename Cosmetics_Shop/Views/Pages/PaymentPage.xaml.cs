@@ -38,6 +38,16 @@ namespace Cosmetics_Shop.Views.Pages
         }
 
         #region Navigation
+        /// <summary>
+        /// Handles navigation to the PaymentPage and sets up the ViewModel with necessary data.
+        /// </summary>
+        /// <param name="e">Navigation event arguments containing the payment navigation data.</param>
+        /// <remarks>
+        /// - Initializes the ViewModel with navigation data and necessary services.
+        /// - Populates combo boxes for voucher and shipping method with data from the ViewModel.
+        /// - Automatically selects the current voucher and shipping method if they are set.
+        /// - Subscribes to dialog requests from the ViewModel.
+        /// </remarks>
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             if (e.Parameter is PaymentNavigationData navigationData)
@@ -76,8 +86,12 @@ namespace Cosmetics_Shop.Views.Pages
         #endregion
 
         /// <summary>
-        /// Show the dialog if having a successful order
+        /// Displays a dialog with a success message when an order is successfully processed.
         /// </summary>
+        /// <param name="message">The message to display in the dialog.</param>
+        /// <remarks>
+        /// - Creates and shows a `ContentDialog` with the provided message.
+        /// </remarks>
         private async void ShowDialog(string message)
         {
             ContentDialog dialog = new ContentDialog
@@ -94,8 +108,13 @@ namespace Cosmetics_Shop.Views.Pages
 
         #region Click
         /// <summary>
-        /// Click to change the shipping address in the order
+        /// Toggles between display and editing modes for the shipping address.
         /// </summary>
+        /// <remarks>
+        /// - In edit mode, the user can modify the shipping address.
+        /// - In display mode, the address is shown as text.
+        /// - Updates the ViewModel's `ShippingAddress` if it's valid and applies changes.
+        /// </remarks>
         private void ChangeAddressButton_Click(object sender, RoutedEventArgs e)
         {
             if (addressTextBlock.Visibility == Visibility.Visible)
@@ -151,6 +170,12 @@ namespace Cosmetics_Shop.Views.Pages
         #endregion
 
         #region Combobox
+        /// <summary>
+        /// Applies the selected voucher to the order.
+        /// </summary>
+        /// <remarks>
+        /// - Calls the `ApplyVoucher` method in the ViewModel to apply the selected voucher to the payment.
+        /// </remarks>
         private void voucherComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (voucherComboBox.SelectedItem is Models.Voucher selectedVoucher)
@@ -159,6 +184,12 @@ namespace Cosmetics_Shop.Views.Pages
             }
         }
 
+        /// <summary>
+        /// Applies the selected shipping method to the order.
+        /// </summary>
+        /// <remarks>
+        /// - Calls the `ApplyShipping` method in the ViewModel to apply the selected shipping method.
+        /// </remarks>
         private void deliveryComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (deliveryComboBox.SelectedItem is Models.ShippingMethod selectedShippingMethod)
@@ -167,6 +198,13 @@ namespace Cosmetics_Shop.Views.Pages
             }
         }
 
+        /// <summary>
+        /// Sets the selected payment method in the ViewModel when a payment option is selected.
+        /// </summary>
+        /// <param name="sender">The radio button representing the selected payment method.</param>
+        /// <remarks>
+        /// - Updates the `SelectedPaymentMethod` property in the ViewModel based on the selected payment method.
+        /// </remarks>
         private void PaymentMethod_Checked(object sender, RoutedEventArgs e)
         {
             if (sender is RadioButton radioButton && radioButton.Tag is Models.PaymentMethod selectedMethod)

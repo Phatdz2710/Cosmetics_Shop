@@ -45,8 +45,14 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
 
         #region Properties Binding
 
-        // Observable Collection
+        /// <summary>
+        /// Observable collection representing the cart items.
+        /// </summary>
         public ObservableCollection<CartThumbnailViewModel> Cart { get; set; }
+
+        /// <summary>
+        /// Indicates if all items in the cart are checked.
+        /// </summary>
         public bool IsAllChecked
         {
             get => _isAllChecked;
@@ -65,6 +71,10 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 }
             }
         }
+
+        /// <summary>
+        /// Represents the total pay of all checked cart items.
+        /// </summary>
         public int TotalPay
         {
             get => _totalPay;
@@ -77,6 +87,10 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 }
             }
         }
+
+        /// <summary>
+        /// Recalculates the total payment based on the checked items in the cart.
+        /// </summary>
         public void RecalculateTotalPay()
         {
             // Check if any item is checked
@@ -84,7 +98,6 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             {
                 // Calculate total pay from checked items
                 TotalPay = Cart.Where(item => item.IsChecked).Sum(item => item.CartThumbnail.TotalPrice);
-
             }
             else
             {
@@ -92,12 +105,15 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 TotalPay = 0;
             }
 
-            if(_currentVoucher != null)
+            if (_currentVoucher != null)
             {
                 ApplyVoucher(_currentVoucher);
             }
         }
 
+        /// <summary>
+        /// Indicates if the cart is empty.
+        /// </summary>
         public bool IsZeroCart
         {
             get => _isZeroCart;
@@ -116,12 +132,20 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
 
 
         //Command
+        /// <summary>
+        /// Command to navigate to Payment Page
+        /// </summary>
         public ICommand PaidButtonCommand { get; set; }
+
+        /// <summary>
+        /// Command to go back to the previous view.
+        /// </summary>
         public ICommand GoBackCommand { get; set; }
 
         #endregion
 
 
+        // Constructor
         public CartPageViewModel(INavigationService navigationService, IDao dao)
         {
             _dao = dao;

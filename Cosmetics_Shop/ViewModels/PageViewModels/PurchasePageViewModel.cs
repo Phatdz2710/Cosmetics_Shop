@@ -44,12 +44,27 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         #endregion
 
         #region ObservableCollections
-        // Observable Collection
+
+        /// <summary>
+        /// Observable collection to hold product thumbnails for display.
+        /// </summary>
         public ObservableCollection<ProductThumbnailViewModel> ProductThumbnails { get; set; }
+
+        /// <summary>
+        /// Observable collection for storing filter checkboxes for brand options.
+        /// </summary>
         public ObservableCollection<FilterCheckbox> Brands { get; set; }
+
+        /// <summary>
+        /// Observable collection for storing filter checkboxes for category options.
+        /// </summary>
         public ObservableCollection<FilterCheckbox> Categories { get; set; }
 
+        /// <summary>
+        /// Lazy loading product thumbnail for asynchronous data fetching.
+        /// </summary>
         private ProductThumbnailViewModel lazyLoading = null;
+
         #endregion
 
         #region Fields
@@ -75,6 +90,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         #endregion
 
         #region Binding Properties
+
+        /// <summary>
+        /// Gets or sets the search keyword for filtering products.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public string Keyword
         {
             get => _keyword;
@@ -84,6 +104,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(Keyword));
             }
         }
+
+        /// <summary>
+        /// Gets or sets the total number of products.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public int TotalProducts
         {
             get => _totalProducts;
@@ -93,6 +118,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(TotalProducts));
             }
         }
+
+        /// <summary>
+        /// Gets or sets the current page index for pagination.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public int PageIndex
         {
             get => _pageIndex;
@@ -102,6 +132,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(PageIndex));
             }
         }
+
+        /// <summary>
+        /// Gets or sets the number of products displayed per page.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public int ProductsPerPage
         {
             get => _productPerPage;
@@ -111,6 +146,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(ProductsPerPage));
             }
         }
+
+        /// <summary>
+        /// Gets or sets the total number of pages for pagination.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public int TotalPages
         {
             get => _totalPages;
@@ -120,6 +160,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(TotalPages));
             }
         }
+
+        /// <summary>
+        /// Gets or sets the minimum price for filtering products.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public string MinPrice
         {
             get => _minPrice;
@@ -129,6 +174,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(MinPrice));
             }
         }
+
+        /// <summary>
+        /// Gets or sets the maximum price for filtering products.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public string MaxPrice
         {
             get => _maxPrice;
@@ -138,6 +188,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(MaxPrice));
             }
         }
+
+        /// <summary>
+        /// Gets or sets the visibility of the "Previous" button for pagination.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public bool VisiPrevious
         {
             get => _visiPrevious;
@@ -147,6 +202,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(VisiPrevious));
             }
         }
+
+        /// <summary>
+        /// Gets or sets the visibility of the "Next" button for pagination.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public bool VisiNext
         {
             get => _visiNext;
@@ -156,6 +216,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(VisiNext));
             }
         }
+
+        /// <summary>
+        /// Gets or sets the selected index for sorting the products.
+        /// Notifies the UI when the value changes and triggers a product search.
+        /// </summary>
         public int SelectedIndexSort
         {
             get => _selectedIndexSort;
@@ -166,6 +231,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(SelectedIndexSort));
             }
         }
+
+        /// <summary>
+        /// Gets or sets the loading state.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public bool IsLoading
         {
             get => _isLoading;
@@ -179,12 +249,32 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         #endregion
 
         #region Commands
-        // Commands
-        public ICommand NextPageCommand         { get; } // Next page
-        public ICommand PreviousPageCommand     { get; } // Previous page
-        public ICommand CheckboxBrandCheckedCommand     { get; } // Checkbox brand checked
-        public ICommand CheckboxCategoryCheckedCommand  { get; } // Checkbox category checked
-        public ICommand FilterPriceCommand      { get; } // Filter price
+
+        /// <summary>
+        /// Command to navigate to the next page of products.
+        /// </summary>
+        public ICommand NextPageCommand { get; }
+
+        /// <summary>
+        /// Command to navigate to the previous page of products.
+        /// </summary>
+        public ICommand PreviousPageCommand { get; }
+
+        /// <summary>
+        /// Command to handle the checkbox for brand selection.
+        /// </summary>
+        public ICommand CheckboxBrandCheckedCommand { get; }
+
+        /// <summary>
+        /// Command to handle the checkbox for category selection.
+        /// </summary>
+        public ICommand CheckboxCategoryCheckedCommand { get; }
+
+        /// <summary>
+        /// Command to apply the price filter.
+        /// </summary>
+        public ICommand FilterPriceCommand { get; }
+
         #endregion
 
 

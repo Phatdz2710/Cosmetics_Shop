@@ -33,8 +33,19 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
 
         #region Properties for binding
         // Observable Collection
-        public ObservableCollection<ProductThumbnailViewModel> BestSeller   { get; set; } = new ObservableCollection<ProductThumbnailViewModel>();
-        public ObservableCollection<ProductThumbnailViewModel> NewProducts  { get; set; } = new ObservableCollection<ProductThumbnailViewModel>();
+        /// <summary>
+        /// Collection of best-selling products.
+        /// </summary>
+        public ObservableCollection<ProductThumbnailViewModel> BestSeller { get; set; } = new ObservableCollection<ProductThumbnailViewModel>();
+
+        /// <summary>
+        /// Collection of newly added products.
+        /// </summary>
+        public ObservableCollection<ProductThumbnailViewModel> NewProducts { get; set; } = new ObservableCollection<ProductThumbnailViewModel>();
+
+        /// <summary>
+        /// Collection of recently viewed products.
+        /// </summary>
         public ObservableCollection<ProductThumbnailViewModel> RecentlyView { get; set; } = new ObservableCollection<ProductThumbnailViewModel>();
         #endregion
 

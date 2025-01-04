@@ -57,6 +57,9 @@ namespace Cosmetics_Shop.Views.Controls
             this.Loaded += ProductThumbnailControl_Loaded;
         }
 
+        /// <summary>
+        /// Sets up animations for mouse enter and leave events.
+        /// </summary>
         private void ProductThumbnailControl_Loaded(object sender, RoutedEventArgs e)
         {
             _mouseEnter = new Storyboard();
@@ -102,6 +105,9 @@ namespace Cosmetics_Shop.Views.Controls
             _mouseLeave.Children.Add(thumbailExitAnimation_Opacity);
         }
 
+        /// <summary>
+        /// Handles the tap event on the product thumbnail, executing the buy button command.
+        /// </summary>
         private void Grid_Tapped(object sender, TappedRoutedEventArgs e)
         {
             ICommand command = ViewModel.BuyButtonCommand;

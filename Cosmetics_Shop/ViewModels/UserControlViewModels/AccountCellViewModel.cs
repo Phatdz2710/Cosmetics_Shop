@@ -20,6 +20,10 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
         private int _id;
         private int _userId;
 
+        /// <summary>
+        /// Gets or sets the unique identifier for the entity.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public int ID
         {
             get => _id;
@@ -30,6 +34,10 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets the user identifier.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public int UserID
         {
             get => _userId;
@@ -40,6 +48,10 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets the username associated with the user.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public string Username
         {
             get => _username;
@@ -49,6 +61,11 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
                 OnPropertyChanged(nameof(Username));
             }
         }
+
+        /// <summary>
+        /// Gets or sets the role of the user.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public string Role
         {
             get => _role;
@@ -59,6 +76,10 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets the user level associated with the user.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public string UserLevel
         {
             get => _userLevel;
@@ -69,8 +90,19 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
             }
         }
 
-        public ICommand ShowMoreCommand     { get; set; }
-        public ICommand DeleteCommand   { get; set; }
+        #region Commands
+
+        /// <summary>
+        /// Command to show more details related to the entity (likely the user).
+        /// </summary>
+        public ICommand ShowMoreCommand { get; set; }
+
+        /// <summary>
+        /// Command to delete the entity (likely the user).
+        /// </summary>
+        public ICommand DeleteCommand { get; set; }
+
+        #endregion
 
 
         public AccountCellViewModel(int id, 

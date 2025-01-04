@@ -53,6 +53,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
         #endregion
 
         #region Properties for binding
+        /// <summary>
+        /// List of account cells to display.
+        /// </summary>
         public ObservableCollection<AccountCellViewModel> ListAccounts
         {
             get { return _listAccounts; }
@@ -62,6 +65,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(ListAccounts));
             }
         }
+        /// <summary>
+        /// The current page number.
+        /// </summary>
         public int CurrentPage
         {
             get { return _currentPage; }
@@ -71,7 +77,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(CurrentPage));
             }
         }
-
+        /// <summary>
+        /// Message to display.
+        /// </summary>
         public string Message
         {
             get => _message;
@@ -82,7 +90,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
             }
         }
 
-
+        /// <summary>
+        /// Total number of pages.
+        /// </summary>
         public int TotalPages
         {
             get { return _totalPages; }
@@ -92,6 +102,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(TotalPages));
             }
         }
+        /// <summary>
+        /// Total number of accounts.
+        /// </summary>
         public int TotalAccounts
         {
             get { return _totalAccounts; }
@@ -101,6 +114,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(TotalAccounts));
             }
         }
+        /// <summary>
+        /// Flag to show or hide the form for adding an account.
+        /// </summary>
         public bool ShowFormAddAccount
         {
             get { return _showFormAddAccount; }
@@ -110,6 +126,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(ShowFormAddAccount));
             }
         }
+        /// <summary>
+        /// Flag to show or hide the form for showing more details.
+        /// </summary>
         public bool ShowFormShowMore
         {
             get { return _showFormShowMore; }
@@ -119,7 +138,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(ShowFormShowMore));
             }
         }
-
+        /// <summary>
+        /// Username for the account.
+        /// </summary>
         public string Username
         {
             get { return _username; }
@@ -129,6 +150,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(Username));
             }
         }
+        /// <summary>
+        /// Password for the account.
+        /// </summary>
         public string Password
         {
             get { return _password; }
@@ -138,6 +162,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(Password));
             }
         }
+        /// <summary>
+        /// Name of the account holder.
+        /// </summary>
         public string Name
         {
             get { return _name; }
@@ -147,6 +174,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(Name));
             }
         }
+        /// <summary>
+        /// Phone number of the account holder.
+        /// </summary>
         public string NumberPhone
         {
             get { return _numberPhone; }
@@ -156,6 +186,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(NumberPhone));
             }
         }
+        /// <summary>
+        /// Address of the account holder.
+        /// </summary>
         public string Address
         {
             get { return _address; }
@@ -165,6 +198,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(Address));
             }
         }
+        /// <summary>
+        /// Email of the account holder.
+        /// </summary>
         public string Email
         {
             get { return _email; }
@@ -175,6 +211,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
             }
         }
 
+        /// <summary>
+        /// Role of the account holder (e.g., admin, user).
+        /// </summary>
         public int Role
         {
             get { return _role; }
@@ -184,6 +223,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(Role));
             }
         }
+        /// <summary>
+        /// Title of the form.
+        /// </summary>
         public string FormTitle
         {
             get { return _formTitle; }
@@ -198,6 +240,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
 
         #region Commands
         private ICommand _acceptFormCommand;
+        /// <summary>
+        /// Command to accept the form
+        /// </summary>
         public ICommand AcceptFormCommand
         {
             get => _acceptFormCommand;
@@ -207,8 +252,17 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(AcceptFormCommand));
             }
         }
+        /// <summary>
+        /// Command to cancel the form
+        /// </summary>
         public ICommand CancelFormCommand       { get; set; }
+        /// <summary>
+        /// Command to create a new account
+        /// </summary>
         public ICommand CreateAccountCommand    { get; set; }
+        /// <summary>
+        /// Command to reload or refresh the form or list.
+        /// </summary>
         public ICommand ReloadCommand           { get; set; }
         #endregion
 

@@ -7,6 +7,15 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.Views.Converters.OrderStatus
 {
+    /// <summary>
+    /// Converts order status to the appropriate button content text.
+    /// </summary>
+    /// <remarks>
+    /// - 1: "Đã nhận hàng" (Order Received)
+    /// - 2: "Đánh giá" (Review Order)
+    /// - Default: "Lỗi" (Error)
+    /// - Returns "Không xác định" (Undefined) if the input value is invalid.
+    /// </remarks>
     public class OrderStatusToButtonContentConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)

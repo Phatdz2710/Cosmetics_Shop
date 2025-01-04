@@ -30,7 +30,10 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
         private string _orderAddress;
         private int _orderStatus;
         private int _orderTotalPrice;
-
+        /// <summary>
+        /// Gets or sets the unique identifier for the order.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public int OrderId
         {
             get { return _orderId; }
@@ -40,6 +43,11 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
                 OnPropertyChanged(nameof(OrderId));
             }
         }
+
+        /// <summary>
+        /// Gets or sets the user identifier associated with the order.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public int UserId
         {
             get { return _userId; }
@@ -49,6 +57,11 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
                 OnPropertyChanged(nameof(UserId));
             }
         }
+
+        /// <summary>
+        /// Gets or sets the date when the order was placed.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public DateTime OrderDate
         {
             get { return _orderDate; }
@@ -58,6 +71,11 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
                 OnPropertyChanged(nameof(OrderDate));
             }
         }
+
+        /// <summary>
+        /// Gets or sets the delivery address for the order.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public string OrderAddress
         {
             get { return _orderAddress; }
@@ -67,6 +85,11 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
                 OnPropertyChanged(nameof(OrderAddress));
             }
         }
+
+        /// <summary>
+        /// Gets or sets the status of the order (e.g., pending, shipped, delivered).
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public int OrderStatus
         {
             get { return _orderStatus; }
@@ -76,7 +99,12 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
                 OnPropertyChanged(nameof(OrderStatus));
             }
         }
-        public int OrderTotalPrice 
+
+        /// <summary>
+        /// Gets or sets the total price of the order.
+        /// Notifies the UI when the value changes.
+        /// </summary>
+        public int OrderTotalPrice
         {
             get { return _orderTotalPrice; }
             set
@@ -85,7 +113,16 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
                 OnPropertyChanged(nameof(OrderTotalPrice));
             }
         }
+
+        #region Command
+
+        /// <summary>
+        /// Command to perform an action related to the order, such as updating or completing the order.
+        /// </summary>
         public ICommand ActionCommand { get; set; }
+
+        #endregion
+
         public OrderCellViewModel() { }
 
         public OrderCellViewModel(int orderId, 

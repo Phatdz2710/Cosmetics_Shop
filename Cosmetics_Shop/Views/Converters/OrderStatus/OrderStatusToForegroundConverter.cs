@@ -9,6 +9,16 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.Views.Converters.OrderStatus
 {
+    /// <summary>
+    /// Converts order status to a corresponding foreground color.
+    /// </summary>
+    /// <remarks>
+    /// - 0: DarkGoldenrod (Pending Approval)
+    /// - 1: DarkGreen (Approved)
+    /// - 2: DarkBlue (Order Received)
+    /// - 3: DarkRed (Order Canceled)
+    /// - Default: Black (Invalid or undefined status)
+    /// </remarks>
     public class OrderStatusToForegroundConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)

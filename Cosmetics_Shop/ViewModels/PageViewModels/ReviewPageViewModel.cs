@@ -28,10 +28,21 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         private readonly INavigationService _navigationService;
         private readonly IServiceProvider _serviceProvider;
         private IDao _dao = null;
+        /// <summary>
+        /// Event triggered to request showing a dialog with a specified message.
+        /// </summary>
         public event Action<string> ShowDialogRequested;
 
         #region Command
+
+        /// <summary>
+        /// Command to handle the review action, likely for submitting or viewing a product review.
+        /// </summary>
         public ICommand ReviewCommand { get; set; }
+
+        /// <summary>
+        /// Command to cancel an ongoing review action.
+        /// </summary>
         public ICommand CancelReviewCommand { get; set; }
         #endregion
 
@@ -45,6 +56,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         #endregion
 
         #region Properties Binding
+
+        /// <summary>
+        /// Gets or sets the name associated with the entity.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public string Name
         {
             get { return _name; }
@@ -54,6 +70,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(Name));
             }
         }
+
+        /// <summary>
+        /// Gets or sets the display name.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public string NameDisplay
         {
             get { return _nameDisplay; }
@@ -64,6 +85,10 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets the phone number.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public string Phone
         {
             get { return _phone; }
@@ -73,6 +98,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(Phone));
             }
         }
+
+        /// <summary>
+        /// Gets or sets the address.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public string Address
         {
             get { return _address; }
@@ -82,6 +112,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(Address));
             }
         }
+
+        /// <summary>
+        /// Gets or sets the product ID associated with the entity.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public int ProductID
         {
             get { return _productID; }
@@ -91,10 +126,15 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(ProductID));
             }
         }
+
         #endregion
 
+        /// <summary>
+        /// Observable collection to hold the review page thumbnails for display.
+        /// </summary>
         public ObservableCollection<ReviewPageThumbnailViewModel> ReviewThumbnails { get; set; }
 
+        // Constructor
         public ReviewPageViewModel(INavigationService navigationService, 
                                    IDao dao,
                                    UserSession userSession,
