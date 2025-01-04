@@ -10,6 +10,9 @@ using System.Windows.Input;
 
 namespace Cosmetics_Shop.Models
 {
+    /// <summary>
+    /// Represents an order item display in the order list
+    /// </summary>
     public class OrderItemDisplay
     {
         public int ProductId {get; set;}

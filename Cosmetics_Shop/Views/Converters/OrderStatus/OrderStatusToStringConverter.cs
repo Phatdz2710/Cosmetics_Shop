@@ -7,8 +7,12 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.Views.Converters.OrderStatus
 {
+    /// <summary>
+    /// View converter to convert order status from integer to string
+    /// </summary>
     public class OrderStatusToStringConverter : IValueConverter
     {
+        
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             if (value is int status)

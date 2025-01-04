@@ -10,6 +10,9 @@ using Windows.UI;
 
 namespace Cosmetics_Shop.Views.Converters.OrderStatus
 {
+    /// <summary>
+    /// View to convert order status to background color
+    /// </summary>
     public class OrderStatusToBackgroundConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
@@ -27,7 +30,7 @@ namespace Cosmetics_Shop.Views.Converters.OrderStatus
             }
             return new SolidColorBrush(Colors.Transparent);
         }
-
+                
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
             throw new NotImplementedException();

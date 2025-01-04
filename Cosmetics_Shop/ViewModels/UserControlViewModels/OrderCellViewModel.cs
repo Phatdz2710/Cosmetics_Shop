@@ -30,7 +30,7 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
         private string _orderAddress;
         private int _orderStatus;
         private int _orderTotalPrice;
-
+        
         public int OrderId
         {
             get { return _orderId; }
@@ -85,6 +85,9 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
                 OnPropertyChanged(nameof(OrderTotalPrice));
             }
         }
+
+
+       
         public ICommand ActionCommand { get; set; }
         public OrderCellViewModel() { }
 

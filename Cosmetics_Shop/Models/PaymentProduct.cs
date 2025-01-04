@@ -11,6 +11,9 @@ using System.Windows.Input;
 
 namespace Cosmetics_Shop.Models
 {
+    /// <summary>
+    /// Stores the payment product information
+    /// </summary>
     public class PaymentProduct : INotifyPropertyChanged
     {
         public int      Id              { get; set; }

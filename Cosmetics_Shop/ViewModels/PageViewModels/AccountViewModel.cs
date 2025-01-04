@@ -21,6 +21,9 @@ using WinRT.Interop;
 
 namespace Cosmetics_Shop.ViewModels.PageViewModels
 {
+    /// <summary>
+    /// View Model for Account Page
+    /// </summary>
     public class AccountViewModel : INotifyPropertyChanged
     {
         #region Dependency   
@@ -252,7 +255,13 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         #endregion
 
 
-        // Constructor
+        /// <summary>
+        /// Constructor of AccountViewModel
+        /// </summary>
+        /// <param name="dao"></param>
+        /// <param name="eventAggregator"></param>
+        /// <param name="filePickerService"></param>
+        /// <param name="userSession"></param>
         public AccountViewModel(IDao                dao, 
                                 IEventAggregator    eventAggregator, 
                                 IFilePickerService  filePickerService,

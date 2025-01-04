@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.Models
 {
+    /// <summary>
+    /// Store Cart Thumbnail Information
+    /// </summary>
     public class CartThumbnail : Cart, INotifyPropertyChanged
     {
         public CartThumbnail(int id, string productImage, string productName,

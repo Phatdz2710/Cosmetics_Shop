@@ -16,6 +16,9 @@ using Windows.UI.Input;
 
 namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
 {
+    /// <summary>
+    /// View model for product manager page
+    /// </summary>
     public class ProductManagerViewModel : INotifyPropertyChanged
     {
         #region Singleton

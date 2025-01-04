@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.Views.Converters.OrderStatus
 {
+    /// <summary>
+    /// View to convert order status to foreground color
+    /// </summary>
     public class OrderStatusToForegroundConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)

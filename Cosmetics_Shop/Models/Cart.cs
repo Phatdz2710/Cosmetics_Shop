@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.Models
 {
+    /// <summary>
+    /// Store Cart Information
+    /// </summary>
     public class Cart : INotifyPropertyChanged
     {
         public int      Id              { get; set; }

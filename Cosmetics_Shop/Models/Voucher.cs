@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.Models
 {
+    /// <summary>
+    /// Stores information about a voucher
+    /// </summary>
     public class Voucher
     {
         public int Id { get; set; }

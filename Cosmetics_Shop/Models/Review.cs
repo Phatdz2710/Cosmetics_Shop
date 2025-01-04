@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.Models
 {
+    /// <summary>
+    /// This class is used to create a review object
+    /// </summary>
     public class Review
     {
         public int Id { get; set; }

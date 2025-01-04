@@ -24,6 +24,9 @@ using Windows.UI.Input;
 
 namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
 {
+    /// <summary>
+    /// View Model for OrderManager page
+    /// </summary>
     public class OrderManagerViewModel : INotifyPropertyChanged
     {
         #region Singletons
@@ -244,18 +247,26 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
             LoadData();
         }
 
+        /// <summary>
+        /// Command for reload data
+        /// </summary>
         private void reloadCommand()
         {
             CurrentPage = 1;
             LoadData();
         }
 
+        /// <summary>
+        /// Command for hide form
+        /// </summary>
         private void hideFormCommand()
         {
             ShowForm = false;
         }
 
-
+        /// <summary>
+        /// Load data from database
+        /// </summary>
         private async void LoadData()
         {
             var result = await _dao.GetListAllOrdersAsync(CurrentPage, 10);
@@ -280,7 +291,7 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
         }
 
 
-
+        // For INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
         {

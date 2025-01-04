@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.Models
 {
+    /// <summary>
+    /// stores the shipping method information
+    /// </summary>
     public class ShippingMethod
     {
         public int Id { get; set; }

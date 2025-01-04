@@ -15,6 +15,9 @@ using System.Windows.Input;
 
 namespace Cosmetics_Shop.ViewModels.PageViewModels
 {
+    /// <summary>
+    /// ViewModel for the OrderPage.
+    /// </summary>
     public class OrderPageViewModel : INotifyPropertyChanged
     {
         #region Singleton
@@ -49,6 +52,12 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
 
         #endregion
 
+        /// <summary>
+        /// Constructor of OrderPageViewModel.
+        /// </summary>
+        /// <param name="dao"></param>
+        /// <param name="userSession"></param>
+        /// <param name="navigationService"></param>
         public OrderPageViewModel(IDao dao, 
                                   UserSession userSession,
                                   INavigationService navigationService)
@@ -66,6 +75,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             _ = LoadListOrder(OrderStatus.InProcess);
         }
 
+        /// <summary>
+        /// Load list order by status.
+        /// </summary>
+        /// <param name="status"></param>
+        /// <returns></returns>
         private async Task LoadListOrder(OrderStatus status)
         {
             UserOrders.Clear();
@@ -92,16 +106,26 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
         }
 
+
+        /// <summary>
+        /// Load orders in process.
+        /// </summary>
         private async void loadOrdersInProcess()
         {
             await LoadListOrder(OrderStatus.InProcess);
         }
 
+        /// <summary>
+        /// Load orders success.
+        /// </summary>
         private async void loadOrdersSuccess()
         {
             await LoadListOrder(OrderStatus.Success);
         }
 
+        /// <summary>
+        /// Load orders failed.
+        /// </summary>
         private async void loadOrdersFailed()
         {
             await LoadListOrder(OrderStatus.Failed);

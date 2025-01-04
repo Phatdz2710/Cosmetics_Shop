@@ -14,6 +14,9 @@ using System.Windows.Input;
 
 namespace Cosmetics_Shop.ViewModels.UserControlViewModels
 {
+    /// <summary>
+    /// View model for user order cell
+    /// </summary>
     public class UserOrderCellViewModel : INotifyPropertyChanged
     {
         #region Singleton
@@ -104,6 +107,7 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
 
         #endregion
 
+        
         public UserOrderCellViewModel(IDao dao, INavigationService navigationService)
         {
             _dao = dao;
@@ -120,6 +124,10 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
             });
         }
 
+        /// <summary>
+        /// Load order items
+        /// </summary>
+        /// <returns></returns>
         public async Task LoadOrderItems()
         {
             OrderItemsDisplay.Clear();
@@ -134,7 +142,9 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
             }
         }
 
-
+        /// <summary>
+        /// Show or hide items
+        /// </summary>
         private void ShowHideItems()
         {
             IsShowItems = !IsShowItems;

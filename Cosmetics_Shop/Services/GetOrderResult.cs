@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.Services
 {
+    /// <summary>
+    /// Get order result
+    /// </summary>
     public struct GetOrderResult
     {
         public List<Models.Order> ListOrders { get; set; }

@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.Models
 {
+    /// <summary>
+    /// Stores the payment product thumbnail information
+    /// </summary>
     public class PaymentProductThumbnail : PaymentProduct
     {
         public PaymentProductThumbnail(

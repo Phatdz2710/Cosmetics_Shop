@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.Models
 {
+    /// <summary>
+    /// Stores the payment method information
+    /// </summary>
     public class PaymentMethod: INotifyPropertyChanged
     {
         public int      Id          { get; set; }

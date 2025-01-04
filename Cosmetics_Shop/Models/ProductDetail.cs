@@ -7,6 +7,9 @@ using Microsoft.UI.Xaml.Controls;
 
 namespace Cosmetics_Shop.Models
 {
+    /// <summary>
+    /// Store product information
+    /// </summary>
     public class ProductDetail
     {
         public int      Id              { get; set; }

@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Cosmetics_Shop.Services
 {
+    /// <summary>
+    /// Status display for the user
+    /// </summary>
     public class StatusDisplay
     { 
         public SolidColorBrush BorderBrush { get; set; }
