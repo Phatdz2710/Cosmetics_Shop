@@ -33,8 +33,19 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
 
         #region Properties for binding
         // Observable Collection
-        public ObservableCollection<ProductThumbnailViewModel> BestSeller   { get; set; } = new ObservableCollection<ProductThumbnailViewModel>();
-        public ObservableCollection<ProductThumbnailViewModel> NewProducts  { get; set; } = new ObservableCollection<ProductThumbnailViewModel>();
+        /// <summary>
+        /// Collection of best-selling products.
+        /// </summary>
+        public ObservableCollection<ProductThumbnailViewModel> BestSeller { get; set; } = new ObservableCollection<ProductThumbnailViewModel>();
+
+        /// <summary>
+        /// Collection of newly added products.
+        /// </summary>
+        public ObservableCollection<ProductThumbnailViewModel> NewProducts { get; set; } = new ObservableCollection<ProductThumbnailViewModel>();
+
+        /// <summary>
+        /// Collection of recently viewed products.
+        /// </summary>
         public ObservableCollection<ProductThumbnailViewModel> RecentlyView { get; set; } = new ObservableCollection<ProductThumbnailViewModel>();
         #endregion
 
@@ -69,6 +80,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             NewProducts.Clear();
             RecentlyView.Clear();
 
+            // Add data to observable collection
             for (int i = 0; i < bestSeller.Count; i++)
             {
                 var productThumbnailViewModel = _serviceProvider.GetService(typeof(ProductThumbnailViewModel));
@@ -76,6 +88,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 BestSeller.Add(productThumbnailViewModel as ProductThumbnailViewModel);
             }
 
+            // Add data to observable collection
             for (int i = 0; i < newProducts.Count; i++)
             {
                 var productThumbnailViewModel = _serviceProvider.GetService(typeof(ProductThumbnailViewModel));
@@ -83,6 +96,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 NewProducts.Add(productThumbnailViewModel as ProductThumbnailViewModel);
             }
 
+            // Add data to observable collection
             for (int i = 0; i < recentlyView.Count; i++)
             {
                 var productThumbnailViewModel = _serviceProvider.GetService(typeof(ProductThumbnailViewModel));

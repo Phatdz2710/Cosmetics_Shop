@@ -20,7 +20,10 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
         private string _category;
         private int _inventory;
         private int _sold;
-
+        /// <summary>
+        /// Gets or sets the unique identifier for the product.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public int Id
         {
             get { return _id; }
@@ -30,6 +33,11 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
                 OnPropertyChanged(nameof(Id));
             }
         }
+
+        /// <summary>
+        /// Gets or sets the name of the product.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public string Name
         {
             get { return _name; }
@@ -39,6 +47,11 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
                 OnPropertyChanged(nameof(Name));
             }
         }
+
+        /// <summary>
+        /// Gets or sets the price of the product.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public int Price
         {
             get { return _price; }
@@ -48,6 +61,11 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
                 OnPropertyChanged(nameof(Price));
             }
         }
+
+        /// <summary>
+        /// Gets or sets the brand of the product.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public string Brand
         {
             get { return _brand; }
@@ -57,6 +75,11 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
                 OnPropertyChanged(nameof(Brand));
             }
         }
+
+        /// <summary>
+        /// Gets or sets the category of the product.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public string Category
         {
             get { return _category; }
@@ -66,6 +89,11 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
                 OnPropertyChanged(nameof(Category));
             }
         }
+
+        /// <summary>
+        /// Gets or sets the inventory count for the product.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public int Inventory
         {
             get { return _inventory; }
@@ -75,6 +103,11 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
                 OnPropertyChanged(nameof(Inventory));
             }
         }
+
+        /// <summary>
+        /// Gets or sets the number of products sold.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public int Sold
         {
             get { return _sold; }
@@ -85,7 +118,14 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
             }
         }
 
+        #region Command
+
+        /// <summary>
+        /// Command for editing the product details (e.g., price, name, etc.).
+        /// </summary>
         public ICommand EditCommand { get; set; }
+
+        #endregion
 
         public ProductCellViewModel() { }
 

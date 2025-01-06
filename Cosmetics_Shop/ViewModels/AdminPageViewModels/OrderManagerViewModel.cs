@@ -9,6 +9,7 @@ using Cosmetics_Shop.ViewModels.UserControlViewModels;
 using Cosmetics_Shop.Views;
 using Cosmetics_Shop.Views.Pages;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -38,25 +39,31 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
         private int _currentPage = 1;
         private int _totalPage = 1;
         private int _totalOrders = 0;
-        private bool _showForm = false;
-        private bool _showFormShowMore = false;
-        private string _formTitle = "";   
-        private string _productName = "";
-        private int _productId = 0;
-        private int _quantity = 0;
-        private decimal _price = 0;
-        private decimal _totalPrice = 0;
+        private bool _showForm = false;       
+        private int _orderId = 0;        
+        private int _orderStatus = 0;
+        private int _totalPrice = 0;        
         private string _message = "";
+        private bool _visiActionButton = false;
 
-        private Models.Order _selectedOrder;
-        
+        //private Models.Order _selectedOrder;
+
 
         #endregion
 
         #region Properties for binding
+        /// <summary>
+        /// List of order cells to display in the UI.
+        /// </summary>
         public ObservableCollection<OrderCellViewModel> ListOrders { get; set; }
-        
+        /// <summary>
+        /// List of order items to display in the UI.
+        /// </summary>
+        public ObservableCollection<OrderItemDisplay> ListView { get; set; }
 
+        /// <summary>
+        /// Boolean value indicating the visibility of the "Previous" button.
+        /// </summary>
         public bool VisiPrevious
         {
             get { return _visiPrevious; }
@@ -66,7 +73,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(VisiPrevious));
             }
         }
-
+        /// <summary>
+        /// Boolean value indicating the visibility of the "Next" button.
+        /// </summary>
         public bool VisiNext
         {
             get { return _visiNext; }
@@ -76,7 +85,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(VisiNext));
             }
         }
-
+        /// <summary>
+        /// Current page in the order list pagination.
+        /// </summary>
         public int CurrentPage
         {
             get { return _currentPage; }
@@ -86,7 +97,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(CurrentPage));
             }
         }
-
+        /// <summary>
+        /// Total number of pages for the order list pagination.
+        /// </summary>
         public int TotalPage
         {
             get { return _totalPage; }
@@ -96,7 +109,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(TotalPage));
             }
         }
-
+        /// <summary>
+        /// Total number of orders.
+        /// </summary>
         public int TotalOrders
         {
             get { return _totalOrders; }
@@ -106,7 +121,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(TotalOrders));
             }
         }
-
+        /// <summary>
+        /// Boolean value indicating whether to show the form.
+        /// </summary>
         public bool ShowForm
         {
             get { return _showForm; }
@@ -116,17 +133,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(ShowForm));
             }
         }
-
-        public string FormTitle
-        {
-            get { return _formTitle; }
-            set
-            {
-                _formTitle = value;
-                OnPropertyChanged(nameof(FormTitle));
-            }
-        }
-
+        /// <summary>
+        /// Message to display (e.g., success or error messages).
+        /// </summary>
         public string Message
         {
             get { return _message; }
@@ -136,52 +145,36 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(Message));
             }
         }
-        
-        public string ProductName
+        /// <summary>
+        /// The ID of the current order.
+        /// </summary>
+        public int OrderId
         {
-            get { return _productName; }
+            get { return _orderId; }
             set
             {
-                _productName = value;
-                OnPropertyChanged(nameof(ProductName));
+                _orderId = value;
+                OnPropertyChanged(nameof(OrderId));
             }
         }
-
-        
-
-        public int ProductId
+        /// <summary>
+        /// The current status of the order.
+        /// </summary>
+        public int OrderStatus
         {
-            get { return _productId; }
+            get { return _orderStatus; }
             set
             {
-                _productId = value;
-                OnPropertyChanged(nameof(ProductId));
+                _orderStatus = value;
+                OnPropertyChanged(nameof(OrderStatus));
+
+                
             }
         }
-
-        
-
-        public int Quantity
-        {
-            get { return _quantity; }
-            set
-            {
-                _quantity = value;
-                OnPropertyChanged(nameof(Quantity));
-            }
-        }
-
-        public decimal Price
-        {
-            get { return _price; }
-            set
-            {
-                _price = value;
-                OnPropertyChanged(nameof(Price));
-            }
-        }
-
-        public decimal TotalPrice
+        /// <summary>
+        /// The total price of the order.
+        /// </summary>
+        public int TotalPrice
         {
             get { return _totalPrice; }
             set
@@ -190,26 +183,41 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(TotalPrice));
             }
         }
-
-        public bool ShowFormShowMore
+        /// <summary>
+        /// Boolean value indicating the visibility of the action button.
+        /// </summary>
+        public bool VisiActionButton 
         {
-            get { return _showFormShowMore; }
+            get { return _visiActionButton; }
             set
             {
-                _showFormShowMore = value;
-                OnPropertyChanged(nameof(ShowFormShowMore));
+                _visiActionButton = value;
+                OnPropertyChanged(nameof(VisiActionButton));
             }
         }
+
+
 
         #endregion
 
         #region Commands
+        /// <summary>
+        /// Command to navigate to the next page of orders.
+        /// </summary>
         public ICommand NextPageCommand => new RelayCommand(nextPageCommand);
+        /// <summary>
+        /// Command to navigate to the previous page of orders.
+        /// </summary>
         public ICommand PreviousPageCommand => new RelayCommand(previousPageCommand);
+        /// <summary>
+        /// Command to reload the orders list.
+        /// </summary>
         public ICommand ReloadCommand { get; set; }
 
-
         private ICommand _acceptFormCommand;
+        /// <summary>
+        /// Command to accept changes in the form
+        /// </summary>
         public ICommand AcceptFormCommand
         {
             get => _acceptFormCommand;
@@ -221,7 +229,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
         }
 
         private ICommand _cancelFormCommand;
-
+        /// <summary>
+        /// Command to cancel changes in the form (e.g., discard changes).
+        /// </summary>
         public ICommand CancelFormCommand
         {
             get => _cancelFormCommand;
@@ -231,19 +241,11 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(CancelFormCommand));
             }
         }
-
-        private ICommand _showMore;
-
-        public ICommand ShowMore
-        {
-            get { return _showMore; }
-            set
-            {
-                _showMore = value;
-                OnPropertyChanged(nameof(ShowMore));
-            }
-        }
-        public object OrderStatusEnum { get; private set; }
+        /// <summary>
+        /// Command to hide the form (e.g., close or reset).
+        /// </summary>
+        public ICommand HideFormCommand { get; set; }
+       
         #endregion
 
         public OrderManagerViewModel(IDao dao,
@@ -258,13 +260,13 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
 
             ListOrders = new ObservableCollection<OrderCellViewModel>();
 
-            CancelFormCommand = new RelayCommand(cancelFormCommand);
-
-            ShowMore = new RelayCommand<int>(execute: ShowMoreCommand);
+            ListView = new ObservableCollection<OrderItemDisplay>();                     
+           
             ReloadCommand = new RelayCommand(reloadCommand);
-            // Load orders when the ViewModel is created
+
+            HideFormCommand = new RelayCommand(hideFormCommand);
+            
             LoadData();
-            //
             
         }
 
@@ -287,100 +289,54 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
             LoadData();
         }
 
+        /// <summary>
+        /// Reload data command
+        /// </summary>
         private void reloadCommand()
         {
             CurrentPage = 1;
             LoadData();
         }
 
+        /// <summary>
+        /// Hide form command
+        /// </summary>
+        private void hideFormCommand()
+        {
+            ShowForm = false;
+        }
 
+        /// <summary>
+        /// Load data
+        /// </summary>
         private async void LoadData()
         {
             var result = await _dao.GetListAllOrdersAsync(CurrentPage, 10);
             TotalPage = result.TotalPages;
             TotalOrders = result.TotalOrders;
-
-
-            // Show or hide button next/previous page
             VisiNext = CurrentPage != TotalPage;
             VisiPrevious = CurrentPage != 1;
 
             ListOrders.Clear();
             foreach (var order in result.ListOrders)
             {
-                ListOrders.Add(new OrderCellViewModel(order.Id, 
-                        order.UserId, 
-                        order.OrderDate, 
+                ListOrders.Add(new OrderCellViewModel(order.Id,
+                        order.UserId,
+                        order.OrderDate,
                         order.ShippingAddress,
                         order.OrderStatus,
-                        new RelayCommand(() =>
-                        {
-                            ShowForm = true;
-                        }))
-                );
-
+                        order.TotalPrice,
+                        this,
+                        _dao
+                ));
             }
         }
 
-        
+
 
         /// <summary>
-        /// Show form to show more information 
+        /// Property changed event
         /// </summary>
-        /// <param name="productId"></param>
-        private async void ShowMoreCommand(int productId)
-        {
-            var orderInfo = await _dao.GetOrderItemDisplayAsync(productId);
-            AcceptFormCommand = new RelayCommand(acceptOrderCommand);
-            AcceptFormCommand = new RelayCommand(CloseShowMoreForm);
-            ShowFormShowMore = true;
-            FormTitle = "Xem thêm thông tin";
-            ProductId = orderInfo.ProductId;
-            ProductName = orderInfo.ProductName;
-            Quantity = orderInfo.Quantity;
-            Price = orderInfo.Price;
-            TotalPrice = orderInfo.TotalPrice;
-        }
-
-        /// <summary>
-        /// Close show more form command
-        /// </summary>
-        private void CloseShowMoreForm()
-        {
-            ShowFormShowMore = false;
-        }
-
-        /// <summary>
-        /// Accept create account command
-        /// </summary>
-        private async void acceptOrderCommand()
-        {
-            ShowFormShowMore = false;
-            var result = await _dao.ChangeOrderStatusAsync();
-
-            if (result)
-            {
-                Message = "Đơn hàng đã được duyệt!";
-                LoadData();
-            }
-            else
-            {
-                Message = "Đơn hàng đang chờ duyệt!";
-            }
-        }
-
-        /// <summary>
-        /// Cancel form command
-        /// </summary>
-        private void cancelFormCommand()
-        {
-            ShowForm = false;
-        }
-
-
-
-
-
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
         {

@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Cosmetics_Shop.DataAccessObject.Interfaces;
+using Windows.UI.Popups;
 
 namespace Cosmetics_Shop.ViewModels.PageViewModels
 {
@@ -22,27 +23,36 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
     /// </summary>
     public class CartPageViewModel : INotifyPropertyChanged
     {
-        // Data access object
+        #region Singletons
+        /// <summary>
+        /// Data access object
+        /// </summary>
         private IDao _dao = null;
+
+        /// <summary>
+        /// Navigation service
+        /// </summary>
+        private readonly INavigationService _navigationService;
+        #endregion
 
         #region Fields
         private bool _isAllChecked;
         private int _totalPay;
         private Models.Voucher _currentVoucher;
         private bool _isZeroCart = false;
+        public event Action<string> ShowDialogRequested;
         #endregion
 
-        // Observable Collection
+        #region Properties Binding
+
+        /// <summary>
+        /// Observable collection representing the cart items.
+        /// </summary>
         public ObservableCollection<CartThumbnailViewModel> Cart { get; set; }
 
-        //Command
-        public ICommand PaidButtonCommand { get; set; }
-        public ICommand GoBackCommand { get; set; }
-
-        // Navigation service
-        private readonly INavigationService _navigationService;
-
-        #region Properties Binding
+        /// <summary>
+        /// Indicates if all items in the cart are checked.
+        /// </summary>
         public bool IsAllChecked
         {
             get => _isAllChecked;
@@ -61,6 +71,10 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 }
             }
         }
+
+        /// <summary>
+        /// Represents the total pay of all checked cart items.
+        /// </summary>
         public int TotalPay
         {
             get => _totalPay;
@@ -73,6 +87,10 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 }
             }
         }
+
+        /// <summary>
+        /// Recalculates the total payment based on the checked items in the cart.
+        /// </summary>
         public void RecalculateTotalPay()
         {
             // Check if any item is checked
@@ -80,15 +98,22 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             {
                 // Calculate total pay from checked items
                 TotalPay = Cart.Where(item => item.IsChecked).Sum(item => item.CartThumbnail.TotalPrice);
-
             }
             else
             {
                 // If no items are checked, set TotalPay to 0
                 TotalPay = 0;
             }
+
+            if (_currentVoucher != null)
+            {
+                ApplyVoucher(_currentVoucher);
+            }
         }
 
+        /// <summary>
+        /// Indicates if the cart is empty.
+        /// </summary>
         public bool IsZeroCart
         {
             get => _isZeroCart;
@@ -103,6 +128,24 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         }
         #endregion
 
+        #region Commands
+
+
+        //Command
+        /// <summary>
+        /// Command to navigate to Payment Page
+        /// </summary>
+        public ICommand PaidButtonCommand { get; set; }
+
+        /// <summary>
+        /// Command to go back to the previous view.
+        /// </summary>
+        public ICommand GoBackCommand { get; set; }
+
+        #endregion
+
+
+        // Constructor
         public CartPageViewModel(INavigationService navigationService, IDao dao)
         {
             _dao = dao;
@@ -118,8 +161,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 var selectedProducts = Cart
                 .Where(item => item.IsChecked) // Get checked items
                 .Select(item => new PaymentProductThumbnail(
-                    item.CartThumbnail.Id, 
-                    null, // image
+                    item.CartThumbnail.Id,
+                    item.CartThumbnail.ProductId,
+                    item.CartThumbnail.ProductImage,
                     item.CartThumbnail.ProductName,
                     item.CartThumbnail.Price,
                     item.CartThumbnail.Amount
@@ -128,9 +172,22 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
 
                 if (selectedProducts.Any())
                 {
-                    _navigationService.NavigateTo<PaymentPage>(selectedProducts); // Pass the list of selected products
+                    //_navigationService.NavigateTo<PaymentPage>(selectedProducts); // Pass the list of selected products
+                    var navigationData = new PaymentNavigationData
+                    (
+                        selectedProducts,
+                        null,
+                        _currentVoucher
+                    );
+
+                    // Navigate to the PaymentPage với đối tượng chứa thông tin
+                    _navigationService.NavigateTo<PaymentPage>(navigationData);
                 }
-                //_navigationService.NavigateTo<PaymentPage>();
+                else
+                {
+                    ShowDialogRequested?.Invoke("Bạn chưa chọn sản phẩm nào.");
+                    return;
+                }
             });
             GoBackCommand = new RelayCommand(() =>
             {
@@ -139,6 +196,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         }
 
         #region Load Cart
+        /// <summary>
+        /// Load cart product from the database
+        /// </summary>
         public async Task LoadCartProductsAsync()
         {
             Cart = new ObservableCollection<CartThumbnailViewModel>();
@@ -177,6 +237,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
         }
 
+        /// <summary>
+        /// Delete a product from cart in database by using ID of cart product
+        /// </summary>
+        /// <param name="cardId">The cart ID need to delete.</param>
+        /// <returns>Successful delete or not</returns>
         public async Task<bool> DeleteFromCartAsync(int cartId)
         {
             // Call the method to delete from the database
@@ -199,6 +264,13 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 return false; // Deletion failed
             }
         }
+
+        /// <summary>
+        /// Update a product from cart in database
+        /// </summary>
+        /// <param name="cartId">The cart ID need to delete.</param>
+        /// <param name="quantity">The quantity of product.</param>
+        /// <returns>Successful update or not</returns>
         public async Task<bool> UpdateCartAsync(int cartId, int quantity)
         {
             // Call the method to delete from the database
@@ -206,6 +278,12 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             //_ = LoadCartProductsAsync();
             return result;
         }
+
+        /// <summary>
+        /// Delete a product from cart in database by using ID of product
+        /// </summary>
+        /// <param name="productId">The ID of product need to delete.</param>
+        /// <returns>Successful delete or not</returns>
         public async Task<bool> DeleteFromCartByProductIDAsync(int productId)
         {
             // Call the method to delete from the database
@@ -230,18 +308,26 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         #endregion
 
         #region Voucher
+        /// <summary>
+        /// Load the vouchers from database
+        /// </summary>
+        /// <returns>A list of vouchers</returns>
         public async Task<List<Models.Voucher>> GetAllVouchersAsync()
         {
             return await _dao.GetAllVouchersAsync(); 
         }
 
+        /// <summary>
+        /// Recalculate the total payment after apply voucher fee
+        /// </summary>
+        /// <param name="selectedVoucher">Voucher was selected.</param>
         public void ApplyVoucher(Models.Voucher selectedVoucher)
         {
             // Remove the previous voucher's effect if a new one is being applied
             if (selectedVoucher != _currentVoucher)
             {
                 _currentVoucher = selectedVoucher; // Update the current voucher
-                RecalculateTotalPay(); // Recalculate total pay before applying the new voucher
+                //RecalculateTotalPay(); // Recalculate total pay before applying the new voucher
             }
 
 

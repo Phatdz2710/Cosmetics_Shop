@@ -27,7 +27,7 @@
                                 Converter={StaticResource LoginSignupStateConverter},
                                 ConverterParameter=Login}">
 
-            <TextBlock Text="LOGIN"
+            <TextBlock Text="ĐĂNG NHẬP"
                    FontSize="40"
                    FontWeight="Bold"
                    Foreground="{ThemeResource PurchasePageGridViewTotalPriceForeground}"
@@ -35,7 +35,7 @@
                    Margin="0,0,0,20"/>
 
             <TextBox x:Name="UsernameLogin"
-                     PlaceholderText="Username"
+                     PlaceholderText="Tên đăng nhập"
                      Padding="10"
                      CornerRadius="8"
                      Background="{ThemeResource PurchasePageFilterPriceBoxBackground}"
@@ -47,7 +47,7 @@
                      IsEnabled="{x:Bind ViewModel.IsEnabled, Mode=OneWay}"/>
 
             <PasswordBox x:Name="PasswordLogin"
-                         PlaceholderText="Password"
+                         PlaceholderText="Mật khẩu"
                          Padding="10"
                          CornerRadius="8"
                          Background="{ThemeResource PurchasePageFilterPriceBoxBackground}"
@@ -64,11 +64,11 @@
                        FontSize="15"/>
 
             <CheckBox x:Name="cbxRememeber" 
-                        Content="Remember me"
+                        Content="Ghi nhớ đăng nhập"
                       IsChecked="{x:Bind ViewModel.RememberMe, Mode=TwoWay}"
                       IsEnabled="{x:Bind ViewModel.IsEnabled, Mode=OneWay}"/>
 
-            <Button Content="Login"
+            <Button Content="Đăng nhập"
                     Background="#7CFFB9"
                     Foreground="{ThemeResource AccountPageBackground}"
                     FontSize="16"
@@ -82,15 +82,15 @@
 
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center">
-                <TextBlock Text="Don't have an account?"
+                <TextBlock Text="Bạn chưa có tài khoản?"
                            VerticalAlignment="Center"/>
-                <Button Content="Register" 
+                <Button Content="Đăng ký" 
                        Margin="5 0 0 0"
                        Foreground="#31C777"
                        Background="Transparent"
                        VerticalAlignment="Center"
                        Command="{x:Bind ViewModel.SwitchSignupCommand}"
-                        IsEnabled="{x:Bind ViewModel.IsEnabled, Mode=OneWay}"/>
+                       IsEnabled="{x:Bind ViewModel.IsEnabled, Mode=OneWay}"/>
             </StackPanel>
 
         </StackPanel>
@@ -146,7 +146,7 @@ Foreground="{ThemeResource AccountPageForeground}"
                          BorderThickness="1"
                          Margin="0,0,0,5"
                          IsEnabled="{x:Bind ViewModel.IsEnabled, Mode=OneWay}"
-                         Password="{x:Bind ViewModel.ConfirmPasswordSingup, Mode=TwoWay}"/>
+                         Password="{x:Bind ViewModel.ConfirmPasswordSignup, Mode=TwoWay}"/>
             
             <TextBox x:Name="EmaiSignup"
                      PlaceholderText="Email"
@@ -166,7 +166,7 @@ Foreground="{ThemeResource AccountPageForeground}"
                        Visibility="{x:Bind ViewModel.MessageVisibility, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
             </TextBlock>
 
-            <Button Content="Sign Up"
+            <Button Content="Đăng ký"
                     Background="#7CFFB9"
                     Foreground="{ThemeResource AccountPageBackground}"
                     FontSize="16"

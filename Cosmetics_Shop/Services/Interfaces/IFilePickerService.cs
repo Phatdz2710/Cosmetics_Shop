@@ -32,5 +32,4 @@ namespace Cosmetics_Shop.Services.Interfaces
         /// </param>
         void SetWindowFocus(Window focus);
     }
-
 }

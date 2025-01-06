@@ -14,6 +14,9 @@ using System.Windows.Input;
 
 namespace Cosmetics_Shop.ViewModels
 {
+    /// <summary>
+    /// View model for review area in product detail page
+    /// </summary>
     public class ReviewThumbnailViewModel : INotifyPropertyChanged
     {
         // Navigation service
@@ -30,6 +33,10 @@ namespace Cosmetics_Shop.ViewModels
 
         private ReviewThumbnail _reviewThumbnail;
 
+        /// <summary>
+        /// Gets or sets the review thumbnail object, which includes the star rating and review details.
+        /// Changes to this property will update the star number and the list of stars displayed.
+        /// </summary>
         public ReviewThumbnail ReviewThumbnail
         {
             get => _reviewThumbnail;
@@ -42,9 +49,16 @@ namespace Cosmetics_Shop.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets the number of stars for the review.
+        /// Returns 0 if the review thumbnail is null.
+        /// </summary>
         public int StarNumber => _reviewThumbnail?.StarNumber ?? 0; // Expose the StarNumber
 
-        // Expose a collection of stars based on StarNumber
+        /// <summary>
+        /// Gets a collection of star numbers (1 to StarNumber) for display purposes.
+        /// This is used to render a list of stars in the UI based on the star rating.
+        /// </summary>
         public IEnumerable<int> StarList => Enumerable.Range(1, StarNumber);
 
 

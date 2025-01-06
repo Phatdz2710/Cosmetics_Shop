@@ -27,7 +27,7 @@ namespace Cosmetics_Shop.DataAccessObject
             throw new NotImplementedException();    
         }
 
-        public async Task<List<Models.OrderItem>> GetListOrderItemAsync(int orderId)
+        public async Task<List<Models.OrderItemDisplay>> GetListOrderItemAsync(int orderId)
         {
             throw new NotImplementedException();    
         }
@@ -236,10 +236,10 @@ namespace Cosmetics_Shop.DataAccessObject
         {
             var db = new List<CartThumbnail>()
             {
-                new CartThumbnail(1, null, "Tẩy trang loreal", 150000, 2, 300000),
-                new CartThumbnail(3, null, "Tẩy trang Bioderma", 150000, 1, 150000),
-                new CartThumbnail(5, null, "Tẩy trang Ganier", 130000, 1, 130000),
-                new CartThumbnail(6, null, "Kem chống nắng skinaqua", 125000, 1, 125000)
+                new CartThumbnail(1,0, null, "Tẩy trang loreal", 150000, 2, 300000),
+                new CartThumbnail(3,0, null, "Tẩy trang Bioderma", 150000, 1, 150000),
+                new CartThumbnail(5,0, null, "Tẩy trang Ganier", 130000, 1, 130000),
+                new CartThumbnail(6,0, null, "Kem chống nắng skinaqua", 125000, 1, 125000)
             };
 
             return db;
@@ -266,7 +266,8 @@ namespace Cosmetics_Shop.DataAccessObject
             return true;
         }
 
-        public async Task<Models.Order> AddToOrderAsync(List<PaymentProductThumbnail> listCartProduct, int paymentMethod, int shippingMethod, int voucher)
+        public async Task<Models.Order> AddToOrderAsync(List<PaymentProductThumbnail> listCartProduct, int paymentMethod,
+                                                        int shippingMethod, int voucher, string address, int totalprice)
         {
             var db = new Models.Order()
             {
@@ -286,6 +287,16 @@ namespace Cosmetics_Shop.DataAccessObject
 
         }
 
+        public async Task<bool> AddReviewAsync(int idProduct, int starNumber)
+        {
+            return true;
+        }
+
+        public async Task<bool> RecalculateRatingAverage(int productID, int starNumber)
+        {
+            return true;
+        }
+
         public async Task<List<string>> GetSuggestionsAsync(string keyword)
         {
             var suggestions = new List<string> { "Apple", "Application", "Banana", "Cherry", "Date", "Grape" };
@@ -300,18 +311,6 @@ namespace Cosmetics_Shop.DataAccessObject
         public async Task<List<Models.Voucher>> GetAllVouchersAsync()
         {
             throw new NotImplementedException();
-        }
-
-        public List<PaymentProductThumbnail> GetAllPaymentProducts()
-        {
-            var db = new List<PaymentProductThumbnail>
-            {
-                new PaymentProductThumbnail(1, null, "Tẩy trang loreal", 150000, 2),
-                new PaymentProductThumbnail(2, null, "Tẩy trang loreal", 150000, 2),
-                new PaymentProductThumbnail(3, null, "Tẩy trang Bioderma", 150000, 1)
-            };
-
-            return db;
         }
 
         public async Task<List<Models.ShippingMethod>> GetShippingMethodsAsync()
@@ -385,7 +384,7 @@ namespace Cosmetics_Shop.DataAccessObject
             throw new NotImplementedException();
         }
 
-        public Task<bool> CreateProductAsync(string name, string brand, string category, int price, int inventory, int sold, string imagePath)
+        public Task<bool> CreateProductAsync(string name, string brand, string category, int price, int inventory, int sold, string imagePath, string description)
         {
             throw new NotImplementedException();
         }
@@ -400,7 +399,7 @@ namespace Cosmetics_Shop.DataAccessObject
             throw new NotImplementedException();
         }
 
-        public Task<bool> ChangeProductInfoAsync(int id, string newName, string newBrand, string newCategory, int newPrice, int newInventory, int newSold, string newImagePath, string newDescription)
+        public Task<bool> ChangeProductInfoAsync(int id, string newName, string newBrand, string newCategory, int newPrice, int newInventory, string newImagePath, string newDescription)
         {
             throw new NotImplementedException();
         }
@@ -410,7 +409,7 @@ namespace Cosmetics_Shop.DataAccessObject
             throw new NotImplementedException();
         }
 
-        Task<List<Models.OrderItem>> IDao.GetListOrderItemAsync(int orderId)
+        Task<List<Models.OrderItemDisplay>> IDao.GetListOrderItemAsync(int orderId)
         {
             throw new NotImplementedException();
         }
@@ -445,7 +444,7 @@ namespace Cosmetics_Shop.DataAccessObject
             throw new NotImplementedException();
         }
 
-        public Task<bool> ChangeOrderStatusAsync()
+        public Task<bool> ChangeOrderStatusAsync(int orderId, int status)
         {
             throw new NotImplementedException();
         }

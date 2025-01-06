@@ -12,6 +12,9 @@ namespace Cosmetics_Shop.Services.EventAggregatorMessages
     /// </summary>
     public class SearchEvent
     {
+        /// <summary>
+        /// Gets or sets the keyword to search for.
+        /// </summary>
         public string Keyword { get; set; }
     }
 }

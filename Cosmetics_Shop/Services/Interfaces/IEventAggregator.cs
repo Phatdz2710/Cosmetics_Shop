@@ -25,8 +25,7 @@ namespace Cosmetics_Shop.Services.Interfaces
         /// </summary>
         /// <typeparam name="T">The type of event to unsubscribe from.</typeparam>
         /// <param name="action">
-        /// The action that was previously subscribed to the event of type <typeparamref name="T"/>.
-        /// </param>
+        /// The action that was previously subscribed to the event of type <typeparamref name="T"/>.</param>
         void Unsubscribe<T>(Action<T> action);
 
         /// <summary>
@@ -38,5 +37,4 @@ namespace Cosmetics_Shop.Services.Interfaces
         /// </param>
         void Publish<T>(T message);
     }
-
 }

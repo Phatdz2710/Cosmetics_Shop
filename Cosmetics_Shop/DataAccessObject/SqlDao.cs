@@ -32,6 +32,8 @@ namespace Cosmetics_Shop.DataAccessObject
     public class SqlDao : IDao
     {
         private readonly IServiceProvider _serviceProvider = null;
+
+
         #region Get Product Thumbnails
         public SqlDao(IServiceProvider serviceProvider)
         {
@@ -360,29 +362,36 @@ namespace Cosmetics_Shop.DataAccessObject
             }
         }
 
-        public async Task<List<Models.OrderItem>> GetListOrderItemAsync(int orderId)
+        public async Task<List<Models.OrderItemDisplay>> GetListOrderItemAsync(int orderId)
         {
             using (var scope = _serviceProvider.CreateScope())
             {
                 var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
                 try
                 {
-                    var orderItems = await _databaseContext.OrderItems
-                        .Where(p => p.OrderId == orderId)
-                        .Select(p => new Models.OrderItem
-                        {
-                            Id = p.Id,
-                            OrderId = p.OrderId,
-                            ProductId = p.ProductId,
-                            Quantity = p.Quantity,
-                        })
-                        .ToListAsync();
+                    var query = await _databaseContext.OrderItems.Where(p => p.OrderId == orderId)
+                        .Join(_databaseContext.Products,
+                                orderItem => orderItem.ProductId,
+                                product => product.Id,
+                                (orderItem, product) => new
+                                {
+                                    OrderItem = orderItem,
+                                    Product = product
+                                }).Select(p => new Models.OrderItemDisplay(
+                                    p.Product.Id,
+                                    p.Product.Name,
+                                    p.OrderItem.Quantity,
+                                    p.Product.ImagePath,
+                                    p.Product.Price,
+                                    p.Product.Price * p.OrderItem.Quantity
+                                )).ToListAsync();
 
-                    return orderItems;
+                    return query;
+                        
                 }
                 catch (Exception)
                 {
-                    return new List<Models.OrderItem>();
+                    return new List<Models.OrderItemDisplay>();
                 }
             }
         }
@@ -944,7 +953,7 @@ namespace Cosmetics_Shop.DataAccessObject
             }
         }
 
-        public async Task<bool> ChangeProductInfoAsync(int id, string newName, string newBrand, string newCategory, int newPrice, int newInventory, int newSold, string newImagePath, string newDescription)
+        public async Task<bool> ChangeProductInfoAsync(int id, string newName, string newBrand, string newCategory, int newPrice, int newInventory, string newImagePath, string newDescription)
         {
             using (var scope = _serviceProvider.CreateScope())
             {
@@ -969,7 +978,6 @@ namespace Cosmetics_Shop.DataAccessObject
                     product.Category = newCategory;
                     product.Price   = newPrice;
                     product.Stock   = newInventory;
-                    product.Sold    = newSold;
                     product.ImagePath = newImagePath;
                     product.Description = newDescription;
 
@@ -983,7 +991,7 @@ namespace Cosmetics_Shop.DataAccessObject
             }
         }
 
-        public async Task<bool> CreateProductAsync(string name, string brand, string category, int price, int inventory, int sold, string imagePath)
+        public async Task<bool> CreateProductAsync(string name, string brand, string category, int price, int inventory, int sold, string imagePath, string description)
         {
             try
             {
@@ -1006,7 +1014,8 @@ namespace Cosmetics_Shop.DataAccessObject
                         Sold = sold,
                         ImagePath = imagePath,
                         AverageRating = 0,
-                        CreatedAt = DateTime.Now
+                        CreatedAt = DateTime.Now,
+                        Description = description
                     };
 
                     await _databaseContext.Products.AddAsync(newProduct);
@@ -1079,7 +1088,8 @@ namespace Cosmetics_Shop.DataAccessObject
                             ShippingMethod = p.ShippingMethod,
                             PaymentMethod = p.PaymentMethod,
                             VoucherId = p.VoucherId,
-                            ShippingAddress = p.ShippingAddress
+                            ShippingAddress = p.ShippingAddress,
+                            TotalPrice = p.TotalPrice
                         })
                         .ToListAsync();
 
@@ -1102,7 +1112,7 @@ namespace Cosmetics_Shop.DataAccessObject
                 }
             }}
 
-        public async Task<bool> ChangeOrderStatusAsync()
+        public async Task<bool> ChangeOrderStatusAsync(int orderId, int status)
         {
             using (var scope = _serviceProvider.CreateScope())
             {
@@ -1110,14 +1120,31 @@ namespace Cosmetics_Shop.DataAccessObject
 
                 try
                 {
-                    var order = await _databaseContext.Orders.FirstOrDefaultAsync(p => p.Id == 1);
+                    var order = await _databaseContext.Orders.FirstOrDefaultAsync(p => p.Id == orderId);
 
                     if (order == null)
                     {
                         return false;
                     }
 
-                    order.OrderStatus = 1;
+                    order.OrderStatus = status;
+
+                    if (status == 1)
+                    {
+                        var orderItems = await _databaseContext.OrderItems
+                            .Where(p => p.OrderId == orderId)
+                            .ToListAsync();
+
+                        foreach (var item in orderItems)
+                        {
+                            var product = await _databaseContext.Products.FirstOrDefaultAsync(p => p.Id == item.ProductId);
+                            if (product != null)
+                            {
+                                product.Stock -= item.Quantity;
+                                product.Sold += item.Quantity;
+                            }
+                        }
+                    }
 
                     await _databaseContext.SaveChangesAsync();
                     return true;
@@ -1126,7 +1153,6 @@ namespace Cosmetics_Shop.DataAccessObject
                 {
                     return false;
                 }
-               
             }
         }
         #endregion
@@ -1145,6 +1171,7 @@ namespace Cosmetics_Shop.DataAccessObject
                         .Where(c => c.UserId == userSession.GetId())
                         .Select(c => new CartThumbnail(
                             c.Id,
+                            c.ProductId,
                             c.Product.ImagePath,       // Assuming 'Image' is the field in Product
                             c.Product.Name,        // Assuming 'Name' is the field in Product
                             c.Product.Price,       // Assuming 'Price' is the field in Product
@@ -1333,17 +1360,16 @@ namespace Cosmetics_Shop.DataAccessObject
             using (var scope = _serviceProvider.CreateScope())
             {
                 var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-                var userSession = _serviceProvider.GetService(typeof(UserSession)) as UserSession;
                 try
                 {
                     // Tìm kiếm sản phẩm trong giỏ hàng theo cartId và userId
                     var reviews = await _databaseContext.ProductRatings
-                        .Where(r => r.ProductId == idProduct && r.UserId == userSession.GetId())
+                        .Where(r => r.ProductId == idProduct)
                         .Select(r => new ReviewThumbnail(
                             r.ProductId,
                             r.UserId,
                             r.User.Name,
-                            r.User.AvatarPath,
+                            r.User.AvatarPath.IsNullOrEmpty() ? "ms-appx:///Assets/avatar_temp.png" : r.User.AvatarPath,
                             r.Rating,
                             r.RatingDate
                         ))
@@ -1356,6 +1382,95 @@ namespace Cosmetics_Shop.DataAccessObject
                 }
             }
 
+        }
+
+        private DBModels.ProductRating ConvertToDbReview(Models.ReviewThumbnail db)
+        {
+            return new DBModels.ProductRating
+            {
+                UserId = db.UserID,
+                ProductId = db.ProductID,
+                Rating = db.StarNumber,
+                RatingDate = db.RatingDate
+            };
+        }
+        public async Task<bool> AddReviewAsync(int idProduct, int star)
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                // Retrieve the database context from the service provider
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                var userSession = _serviceProvider.GetService(typeof(UserSession)) as UserSession;
+
+                // Create a new review
+                var review = new ReviewThumbnail
+                (
+                    userSession.GetId(),
+                    idProduct,
+                    star,
+                    DateTime.Now
+                );
+
+                try
+                {
+                    // Add the order to the context
+                    var dbReview = ConvertToDbReview(review);
+                    await _databaseContext.ProductRatings.AddAsync(dbReview);
+
+                    // Save changes to the database to generate the OrderId
+                    await _databaseContext.SaveChangesAsync();
+
+                    // Return the created order
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
+            }
+        }
+
+        public async Task<bool> RecalculateRatingAverage(int productID, int starNumber)
+        {
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                // Retrieve the database context from the service provider
+                var _databaseContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+
+                try
+                {
+                    // Lấy sản phẩm từ cơ sở dữ liệu
+                    var product = await _databaseContext.Products
+                        .FirstOrDefaultAsync(p => p.Id == productID);
+
+                    if (product != null)
+                    {
+                        // Đếm số lượng đánh giá cho sản phẩm
+                        var reviewCount = await _databaseContext.Products
+                                        .Where(p => p.Id == productID)
+                                        .Select(p => p.NumReview)
+                                        .FirstOrDefaultAsync();
+
+                        // Tính toán giá trị trung bình mới
+                        double newAverageRating = (product.AverageRating * reviewCount + starNumber) / (reviewCount + 1);
+
+                        // Cập nhật giá trị trung bình
+                        product.AverageRating = newAverageRating;
+                        product.NumReview = reviewCount + 1;
+
+                        // Cập nhật sản phẩm trong cơ sở dữ liệu
+                        _databaseContext.Products.Update(product);
+                        await _databaseContext.SaveChangesAsync();
+                    }
+
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    // Xử lý lỗi nếu cần
+                    return false;
+                }
+            }
         }
         #endregion
         public async Task<List<string>> GetSuggestionsAsync(string keyword)
@@ -1405,18 +1520,6 @@ namespace Cosmetics_Shop.DataAccessObject
                     return new List<Models.Voucher>();
                 }
             }
-        }
-
-        public List<PaymentProductThumbnail> GetAllPaymentProducts()
-        {
-            var db = new List<PaymentProductThumbnail>
-            {
-                new PaymentProductThumbnail(1, null, "Tẩy trang loreal", 150000, 2),
-                new PaymentProductThumbnail(2, null, "Tẩy trang loreal", 150000, 2),
-                new PaymentProductThumbnail(3, null, "Tẩy trang Bioderma", 150000, 1)
-            };
-
-            return db;
         }
 
         #region Shipping Method
@@ -1479,6 +1582,8 @@ namespace Cosmetics_Shop.DataAccessObject
                 PaymentMethod = modelOrder.PaymentMethod,
                 ShippingMethod = modelOrder.ShippingMethod,
                 VoucherId = modelOrder.VoucherId,
+                ShippingAddress = modelOrder.ShippingAddress,
+                TotalPrice = modelOrder.TotalPrice
             };
         }
 
@@ -1491,8 +1596,9 @@ namespace Cosmetics_Shop.DataAccessObject
                 Quantity = modelOrder.Quantity
             };
         }
-        
-        public async Task<Models.Order> AddToOrderAsync(List<PaymentProductThumbnail> listCartProduct, int paymentMethod, int shippingMethod, int voucher)
+
+        public async Task<Models.Order> AddToOrderAsync(List<PaymentProductThumbnail> listCartProduct, int paymentMethod,
+                                                        int shippingMethod, int voucher, string address, int totalprice)
         {
             // Create a new scope for dependency injection
             using (var scope = _serviceProvider.CreateScope())
@@ -1509,7 +1615,9 @@ namespace Cosmetics_Shop.DataAccessObject
                     OrderDate = DateTime.Now,
                     PaymentMethod = paymentMethod,
                     ShippingMethod = shippingMethod,
-                    VoucherId = voucher
+                    VoucherId = voucher,
+                    ShippingAddress = address,
+                    TotalPrice = totalprice
                 };
 
                 try
@@ -1527,14 +1635,13 @@ namespace Cosmetics_Shop.DataAccessObject
                         var orderItem = new Models.OrderItem
                         {
                             OrderId = dbOrder.Id, // Use the generated OrderId
-                            ProductId = product.Id,
+                            ProductId = product.ProductId,
                             Quantity = product.Amount
                         };
 
                         // Convert to DB model and add to the context
-                        var dbOrderItem = ConvertToDbOrderItem(orderItem);                      
+                        var dbOrderItem = ConvertToDbOrderItem(orderItem);
                         await _databaseContext.OrderItems.AddAsync(dbOrderItem);
-                        await DeleteFromCartByProductIDAsync(product.Id);
                     }
 
                     // Save changes again to persist the OrderItems

@@ -8,15 +8,14 @@
     xmlns:local="using:Cosmetics_Shop.Views.AdminPages"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    NavigationCacheMode="Enabled"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+    mc:Ignorable="d">
+    
     <Page.Resources>
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converter:StringToImageSourceConverter x:Key="StringToImageSourceConverter"/>
-        <converter:IsImageAvailableConverter x:Key="IsImageAvailableConverter"/>
+        <converter:VNDCurrencyConverter x:Key="VNDCurrencyConverter"/>
         <converter:MessageForegroundConverter x:Key="MessageForegroundConverter"/>
+       
     </Page.Resources>
 
     <Grid Background="White"
@@ -47,9 +46,9 @@
                 Command="{x:Bind ViewModel.ReloadCommand, Mode=OneTime}"/>
 
         <TextBlock Grid.Row="1"
-                Height="35"
+                   Height="35"
                    FontSize="17"
-                HorizontalAlignment="Left">
+                   HorizontalAlignment="Left">
             <Run Text="Tổng số đơn hàng: "
                  Foreground="#27A866"/>
             <Run Text="{x:Bind ViewModel.TotalOrders, Mode=OneWay}"/>
@@ -94,6 +93,7 @@
                        VerticalAlignment="Center"
                        HorizontalAlignment="Left"
                        FontSize="17"/>
+            
             <TextBlock Grid.Column="5" Text="Thao tác"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"
@@ -157,87 +157,144 @@
             <Grid Background="White"
                   CornerRadius="10"
                   Height="500"
-                  Width="500"
+                  Width="1000"
                   Padding="20">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="2*"/>
-                    <RowDefinition Height="2*"/>
-                    <RowDefinition Height="2*"/>
-                    <RowDefinition Height="2*"/>
-                    <RowDefinition Height="2*"/>                    
-                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+
                 </Grid.RowDefinitions>
 
-                <TextBlock Text="{x:Bind ViewModel.FormTitle, Mode=OneWay}"
-                           VerticalAlignment="Top"
-                           HorizontalAlignment="Center"
-                           FontSize="25"
-                           FontWeight="SemiBold"/>
+                <TextBlock Text="Chi tiết đơn hàng" 
+                           FontWeight="SemiBold" 
+                           VerticalAlignment="Center" 
+                           HorizontalAlignment="Center" 
+                           FontSize="25" />
+                <Grid Grid.Row="1" 
+                      Background="#E0FFF1"
+                      CornerRadius="10 10 10 10"
+                      BorderThickness="1 1 1 0"
+                      Padding="10 10 10 10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                <StackPanel Grid.Row="1">
-                    <TextBlock Text="Mã Sản phẩm"                       
-                               FontSize="17"
-                               FontWeight="SemiBold"
-                               Margin="10"/>
-                    <TextBox PlaceholderText="ProductID" IsEnabled="False"
-                        Text="{x:Bind ViewModel.ProductId, Mode=TwoWay}"/>
-                </StackPanel>
+                    <TextBlock Grid.Column="0" Text="Hình ảnh"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               Margin="20 0 0 0"
+                               FontSize="17"/>
 
+                    <TextBlock Grid.Column="1" Text="Tên sản phẩm"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Margin="20 0 0 0"
+                                FontSize="17"/>
 
+                    <TextBlock Grid.Column="2" Text="Số lượng"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Margin="20 0 0 0"
+                                FontSize="17"/>
 
-                <StackPanel Grid.Row="2">
-                    <TextBlock Text="Tên Sản phẩm"                       
-                               FontSize="17"
-                               FontWeight="SemiBold"
-                               Margin="10"/>
-                    <TextBox PlaceholderText="ProductName" IsEnabled="False"
-                        Text="{x:Bind ViewModel.ProductName, Mode=TwoWay}"/>
-                </StackPanel>
+                    <TextBlock Grid.Column="3" Text="Giá"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                               Margin="0 0 20 0"
+                                FontSize="17"/>
 
-                <StackPanel Grid.Row="3">
-                    <TextBlock Text="Số Lượng"                       
-                               FontSize="17"
-                               FontWeight="SemiBold"
-                               Margin="10"/>
-                    <TextBox PlaceholderText="Quantity" IsEnabled="False"
-                        Text="{x:Bind ViewModel.Quantity, Mode=TwoWay}"/>
-                </StackPanel>
+                </Grid>
+                
+                
+                <ScrollView Grid.Row="2"
+                            MinHeight="450"                            
+                            VerticalAlignment="Top"
+                            CornerRadius="0 0 10 10">
+                    <ListView  ItemsSource="{x:Bind ViewModel.ListView}"
+                               SelectionMode="None">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Height" Value="70"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
 
-                <StackPanel Grid.Row="4">
-                    <TextBlock Text="Giá"                       
-                               FontSize="17"
-                               FontWeight="SemiBold"
-                               Margin="10"/>
-                    <TextBox PlaceholderText="Price" IsEnabled="False"
-                        Text="{x:Bind ViewModel.Price, Mode=TwoWay}"/>
-                </StackPanel>
-
-                <StackPanel Grid.Row="5">
-                    <TextBlock Text="Tổng hóa đơn"                       
-                               FontSize="17"
-                               FontWeight="SemiBold"
-                               Margin="10"/>
-                    <TextBox PlaceholderText="Total Price" IsEnabled="False"
-                        Text="{x:Bind ViewModel.TotalPrice, Mode=TwoWay}"/>
-                </StackPanel>
-
-                <StackPanel Grid.Row="6"
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0 10 0 0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Image Margin="20 0 0 0" Grid.Column="0"   Source="{Binding ImageSource, Mode=OneWay, Converter={StaticResource StringToImageSourceConverter}}"
+                                            Height="40" Width="40" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                    <TextBlock Margin="20 0 0 0" Grid.Column="1" Text="{Binding ProductName, Mode=OneWay}" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="2" Text="{Binding Quantity, Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                                    <TextBlock Margin="0 0 20 0" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                        <Run Text="{Binding Price, Mode=OneWay, Converter={StaticResource VNDCurrencyConverter}}" FontSize="17"/>
+                                        <Run Text="đ" FontSize="15"/>
+                                    </TextBlock>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </ScrollView>
+                
+                <Grid Grid.Row="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="2*"/>
+                        
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
+                               FontSize="20"
+                               HorizontalAlignment="Left"
+                               Margin="20 0 0 0">
+                        <Run Text="Tổng hóa đơn: "
+                             Foreground="#27A866"/>
+                        
+                    </TextBlock>
+                    
+                    <TextBlock Grid.Column="1" Grid.Row="0" HorizontalAlignment="Right"
+                               Margin="0 0 20 0">
+                        <Run Text="{x:Bind ViewModel.TotalPrice, Mode=OneWay, Converter={StaticResource VNDCurrencyConverter}}"
+                             FontSize="20" FontWeight="SemiBold" Foreground="{ThemeResource AccountPageTotalBillsForeground}"/>
+                        <Run Text="đ" FontSize="15"/>   
+                    </TextBlock>
+                </Grid>
+                
+                <StackPanel Grid.Row="4"
                             Orientation="Horizontal"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Center">
                     <Button Width="100" Margin="10" 
                             Content="Duyệt"
                             Background="#6BE38F"
-                            Command="{x:Bind ViewModel.AcceptFormCommand, Mode=OneWay}"/>
+                            Command="{x:Bind ViewModel.AcceptFormCommand, Mode=OneWay}"
+                            Visibility="{x:Bind ViewModel.VisiActionButton, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
                     <Button Width="100" Margin="10"
                             Content="Hủy"
                             Background="Tomato"
                             Foreground="White"
-                            Command="{x:Bind ViewModel.CancelFormCommand, Mode=OneWay}"/>
-                </StackPanel>
+                            Command="{x:Bind ViewModel.CancelFormCommand, Mode=OneWay}"
+                            Visibility="{x:Bind ViewModel.VisiActionButton, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
+                    <Button Width="100" Margin="10"
+                            Content="Quay lại"
+                            Background="Aquamarine"           
+                            Command="{x:Bind ViewModel.HideFormCommand, Mode=OneTime}"/>
+
+                </StackPanel>
             </Grid>
         </Grid>
 

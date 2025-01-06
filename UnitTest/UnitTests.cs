@@ -13,6 +13,7 @@ using System;
 using System.IO;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using Cosmetics_Shop.Enums;
 
 /// <summary>
 /// Unit tests for the Data Access Object (DAO) in the Cosmetics Shop application.
@@ -206,5 +207,32 @@ namespace UnitTest
             Assert.IsTrue(result.Products.All(p => p.Price >= 100000 && p.Price <= 500000));
             Assert.IsTrue(result1.Products.All(p => p.Price >= 100000));
         }
+
+        /// <summary>
+        /// Tests getting a list of orders when filtering by order status (In Process).
+        /// </summary>
+        public async Task GetListOrder_WhenOrderStatusIsInProcess_ShouldReturnTrue()
+        {
+            var result1 = await dao.GetListOrderAsync(2, OrderStatus.InProcess);
+            var result2 = await dao.GetListOrderAsync(3, OrderStatus.InProcess);
+
+            Assert.IsTrue(result1.All(o => o.OrderStatus == 1 || o.OrderStatus == 0));
+            Assert.IsTrue(result2.All(o => o.OrderStatus == 1 || o.OrderStatus == 0));
+        }
+
+
+        /// <summary>
+        /// Tests getting a list of orders when filtering by order status (Success).
+        /// </summary>
+        public async Task GetListOrder_WhenOrderStatusIsSuccessful_ShouldReturnTrue()
+        {
+            var result1 = await dao.GetListOrderAsync(2, OrderStatus.Success);
+            var result2 = await dao.GetListOrderAsync(4, OrderStatus.Success);
+
+            Assert.IsTrue(result1.All(o => o.OrderStatus == 2));
+            Assert.IsTrue(result2.All(o => o.OrderStatus == 2));
+        }
+
+
     }
 }

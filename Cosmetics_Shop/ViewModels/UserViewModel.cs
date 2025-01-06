@@ -48,6 +48,10 @@ namespace Cosmetics_Shop.ViewModels
         #endregion
 
         #region Properties for binding
+
+        /// <summary>
+        /// Observable collection of suggestions that can be shown as search suggestions.
+        /// </summary>
         public ObservableCollection<string> Suggestions
         {
             get => _suggestions;
@@ -58,7 +62,10 @@ namespace Cosmetics_Shop.ViewModels
             }
         }
 
-        // Từ khóa tìm kiếm (Binding)
+        /// <summary>
+        /// The keyword used for searching, updated when the user types in the search field.
+        /// This triggers the update of suggestions based on the keyword entered.
+        /// </summary>
         public string Keyword
         {
             get => _keyword;
@@ -66,11 +73,13 @@ namespace Cosmetics_Shop.ViewModels
             {
                 _keyword = value;
                 OnPropertyChanged(nameof(_keyword));
-                UpdateSuggestions();
+                UpdateSuggestions(); // Call to update suggestions based on the entered keyword
             }
         }
 
-        // Display Username
+        /// <summary>
+        /// The username to be displayed in the UI.
+        /// </summary>
         public string Username
         {
             get => name;
@@ -81,6 +90,9 @@ namespace Cosmetics_Shop.ViewModels
             }
         }
 
+        /// <summary>
+        /// The path to the user's avatar image for display purposes.
+        /// </summary>
         public string AvatarPath
         {
             get => avatarPath;
@@ -94,15 +106,45 @@ namespace Cosmetics_Shop.ViewModels
         #endregion
 
         #region Commands
+
+        /// <summary>
+        /// Command to handle product purchase action.
+        /// </summary>
         public ICommand PurchaseButtonCommand { get; }
+
+        /// <summary>
+        /// Command to navigate to the cart page.
+        /// </summary>
         public ICommand CartButtonCommand { get; }
+
+        /// <summary>
+        /// Command to navigate to the admin page.
+        /// </summary>
         public ICommand AdminButtonCommand { get; }
+
+        /// <summary>
+        /// Command to navigate to the account settings page.
+        /// </summary>
         public ICommand AccountButtonCommand { get; }
+
+        /// <summary>
+        /// Command to navigate to the dashboard page.
+        /// </summary>
         public ICommand DashboardButtonCommand { get; }
+
+        /// <summary>
+        /// Command to view orders.
+        /// </summary>
         public ICommand OrderButtonCommand { get; }
+
+        /// <summary>
+        /// Command to toggle the application's theme (e.g., dark mode or light mode).
+        /// </summary>
         public ICommand ChangeThemeButtonCommand { get; }
 
-        // Search button command
+        /// <summary>
+        /// Command to initiate a search when the user presses the search button.
+        /// </summary>
         public ICommand SearchButtonCommand { get; }
 
         #endregion

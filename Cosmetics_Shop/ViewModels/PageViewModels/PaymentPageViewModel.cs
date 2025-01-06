@@ -32,12 +32,23 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         private readonly INavigationService _navigationService;
         private readonly IServiceProvider _serviceProvider;
         private IDao _dao = null;
+        /// <summary>
+        /// Event to request the display of a dialog with a string parameter.
+        /// </summary>
         public event Action<string> ShowDialogRequested;
-
+        /// <summary>
+        /// Gets or sets the cart view model containing the list of items in the cart.
+        /// </summary>
         public CartPageViewModel Carts { get; set; }
 
         //Command
+        /// <summary>
+        /// Command to navigate back.
+        /// </summary>
         public ICommand GoBackCommand {  get; set; }
+        /// <summary>
+        /// Command to place an order.
+        /// </summary>
         public ICommand OrderCommand { get; set; }
 
 
@@ -53,9 +64,15 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         private string _nameDisplay;
         private string _phone;
         private string _address;
+        private string _shippingAddress;
+
         #endregion
 
         #region Properties Binding
+        /// <summary>
+        /// Gets or sets the display name.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public string NameDisplay
         {
             get { return _nameDisplay; }
@@ -65,6 +82,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(NameDisplay));
             }
         }
+
+        /// <summary>
+        /// Gets or sets the name.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public string Name
         {
             get { return _name; }
@@ -75,6 +97,10 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets the phone number.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public string Phone
         {
             get { return _phone; }
@@ -84,6 +110,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(Phone));
             }
         }
+
+        /// <summary>
+        /// Gets or sets the address.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public string Address
         {
             get { return _address; }
@@ -94,6 +125,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
         }
 
+        /// <summary>
+        /// Gets the total payment based on the sum of all items' total prices in the payment product.
+        /// </summary>
         public int TotalPay
         {
             get => PaymentProduct.Sum(item => item.TotalPrice);
@@ -102,6 +136,10 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets the shipping fee.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public int ShippingFee
         {
             get => _shippingFee;
@@ -115,7 +153,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
         }
 
-        public int VoucherFee 
+        /// <summary>
+        /// Gets or sets the voucher fee.
+        /// Notifies the UI when the value changes.
+        /// </summary>
+        public int VoucherFee
         {
             get => _voucherFee;
             set
@@ -128,6 +170,10 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets the final fee after applying all discounts, fees, and vouchers.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public int FinalFee
         {
             get => _finalFee;
@@ -141,13 +187,68 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets the selected payment method.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public Models.PaymentMethod SelectedPaymentMethod
         {
             get => _selectedPaymentMethod;
             set
             {
                 _selectedPaymentMethod = value;
-                OnPropertyChanged(); // Thông báo thay đổi nếu cần
+                OnPropertyChanged(); // Notify UI of change
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the shipping address.
+        /// Notifies the UI when the value changes.
+        /// </summary>
+        public string ShippingAddress
+        {
+            get => _shippingAddress;
+            set
+            {
+                if (_shippingAddress != value)
+                {
+                    _shippingAddress = value;
+                    OnPropertyChanged(); // Notify UI of change
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the current voucher.
+        /// Notifies the UI when the value changes.
+        /// </summary>
+        public Models.Voucher CurrentVoucher
+        {
+            get => _currentVoucher;
+            set
+            {
+                if (_currentVoucher != value)
+                {
+                    _currentVoucher = value;
+                    OnPropertyChanged(nameof(CurrentVoucher)); // Notify UI of change
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the current shipping method.
+        /// Notifies the UI when the value changes.
+        /// </summary>
+        public Models.ShippingMethod CurrentShippingMethod
+        {
+            get => _currentShippingMethod;
+            set
+            {
+                if (_currentShippingMethod != value)
+                {
+                    _currentShippingMethod = value;
+                    OnPropertyChanged(nameof(CurrentShippingMethod)); // Notify UI of change
+                }
             }
         }
 
@@ -156,19 +257,21 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         // Observable Collection
         public ObservableCollection<PaymentProductThumbnailViewModel> PaymentProduct { get; set; }
         public ObservableCollection<Models.PaymentMethod> PaymentMethods { get; set; }
-        public PaymentPageViewModel(INavigationService      navigationService, 
-                                    IDao                    dao, 
-                                    IServiceProvider        serviceProvider,
-                                    UserSession             userSession,
-                                    List<PaymentProductThumbnail> products
+
+        // Constructor
+        public PaymentPageViewModel(INavigationService navigationService,
+                                    IDao dao,
+                                    IServiceProvider serviceProvider,
+                                    UserSession userSession,
+                                    PaymentNavigationData data
                                     )
         {
             _dao                = dao;
             _serviceProvider    = serviceProvider;
             _userSession        = userSession;
-            _navigationService = navigationService;
-
-            Carts = new CartPageViewModel(_navigationService, _dao);
+            _navigationService  = navigationService;
+            CurrentVoucher = data.CurrentVoucher;
+            CurrentShippingMethod = data.CurrentShippingMethod;
 
             PaymentProduct = new ObservableCollection<PaymentProductThumbnailViewModel>();
             PaymentMethods = new ObservableCollection<Models.PaymentMethod>();
@@ -177,9 +280,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             LoadPaymentMethods();
 
             // Iterate through the list of products and add them to the ObservableCollection
-            if (products != null)
+            if (data.Products != null)
             {
-                foreach (var product in products)
+                foreach (var product in data.Products)
                 {
                     var paymentProductThumbnailViewModel = _serviceProvider.GetService<PaymentProductThumbnailViewModel>();
                     paymentProductThumbnailViewModel.PaymentProductThumbnail = product; // Set the product
@@ -198,11 +301,18 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         }
 
         #region Voucher
+        /// <summary>
+        /// Load the vouchers from database
+        /// </summary>
+        /// <returns>A list of vouchers</returns>
         public async Task<List<Models.Voucher>> GetAllVouchersAsync()
         {
             return await _dao.GetAllVouchersAsync();
         }
 
+        /// <summary>
+        /// Calculate the voucher to the total payment
+        /// </summary>
         public void calculateVoucher()
         {
             if (_currentVoucher != null)
@@ -227,6 +337,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
             recalculateFinalFee();
         }
+
+        /// <summary>
+        /// Recalculate the total payment after apply voucher fee
+        /// </summary>
+        /// <param name="selectedVoucher">Voucher was selected.</param>
         public void ApplyVoucher(Models.Voucher selectedVoucher)
         {
             // Remove the previous voucher's effect if a new one is being applied
@@ -240,11 +355,19 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         #endregion
 
         #region Shipping
+        /// <summary>
+        /// Load the shipping methods from database
+        /// </summary>
+        /// <returns>A list of shipping methods</returns>
         public async Task<List<Models.ShippingMethod>> GetShippingMethodsAsync()
         {
             return await _dao.GetShippingMethodsAsync(); 
         }
 
+        /// <summary>
+        /// Recalculate the total payment after apply shipping fee
+        /// </summary>
+        /// <param name="selectedShippingMethod">Shipping method was selected.</param>
         public void ApplyShipping(Models.ShippingMethod selectedShippingMethod)
         {
             // Remove the previous voucher's effect if a new one is being applied
@@ -255,9 +378,28 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 recalculateFinalFee();
             }
         }
+
+        /// <summary>
+        /// Update shipping address to order
+        /// </summary>
+        /// <param name="address">Address was changed.</param>
+        public bool LoadShippingAddress(string address)
+        {
+            if (string.IsNullOrEmpty(address))
+            {
+                ShowDialogRequested?.Invoke("Địa chỉ đặt hàng không hợp lệ !");
+                return false;
+            }
+            ShippingAddress = address;
+            return true;
+        }
+
         #endregion
 
         #region Calculation
+        /// <summary>
+        /// Calculate the final fee
+        /// </summary>
         public void recalculateFinalFee()
         {
             FinalFee = TotalPay + ShippingFee - VoucherFee;
@@ -265,6 +407,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         #endregion
 
         #region User
+        /// <summary>
+        /// Load user information
+        /// </summary>
         private async void loadUserInformation()
         {
             var userDetail = await _dao.GetUserDetailAsync(_userSession.GetId());
@@ -273,14 +418,23 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             NameDisplay = userDetail.Name;
             Phone = userDetail.Phone;
             Address = userDetail.Address;
+            ShippingAddress = Address; // initial shipping address is user address
         }
         #endregion
 
         #region Payment Method
+        /// <summary>
+        /// Load payment methods from database
+        /// </summary>
+        /// <returns>A list of payment methods</returns>
         public async Task<List<Models.PaymentMethod>> GetPaymentMethodsAsync()
         {
             return await _dao.GetPaymentMethodsAsync();
         }
+
+        /// <summary>
+        /// Load payment methods from database
+        /// </summary>
         private async void LoadPaymentMethods()
         {
             var methods = await GetPaymentMethodsAsync();
@@ -293,6 +447,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         #endregion
 
         #region Order
+        /// <summary>
+        /// Command to add a new order to database
+        /// </summary>
         private async Task ExecuteOrderCommand()
         {
             // Validate user input
@@ -319,6 +476,12 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 _currentVoucher = new Models.Voucher();
             }
 
+            if (string.IsNullOrEmpty(Address)) 
+            {
+                ShowDialogRequested?.Invoke("Vui lòng nhập địa chỉ nhận hàng !");
+                return;
+            }
+
             // Gather necessary information for the order
             var products = PaymentProduct.Select(p => p.PaymentProductThumbnail).ToList();
             var paymentMethod = SelectedPaymentMethod?.Id; // Assuming SelectedPaymentMethod has an Id property
@@ -326,11 +489,12 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             var voucherId = _currentVoucher?.Id; // Assuming _currentVoucher has an Id property
 
             // Call the method to add the order
-            var order = await _dao.AddToOrderAsync(products, (int)paymentMethod, (int)shippingMethod, (int)voucherId);
+            var order = await _dao.AddToOrderAsync(products, (int)paymentMethod, (int)shippingMethod, 
+                            (int)voucherId, ShippingAddress, FinalFee);
 
             foreach (var product in PaymentProduct)
             {
-                bool isDeleted = await Carts.DeleteFromCartByProductIDAsync(product.PaymentProductThumbnail.Id);
+                bool isDeleted = await _dao.DeleteFromCartAsync(product.PaymentProductThumbnail.CartId);
                 if (isDeleted)
                 {
                     //
@@ -340,12 +504,13 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                     //
                 }
             }
-            await Carts.LoadCartProductsAsync();
+            // await Carts.LoadCartProductsAsync();
 
             if (order != null)
             {
                 ShowDialogRequested?.Invoke("Cảm ơn bạn đã đặt hàng !");
-                _navigationService.NavigateTo<DashboardPage>(); // Assuming you have a ConfirmationPage
+                _navigationService.NavigateTo<DashboardPage>();
+                //_navigationService.NavigateTo<ReviewPage>(products);
             }
             else
             {

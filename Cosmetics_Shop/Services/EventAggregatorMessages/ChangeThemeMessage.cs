@@ -11,6 +11,6 @@ namespace Cosmetics_Shop.Services.EventAggregatorMessages
     /// </summary>
     public class ChangeThemeMessage
     {
-        
+        // No properties or methods are defined in this class.
     }
 }

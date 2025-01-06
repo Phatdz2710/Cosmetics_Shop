@@ -27,36 +27,46 @@ namespace Cosmetics_Shop.Views.Controls
     /// </summary>
     public sealed partial class ProductThumbnailControl : UserControl
     {
+        /// <summary>
+        /// Gets or sets the ViewModel for the product thumbnail.
+        /// </summary>
         public ProductThumbnailViewModel ViewModel
         {
-            get 
+            get
             {
                 return (ProductThumbnailViewModel)GetValue(ViewModelProperty);
             }
-            set 
-            { 
+            set
+            {
                 SetValue(ViewModelProperty, value);
                 DataContext = value;
             }
         }
 
-
-        // Sử dụng DependencyProperty để hỗ trợ binding
+        /// <summary>
+        /// DependencyProperty for ViewModel to support binding.
+        /// </summary>
         public static readonly DependencyProperty ViewModelProperty =
             DependencyProperty.Register("ViewModel",
                                         typeof(ProductThumbnailViewModel),
                                         typeof(ProductThumbnailControl),
                                         new PropertyMetadata(null));
 
-
         private Storyboard _mouseEnter;
         private Storyboard _mouseLeave;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductThumbnailControl"/> class.
+        /// </summary>
         public ProductThumbnailControl()
         {
             this.InitializeComponent();
             this.Loaded += ProductThumbnailControl_Loaded;
         }
 
+        /// <summary>
+        /// Sets up animations for mouse enter and leave events.
+        /// </summary>
         private void ProductThumbnailControl_Loaded(object sender, RoutedEventArgs e)
         {
             _mouseEnter = new Storyboard();
@@ -102,6 +112,9 @@ namespace Cosmetics_Shop.Views.Controls
             _mouseLeave.Children.Add(thumbailExitAnimation_Opacity);
         }
 
+        /// <summary>
+        /// Handles the tap event on the product thumbnail, executing the buy button command.
+        /// </summary>
         private void Grid_Tapped(object sender, TappedRoutedEventArgs e)
         {
             ICommand command = ViewModel.BuyButtonCommand;
@@ -110,14 +123,19 @@ namespace Cosmetics_Shop.Views.Controls
                 command.Execute(null);
                 _mouseLeave?.Begin();
             }
-
         }
 
+        /// <summary>
+        /// Handles the pointer entered event on the product thumbnail, starting the mouse enter animation.
+        /// </summary>
         private void Grid_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
             _mouseEnter?.Begin();
         }
 
+        /// <summary>
+        /// Handles the pointer exited event on the product thumbnail, starting the mouse leave animation.
+        /// </summary>
         private void Grid_PointerExited(object sender, PointerRoutedEventArgs e)
         {
             _mouseLeave?.Begin();

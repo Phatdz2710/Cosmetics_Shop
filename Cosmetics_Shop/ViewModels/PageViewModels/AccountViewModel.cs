@@ -7,6 +7,7 @@ using Cosmetics_Shop.Services;
 using Cosmetics_Shop.Services.EventAggregatorMessages;
 using Cosmetics_Shop.Services.Interfaces;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
@@ -21,13 +22,17 @@ using WinRT.Interop;
 
 namespace Cosmetics_Shop.ViewModels.PageViewModels
 {
+    /// <summary>
+    /// View model for AccountPage
+    /// </summary>
     public class AccountViewModel : INotifyPropertyChanged
     {
-        #region Dependency   
+        #region Singletons   
         private readonly UserSession        _userSession;
         private readonly IDao               _dao;
         private readonly IEventAggregator   _eventAggregator;
         private readonly IFilePickerService _filePickerService;
+        private readonly INavigationService _navigationService;
         #endregion
 
         #region Fields
@@ -57,6 +62,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         #endregion
 
         #region Properties Binding
+        /// <summary>
+        /// Display name of the user.
+        /// </summary>
         public string NameDisplay
         {
             get { return _nameDisplay; }
@@ -66,6 +74,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(NameDisplay));
             }
         }
+        /// <summary>
+        /// Name of the user.
+        /// </summary>
         public string Name
         {
             get { return _name; }
@@ -75,6 +86,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(Name));
             }
         }
+        /// <summary>
+        /// User's email address.
+        /// </summary>
         public string Email
         {
             get { return _email; }
@@ -84,6 +98,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(Email));
             }
         }
+        /// <summary>
+        /// User's phone number.
+        /// </summary>
         public string Phone
         {
             get { return _phone; }
@@ -93,6 +110,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(Phone));
             }
         }
+        /// <summary>
+        /// User's address.
+        /// </summary>
         public string Address
         {
             get { return _address; }
@@ -102,6 +122,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(Address));
             }
         }
+        /// <summary>
+        /// Total number of products purchased by the user.
+        /// </summary>
         public int TotalProducts
         {
             get { return totalProducts; }
@@ -111,6 +134,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(TotalProducts));
             }
         }
+        /// <summary>
+        /// Total number of bills the user has.
+        /// </summary>
         public int TotalBills
         {
             get { return totalBills; }
@@ -120,6 +146,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(TotalBills));
             }
         }
+        /// <summary>
+        /// Total money spent by the user.
+        /// </summary>
         public int TotalMoneySpent
         {
             get { return totalMoneySpent; }
@@ -129,6 +158,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(TotalMoneySpent));
             }
         }
+        /// <summary>
+        /// Path to the user's avatar image.
+        /// </summary>
         public string AvatarPath
         {
 
@@ -139,7 +171,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(AvatarPath));
             }
         }
-
+        /// <summary>
+        /// User's account creation time.
+        /// </summary>
         public string CreateTime
         {
             get => _createTime;
@@ -149,6 +183,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(CreateTime));
             }
         }
+        /// <summary>
+        /// Boolean indicating if the user is in change information mode.
+        /// </summary>
         public bool ChangeInforMode
         {
             get => _changeInforMode;
@@ -158,8 +195,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(ChangeInforMode));
             }
         }
-
-        
+        /// <summary>
+        /// Boolean indicating if the password change dialog is displayed.
+        /// </summary>
         public bool ShowDialogChangePassword
         {
             get => _showDialogChangePassword;
@@ -169,6 +207,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(ShowDialogChangePassword));
             }
         }
+        /// <summary>
+        /// User's current password.
+        /// </summary>
         public string PasswordCurrent
         {
             get => _passwordCurrent;
@@ -178,6 +219,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(PasswordCurrent));
             }
         }
+        /// <summary>
+        /// User's new password.
+        /// </summary>
         public string PasswordNew
         {
             get => _passwordNew;
@@ -187,7 +231,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(PasswordNew));
             }
         }
-
+        /// <summary>
+        /// Confirmation of the user's new password.
+        /// </summary>
         public string ConfirmPasswordNew
         {
             get => _confirmPasswordNew;
@@ -197,6 +243,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(ConfirmPasswordNew));
             }
         }
+        /// <summary>
+        /// Message related to password change status.
+        /// </summary>
         public string ChangePasswordMessage
         {
             get => _changePasswordMessage;
@@ -206,7 +255,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(ChangePasswordMessage));
             }
         }
-        
+        /// <summary>
+        /// Message related to information change status.
+        /// </summary>
         public string ChangeInfoMessage
         {
             get => _changeInfoMessage;
@@ -216,7 +267,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(ChangeInfoMessage));
             }
         }
-
+        /// <summary>
+        /// Content shown when the user is in change mode (for info or password).
+        /// </summary>
         public string ChangeModeContent
         {
             get => _changeModeContent;
@@ -226,7 +279,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(ChangeModeContent));
             }
         }
-
+        /// <summary>
+        /// User's level
+        /// </summary>
         public string UserLevel
         {
             get
@@ -242,13 +297,45 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         #endregion
 
         #region Commands
+        /// <summary>
+        /// Command to change user information.
+        /// </summary>
         public ICommand ChangeInfoModeCommand { get; set; }
+
+        /// <summary>
+        /// Command to save user information changes.
+        /// </summary>
         public ICommand SaveInfoCommand { get; set; }
+
+        /// <summary>
+        /// Command to change the user's avatar.
+        /// </summary>
         public ICommand ChangeAvatarCommand { get; set; }
+
+        /// <summary>
+        /// Command to change the user's password.
+        /// </summary>
         public ICommand ChangePasswordCommand { get; set; }
+
+        /// <summary>
+        /// Command to log out the user.
+        /// </summary>
         public ICommand LogoutCommand { get; set; }
+
+        /// <summary>
+        /// Command to accept the password change request.
+        /// </summary>
         public ICommand AcceptChangePasswordCommand { get; set; }
+
+        /// <summary>
+        /// Command to refuse the password change request.
+        /// </summary>
         public ICommand RefuseChangePasswordCommand { get; set; }
+
+        /// <summary>
+        /// Command to go back to the previous page or state.
+        /// </summary>
+        public ICommand GoBackCommand { get; set; }
         #endregion
 
 
@@ -256,12 +343,14 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         public AccountViewModel(IDao                dao, 
                                 IEventAggregator    eventAggregator, 
                                 IFilePickerService  filePickerService,
+                                INavigationService  navigationService,
                                 UserSession         userSession)
         {
             this._userSession       = userSession;
             this._eventAggregator   = eventAggregator;
             this._filePickerService = filePickerService;
             this._dao               = dao;
+            this._navigationService = navigationService;
 
             loadUserInformation();
             ChangeInforMode = false;
@@ -275,6 +364,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             RefuseChangePasswordCommand = new RelayCommand(cancelChangePasswordCommand);
 
             ChangePasswordCommand = new RelayCommand(changePasswordCommand);
+
+            GoBackCommand = new RelayCommand(() =>
+            {
+                _navigationService.GoBack();
+            });
         }
 
         /// <summary>
@@ -307,14 +401,25 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         /// </summary>
         private async void saveInfoCommand()
         {
-            if (!Email.IsValidEmail() || !Phone.IsValidPhoneNumber())
+            if (!Email.IsValidEmail() && !Email.IsNullOrEmpty())
             {
                 Name = _nameRestore;
                 Email = _emailRestore;
                 Phone = _phoneRestore;
                 Address = _addressRestore;
                 changeInfoModeCommand();
-                ChangeInfoMessage = "Thông tin không hợp lệ!";
+                ChangeInfoMessage = "Email không đúng định dạng! Vui lòng nhập đúng định dạng example@mail.com!";
+                return;
+            }
+
+            if (!Phone.IsValidPhoneNumber() && !Phone.IsNullOrEmpty())
+            {
+                Name = _nameRestore;
+                Email = _emailRestore;
+                Phone = _phoneRestore;
+                Address = _addressRestore;
+                changeInfoModeCommand();
+                ChangeInfoMessage = "Số điện thoại không đúng định dạng! Yêu cầu có đúng 10 chữ số!";
                 return;
             }
 
@@ -325,7 +430,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 return;
             }
 
-                await _dao.ChangeAllUserInformationAsync(_userSession.GetId(), new UserDetail()
+            await _dao.ChangeAllUserInformationAsync(_userSession.GetId(), new UserDetail()
             {
                 Name    = Name,
                 Email   = Email,

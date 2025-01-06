@@ -17,12 +17,12 @@ namespace Cosmetics_Shop.Enums
     /// </summary>
     public enum SignupStatus
     {
-        Success         = 0,
-        EmptyUsername   = 1,
-        EmptyPassword   = 2,
-        ConfirmPasswordWrong    = 3,
-        UsernameAlreadyExists   = 4,
-        ConnectServerFailed     = 5,
-        InvalidEmail           = 6
+        Success         = 0, // The signup was successful.
+        EmptyUsername   = 1, // The username is empty.
+        EmptyPassword   = 2, // The password is empty.
+        ConfirmPasswordWrong    = 3, // The confirm password is wrong.
+        UsernameAlreadyExists   = 4, // The username already exists.
+        ConnectServerFailed     = 5, // The connection to the server failed.
+        InvalidEmail            = 6 // The email is invalid.
     }
 }

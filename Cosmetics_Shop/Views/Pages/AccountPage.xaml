@@ -21,12 +21,23 @@
 
     <!-- Main page -->
     <Grid Background="{ThemeResource AccountPageBackground}">
-        
+
+        <Button x:Name="returnButton"
+                Background="#317256"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Left"
+                BorderBrush="#317256"
+                Margin="10 10 0 0"
+                Foreground="White"
+                Command="{x:Bind ViewModel.GoBackCommand, Mode=OneTime}">
+            <FontIcon Glyph="&#xE830;" />
+        </Button>
         
         <Grid Background="{ThemeResource AccountPageBackground}"
               CornerRadius="20"
               Margin="230 50 230 50">
-            
+
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="3*"/>
@@ -306,6 +317,7 @@
                         <TextBox PlaceholderText="Tên"
                                  Text="{x:Bind ViewModel.Name, Mode=TwoWay}"
                                  Width="500"
+                                 IsSpellCheckEnabled="False"
                                  HorizontalAlignment="Left"
                                  IsEnabled="{x:Bind ViewModel.ChangeInforMode, Mode=OneWay}"
                                  Foreground="{ThemeResource AccountPageForeground}"/>
@@ -322,6 +334,7 @@
                         </StackPanel>
                         <TextBox PlaceholderText="Email"
                                  Text="{x:Bind ViewModel.Email, Mode=TwoWay}"
+                                 IsSpellCheckEnabled="False"
                                  Width="500"
                                  HorizontalAlignment="Left"
                                  IsEnabled="{x:Bind ViewModel.ChangeInforMode, Mode=OneWay}"
@@ -466,5 +479,7 @@
                 </StackPanel>
             </Grid>
         </Grid>
+
+        
     </Grid>
 </Page>

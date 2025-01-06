@@ -21,7 +21,7 @@ using Cosmetics_Shop.ViewModels;
 namespace Cosmetics_Shop.Views.Controls
 {
     /// <summary>
-    /// Review thumbnail control
+    /// Review thumbnail control in product detail page
     /// </summary>
     public sealed partial class ReviewThumbnailControl : UserControl
     {

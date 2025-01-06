@@ -17,6 +17,7 @@
         <converter:StringToImageSourceConverter x:Key="StringToImageSourceConverter"/>
         <converter:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
         <converter:BackgroundColorByRatingConverter x:Key="BackgroundColorByRatingConverter"/>
+        <converter:DecimalToThreeDecimalConverter x:Key="DecimalToThreeDecimalConverter"/>
     </UserControl.Resources>
 
     <ScrollView x:Name="scrollView">
@@ -110,7 +111,7 @@ Height="250">
                                     FontSize="15"
                                     >
                                 <TextBlock Foreground="White">
-                                    <Run Text="{x:Bind ViewModel.ProductDetail.review, Mode=OneWay}" />
+                                    <Run Text="{x:Bind ViewModel.ProductDetail.review, Mode=OneWay, Converter={StaticResource DecimalToThreeDecimalConverter}}" />
                                 </TextBlock>
                                 
                             </Button>
@@ -178,7 +179,8 @@ Height="250">
                                             FontSize="15"
                                             PlaceholderText="Chọn hình thức vận chuyển"
                                             Width="260"
-                                            Height="40"              
+                                            Height="40" 
+                                          SelectionChanged="DeliveryComboBox_SelectionChanged"
                                           >
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
@@ -248,7 +250,7 @@ Height="250">
 
                                 <Button x:Name="themvaogiohangButton" 
                                         Grid.Column="0"
-                                        Margin="0 10 0 0"
+                                        Margin="0 10 0 15"
                                         Height="50"
                                         Foreground="{ThemeResource PurchasePageFilterButtonBackground}"
                                         BorderBrush="{ThemeResource PurchasePageFilterButtonBackground}"
@@ -264,7 +266,7 @@ Height="250">
 
                                 <Button x:Name="muangayButton" 
                                         Grid.Column="1"
-                                        Margin="10 10 0 0"
+                                        Margin="10 10 0 15"
                                         Height="50"
                                         Width="150"
                                         Foreground="White"
@@ -295,10 +297,11 @@ Height="250">
                   Grid.Column="1"
                   Grid.Row="3"
                   Background="{ThemeResource OrderCellBackground}"
-                CornerRadius="20">
+                CornerRadius="20"
+                  MaxHeight="250">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="2*"/>
-                    <RowDefinition Height="7*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0"

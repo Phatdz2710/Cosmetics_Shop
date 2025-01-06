@@ -17,12 +17,22 @@ using System.Windows.Input;
 
 namespace Cosmetics_Shop.ViewModels.UserControlViewModels
 {
+    /// <summary>
+    /// View model for payment product thumbnail
+    /// </summary>
     public class PaymentProductThumbnailViewModel : INotifyPropertyChanged
     {
         // Navigation service
         private readonly INavigationService _navigationService;
+        /// <summary>
+        /// Gets or sets the thumbnail information for a payment product.
+        /// </summary>
         public PaymentProductThumbnail PaymentProductThumbnail { get; set; }
 
+        /// <summary>
+        /// Gets the total price for the payment product.
+        /// It is calculated by multiplying the amount and price of the product.
+        /// </summary>
         public int TotalPrice
         {
             get
@@ -31,6 +41,7 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
             }
             set
             {
+                // No setter logic, as TotalPrice is a calculated property.
             }
         }
 

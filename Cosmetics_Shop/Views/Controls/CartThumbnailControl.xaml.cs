@@ -45,6 +45,10 @@ namespace Cosmetics_Shop.Views.Controls
             this.InitializeComponent();
         }
 
+        #region Click
+        /// <summary>
+        /// Click to minus the quantity of product in the cart
+        /// </summary>
         private async void minusButton_Click(object sender, RoutedEventArgs e)
         {
             if (ViewModel.CartThumbnail.Amount > 1)
@@ -77,12 +81,22 @@ namespace Cosmetics_Shop.Views.Controls
             }
         }
 
+        /// <summary>
+        /// Click to plus the quantity of product in the cart
+        /// </summary>
         private void plusButton_Click(object sender, RoutedEventArgs e)
         {
             ViewModel.CartThumbnail.Amount++;
             UpdateCartAsync(ViewModel.CartThumbnail.Id, ViewModel.CartThumbnail.Amount);
         }
+        #endregion
 
+        #region Cart
+        /// <summary>
+        /// Delete a product from cart in database by using ID of cart product
+        /// </summary>
+        /// <param name="cartId">The cart ID need to delete.</param>
+        /// <returns>Successful delete or not</returns>
         private async void DeleteProductFromCart(int cartId)
         {
             // Gọi phương thức xóa sản phẩm từ giỏ hàng
@@ -101,10 +115,16 @@ namespace Cosmetics_Shop.Views.Controls
             await dialog.ShowAsync();
         }
 
+        /// <summary>
+        /// Update a product from cart in database
+        /// </summary>
+        /// <param name="cartId">The cart ID need to delete.</param>
+        /// <param name="quantity">The quantity of product.</param>
         private async void UpdateCartAsync(int cartID, int quantity)
         {
             bool isUpdate = await ViewModel._cartPageViewModel.UpdateCartAsync(cartID, quantity);
             //return isUpdate;
         }
+        #endregion
     }
 }

@@ -16,10 +16,10 @@ namespace Cosmetics_Shop.Models.Enums
     /// </summary>
     public enum SortProduct
     {
-        DateAscending   = 0,
-        PriceDescending = 1,
-        PriceAscending  = 2,
-        NameAscending   = 3,
-        NameDescending  = 4,
+        DateAscending   = 0, // Sort by date in ascending order.
+        PriceDescending = 1, // Sort by price in descending order.
+        PriceAscending  = 2, // Sort by price in ascending order.
+        NameAscending   = 3, // Sort by name in ascending order.
+        NameDescending  = 4, // Sort by name in descending order.
     }
 }

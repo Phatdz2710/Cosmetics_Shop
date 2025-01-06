@@ -17,6 +17,7 @@
         <cvtorder:OrderStatusToBackgroundConverter x:Key="OrderStatusToBackgroundConverter"/>
         <cvtorder:OrderStatusToStringConverter x:Key="OrderStatusToStringConverter"/>
         <cvtorder:OrderStatusToForegroundConverter x:Key="OrderStatusToForegroundConverter"/>
+        <cvtorder:OrderStatusToButtonContentConverter x:Key="OrderStatusToButtonContentConverter"/>
     </UserControl.Resources>
 
     <Grid Padding="10"
@@ -61,11 +62,13 @@
 
         <Button Grid.Column="3" Grid.Row="0" Grid.RowSpan="2"
                 VerticalAlignment="Center" HorizontalAlignment="Center"
-                Content="Đã nhận hàng"
+                Content="{x:Bind ViewModel.OrderStatus, Mode=OneWay, Converter={StaticResource OrderStatusToButtonContentConverter}}"
                 Height="50"
                 BorderThickness="1"
-                BorderBrush="{ThemeResource AccountPageTotalBillsForeground}"
-                Visibility="{x:Bind ViewModel.IsApproved, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                BorderBrush="{x:Bind ViewModel.OrderStatus, Mode=OneWay, Converter={StaticResource OrderStatusToBackgroundConverter}}"
+                Visibility="{x:Bind ViewModel.IsShowButton, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                Command="{x:Bind ViewModel.ReceivedCommand, Mode=OneWay}"
+                Tapped="Button_Tapped"/>
 
         <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" Visibility="{x:Bind ViewModel.IsShowItems, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid.RowDefinitions>
@@ -75,7 +78,8 @@
 
             <TextBlock Text="Chi tiết đơn hàng" FontWeight="SemiBold"/>
 
-            <ListView Grid.Row="1" ItemsSource="{x:Bind ViewModel.OrderItemsDisplay, Mode=OneWay}">
+            <ListView Grid.Row="1" ItemsSource="{x:Bind ViewModel.OrderItemsDisplay, Mode=OneWay}"
+                      SelectionMode="None">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="Height" Value="70"/>

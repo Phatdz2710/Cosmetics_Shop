@@ -7,22 +7,29 @@ using System.Threading.Tasks;
 namespace Cosmetics_Shop.Models
 {
     /// <summary>
-    /// Store User Information in Session
+    /// Stores user information in the session.
     /// </summary>
     public class UserSession
     {
+        /// <summary>
+        /// Gets or sets the user information.
+        /// </summary>
         private User UserInfo { get; set; }
 
+        /// <summary>
+        /// Sets the user information.
+        /// </summary>
+        /// <param name="userInfo">The user information to set.</param>
         public void SetUserInfo(User userInfo)
         {
             UserInfo = userInfo;
         }
 
         /// <summary>
-        /// Get Token of User
+        /// Gets the token of the user.
         /// </summary>
         /// <returns>
-        /// a <see cref="string"/> that represents the token of the user."/>
+        /// A <see cref="string"/> that represents the token of the user.
         /// </returns>
         public string GetToken()
         {
@@ -30,10 +37,10 @@ namespace Cosmetics_Shop.Models
         }
 
         /// <summary>
-        /// Get Role of User
+        /// Gets the role of the user.
         /// </summary>
         /// <returns>
-        /// a <see cref="string"/> that represents the role of the user."/>
+        /// A <see cref="string"/> that represents the role of the user.
         /// </returns>
         public string GetRole()
         {
@@ -41,10 +48,10 @@ namespace Cosmetics_Shop.Models
         }
 
         /// <summary>
-        /// Get Id of User
+        /// Gets the ID of the user.
         /// </summary>
         /// <returns>
-        /// a <see cref="int"/> that represents the id of the user."/>
+        /// An <see cref="int"/> that represents the ID of the user.
         /// </returns>
         public int GetId()
         {
@@ -52,7 +59,7 @@ namespace Cosmetics_Shop.Models
         }
 
         /// <summary>
-        /// Clear user information when user logout
+        /// Clears the user information when the user logs out.
         /// </summary>
         public void Logout()
         {

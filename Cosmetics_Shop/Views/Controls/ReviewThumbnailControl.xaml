@@ -42,5 +42,13 @@
             </ItemsControl.ItemsPanel>
         </ItemsControl>
 
+        <TextBlock FontSize="15"
+                   Margin="150 0 0 0"
+                   VerticalAlignment="Center"
+                   Foreground="Gray"
+                   FontStyle="Italic">
+            <Run Text="{x:Bind ViewModel.ReviewThumbnail.RatingDate, Mode=OneWay}"/>
+        </TextBlock>
+
     </StackPanel>
 </UserControl>
