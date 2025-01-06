@@ -24,7 +24,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
 {
     public class AccountViewModel : INotifyPropertyChanged
     {
-        #region Dependency   
+        #region Singletons   
         private readonly UserSession        _userSession;
         private readonly IDao               _dao;
         private readonly IEventAggregator   _eventAggregator;

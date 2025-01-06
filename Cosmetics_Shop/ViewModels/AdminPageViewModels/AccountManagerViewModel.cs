@@ -25,7 +25,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
     public class AccountManagerViewModel : INotifyPropertyChanged
     {
         #region Singleton
-        // Data access object
+        /// <summary>
+        /// Data access object
+        /// </summary>
         private readonly IDao _dao = null;
         #endregion
 
@@ -45,7 +47,6 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
         private string  _address = "";
         private string  _email = "";
         private string  _message = "";
-
         private int     _role = 0;
         private int     _id = 0;
         private string  _formTitle = "";
