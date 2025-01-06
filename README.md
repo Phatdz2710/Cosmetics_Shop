@@ -171,7 +171,10 @@ knex migrate:rollback
 	- Hiển thị thông tin sản phẩm trong đơn hàng.
     - Xác nhận nhận hàng.
     - Đánh giá sản phẩm nếu sản phẩm hoàn thành.
+<<<<<<< HEAD
       - Đánh giá số sao cho từng sản phẩm trong đơn hàng.
+=======
+>>>>>>> dbfe4cd66db62ea527c04d7b1aa097fc19987364
 9. **👤 Trang quản lý tài khoản cá nhân**
     - Thay đổi ảnh đại diện.
     - Thay đổi thông tin cá nhân (tên, email, số điện thoại, địa chỉ).

@@ -21,7 +21,6 @@
     </UserControl.Resources>
 
     <Grid Padding="10"
-          CornerRadius="5"
           Tapped="Grid_Tapped">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
