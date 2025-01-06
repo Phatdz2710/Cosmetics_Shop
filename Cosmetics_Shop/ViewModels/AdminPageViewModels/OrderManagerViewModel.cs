@@ -45,17 +45,25 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
         private int _totalPrice = 0;        
         private string _message = "";
         private bool _visiActionButton = false;
-       
+
         //private Models.Order _selectedOrder;
 
 
         #endregion
 
         #region Properties for binding
+        /// <summary>
+        /// List of order cells to display in the UI.
+        /// </summary>
         public ObservableCollection<OrderCellViewModel> ListOrders { get; set; }
+        /// <summary>
+        /// List of order items to display in the UI.
+        /// </summary>
         public ObservableCollection<OrderItemDisplay> ListView { get; set; }
 
-
+        /// <summary>
+        /// Boolean value indicating the visibility of the "Previous" button.
+        /// </summary>
         public bool VisiPrevious
         {
             get { return _visiPrevious; }
@@ -65,7 +73,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(VisiPrevious));
             }
         }
-
+        /// <summary>
+        /// Boolean value indicating the visibility of the "Next" button.
+        /// </summary>
         public bool VisiNext
         {
             get { return _visiNext; }
@@ -75,7 +85,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(VisiNext));
             }
         }
-
+        /// <summary>
+        /// Current page in the order list pagination.
+        /// </summary>
         public int CurrentPage
         {
             get { return _currentPage; }
@@ -85,7 +97,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(CurrentPage));
             }
         }
-
+        /// <summary>
+        /// Total number of pages for the order list pagination.
+        /// </summary>
         public int TotalPage
         {
             get { return _totalPage; }
@@ -95,7 +109,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(TotalPage));
             }
         }
-
+        /// <summary>
+        /// Total number of orders.
+        /// </summary>
         public int TotalOrders
         {
             get { return _totalOrders; }
@@ -105,7 +121,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(TotalOrders));
             }
         }
-
+        /// <summary>
+        /// Boolean value indicating whether to show the form.
+        /// </summary>
         public bool ShowForm
         {
             get { return _showForm; }
@@ -115,7 +133,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(ShowForm));
             }
         }
-
+        /// <summary>
+        /// Message to display (e.g., success or error messages).
+        /// </summary>
         public string Message
         {
             get { return _message; }
@@ -125,7 +145,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(Message));
             }
         }
-
+        /// <summary>
+        /// The ID of the current order.
+        /// </summary>
         public int OrderId
         {
             get { return _orderId; }
@@ -135,7 +157,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(OrderId));
             }
         }
-
+        /// <summary>
+        /// The current status of the order.
+        /// </summary>
         public int OrderStatus
         {
             get { return _orderStatus; }
@@ -146,8 +170,10 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
 
                 
             }
-        }       
-
+        }
+        /// <summary>
+        /// The total price of the order.
+        /// </summary>
         public int TotalPrice
         {
             get { return _totalPrice; }
@@ -157,7 +183,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(TotalPrice));
             }
         }
-
+        /// <summary>
+        /// Boolean value indicating the visibility of the action button.
+        /// </summary>
         public bool VisiActionButton 
         {
             get { return _visiActionButton; }
@@ -169,15 +197,27 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
         }
 
 
-        
+
         #endregion
 
         #region Commands
+        /// <summary>
+        /// Command to navigate to the next page of orders.
+        /// </summary>
         public ICommand NextPageCommand => new RelayCommand(nextPageCommand);
+        /// <summary>
+        /// Command to navigate to the previous page of orders.
+        /// </summary>
         public ICommand PreviousPageCommand => new RelayCommand(previousPageCommand);
+        /// <summary>
+        /// Command to reload the orders list.
+        /// </summary>
         public ICommand ReloadCommand { get; set; }
 
         private ICommand _acceptFormCommand;
+        /// <summary>
+        /// Command to accept changes in the form
+        /// </summary>
         public ICommand AcceptFormCommand
         {
             get => _acceptFormCommand;
@@ -189,6 +229,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
         }
 
         private ICommand _cancelFormCommand;
+        /// <summary>
+        /// Command to cancel changes in the form (e.g., discard changes).
+        /// </summary>
         public ICommand CancelFormCommand
         {
             get => _cancelFormCommand;
@@ -198,7 +241,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(CancelFormCommand));
             }
         }
-
+        /// <summary>
+        /// Command to hide the form (e.g., close or reset).
+        /// </summary>
         public ICommand HideFormCommand { get; set; }
        
         #endregion

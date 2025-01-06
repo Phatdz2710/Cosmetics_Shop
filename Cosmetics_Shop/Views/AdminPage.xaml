@@ -76,7 +76,7 @@
                         Background="#47BD6D"
                         CornerRadius="5"
                         Margin="5 10 5 10"
-                        Command="{x:Bind ViewModel.ProductManagerComamnd, Mode=OneTime}">
+                        Command="{x:Bind ViewModel.ProductManagerCommand, Mode=OneTime}">
                     <StackPanel Orientation="Horizontal">
                         <FontIcon Glyph="&#xE74C;" 
                                   Foreground="White"

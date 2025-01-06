@@ -146,7 +146,7 @@ Foreground="{ThemeResource AccountPageForeground}"
                          BorderThickness="1"
                          Margin="0,0,0,5"
                          IsEnabled="{x:Bind ViewModel.IsEnabled, Mode=OneWay}"
-                         Password="{x:Bind ViewModel.ConfirmPasswordSingup, Mode=TwoWay}"/>
+                         Password="{x:Bind ViewModel.ConfirmPasswordSignup, Mode=TwoWay}"/>
             
             <TextBox x:Name="EmaiSignup"
                      PlaceholderText="Email"

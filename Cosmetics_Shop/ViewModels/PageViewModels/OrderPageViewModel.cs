@@ -15,6 +15,9 @@ using System.Windows.Input;
 
 namespace Cosmetics_Shop.ViewModels.PageViewModels
 {
+    /// <summary>
+    /// View model for OrderPage
+    /// </summary>
     public class OrderPageViewModel : INotifyPropertyChanged
     {
         #region Singleton
@@ -28,8 +31,14 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         #endregion
 
         #region Properties for binding
+        /// <summary>
+        /// Collection of user order cells.
+        /// </summary>
         public ObservableCollection<UserOrderCellViewModel> UserOrders { get; set; }
 
+        /// <summary>
+        /// Flag indicating whether the user has no orders.
+        /// </summary>
         public bool IsZeroOrder
         {
             get { return _isZeroOrder; }
@@ -43,14 +52,30 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         #endregion
 
         #region Commands
+        /// <summary>
+        /// Command to load orders in process.
+        /// </summary>
         public ICommand LoadOrdersInProcessCommand { get; set; }
+
+        /// <summary>
+        /// Command to load successful orders.
+        /// </summary>
         public ICommand LoadOrdersSuccessCommand { get; set; }
+
+        /// <summary>
+        /// Command to load failed orders.
+        /// </summary>
         public ICommand LoadOrdersFailedCommand { get; set; }
+
+        /// <summary>
+        /// Command to navigate back.
+        /// </summary>
         public ICommand GoBackCommand { get; set; }
 
 
         #endregion
 
+        // Constructor
         public OrderPageViewModel(IDao dao, 
                                   UserSession userSession,
                                   INavigationService navigationService)

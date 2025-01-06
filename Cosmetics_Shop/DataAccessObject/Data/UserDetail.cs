@@ -7,19 +7,57 @@ using System.Threading.Tasks;
 namespace Cosmetics_Shop.DataAccessObject.Data
 {
     /// <summary>
-    /// User Detail (Information of user
+    /// Represents detailed information of a user.
     /// </summary>
     public class UserDetail
     {
-        public string   Name    { get; set; } // Name of user
-        public string   Email   { get; set; } // Email of user
-        public string   Phone   { get; set; } // Phone number of user
-        public string   Address { get; set; } // Address of user
-        public DateTime CreateTime { get; set; } // Create time of user
-        public string   AvatarPath      { get; set; } // Avatar path of user
-        public int      TotalMoneySpent { get; set; } = 0; // Total money spent
-        public int      TotalBills      { get; set; } = 0; // Total bills
-        public int      TotalProducts   { get; set; } = 0; // Total products
-        
+        /// <summary>
+        /// The name of the user.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// The email of the user.
+        /// </summary>
+        public string Email { get; set; }
+
+        /// <summary>
+        /// The phone number of the user.
+        /// </summary>
+        public string Phone { get; set; }
+
+        /// <summary>
+        /// The address of the user.
+        /// </summary>
+        public string Address { get; set; }
+
+        /// <summary>
+        /// The account creation time of the user.
+        /// </summary>
+        public DateTime CreateTime { get; set; }
+
+        /// <summary>
+        /// The file path to the user's avatar image.
+        /// </summary>
+        public string AvatarPath { get; set; }
+
+        /// <summary>
+        /// The total amount of money the user has spent.
+        /// Default value is 0.
+        /// </summary>
+        public int TotalMoneySpent { get; set; } = 0;
+
+        /// <summary>
+        /// The total number of bills the user has made.
+        /// Default value is 0.
+        /// </summary>
+        public int TotalBills { get; set; } = 0;
+
+        /// <summary>
+        /// The total number of products the user has purchased.
+        /// Default value is 0.
+        /// </summary>
+        public int TotalProducts { get; set; } = 0;
     }
+
 }

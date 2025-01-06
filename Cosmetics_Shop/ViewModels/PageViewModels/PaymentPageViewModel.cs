@@ -32,12 +32,23 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         private readonly INavigationService _navigationService;
         private readonly IServiceProvider _serviceProvider;
         private IDao _dao = null;
+        /// <summary>
+        /// Event to request the display of a dialog with a string parameter.
+        /// </summary>
         public event Action<string> ShowDialogRequested;
-
+        /// <summary>
+        /// Gets or sets the cart view model containing the list of items in the cart.
+        /// </summary>
         public CartPageViewModel Carts { get; set; }
 
         //Command
+        /// <summary>
+        /// Command to navigate back.
+        /// </summary>
         public ICommand GoBackCommand {  get; set; }
+        /// <summary>
+        /// Command to place an order.
+        /// </summary>
         public ICommand OrderCommand { get; set; }
 
 
@@ -58,6 +69,10 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         #endregion
 
         #region Properties Binding
+        /// <summary>
+        /// Gets or sets the display name.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public string NameDisplay
         {
             get { return _nameDisplay; }
@@ -67,6 +82,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(NameDisplay));
             }
         }
+
+        /// <summary>
+        /// Gets or sets the name.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public string Name
         {
             get { return _name; }
@@ -77,6 +97,10 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets the phone number.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public string Phone
         {
             get { return _phone; }
@@ -86,6 +110,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 OnPropertyChanged(nameof(Phone));
             }
         }
+
+        /// <summary>
+        /// Gets or sets the address.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public string Address
         {
             get { return _address; }
@@ -96,6 +125,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
         }
 
+        /// <summary>
+        /// Gets the total payment based on the sum of all items' total prices in the payment product.
+        /// </summary>
         public int TotalPay
         {
             get => PaymentProduct.Sum(item => item.TotalPrice);
@@ -104,6 +136,10 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets the shipping fee.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public int ShippingFee
         {
             get => _shippingFee;
@@ -117,7 +153,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
         }
 
-        public int VoucherFee 
+        /// <summary>
+        /// Gets or sets the voucher fee.
+        /// Notifies the UI when the value changes.
+        /// </summary>
+        public int VoucherFee
         {
             get => _voucherFee;
             set
@@ -130,6 +170,10 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets the final fee after applying all discounts, fees, and vouchers.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public int FinalFee
         {
             get => _finalFee;
@@ -143,15 +187,24 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets the selected payment method.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public Models.PaymentMethod SelectedPaymentMethod
         {
             get => _selectedPaymentMethod;
             set
             {
                 _selectedPaymentMethod = value;
-                OnPropertyChanged(); // Thông báo thay đổi nếu cần
+                OnPropertyChanged(); // Notify UI of change
             }
         }
+
+        /// <summary>
+        /// Gets or sets the shipping address.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public string ShippingAddress
         {
             get => _shippingAddress;
@@ -164,6 +217,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 }
             }
         }
+
+        /// <summary>
+        /// Gets or sets the current voucher.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public Models.Voucher CurrentVoucher
         {
             get => _currentVoucher;
@@ -176,6 +234,11 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 }
             }
         }
+
+        /// <summary>
+        /// Gets or sets the current shipping method.
+        /// Notifies the UI when the value changes.
+        /// </summary>
         public Models.ShippingMethod CurrentShippingMethod
         {
             get => _currentShippingMethod;
@@ -194,6 +257,8 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         // Observable Collection
         public ObservableCollection<PaymentProductThumbnailViewModel> PaymentProduct { get; set; }
         public ObservableCollection<Models.PaymentMethod> PaymentMethods { get; set; }
+
+        // Constructor
         public PaymentPageViewModel(INavigationService navigationService,
                                     IDao dao,
                                     IServiceProvider serviceProvider,
@@ -320,7 +385,7 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
         /// <param name="address">Address was changed.</param>
         public bool LoadShippingAddress(string address)
         {
-            if (string.IsNullOrEmpty(address) || !address.IsValidAddress())
+            if (string.IsNullOrEmpty(address))
             {
                 ShowDialogRequested?.Invoke("Địa chỉ đặt hàng không hợp lệ !");
                 return false;
@@ -411,9 +476,9 @@ namespace Cosmetics_Shop.ViewModels.PageViewModels
                 _currentVoucher = new Models.Voucher();
             }
 
-            if (Address == null || !Address.IsValidAddress()) 
+            if (string.IsNullOrEmpty(Address)) 
             {
-                ShowDialogRequested?.Invoke("Vui lòng nhập địa chỉ nhận hàng hợp lệ !");
+                ShowDialogRequested?.Invoke("Vui lòng nhập địa chỉ nhận hàng !");
                 return;
             }
 

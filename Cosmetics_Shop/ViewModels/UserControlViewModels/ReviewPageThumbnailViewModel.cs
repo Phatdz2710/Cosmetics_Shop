@@ -39,6 +39,10 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
         #endregion
 
         #region Properties Binding
+        /// <summary>
+        /// Gets or sets the number of stars for a product or review.
+        /// Updates star states when the value changes.
+        /// </summary>
         public int StarNumber
         {
             get { return _starNumber; }
@@ -48,10 +52,14 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
                 {
                     _starNumber = value;
                     OnPropertyChanged();
-                    UpdateStarStates(value);
+                    UpdateStarStates(value);  // Update the visual state of the stars
                 }
             }
         }
+
+        /// <summary>
+        /// Gets the total price for the product based on its quantity and unit price.
+        /// </summary>
         public int TotalPrice
         {
             get
@@ -60,8 +68,10 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
             }
             set
             {
+               
             }
         }
+
         #endregion
 
         public ReviewPageThumbnailViewModel(INavigationService navigationService)

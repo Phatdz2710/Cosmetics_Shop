@@ -16,6 +16,9 @@ using System.Windows.Input;
 
 namespace Cosmetics_Shop.ViewModels.UserControlViewModels
 {
+    /// <summary>
+    /// View model for User Order Cell
+    /// </summary>
     public class UserOrderCellViewModel : INotifyPropertyChanged
     {
         #region Singleton
@@ -36,9 +39,15 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
         private readonly SemaphoreSlim _loadItemsLock = new SemaphoreSlim(1, 1);
         #endregion
 
-        #region Properties for binding
+        #region Properties for Binding
+        /// <summary>
+        /// List of order items to display.
+        /// </summary>
         public ObservableCollection<OrderItemDisplay> OrderItemsDisplay { get; set; }
 
+        /// <summary>
+        /// Indicates whether the order items are shown.
+        /// </summary>
         public bool IsShowItems
         {
             get { return _isShowItems; }
@@ -49,6 +58,9 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
             }
         }
 
+        /// <summary>
+        /// Unique identifier for the order.
+        /// </summary>
         public int OrderId
         {
             get { return _orderId; }
@@ -57,8 +69,11 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
                 _orderId = value;
                 OnPropertyChanged(nameof(OrderId));
             }
-        } 
+        }
 
+        /// <summary>
+        /// Date the order was placed.
+        /// </summary>
         public DateTime OrderDate
         {
             get { return _orderDate; }
@@ -69,6 +84,9 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
             }
         }
 
+        /// <summary>
+        /// Status of the order (e.g., 1 for Pending, 2 for Shipped, etc.).
+        /// </summary>
         public int OrderStatus
         {
             get { return _orderStatus; }
@@ -81,15 +99,18 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
 
                 if (OrderStatus == 1)
                 {
-                    ReceivedCommand = new RelayCommand(receivedCommand);
+                    ReceivedCommand = new RelayCommand(receivedCommand); // Button for received action
                 }
                 else
                 {
-                    ReceivedCommand = new RelayCommand(reviewCommand);
+                    ReceivedCommand = new RelayCommand(reviewCommand); // Button for review action
                 }
             }
         }
 
+        /// <summary>
+        /// Determines if the button to mark order as received or to review is visible.
+        /// </summary>
         public bool IsShowButton
         {
             get { return _isShowButton; }
@@ -100,6 +121,9 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
             }
         }
 
+        /// <summary>
+        /// Total price of the order.
+        /// </summary>
         public int TotalPrice
         {
             get { return _totalPrice; }
@@ -112,9 +136,15 @@ namespace Cosmetics_Shop.ViewModels.UserControlViewModels
         #endregion
 
         #region Commands
+        /// <summary>
+        /// Command to show or hide the order items.
+        /// </summary>
         public ICommand ShowHideItemCommand { get; set; }
-        public ICommand ReceivedCommand { get; set; }
 
+        /// <summary>
+        /// Command to handle the received action based on order status.
+        /// </summary>
+        public ICommand ReceivedCommand { get; set; }
         #endregion
 
         public UserOrderCellViewModel(IDao dao, INavigationService navigationService, OrderPageViewModel viewModel)

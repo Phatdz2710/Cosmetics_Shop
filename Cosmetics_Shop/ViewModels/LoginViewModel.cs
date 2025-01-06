@@ -45,7 +45,9 @@ namespace Cosmetics_Shop.ViewModels
         #endregion
 
         #region Properties for binding
-        // Message about login success
+        /// <summary>
+        /// Message to display upon successful login or sign-up.
+        /// </summary>
         public string Message
         {
             get => message;
@@ -57,7 +59,9 @@ namespace Cosmetics_Shop.ViewModels
             }
         }
 
-        // Show message
+        /// <summary>
+        /// Controls the visibility of the login/signup success message.
+        /// </summary>
         public bool MessageVisibility
         {
             get => messageVisibility;
@@ -68,7 +72,9 @@ namespace Cosmetics_Shop.ViewModels
             }
         }
 
-        // Switch between login and signup mode
+        /// <summary>
+        /// Indicates whether the view is in login or signup mode.
+        /// </summary>
         public string LoginSignupState
         {
             get => loginSignupState;
@@ -78,8 +84,9 @@ namespace Cosmetics_Shop.ViewModels
                 OnPropertyChanged(nameof(LoginSignupState));
             }
         }
-
-        // Enable or disable login button
+        /// <summary>
+        /// Enables or disables the login button based on the state.
+        /// </summary>
         public bool IsEnabled
         {
             get => isEnabled;
@@ -91,23 +98,64 @@ namespace Cosmetics_Shop.ViewModels
         }
 
         // For binding two-way
+        /// <summary>
+        /// Username input for login.
+        /// </summary>
         public string Username { get; set; }
+        /// <summary>
+        /// Password input for login.
+        /// </summary>
         public string Password { get; set; }
+
+        /// <summary>
+        /// Username input for signup.
+        /// </summary>
         public string UsernameSignup { get; set; }
+
+        /// <summary>
+        /// Password input for signup.
+        /// </summary>
         public string PasswordSignup { get; set; }
-        public string ConfirmPasswordSingup { get; set; }
+
+        /// <summary>
+        /// Confirm password input for signup.
+        /// </summary>
+        public string ConfirmPasswordSignup { get; set; }
+
+        /// <summary>
+        /// Email input for signup.
+        /// </summary>
         public string Email { get; set; }
+
+        /// <summary>
+        /// Checkbox for remembering the user for future logins.
+        /// </summary>
         public bool RememberMe { get; set; } = true;
 
         #endregion
 
         #region Commands
-        // Commands
-        public ICommand SwitchLoginCommand  { get; set; }
+        /// <summary>
+        /// Command to switch between login and signup views.
+        /// </summary>
+        public ICommand SwitchLoginCommand { get; set; }
+
+        /// <summary>
+        /// Command to switch to the signup view.
+        /// </summary>
         public ICommand SwitchSignupCommand { get; set; }
-        public ICommand LoginCommand        { get; set; }
-        public ICommand SignupCommand       { get; set; }
+
+        /// <summary>
+        /// Command to trigger login functionality.
+        /// </summary>
+        public ICommand LoginCommand { get; set; }
+
+        /// <summary>
+        /// Command to trigger signup functionality.
+        /// </summary>
+        public ICommand SignupCommand { get; set; }
         #endregion
+
 
         // Constructor
         public LoginViewModel(IEventAggregator  eventAggregator,
@@ -218,7 +266,7 @@ namespace Cosmetics_Shop.ViewModels
             Message      = "";
             MessageVisibility   = false;
             IsEnabled       = false;
-            var loginStatus = await _dao.DoSignupAsync(UsernameSignup, PasswordSignup, ConfirmPasswordSingup, Email);
+            var loginStatus = await _dao.DoSignupAsync(UsernameSignup, PasswordSignup, ConfirmPasswordSignup, Email);
             IsEnabled = true;
 
             switch(loginStatus)

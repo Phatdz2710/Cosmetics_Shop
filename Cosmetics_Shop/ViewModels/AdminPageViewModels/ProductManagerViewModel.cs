@@ -46,6 +46,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
         #endregion
 
         #region Properties for binding
+        /// <summary>
+        /// List of product cells to display in the UI.
+        /// </summary>
         public ObservableCollection<ProductCellViewModel> ListProducts
         {
             get { return listProducts; }
@@ -55,7 +58,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(ListProducts));
             }
         }
-
+        /// <summary>
+        /// Boolean value indicating the visibility of the "Previous" button in pagination.
+        /// </summary>
         public bool VisiPrevious
         {
             get { return _visiPrevious; }
@@ -65,7 +70,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(VisiPrevious));
             }
         }
-
+        /// <summary>
+        /// Boolean value indicating the visibility of the "Next" button in pagination.
+        /// </summary>
         public bool VisiNext
         {
             get { return _visiNext; }
@@ -75,7 +82,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(VisiNext));
             }
         }
-
+        /// <summary>
+        /// Current page in the product list pagination.
+        /// </summary>
         public int CurrentPage
         {
             get { return _currentPage; }
@@ -85,7 +94,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(CurrentPage));
             }
         }
-
+        /// <summary>
+        /// Total number of pages for product list pagination.
+        /// </summary>
         public int TotalPage
         {
             get { return _totalPage; }
@@ -95,7 +106,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(TotalPage));
             }
         }
-
+        /// <summary>
+        /// Boolean value indicating whether to show the form for product details.
+        /// </summary>
         public bool ShowForm
         {
             get { return _showForm; }
@@ -105,6 +118,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(ShowForm));
             }
         }
+        /// <summary>
+        /// Name of the product.
+        /// </summary>
         public string ProductName
         {
             get { return _productName; }
@@ -114,6 +130,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(ProductName));
             }
         }
+        /// <summary>
+        /// Brand of the product.
+        /// </summary>
         public string ProductBrand
         {
             get { return _productBrand; }
@@ -123,6 +142,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(ProductBrand));
             }
         }
+        /// <summary>
+        /// Category of the product.
+        /// </summary>
         public string ProductCategory
         {
             get { return _productCategory; }
@@ -132,6 +154,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(ProductCategory));
             }
         }
+        /// <summary>
+        /// Price of the product.
+        /// </summary>
         public int ProductPrice
         {
             get { return _productPrice; }
@@ -141,6 +166,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(ProductPrice));
             }
         }
+        /// <summary>
+        /// Inventory count of the product.
+        /// </summary>
         public int ProductInventory
         {
             get { return _productInventory; }
@@ -150,6 +178,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(ProductInventory));
             }
         }
+        /// <summary>
+        /// Total number of products sold.
+        /// </summary>
         public int ProductSold
         {
             get { return _productSold; }
@@ -159,7 +190,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(ProductSold));
             }
         }
-
+        /// <summary>
+        /// Description of the product.
+        /// </summary>
         public string ProductDescription
         {
             get { return _productDescription; }
@@ -169,6 +202,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(ProductDescription));
             }
         }
+        /// <summary>
+        /// Title of the form.
+        /// </summary>
         public string FormTitle
         {
             get { return _formTitle; }
@@ -178,6 +214,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(FormTitle));
             }
         }
+        /// <summary>
+        /// Path to the product's image.
+        /// </summary>
         public string ProductImagePath
         {
             get { return _productImagePath; }
@@ -187,7 +226,9 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(ProductImagePath));
             }
         }
-
+        /// <summary>
+        /// Message to display (e.g., success or error messages).
+        /// </summary>
         public string Message
         {
             get { return _message; }
@@ -202,7 +243,10 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
 
         #region Commands
         private ICommand _acceptFormCommand;
-        public  ICommand AcceptFormCommand
+        /// <summary>
+        /// Command to accept changes in the form (e.g., save or update product).
+        /// </summary>
+        public ICommand AcceptFormCommand
         {
             get => _acceptFormCommand;
             set
@@ -211,12 +255,30 @@ namespace Cosmetics_Shop.ViewModels.AdminPageViewModels
                 OnPropertyChanged(nameof(AcceptFormCommand));
             }
         }
-        public  ICommand CancelFormCommand      { get; set; }
-        public  ICommand CreateProductCommand   { get; set; }
-        public  ICommand SelectImagePathCommand { get; set; }
-        public  ICommand NextPageCommand        { get; }
-        public  ICommand PreviousPageCommand    { get; }
-        public  ICommand ReloadCommand         { get; }
+        /// <summary>
+        /// Command to cancel changes in the form (e.g., discard changes).
+        /// </summary>
+        public ICommand CancelFormCommand      { get; set; }
+        /// <summary>
+        /// Command to create a new product.
+        /// </summary>
+        public ICommand CreateProductCommand   { get; set; }
+        /// <summary>
+        /// Command to select an image for the product.
+        /// </summary>
+        public ICommand SelectImagePathCommand { get; set; }
+        /// <summary>
+        /// Command to navigate to the next page of products.
+        /// </summary>
+        public ICommand NextPageCommand        { get; }
+        /// <summary>
+        /// Command to navigate to the previous page of products.
+        /// </summary>
+        public ICommand PreviousPageCommand    { get; }
+        /// <summary>
+        /// Command to reload the products list.
+        /// </summary>
+        public ICommand ReloadCommand         { get; }
 
         #endregion
 

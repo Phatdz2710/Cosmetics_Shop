@@ -39,6 +39,12 @@ namespace Cosmetics_Shop.Views.Pages
             this.Loaded += ProductDetailPage_Loaded;
         }
 
+        /// <summary>
+        /// Handles the Loaded event to safely execute asynchronous code.
+        /// </summary>
+        /// <remarks>
+        /// - Populates the `deliveryComboBox` with available shipping methods using the ViewModel.
+        /// </remarks>
         private async void ProductDetailPage_Loaded(object sender, RoutedEventArgs e)
         {
             // Now you can safely call async code here
@@ -47,6 +53,15 @@ namespace Cosmetics_Shop.Views.Pages
         }
 
         #region Navigation
+        /// <summary>
+        /// Handles navigation to the ProductDetailPage and initializes product details and reviews.
+        /// </summary>
+        /// <param name="e">Navigation event arguments containing the product ID.</param>
+        /// <remarks>
+        /// - Loads product details and initial reviews asynchronously.
+        /// - Creates a product instance with user-defined or default quantity.
+        /// - Updates the ViewModel with the created product information.
+        /// </remarks>
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             if (e.Parameter is int productId)
@@ -60,9 +75,7 @@ namespace Cosmetics_Shop.Views.Pages
                 if (!int.TryParse(amountTextBox.Text, out amount))
                 {
                     amount = 1; // Default value
-                }
-
-                
+                }  
 
                 // Create the product instance
                 var product = new PaymentProductThumbnail(0, productId, ViewModel.ProductDetail.ThumbnailImage, ViewModel.ProductDetail.Name, ViewModel.ProductDetail.Price, amount);
@@ -73,7 +86,7 @@ namespace Cosmetics_Shop.Views.Pages
 
         #region Click button
         /// <summary>
-        /// Click to minus the quantity
+        /// Decreases the product quantity by one, ensuring it stays above 1.
         /// </summary>
         private void minusButton_Click(object sender, RoutedEventArgs e)
         {
@@ -84,7 +97,7 @@ namespace Cosmetics_Shop.Views.Pages
         }
 
         /// <summary>
-        /// Click to plus the quantity
+        /// Increases the product quantity by one, ensuring it does not exceed the available stock.
         /// </summary>
         private void plusButton_Click(object sender, RoutedEventArgs e)
         {
@@ -95,8 +108,14 @@ namespace Cosmetics_Shop.Views.Pages
         }
 
         /// <summary>
-        /// Click to category the product rating 
+        /// Filters product reviews based on the selected rating category.
         /// </summary>
+        /// <param name="sender">The button that was clicked.</param>
+        /// <param name="e">Event arguments.</param>
+        /// <remarks>
+        /// - Shows all reviews if "All" is selected.
+        /// - Filters reviews by the star number if a valid star rating is selected.
+        /// </remarks>
         private void FilterButton_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button button && button.Tag is string tag)
@@ -115,8 +134,12 @@ namespace Cosmetics_Shop.Views.Pages
         }
 
         /// <summary>
-        /// Click to add a product to cart 
+        /// Adds the selected product and quantity to the shopping cart.
         /// </summary>
+        /// <remarks>
+        /// - Calls `AddToCartAsync` in the ViewModel to add the product.
+        /// - Displays a success or error message using a ContentDialog.
+        /// </remarks>
         private async void themvaogiohangButton_Click(object sender, RoutedEventArgs e)
         {
             // Lấy productId từ ViewModel
@@ -142,8 +165,10 @@ namespace Cosmetics_Shop.Views.Pages
         }
 
         /// <summary>
-        /// Get the current shipping method
+        /// Updates the current shipping method based on the selected item in the delivery combo box.
         /// </summary>
+        /// <param name="sender">The combo box control.</param>
+        /// <param name="e">SelectionChanged event arguments.</param>
         private void DeliveryComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (deliveryComboBox.SelectedItem is Models.ShippingMethod selectedMethod)

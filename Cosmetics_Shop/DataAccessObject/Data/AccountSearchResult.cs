@@ -8,17 +8,23 @@ using System.Threading.Tasks;
 namespace Cosmetics_Shop.DataAccessObject.Data
 {
     /// <summary>
-    /// Account Search Result
+    /// Represents the result of a search for accounts.
     /// </summary>
     public class AccountSearchResult
     {
-        // List of accounts
+        /// <summary>
+        /// List of accounts retrieved from the search.
+        /// </summary>
         public List<Account> ListAccounts { get; set; }
 
-        // Total pages of accounts
+        /// <summary>
+        /// The total number of pages available for the account search.
+        /// </summary>
         public int TotalPages { get; set; }
 
-        // Total accounts
+        /// <summary>
+        /// The total number of accounts found in the search.
+        /// </summary>
         public int TotalAccounts { get; set; }
     }
 }

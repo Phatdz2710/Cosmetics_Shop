@@ -20,6 +20,9 @@ using System.Windows.Input;
 
 namespace Cosmetics_Shop.Views.Controls
 {
+    /// <summary>
+    /// User Order Cell control
+    /// </summary>
     public sealed partial class UserOrderCellControl : UserControl
     {
         public UserOrderCellViewModel ViewModel
@@ -42,6 +45,13 @@ namespace Cosmetics_Shop.Views.Controls
             this.InitializeComponent();
         }
 
+        /// <summary>
+        /// Handles the tap event on the grid, allowing the execution of a command from the ViewModel when tapped.
+        /// </summary>
+        /// <remarks>
+        /// - If the tapped element is a `Button`, it will not trigger the command.
+        /// - Otherwise, it checks if the `ShowHideItemCommand` in the ViewModel can be executed and calls it.
+        /// </remarks>
         public void Grid_Tapped(object sender, TappedRoutedEventArgs e)
         {
             if (e.OriginalSource is FrameworkElement element && element is Button)
@@ -57,6 +67,12 @@ namespace Cosmetics_Shop.Views.Controls
             }
         }
 
+        /// <summary>
+        /// Handles the tap event on a button, preventing the event from propagating to the parent.
+        /// </summary>
+        /// <remarks>
+        /// - This ensures that when a button is tapped, the event does not trigger the parent tap event (`Grid_Tapped`).
+        /// </remarks>
         private void Button_Tapped(object sender, TappedRoutedEventArgs e)
         {
             e.Handled = true; // Ngăn sự kiện tiếp tục lan lên cha
