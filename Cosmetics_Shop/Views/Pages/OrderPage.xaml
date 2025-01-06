@@ -70,13 +70,15 @@
 
             <ScrollView Grid.Row="1" Background="{ThemeResource DashboardGridViewBackground}">
                 <ListView ItemsSource="{x:Bind ViewModel.UserOrders, Mode=OneWay}"
-                          SelectionMode="None">
+                          SelectionMode="None"
+                          Padding="5">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
-                            <Setter Property="Background" Value="{ThemeResource OrderCellBackground}" />
+                            <Setter Property="Background" Value="Transparent" />
                             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                             <Setter Property="VerticalContentAlignment" Value="Stretch" />
-                        </Style>
+
+                            </Style>
                     </ListView.ItemContainerStyle>
 
                     <ListView.ItemTemplate>
