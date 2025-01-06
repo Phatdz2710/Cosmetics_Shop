@@ -21,7 +21,9 @@
     </UserControl.Resources>
 
     <Grid Padding="10"
-          Tapped="Grid_Tapped">
+          Tapped="Grid_Tapped"
+          Background="{ThemeResource OrderCellBackground}"
+          CornerRadius="20">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="*"/>
