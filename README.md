@@ -28,7 +28,7 @@
 ### **Minh chứng Teamwork:** [Click here](https://docs.google.com/spreadsheets/d/17md4-uG1S-eth66OMy1M5-doLW-ViATCUC3QJ-IMxs0/edit?gid=0#gid=0)
 ### **Link Github:** 
 - Source code: [Click here](https://github.com/Phatdz2710/Cosmetics_Shop)
-- Migration: [Click here](https://github.com/Phatdz2710/Cosmetics_Shop)
+- Migration: [Click here](https://github.com/Phatdz2710/CosmeticShopDB)
 <br> <br>
 
 ## **Hướng dẫn sử dụng**
