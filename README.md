@@ -28,7 +28,7 @@
 ### **Minh chứng Teamwork:** [Click here](https://docs.google.com/spreadsheets/d/17md4-uG1S-eth66OMy1M5-doLW-ViATCUC3QJ-IMxs0/edit?gid=0#gid=0)
 ### **Link Github:** 
 - Source code: [Click here](https://github.com/Phatdz2710/Cosmetics_Shop)
-- Migration: [Click here](https://github.com/Phatdz2710/Cosmetics_Shop)
+- Migration: [Click here](https://github.com/Phatdz2710/CosmeticShopDB)
 <br> <br>
 
 ## **Hướng dẫn sử dụng**
@@ -171,6 +171,7 @@ knex migrate:rollback
 	- Hiển thị thông tin sản phẩm trong đơn hàng.
     - Xác nhận nhận hàng.
     - Đánh giá sản phẩm nếu sản phẩm hoàn thành.
+      - Đánh giá số sao cho từng sản phẩm trong đơn hàng.
 9. **👤 Trang quản lý tài khoản cá nhân**
     - Thay đổi ảnh đại diện.
     - Thay đổi thông tin cá nhân (tên, email, số điện thoại, địa chỉ).
