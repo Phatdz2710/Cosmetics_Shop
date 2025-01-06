@@ -84,7 +84,8 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <controls:UserOrderCellControl ViewModel="{Binding}"
-                                                           MinWidth="800"/>
+                                                           MinWidth="0"
+                                                           Margin="0 3 0 3"/>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
