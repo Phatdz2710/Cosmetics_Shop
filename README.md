@@ -216,6 +216,6 @@ knex migrate:rollback
 - `Microsoft.Extensions.DependencyInjection` (9.0.0)
 
 ## 📌 **Thông tin phiên bản**
-- **.NET**: 9.0
+- **.NET**: 8.0
 - **Target OS:** Windows
 - **Target OS Version:** 10.0.19041.0
