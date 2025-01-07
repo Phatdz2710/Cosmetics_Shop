@@ -31,6 +31,9 @@
 - Migration: [Click here](https://github.com/Phatdz2710/CosmeticShopDB)
 <br> <br>
 
+## **C4 DIAGRAM**
+![Screenshot of the app](https://github.com/Phatdz2710/Cosmetics_Shop/blob/master/Cosmetic%20Shop%20C4%20Diagram.png)
+
 ## **Hướng dẫn sử dụng**
 ### 🌟 Tạo database bằng migration.
 
